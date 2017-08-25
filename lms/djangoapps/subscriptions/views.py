@@ -61,10 +61,10 @@ def render_subs(request, template):
 
     user = request.user
     if user.is_authenticated():
-        if stype == '1':
+        if stype == '1' or stype == '4':
             step_pos = 3
         else:
-            if stype == '2' or stype == '3' or stype == '6':
+            if stype == '2' or stype == '3' or stype == '5' or stype == '6':
                 step_pos = 2
             else:
                 return redirect('/dashboard')
@@ -171,7 +171,7 @@ def render_subs(request, template):
                 # print post_vars
                 user = create_account_with_params(request, post_vars)
                 if user.is_authenticated():
-                    redirect_to = "/membership?m=%s" % (stype)
+                    redirect_to = "/subscription?m=%s" % (stype)
                     return redirect(redirect_to)
 
     # step2 or step3
@@ -179,7 +179,7 @@ def render_subs(request, template):
         sus_id = 0
         type_sus = 0
 
-       # check user_id
+        # check user_id
         db = appmysqldb.mysql(mysql_host, 3306, mysql_database, mysql_user, mysql_pwd)
         q = "SELECT id,email FROM auth_user WHERE username='%s' LIMIT 1" % (user)
         db.query(q)
@@ -187,6 +187,7 @@ def render_subs(request, template):
         for row in res:
             user_id = row[0]
             edx_email = row[1]
+
         if step_pos == 2 and user_id > 0:
             if pay == 'done':
                 params = request.POST.dict()
@@ -211,7 +212,7 @@ def render_subs(request, template):
                     check_stype = 1
                 else:
                     check_stype = 4
-              #   check aux_subscription
+                # check aux_subscription
                 check_sus_id = 0
                 q = "SELECT aux_subscription_id,type_sus FROM aux_subscriptions WHERE user_id='%s' AND (type_sus='1' OR type_sus='4') LIMIT 1" % (user_id)
                 db.query(q)
@@ -234,8 +235,9 @@ def render_subs(request, template):
                 # print paypal button
                 import paybuild
                 frmbuttonpay = paybuild.build_cb_payment(stype, user_id, edx_email, debug_mode='0')
+
         if step_pos == 3 and user_id > 0:
-             # check aux_subscription
+            # check aux_subscription
             q = "SELECT aux_subscription_id,type_sus FROM aux_subscriptions WHERE user_id='%s' LIMIT 1" % (user_id)
             db.query(q)
             res = db.fetchall()

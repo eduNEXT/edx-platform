@@ -4,7 +4,6 @@ URLs for LMS
 
 from django.conf import settings
 from django.conf.urls import patterns, include, url
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import RedirectView
 from ratelimitbackend import admin
 from django.conf.urls.static import static
@@ -25,7 +24,7 @@ if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
 urlpatterns = (
     '',
 
-    url(r'^$',RedirectView.as_view(pattern_name='courses', permanent=False,query_string = True),name='root'),   # Main marketing page, or redirect to courseware
+    url(r'^$', 'branding.views.index', name="root"),   # Main marketing page, or redirect to courseware
     url(r'^dashboard$', 'student.views.dashboard', name="dashboard"),
     url(r'^login_ajax$', 'student.views.login_user', name="login"),
     url(r'^login_ajax/(?P<error>[^/]*)$', 'student.views.login_user'),
@@ -163,12 +162,9 @@ urlpatterns += (url(
 ),)
 
 
-#subscription deprecated to membership
-urlpatterns += (url(r'^subscription$',csrf_exempt(RedirectView.as_view(pattern_name='membership',query_string = True, permanent=False)),name='subscription'),) 
-
-#membership
-urlpatterns += ( url(r'^membership$', 'subscriptions.views.render_subs', 
-		{'template': 'subscription.html'}, name="membership"), )
+#subscription
+urlpatterns += ( url(r'^subscription$', 'subscriptions.views.render_subs', 
+		{'template': 'subscription.html'}, name="subscriptions"), )
 
 #pay subscription callback
 urlpatterns += ( url(r'^paysubscallback$', 'subscriptions.views.render_pay_callback', 

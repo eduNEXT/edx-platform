@@ -81,5 +81,5 @@
             <span class="text"><%- _.sprintf( gettext("New to %(platformName)s?"), context ) %></span>
         </h2>
     </div>
-    <a href='https://buildacademy.com/membership/'><%- gettext("Create an account") %></a>
+    <a href='/#subscr'><%- gettext("Create an account") %></a>
 </div>

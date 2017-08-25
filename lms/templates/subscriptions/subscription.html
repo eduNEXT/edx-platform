@@ -47,7 +47,7 @@ import requests
 
     <div ng-controller="SubscribeStep1Controller" class="row ng-scope">
         <div class="small-12 large-33-48 columns">
-            <form novalidate="" name="subscribeForm" action="/membership?m=${stype}" method="POST" class="reg ng-scope ng-pristine ng-invalid ng-invalid-required">
+            <form novalidate="" name="subscribeForm" action="/subscription?m=${stype}" method="POST" class="reg ng-scope ng-pristine ng-invalid ng-invalid-required">
 <!--            <form novalidate="" name="register-form" action="/create_account" method="POST" class="reg ng-scope ng-pristine ng-invalid ng-invalid-required">-->
              <input type="hidden" name="stype" value="${stype}">
                 <h4 class="underline">Create your account</h4>
@@ -165,24 +165,35 @@ import requests
                     <img alt="BA logo" class="ps-icon" src="/static/subscription/images/ba-icon-hexagon-v1.png">
                 </div>
 
+                <div ng-show="analytics.isTrial" class="subscription bold">
+		% if stype == '1' or stype == '2' or stype == '3':
+			For individuals
+		% else:
+			For Enterprises
+		% endif
+		</div>
 
-
-                <div class="subscription-term ng-binding text-center">
-                % if stype == '1':
-			Basic Membership
+                <div ng-hide="analytics.isTrial" class="subscription ng-hide">Subscription</div>
+                <div class="subscription-term ng-binding">
+                % if stype == '1': 
+			Free 
 		% elif stype == '2':
-			Plus Membership <h4>$99 / Year </h4> <center><h6>or</h6><center/><h4>$19 / Month</h4>
+			Basic $99 / Year
 		% elif stype == '3':
-			Pro Membership <h4> $199 / Year </h4> <center><h6>or</h6><center/> <h4>$39 / Month</h4>
+			Plus $199 / Year
+		% elif stype == '4':
+			Free
+		% elif stype == '5':
+			Plus $199 / Year
 		% elif stype == '6':
-			Premium Membership <h4>$499 / Year</h4>  <center><h6>or</h6><center/> <h4>$99 / Month</h4>
+			Pro $499 / Year
 		% endif
 		</div>
                 <hr>
                 <div class="text-center">
                     <h4>Real training. Real results.</h4>
                     <div class="benefits">
-			% if stype == '1':
+			% if stype == '1' or stype == '4':
                             Introductory courses <br>
                             Products courses + CEUs<br>
                             Mobile compatibility<br>
@@ -200,6 +211,17 @@ import requests
 
 			% if stype == '3':
 				Free + Basic Features<br>
+				AIA-CES/CEU credits<br>
+				Professor &amp; TA support<br>
+				Virtual meetings<br>
+			% endif
+
+			% if stype == '5':
+				Free Features<br>
+				17+ courses<br>
+				New courses monthly<br>
+				Professional community<br>
+				Course certificates<br>
 				AIA-CES/CEU credits<br>
 				Professor &amp; TA support<br>
 				Virtual meetings<br>

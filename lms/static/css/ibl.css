@@ -281,6 +281,10 @@ font-size:26px;
 }
 .flyimage{
 height:120px;
+border:solid 1px #cecece;
+border-radius:50%;
+border: 1px solid #919191;
+box-shadow: 0 0 3px black;
 }
 #flylogo{
 height:120px;
@@ -331,16 +335,6 @@ text-decoration:none;
     text-shadow: 0 0 3px black;;
 
 }
-.home>header .title>hgroup h3{
-    font-family: 'Open Sans', Helvetica, Arial, Lucida, sans-serif;
-    color:#ffffff;
-    text-align:center;
-    font-size: 20px;
-    padding-bottom: 25px;
-    font-weight: 500 !important;
-    text-shadow: 0 0 3px black;;
-
-}
 
 .home>header .title {
 background:none;
@@ -348,8 +342,8 @@ box-shadow:none;
 }
 
 .home>header{
-background-image:url("/static/images/New_york_panoramic07.jpg");
-height:450px;
+background-image:url("/static/images/buildnewyork.jpg");
+height:350px;
 overflow:visible;
 }
 
