@@ -37,6 +37,8 @@ from path import Path as path
 from warnings import simplefilter
 from django.utils.translation import ugettext_lazy as _
 
+import raven
+
 from .discussionsettings import *
 import dealer.git
 from xmodule.modulestore.modulestore_settings import update_module_store_settings
@@ -1944,6 +1946,9 @@ INSTALLED_APPS = (
 
     # Custom session time tracker
     'openedx_session_time',
+
+    # Sentry raven
+    'raven.contrib.django.raven_compat',
 )
 
 # Migrations which are not in the standard module "migrations"
@@ -2693,3 +2698,12 @@ SUBSCRIPTION_MYSQL_HOST = "172.31.23.49"
 SUBSCRIPTION_MYSQL_DB_NAME = "edxapp"
 SUBSCRIPTION_MYSQL_USER = "edxapp001"
 SUBSCRIPTION_MYSQL_PASSWORD = "password"
+
+#RAven Config
+
+RAVEN_CONFIG = {
+    'dsn': 'https://b6649eca5d334447aa3d0106e029101a:26bb0fe89eed44f5a97d070c527a5d83@sentry.io/211634',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
+}
