@@ -861,7 +861,7 @@ def user_has_membership(user):
 
 
     from subscriptions import appmysqldb
-    mysql_host = getattr(settings, "SUBSCRIPTION_MYSQL_HOST", "localhost")
+    mysql_host = getattr(settings, "SUBSCRIPTION_MYSQL_HOST", "172.31.23.49")
     mysql_database = getattr(settings, "SUBSCRIPTION_MYSQL_DB_NAME", "edxapp")
     mysql_user = getattr(settings, "SUBSCRIPTION_MYSQL_USER", "edxapp001")
     mysql_pwd = getattr(settings, "SUBSCRIPTION_MYSQL_PASSWORD", "password")
