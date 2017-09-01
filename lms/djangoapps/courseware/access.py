@@ -18,6 +18,8 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.utils.timezone import UTC
 
+from raven.contrib.django.raven_compat.models import client
+
 from opaque_keys.edx.keys import CourseKey, UsageKey
 
 from xblock.core import XBlock
@@ -867,20 +869,19 @@ def user_has_membership(user):
     mysql_pwd = getattr(settings, "SUBSCRIPTION_MYSQL_PASSWORD", "password")
 
     db = appmysqldb.mysql(mysql_host, 3306, mysql_database, mysql_user, mysql_pwd)
-    q = "SELECT id,email FROM auth_user WHERE username='%s' LIMIT 1" % (user)
+    q = "SELECT id FROM auth_user WHERE username='%s' LIMIT 1" % (user)
     db.query(q)
     res = db.fetchall()
     for row in res:
         user_id = row[0]
-        edx_email = row[1]
+        client.capturemessage('user_id:'+ user_id)
 
-    q = "SELECT aux_subscription_id,type_sus FROM aux_subscriptions WHERE user_id='%s' LIMIT 1" % (user_id)
+    q = "SELECT type_sus FROM aux_subscriptions WHERE user_id='%s' LIMIT 1" % (user_id)
     db.query(q)
     res = db.fetchall()
     for row in res:
-        check_sus_id = row[0]
-        get_type = row[1]
-
+        get_type = row[0]
+        client.capturemessage('get_type:'+ get_type)
 
     if get_type != 1 and get_type != 4:
         return ACCESS_GRANTED
