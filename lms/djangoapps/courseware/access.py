@@ -874,14 +874,14 @@ def user_has_membership(user):
     res = db.fetchall()
     for row in res:
         user_id = row[0]
-        client.captureMessage('user_id:'+ user_id)
+        client.captureMessage('user_id:'+ str(user_id))
 
     q = "SELECT type_sus FROM aux_subscriptions WHERE user_id='%s' LIMIT 1" % (user_id)
     db.query(q)
     res = db.fetchall()
     for row in res:
         get_type = row[0]
-        client.captureMessage('get_type:'+ get_type)
+        client.captureMessage('get_type:'+ str(get_type))
 
     if get_type != 1 and get_type != 4:
         return ACCESS_GRANTED
