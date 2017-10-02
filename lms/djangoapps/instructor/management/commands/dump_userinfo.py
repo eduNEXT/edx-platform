@@ -2,6 +2,7 @@
 #
 # CME management command: dump userinfo to csv files for reporting
 
+import json
 import csv
 from datetime import datetime
 from optparse import make_option
@@ -20,7 +21,20 @@ from opaque_keys.edx.keys import CourseKey
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from shoppingcart.models import PaidCourseRegistration
 
+try:
+    from lms.djangoapps.grades.new.course_grade import CourseGradeFactory
+except ImportError:
+    from lms.djangoapps.grades.new.course_grade_factory import CourseGradeFactory
+
 from unidecode import unidecode
+from django.http import request
+
+from django.contrib.auth.models import User
+from opaque_keys.edx.locator import BlockUsageLocator
+from courseware.courses import (
+    get_course_with_access,
+)
+
 
 PROFILE_FIELDS = [
     ('user__profile__cmeuserprofile__last_name', 'Last Name'),
@@ -177,6 +191,15 @@ class Command(BaseCommand):
             default=False,
             help='The amount of credits awarded for course completion.',
         ),
+        make_option(
+            '-g',
+            '--include-grades',
+            metavar='INCLUDE_GRADES',
+            dest='include_grades',
+            action='store_true',
+            default=False,
+            help='If you want the new version of the report.',
+        ),
     )
 
     def handle(self, *args, **options):
@@ -187,6 +210,7 @@ class Command(BaseCommand):
         end_date = datetime.strptime(options['end_date'], '%Y-%m-%d').replace(tzinfo=UTC)
         outfile_name = options['outfile']
         verbose = int(options['verbosity']) > 1
+        include_grades = options['include_grades']
 
         if not (course_id):
             raise CommandError('--course must be specified')
@@ -202,16 +226,22 @@ class Command(BaseCommand):
             outfile = tempfile.NamedTemporaryFile(suffix='.csv', delete=False)
             outfile_name = outfile.name
 
-        csv_fieldnames = [label for field, label in CME_SPECIFIC_ORDER if len(label) > 0]
+        certificates, profiles, registrations, unpaid_registrations = self.query_database_for(course_id)
+        if 'openedx.stanford.djangoapps.register_cme' in settings.INSTALLED_APPS:
+            certificates, profiles, registrations, unpaid_registrations = self.query_database_for_new_app(course_id)
+
+        # If include_grades option is passed, generates the report with scores
+        if include_grades:
+            user_id = profiles[0]['user__id']
+            user = User.objects.get(id=user_id)
+            csv_fieldnames = self.build_new_columns(user, course_id)
+        else:
+            csv_fieldnames = [label for field, label in CME_SPECIFIC_ORDER if len(label) > 0]
 
         csvwriter = csv.DictWriter(outfile, fieldnames=csv_fieldnames, delimiter='\t', quoting=csv.QUOTE_ALL)
         csvwriter.writeheader()
 
         sys.stdout.write("Fetching enrolled students for {course}...".format(course=course_id))
-
-        certificates, profiles, registrations, unpaid_registrations = self.query_database_for(course_id)
-        if 'openedx.stanford.djangoapps.register_cme' in settings.INSTALLED_APPS:
-            certificates, profiles, registrations, unpaid_registrations = self.query_database_for_new_app(course_id)
 
         registration_table = self.build_user_table(registrations)
         unpaid_registration_table = self.build_user_table(unpaid_registrations)
@@ -227,16 +257,37 @@ class Command(BaseCommand):
         if intervals > 100 and verbose:
             intervals = 101
 
-        sys.stdout.write("Processing users")
+        sys.stdout.write("Processing users \n")
 
+        user_scores = []
         for profile in profiles:
             user_id = profile['user__id']
+            user = User.objects.get(id=user_id)
             self.print_progress(count, intervals, verbose)
 
+            # Create dict which will pass to the rows CSV
             student_dict = {
                 'Credits Issued': 0.0,  # XXX should be revisited when credit count functionality implemented
                 'Certif': False,
             }
+
+            if include_grades:
+                # Get scores for each exam and user in a course,
+                # then create a JSON that will associate the scores with the user
+                user_json = {'name':user}
+                scores = self.get_scores(user, course_id)
+                exams = []
+                for grade in scores['section_breakdown']:
+                    exam_scores = {'score':grade['percent'],'label':grade['label']}
+                    exams.append(exam_scores)
+                user_json['exams'] = exams
+                user_scores.append(user_json)
+                for user in user_scores:
+                    count = 0
+                    for exam in user["exams"]:
+                        label_exam = exam["label"]
+                        student_dict[label_exam] = exam["score"]
+                        count = count+1
 
             for field, label in PROFILE_FIELDS:
                 if 'untracked' not in field and len(label) > 0:
@@ -290,6 +341,31 @@ class Command(BaseCommand):
 
         outfile.close()
         sys.stdout.write("Data written to {name}\n".format(name=outfile_name))
+
+    def build_new_columns(self, user, course_id):
+        # Get the calificables units labels of the course,
+        # and add each label of the exam as one new column to CSV
+        scores = self.get_scores(user, course_id)
+        exam_columns = []
+        for grade in scores['section_breakdown']:
+            percent = str(grade['percent'])
+            category = grade['label']
+            if category not in exam_columns:
+                exam_columns.append((percent, category))
+        new_cme_specific_order = CME_SPECIFIC_ORDER + (exam_columns)
+        csv_fieldnames = [label for field, label in new_cme_specific_order if len(label) > 0]
+        
+        return csv_fieldnames
+
+    def get_scores(self, user, course_id):
+        """
+        Return the scores for each calificable unit per user in a determinated course.
+        """
+        course = get_course_with_access(user, 'load', course_id, depth=None, check_if_enrolled=True)
+        course_grade = CourseGradeFactory().create(user, course)
+        grade_summary = course_grade.summary
+        
+        return grade_summary
 
     def query_database_for(self, course_id):
         cme_profiles = CourseEnrollment.objects.select_related('user__profile__cmeuserprofile').filter(course_id=course_id).values(
