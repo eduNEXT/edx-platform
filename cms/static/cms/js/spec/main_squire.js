@@ -11,7 +11,7 @@
         paths: {
             'gettext': 'xmodule_js/common_static/js/test/i18n',
             'mustache': 'xmodule_js/common_static/js/vendor/mustache',
-            'codemirror': 'xmodule_js/common_static/js/vendor/CodeMirror/codemirror',
+            'codemirror': 'xmodule_js/common_static/js/vendor/CodeMirror/lib/codemirror',
             'jquery': 'common/js/vendor/jquery',
             'jquery-migrate': 'common/js/vendor/jquery-migrate',
             'jquery.ui': 'xmodule_js/common_static/js/vendor/jquery-ui.min',

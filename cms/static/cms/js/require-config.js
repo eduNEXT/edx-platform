@@ -85,8 +85,8 @@
         paths: {
             'domReady': 'js/vendor/domReady',
             'mustache': 'js/vendor/mustache',
-            'codemirror': 'js/vendor/codemirror-compressed',
-            'codemirror/stex': 'js/vendor/CodeMirror/stex',
+            'codemirror': 'js/vendor/CodeMirror/lib/codemirror',
+            'codemirror/stex': 'js/vendor/CoderMirror/mode/stex/stex',
             'jquery': 'common/js/vendor/jquery',
             'jquery-migrate': 'common/js/vendor/jquery-migrate',
             'jquery.ui': 'js/vendor/jquery-ui.min',
