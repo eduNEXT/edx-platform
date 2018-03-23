@@ -1,13 +1,12 @@
-<div class="js-form-feedback" aria-live="assertive" tabindex="-1">
-</div>
-
 <% if (!context.syncLearnerProfileData) { %>
-	<div class="toggle-form">
+	<div class="toggle-form title-form">
+        <h2>Welcome!</h2>
 		<span class="text"><%- edx.StringUtils.interpolate(gettext('Already have an {platformName} account?'), {platformName: context.platformName }) %></span>
 		<a href="#login" class="form-toggle" data-type="login"><%- gettext("Sign in.") %></a>
 	</div>
 <% } %>
-
+<div class="js-form-feedback" aria-live="assertive" tabindex="-1">
+</div>
 <form id="register" class="register-form" autocomplete="off" tabindex="-1" method="POST">
 
     <% if (!context.currentProvider) { %>

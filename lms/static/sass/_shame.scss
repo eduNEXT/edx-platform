@@ -6,6 +6,55 @@
 // edx.org marketing site - 7/2013 visual button revamp
 
 // extends btn
+
+
+$main-container-color: #F4F4F4;
+$primary-color:#E63D28;
+$action-color::#E63D28;
+
+.window-wrap {
+  background-color: $main-container-color;
+}
+
+
+.login-register-content{
+  background-color: $main-container-color;
+}
+
+
+.login-register {
+  background-color: $main-container-color;
+}
+
+.action-primary.login-button, 
+.action-primary.register-button,
+.login-register .action-primary,
+.action-primary.login-button:hover, 
+.action-primary.register-button:hover,
+.login-register .action-primary:hover {
+  background: $primary-color;
+  box-shadow: none;
+}
+
+button.action .action-primary:active{
+  background: $primary-color;
+  box-shadow;none;
+
+}
+
+
+
+.login-register-content {
+  h2 {
+    color:$primary-color;
+  }
+  .title-form h2{
+    color: #6AB3DC;
+    font-weight: 600;
+  }
+}
+
+
 %m-btn {
   @include box-sizing(border-box);
   @include transition(color $tmg-f2 ease-in-out, background $tmg-f2 ease-in-out, box-shadow $tmg-f2 ease-in-out);
