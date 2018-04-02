@@ -5,6 +5,7 @@
 <%!
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+from lms.djangoapps.learner_dashboard.utils import disclaimer_incomplete_fields_notification
 from django.template import RequestContext
 import third_party_auth
 from third_party_auth import pipeline
@@ -154,6 +155,15 @@ from openedx.core.djangolib.markup import HTML, Text
       %if sidebar_account_activation_message:
         <div class="sidebar-notification">
           ${sidebar_account_activation_message | n, decode.utf8}
+        </div>
+      %endif
+
+      %if configuration_helpers.get_value('ENABLE_INCOMPLETE_PROFILE_NOTIFICATION', settings.FEATURES.get('ENABLE_INCOMPLETE_PROFILE_NOTIFICATION', False)):
+        <div class="sidebar-notification">
+          <% disclaimer = disclaimer_incomplete_fields_notification(self, request) %>
+          % if disclaimer:
+              <%include file="learner_dashboard/_dashboard_incomplete_profile_notification.html"/>
+          % endif
         </div>
       %endif
 
