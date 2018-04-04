@@ -13,46 +13,96 @@ from django.core.management.base import BaseCommand, CommandError
 from pytz import UTC
 
 from certificates.models import GeneratedCertificate
+from cme_registration.models import CmeUserProfile
 from student.models import CourseEnrollment
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from shoppingcart.models import PaidCourseRegistration
 
+# Future proof: In Ginko the function is renamed to new.course_grade_factory
+# by Hawthorn the function is renamed again to course_grade_factory
+try:
+    from lms.djangoapps.grades.new.course_grade import CourseGradeFactory
+except ImportError:
+    try:
+        from lms.djangoapps.grades.new.course_grade_factory import CourseGradeFactory
+    except ImportError:
+        from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
+
 from unidecode import unidecode
 
+from django.contrib.auth.models import User
+from courseware.courses import (
+    get_course_with_access,
+)
+
+
 PROFILE_FIELDS = [
-    ('user__extrainfo__last_name', 'Last Name'),
-    ('user__extrainfo__middle_initial', 'Middle Initial'),
-    ('user__extrainfo__first_name', 'First Name'),
+    ('user__profile__cmeuserprofile__last_name', 'Last Name'),
+    ('user__profile__cmeuserprofile__middle_initial', 'Middle Initial'),
+    ('user__profile__cmeuserprofile__first_name', 'First Name'),
     ('user__email', 'Email Address'),
-    ('user__extrainfo__birth_date', 'Birth Date'),
-    ('user__extrainfo__professional_designation', 'Professional Designation'),
-    ('user__extrainfo__license_number', 'Professional License Number'),
-    ('user__extrainfo__license_country', 'Professional License Country'),
-    ('user__extrainfo__license_state', 'Professional License State'),
-    ('user__extrainfo__physician_status', 'Physician Status'),
-    ('user__extrainfo__patient_population', 'Patient Population'),
-    ('user__extrainfo__specialty', 'Specialty'),
-    ('user__extrainfo__sub_specialty', 'Sub Specialty'),
-    ('user__extrainfo__affiliation', 'Stanford Medicine Affiliation'),
-    ('user__extrainfo__sub_affiliation', 'Stanford Sub Affiliation'),
-    ('user__extrainfo__stanford_department', 'Stanford Department'),
-    ('user__extrainfo__sunet_id', 'SUNet ID'),
-    ('user__extrainfo__other_affiliation', 'Other Affiliation'),
-    ('user__extrainfo__job_title', 'Job Title or Position'),
-    ('user__extrainfo__address_1', 'Address 1'),
-    ('user__extrainfo__address_2', 'Address 2'),
-    ('user__extrainfo__city', 'City'),
-    ('user__extrainfo__state', 'State'),
-    ('user__extrainfo__postal_code', 'Postal Code'),
-    ('user__extrainfo__county_province', 'County/Province'),
-    ('user__extrainfo__country', 'Country'),
-    ('user__extrainfo__phone_number_untracked', 'Phone Number'),
-    ('user__profile__gender', 'Gender'),
-    ('user__extrainfo__marketing_opt_in_untracked', 'Marketing Opt-In'),
-    ('user__id', ''),
+    ('user__profile__cmeuserprofile__birth_date', 'Birth Date'),
+    ('user__profile__cmeuserprofile__professional_designation', 'Professional Designation'),
+    ('user__profile__cmeuserprofile__license_number', 'Professional License Number'),
+    ('user__profile__cmeuserprofile__license_country', 'Professional License Country'),
+    ('user__profile__cmeuserprofile__license_state', 'Professional License State'),
+    ('user__profile__cmeuserprofile__physician_status', 'Physician Status'),
+    ('user__profile__cmeuserprofile__patient_population', 'Patient Population'),
+    ('user__profile__cmeuserprofile__specialty', 'Specialty'),
+    ('user__profile__cmeuserprofile__sub_specialty', 'Sub Specialty'),
+    ('user__profile__cmeuserprofile__affiliation', 'Stanford Medicine Affiliation'),
+    ('user__profile__cmeuserprofile__sub_affiliation', 'Stanford Sub Affiliation'),
+    ('user__profile__cmeuserprofile__stanford_department', 'Stanford Department'),
+    ('user__profile__cmeuserprofile__sunet_id', 'SUNet ID'),
+    ('user__profile__cmeuserprofile__other_affiliation', 'Other Affiliation'),
+    ('user__profile__cmeuserprofile__job_title_position_untracked', 'Job Title or Position'),
+    ('user__profile__cmeuserprofile__address_1', 'Address 1'),
+    ('user__profile__cmeuserprofile__address_2', 'Address 2'),
+    ('user__profile__cmeuserprofile__city_cme', 'City'),
+    ('user__profile__cmeuserprofile__state', 'State'),
+    ('user__profile__cmeuserprofile__postal_code', 'Postal Code'),
+    ('user__profile__cmeuserprofile__county_province', 'County/Province'),
+    ('user__profile__cmeuserprofile__country_cme', 'Country'),
+    ('user__profile__cmeuserprofile__phone_number_untracked', 'Phone Number'),
+    ('user__profile__cmeuserprofile__gender', 'Gender'),
+    ('user__profile__cmeuserprofile__marketing_opt_in_untracked', 'Marketing Opt-In'),
+    ('user__id', '')
 ]
+if 'openedx.stanford.djangoapps.register_cme' in settings.INSTALLED_APPS:
+    PROFILE_FIELDS = [
+        ('user__extrainfo__last_name', 'Last Name'),
+        ('user__extrainfo__middle_initial', 'Middle Initial'),
+        ('user__extrainfo__first_name', 'First Name'),
+        ('user__email', 'Email Address'),
+        ('user__extrainfo__birth_date', 'Birth Date'),
+        ('user__extrainfo__professional_designation', 'Professional Designation'),
+        ('user__extrainfo__license_number', 'Professional License Number'),
+        ('user__extrainfo__license_country', 'Professional License Country'),
+        ('user__extrainfo__license_state', 'Professional License State'),
+        ('user__extrainfo__physician_status', 'Physician Status'),
+        ('user__extrainfo__patient_population', 'Patient Population'),
+        ('user__extrainfo__specialty', 'Specialty'),
+        ('user__extrainfo__sub_specialty', 'Sub Specialty'),
+        ('user__extrainfo__affiliation', 'Stanford Medicine Affiliation'),
+        ('user__extrainfo__sub_affiliation', 'Stanford Sub Affiliation'),
+        ('user__extrainfo__stanford_department', 'Stanford Department'),
+        ('user__extrainfo__sunet_id', 'SUNet ID'),
+        ('user__extrainfo__other_affiliation', 'Other Affiliation'),
+        ('user__extrainfo__job_title', 'Job Title or Position'),
+        ('user__extrainfo__address_1', 'Address 1'),
+        ('user__extrainfo__address_2', 'Address 2'),
+        ('user__extrainfo__city', 'City'),
+        ('user__extrainfo__state', 'State'),
+        ('user__extrainfo__postal_code', 'Postal Code'),
+        ('user__extrainfo__county_province', 'County/Province'),
+        ('user__extrainfo__country', 'Country'),
+        ('user__extrainfo__phone_number_untracked', 'Phone Number'),
+        ('user__profile__gender', 'Gender'),
+        ('user__extrainfo__marketing_opt_in_untracked', 'Marketing Opt-In'),
+        ('user__id', ''),
+    ]
 
 REGISTRATION_FIELDS = [
     ('system_id_untracked', 'System ID'),
@@ -148,6 +198,15 @@ class Command(BaseCommand):
             default=False,
             help='The amount of credits awarded for course completion.',
         ),
+        make_option(
+            '-g',
+            '--include-grades',
+            metavar='INCLUDE_GRADES',
+            dest='include_grades',
+            action='store_true',
+            default=False,
+            help='If you want the new version of the report.',
+        ),
     )
 
     def handle(self, *args, **options):
@@ -158,6 +217,7 @@ class Command(BaseCommand):
         end_date = datetime.strptime(options['end_date'], '%Y-%m-%d').replace(tzinfo=UTC)
         outfile_name = options['outfile']
         verbose = int(options['verbosity']) > 1
+        include_grades = options['include_grades']
 
         if not (course_id):
             raise CommandError('--course must be specified')
@@ -173,14 +233,21 @@ class Command(BaseCommand):
             outfile = tempfile.NamedTemporaryFile(suffix='.csv', delete=False)
             outfile_name = outfile.name
 
-        csv_fieldnames = [label for field, label in CME_SPECIFIC_ORDER if len(label) > 0]
+        certificates, profiles, registrations, unpaid_registrations = self.query_database_for(course_id)
+        if 'openedx.stanford.djangoapps.register_cme' in settings.INSTALLED_APPS:
+            certificates, profiles, registrations, unpaid_registrations = self.query_database_for_new_app(course_id)
+
+        if include_grades:
+            user_id = profiles[0]['user__id']
+            user = User.objects.get(id=user_id)
+            csv_fieldnames = self.build_new_columns(user, course_id)
+        else:
+            csv_fieldnames = [label for field, label in CME_SPECIFIC_ORDER if len(label) > 0]
 
         csvwriter = csv.DictWriter(outfile, fieldnames=csv_fieldnames, delimiter='\t', quoting=csv.QUOTE_ALL)
         csvwriter.writeheader()
 
         sys.stdout.write("Fetching enrolled students for {course}...".format(course=course_id))
-
-        certificates, profiles, registrations, unpaid_registrations = self.query_database_for(course_id)
 
         registration_table = self.build_user_table(registrations)
         unpaid_registration_table = self.build_user_table(unpaid_registrations)
@@ -195,6 +262,8 @@ class Command(BaseCommand):
         intervals = int(0.10 * total)
         if intervals > 100 and verbose:
             intervals = 101
+        if intervals < 1:
+            intervals = 1
 
         sys.stdout.write("Processing users")
 
@@ -207,6 +276,23 @@ class Command(BaseCommand):
                 'Attested': False,
             }
 
+            if include_grades:
+                # Get scores for each exam and user in a course,
+                # then create a dict that will associate the scores with the user
+                user = User.objects.get(id=user_id)
+                scores = self.get_scores(user, course_id)
+                exams = [
+                    {
+                        'score': grade['percent'],
+                        'label': grade['label'],
+                    }
+                    for grade in scores['section_breakdown']
+                ]
+
+                for exam in exams:
+                    label = exam['label']
+                    student_dict[label] = exam['score']
+
             for field, label in PROFILE_FIELDS:
                 if 'untracked' not in field and len(label) > 0:
                     student_dict[label] = profile[field]
@@ -216,7 +302,7 @@ class Command(BaseCommand):
             if registration:
                 self.add_fields_to(student_dict, ORDER_FIELDS, {user_id: registration.order}, user_id)
 
-                #Registration order special case values
+                # Registration order special case values
                 if student_dict['Payment Type'] == 'Visa':
                     student_dict['Payment Type'] = 'VISA'
 
@@ -268,7 +354,45 @@ class Command(BaseCommand):
         outfile.close()
         sys.stdout.write("Data written to {name}\n".format(name=outfile_name))
 
+    def build_new_columns(self, user, course_id):
+        """
+        Get the qualifiable units labels of the course,
+        and add each label of the exam as one new column to CSV
+        """
+        scores = self.get_scores(user, course_id)
+        exam_columns = []
+        for grade in scores['section_breakdown']:
+            percent = str(grade['percent'])
+            category = grade['label']
+            if category not in exam_columns:
+                exam_columns.append((percent, category))
+
+        new_cme_specific_order = CME_SPECIFIC_ORDER + exam_columns
+        csv_fieldnames = [
+            label
+            for field, label in new_cme_specific_order
+            if len(label) > 0
+        ]
+        return csv_fieldnames
+
+    def get_scores(self, user, course_id):
+        """
+        Return the scores for each qualifiable unit per user in a determinated course.
+        """
+        course = get_course_with_access(user, 'load', course_id, depth=None, check_if_enrolled=True)
+        course_grade = CourseGradeFactory().create(user, course)
+        return course_grade.summary
+
     def query_database_for(self, course_id):
+        cme_profiles = CourseEnrollment.objects.select_related('user__profile__cmeuserprofile').filter(course_id=course_id).values(
+            *[field for field, label in PROFILE_FIELDS if 'untracked' not in field]
+        ).order_by('user__username')
+        unpaid_registrations = CourseEnrollment.objects.filter(course_id=course_id)
+        registrations = PaidCourseRegistration.objects.filter(status='purchased', course_id=course_id)
+        certificates = GeneratedCertificate.objects.filter(course_id=course_id)
+        return certificates, cme_profiles, registrations, unpaid_registrations
+
+    def query_database_for_new_app(self, course_id):
         cme_profiles = CourseEnrollment.objects.select_related(
             'user__extrainfo',
             'user__profile',
