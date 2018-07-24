@@ -6397,6 +6397,16 @@ msgstr ""
 msgid "Username"
 msgstr "Ûsérnämé Ⱡ'σяєм ιρѕυм ∂#"
 
+#: lms/templates/instructor/instructor_dashboard_2/sensitive_data_download_msg.html
+#: lms/templates/instructor/instructor_dashboard_2/sensitive_data_download_msg.txt
+msgid "Contains information protected under the Protection of Privacy Law - the wrongful transgressor commits an offense"
+msgstr "Cöntäïns ïnfσяαмαtïöη ρяötéctéd ündéя thé Pσяtéçtïöη öf Pяïväcïty l∂w"
+
+#: lms/templates/instructor/instructor_dashboard_2/sensitive_data_on_reports.html
+#: lms/templates/instructor/instructor_dashboard_2/sensitive_data_on_reports.txt
+msgid "This report contains information protected under\nthe Protection of Privacy Law - the wrongful transgressor commits an offense\n"
+msgstr "This report cöntäïns ïnfσяαмαtïöη ρяötéctéd ündéя\nthé Pσяtéçtïöη öf Pяïväcïty l∂w\n"
+
 #: lms/djangoapps/class_dashboard/dashboard_data.py
 #: lms/templates/instructor/instructor_dashboard_2/metrics.html
 msgid "Grade"
@@ -20860,6 +20870,7 @@ msgid "modal open"
 msgstr "mödäl öpén Ⱡ'σяєм ιρѕυм ∂σłσ#"
 
 #: lms/templates/modal/accessible_confirm.html
+#: lms/templates/instructor/instructor_dashboard_2/data_download.html
 msgid "OK"
 msgstr "ÖK Ⱡ'σя#"
 

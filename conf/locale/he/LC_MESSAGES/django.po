@@ -104,6 +104,16 @@ msgstr "דיון"
 msgid "Problem"
 msgstr "בעיה"
 
+#: lms/templates/instructor/instructor_dashboard_2/sensitive_data_download_msg.html
+#: lms/templates/instructor/instructor_dashboard_2/sensitive_data_download_msg.txt
+msgid "Contains information protected under the Protection of Privacy Law - the wrongful transgressor commits an offense"
+msgstr "מכיל מידע מוגן לפי חוק הגנת הפרטיות - המוסר שלא כדין עובר עבירה"
+
+#: lms/templates/instructor/instructor_dashboard_2/sensitive_data_on_reports.html
+#: lms/templates/instructor/instructor_dashboard_2/sensitive_data_on_reports.txt
+msgid "This report contains information protected under\nthe Protection of Privacy Law - the wrongful transgressor commits an offense\n"
+msgstr "הדוח הזה הדוח מכיל מידע מוגן לפי חוק הגנת\n הפרטיות - המוסר שלא כדין עובר עבירה\n"
+
 #: cms/djangoapps/contentstore/views/component.py
 #: common/lib/xmodule/xmodule/video_module/video_module.py
 msgid "Advanced"
@@ -17602,6 +17612,7 @@ msgid "modal open"
 msgstr "מודל פתוח"
 
 #: lms/templates/modal/accessible_confirm.html
+#: lms/templates/instructor/instructor_dashboard_2/data_download.html
 msgid "OK"
 msgstr "בסדר"
 

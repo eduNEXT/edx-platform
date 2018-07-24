@@ -1,6 +1,10 @@
 from eventtracking import tracker
 from lms.djangoapps.instructor_task.models import ReportStore
 from util.file import course_filename_prefix_generator
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from edxmako.shortcuts import render_to_string
+
+from django.conf import settings
 
 REPORT_REQUESTED_EVENT_NAME = u'edx.instructor.report.requested'
 
@@ -28,6 +32,11 @@ def upload_csv_to_report_store(rows, csv_name, course_id, timestamp, config_name
         course_id: ID of the course
     """
     report_store = ReportStore.from_config(config_name)
+    disclaimer = SensitiveMessageOnReports()
+    if disclaimer.should_msg_be_displayed:
+        # Append the new row above the headers.
+        send_disclaimer = disclaimer.with_report_store()
+        rows = [send_disclaimer] + rows
     report_store.store_rows(
         course_id,
         u"{course_prefix}_{csv_name}_{timestamp_str}.csv".format(
@@ -45,3 +54,40 @@ def tracker_emit(report_name):
     Emits a 'report.requested' event for the given report.
     """
     tracker.emit(REPORT_REQUESTED_EVENT_NAME, {"report_type": report_name, })
+
+
+class SensitiveMessageOnReports(object):
+    """
+    Check how to add the disclaimer new row in the CSV,
+    due to reports are generated of different ways, each one handles their own way:
+        1. Using the CSV library directly.
+        2. Using upload_csv_to_report_store function which in turn
+           uses store_rows of DjangoStorageReportStore class where is built the CSV.
+    """
+
+    def __init__(self):
+        self.should_msg_be_displayed = configuration_helpers.get_value('DISPLAY_SENSITIVE_DATA_MSG_FOR_DOWNLOADS', settings.FEATURES.get('DISPLAY_SENSITIVE_DATA_MSG_FOR_DOWNLOADS', False))
+
+    def csv_direct(self, writer):
+        """
+        Writes the row immediately in the CSV.
+        """
+        if self.should_msg_be_displayed:
+            msg = self.process_message()
+            encode = unicode(msg).encode('utf-8')
+            return writer.writerow([encode])
+
+    def with_report_store(self):
+        """
+        Return the string parsed in process_message. This string is passed
+        to upload_csv_to_report_store which decides if execute it or not.
+        """
+        return [self.process_message()]
+
+    def process_message(self):
+        """
+        Return the message parsed from template.
+        """
+        template_message = 'instructor/instructor_dashboard_2/sensitive_data_download_msg.txt'
+        message = render_to_string(template_message, None)
+        return message
