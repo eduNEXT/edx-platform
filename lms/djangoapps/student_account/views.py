@@ -58,6 +58,9 @@ from third_party_auth.decorators import xframe_allow_whitelisted
 from util.bad_request_rate_limiter import BadRequestRateLimiter
 from util.date_utils import strftime_localized
 
+# Import custom form model from campusromero_openedx_extensions plugin app.
+from campusromero_openedx_extensions.custom_registration_form.models import CustomFormFields
+
 
 AUDIT_LOG = logging.getLogger("audit")
 log = logging.getLogger(__name__)
@@ -573,6 +576,9 @@ def account_settings_context(request):
         'extended_profile_fields': _get_extended_profile_fields(),
     }
 
+    # We extend the extended_profile_fields and maintain data no related to custom form fields.
+    context['extended_profile_fields'].extend(_get_custom_form_fields(CustomFormFields))
+
     enterprise_customer = get_enterprise_customer_for_learner(site=request.site, user=request.user)
     update_account_settings_context_for_enterprise(context, enterprise_customer)
 
@@ -604,3 +610,20 @@ def account_settings_context(request):
         } for state in auth_states if state.provider.display_for_login or state.has_account]
 
     return context
+
+
+def _get_custom_form_fields(custom_form_model):
+    """
+    Get the fields from the model and then create a list that contains,
+    every custom form field and its information.
+    """
+    custom_form_fields = custom_form_model._meta.fields # pylint: disable=W0212
+    extended_profile_fields = []
+    for field_index in range(2, len(custom_form_fields)):
+        extended_profile_fields.append({
+            "field_name": _(custom_form_fields[field_index].name),
+            "field_label": _(custom_form_fields[field_index].verbose_name),
+            "field_type": 'TextField' if not custom_form_fields[field_index].choices else 'ListField',
+            "field_options": [] if not custom_form_fields[field_index].choices else custom_form_fields[field_index].choices
+        })
+    return extended_profile_fields
