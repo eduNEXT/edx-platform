@@ -3855,6 +3855,9 @@ FERNET_KEYS = [
 # Maximum number of rows to fetch in XBlockUserStateClient calls. Adjust for performance
 USER_STATE_BATCH_SIZE = 5000
 
+############### Custom settings Campus Romero ###############
+CAMPUS_BYPASS_VERIFICATION_SERVICE = False
+
 ############### Settings for edx-rbac  ###############
 SYSTEM_WIDE_ROLE_CLASSES = []
 
