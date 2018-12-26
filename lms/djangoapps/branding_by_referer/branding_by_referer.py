@@ -71,11 +71,17 @@ class SetBrandingByReferer(MiddlewareMixin):
         if SetBrandingByReferer.user_referer:
             # Logic edx-platform/common/djangoapps/student/views/login.py
             oauth_client_ids = request.session.get(edx_oauth2_provider.constants.AUTHORIZED_CLIENTS_SESSION_KEY, [])
-            referer_url = '//{}'.format(SetBrandingByReferer.user_referer)
-            if urlparse(request.META.get('HTTP_REFERER', '')).path == '/logout':
-                return redirect(referer_url)
-            if not oauth_client_ids and getattr(request.resolver_match, 'url_name', None) == 'logout':
-                return redirect(referer_url)
+            user_referer = '//{}'.format(SetBrandingByReferer.user_referer)
+            referer_path = urlparse(request.META.get('HTTP_REFERER', '')).path
+            url_resolver_name = getattr(request.resolver_match, 'url_name', None)
+
+            if referer_path == '/logout':
+                return redirect(user_referer)
+
+            if url_resolver_name == 'logout' and not oauth_client_ids:
+                if response.has_header('Location'):
+                    response['Location'] = user_referer
+
         return response
 
 
