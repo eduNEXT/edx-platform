@@ -401,6 +401,12 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
             path=reverse('about_course', kwargs={'course_id': course_key})
         )
 
+    login_url = u'{proto}://{site}{path}'.format(
+        proto=protocol,
+        site=stripped_site_name,
+        path=reverse('signin_user')
+    )
+
     is_shib_course = uses_shib(course)
 
     # Composition of email
@@ -413,6 +419,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
         'course_url': course_url,
         'course_about_url': course_about_url,
         'is_shib_course': is_shib_course,
+        'login_url': login_url,
     }
     return email_params
 
