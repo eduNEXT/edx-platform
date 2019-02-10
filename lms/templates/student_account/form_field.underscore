@@ -132,7 +132,4 @@
         <% if ( instructions ) { %> <span class="tip tip-input" id="<%- form %>-<%- name %>-desc"><%- instructions %></span><% } %>
     <% } %>
 
-    <% if( form === 'login' && name === 'password' ) { %>
-        <button type="button" class="forgot-password field-link"><%- gettext("Forgot password?") %></button>
-    <% } %>
 </div>
