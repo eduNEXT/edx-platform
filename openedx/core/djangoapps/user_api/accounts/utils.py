@@ -15,6 +15,7 @@ from completion import waffle as completion_waffle
 from completion.models import BlockCompletion
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from openedx.core.djangoapps.theming.helpers import get_config_value_from_site_or_settings, get_current_site
+from util.password_policy_validators import password_complexity
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError
 
@@ -188,7 +189,42 @@ def generate_password(length=12, chars=string.letters + string.digits):
     choice = random.SystemRandom().choice
 
     password = ''
-    password += choice(string.digits)
-    password += choice(string.letters)
-    password += ''.join([choice(chars) for _i in xrange(length - 2)])
+
+    min_uppercase = 1
+    min_lowercase = 1
+    min_digits = 1
+    min_punctuation = 0
+
+    if settings.FEATURES.get('ENFORCE_PASSWORD_POLICY', False):
+        complexity = password_complexity()
+        length = max(length, settings.PASSWORD_MIN_LENGTH)
+        min_uppercase = complexity.get('UPPER', 0)
+        min_lowercase = complexity.get('LOWER', 0)
+        min_digits = complexity.get('DIGITS', 0)
+        min_punctuation = complexity.get('PUNCTUATION', 0)
+
+        # Merge DIGITS and NUMERIC policy
+        min_numeric = complexity.get('NUMERIC', 0)
+        min_digits = max(min_digits, min_numeric)
+
+        # lowercase and uppercase are alphabetic
+        min_alphabetic = complexity.get('ALPHABETIC', 0)
+        if min_alphabetic > min_uppercase + min_lowercase:
+            min_lowercase = min_alphabetic - min_uppercase
+
+    policies = min_uppercase + min_lowercase + min_digits + min_punctuation
+
+    for _ in xrange(min_digits):
+        password += choice(string.digits)
+
+    for _ in xrange(min_lowercase):
+        password += choice(string.lowercase)
+
+    for _ in xrange(min_uppercase):
+        password += choice(string.uppercase)
+
+    for _ in xrange(min_punctuation):
+        password += choice(string.punctuation)
+
+    password += ''.join([choice(chars) for _i in xrange(length - policies)])
     return password
