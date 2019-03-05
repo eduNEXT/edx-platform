@@ -194,6 +194,7 @@ def generate_password(length=12, chars=string.letters + string.digits):
     min_lowercase = 1
     min_digits = 1
     min_punctuation = 0
+    min_words = 1
 
     if settings.FEATURES.get('ENFORCE_PASSWORD_POLICY', False):
         complexity = password_complexity()
@@ -202,6 +203,7 @@ def generate_password(length=12, chars=string.letters + string.digits):
         min_lowercase = complexity.get('LOWER', 0)
         min_digits = complexity.get('DIGITS', 0)
         min_punctuation = complexity.get('PUNCTUATION', 0)
+        min_words = complexity.get('WORDS', min_words)
 
         # Merge DIGITS and NUMERIC policy
         min_numeric = complexity.get('NUMERIC', 0)
@@ -227,4 +229,10 @@ def generate_password(length=12, chars=string.letters + string.digits):
         password += choice(string.punctuation)
 
     password += ''.join([choice(chars) for _i in xrange(length - policies)])
+
+    if min_words > 1:
+        # Add the number of spaces to have the number of words required
+        word_size = length / min_words
+        password = ''.join(l + ' ' * (n % word_size == word_size - 1 and n < length - 1) for n, l in enumerate(password))
+
     return password
