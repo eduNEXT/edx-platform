@@ -210,9 +210,9 @@ def generate_password(length=12, chars=string.letters + string.digits):  # pylin
             min_lowercase = min_alphabetic - min_uppercase
 
     # We need to be able to delete values of the choice source sequence,
-    # since the _validate_password_complexity function, groups the policy inside
-    # of a set iterable is a collections of unique elements,
-    # and repeat characters are no allowed.
+    # because, _validate_password_complexity function, groups the validations policy inside
+    # of a set() iterable, which is a collection of unique elements,
+    # and repeated characters are no allowed.
     digits = string.digits
     list_digits = list(digits)
     for _ in xrange(min_digits):
