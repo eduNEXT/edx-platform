@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Utility methods for the account settings.
 """
@@ -191,6 +192,7 @@ def generate_password(length=12, chars=string.letters + string.digits):  # pylin
     min_uppercase, min_lowercase, min_digits, min_words = 1, 1, 1, 1
     min_punctuation = 0
     password_length = max(length, settings.PASSWORD_MIN_LENGTH)
+    non_ascii_characters = [u'£', u'¥', u'€', u'©', u'®', u'™', u'†', u'§', u'¶', u'π', u'μ', u'±']
 
     if settings.FEATURES.get('ENFORCE_PASSWORD_POLICY'):
         complexity = password_complexity()
@@ -198,6 +200,7 @@ def generate_password(length=12, chars=string.letters + string.digits):  # pylin
         min_lowercase = complexity.get('LOWER', 0)
         min_punctuation = complexity.get('PUNCTUATION', 0)
         min_words = complexity.get('WORDS', min_words)
+        min_non_ascii = complexity.get('NON ASCII', 0)
 
         # Merge DIGITS and NUMERIC policy
         min_numeric = complexity.get('NUMERIC', 0)
@@ -241,8 +244,15 @@ def generate_password(length=12, chars=string.letters + string.digits):  # pylin
         password += punct
         del list_punctuation[list_punctuation.index(punct)]
 
+    non_ascii = non_ascii_characters
+    list_non_ascii = list(non_ascii)
+    for _ in xrange(min_non_ascii):
+        non = choice(list_non_ascii)
+        password += non
+        del list_non_ascii[list_non_ascii.index(non)]
+
     policies = min_uppercase + min_lowercase + min_digits + min_punctuation
-    password += ''.join([choice(chars) for _i in xrange(length - policies)])
+    password += ''.join([choice(chars) for _i in xrange(password_length - policies)])
 
     if min_words > 1:
         # Add the number of spaces to have the number of words required
