@@ -181,58 +181,72 @@ def retrieve_last_sitewide_block_completed(username):
     )
 
 
-def generate_password(length=12, chars=string.letters + string.digits):
+def generate_password(length=12, chars=string.letters + string.digits):  # pylint: disable=too-many-locals
     """Generate a valid random password"""
     if length < 8:
         raise ValueError("password must be at least 8 characters")
 
-    choice = random.SystemRandom().choice
-
     password = ''
-
-    min_uppercase = 1
-    min_lowercase = 1
-    min_digits = 1
+    choice = random.SystemRandom().choice
+    min_uppercase, min_lowercase, min_digits, min_words = 1, 1, 1, 1
     min_punctuation = 0
-    min_words = 1
+    password_length = max(length, settings.PASSWORD_MIN_LENGTH)
 
-    if settings.FEATURES.get('ENFORCE_PASSWORD_POLICY', False):
+    if settings.FEATURES.get('ENFORCE_PASSWORD_POLICY'):
         complexity = password_complexity()
-        length = max(length, settings.PASSWORD_MIN_LENGTH)
         min_uppercase = complexity.get('UPPER', 0)
         min_lowercase = complexity.get('LOWER', 0)
-        min_digits = complexity.get('DIGITS', 0)
         min_punctuation = complexity.get('PUNCTUATION', 0)
         min_words = complexity.get('WORDS', min_words)
 
         # Merge DIGITS and NUMERIC policy
         min_numeric = complexity.get('NUMERIC', 0)
+        min_digits = complexity.get('DIGITS', 0)
         min_digits = max(min_digits, min_numeric)
 
-        # lowercase and uppercase are alphabetic
+        # Lowercase and uppercase are alphabetic
         min_alphabetic = complexity.get('ALPHABETIC', 0)
         if min_alphabetic > min_uppercase + min_lowercase:
             min_lowercase = min_alphabetic - min_uppercase
 
-    policies = min_uppercase + min_lowercase + min_digits + min_punctuation
-
+    # We need to be able to delete values of the choice source sequence,
+    # since the _validate_password_complexity function, groups the policy inside
+    # of a set iterable is a collections of unique elements,
+    # and repeat characters are no allowed.
+    digits = string.digits
+    list_digits = list(digits)
     for _ in xrange(min_digits):
-        password += choice(string.digits)
+        digit = choice(list_digits)
+        password += digit
+        del list_digits[list_digits.index(digit)]
 
+    lowercase = string.lowercase
+    list_lowercase = list(lowercase)
     for _ in xrange(min_lowercase):
-        password += choice(string.lowercase)
+        lower = choice(list_lowercase)
+        password += lower
+        del list_lowercase[list_lowercase.index(lower)]
 
+    uppercase = string.uppercase
+    list_uppercase = list(uppercase)
     for _ in xrange(min_uppercase):
-        password += choice(string.uppercase)
+        upper = choice(list_uppercase)
+        password += upper
+        del list_uppercase[list_uppercase.index(upper)]
 
+    punctuation = string.punctuation
+    list_punctuation = list(punctuation)
     for _ in xrange(min_punctuation):
-        password += choice(string.punctuation)
+        punct = choice(list_punctuation)
+        password += punct
+        del list_punctuation[list_punctuation.index(punct)]
 
+    policies = min_uppercase + min_lowercase + min_digits + min_punctuation
     password += ''.join([choice(chars) for _i in xrange(length - policies)])
 
     if min_words > 1:
         # Add the number of spaces to have the number of words required
-        word_size = length / min_words
+        word_size = password_length / min_words
         password = ''.join(l + ' ' * (n % word_size == word_size - 1 and n < length - 1) for n, l in enumerate(password))
 
     return password
