@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Utility methods for the account settings.
 """
@@ -15,6 +16,7 @@ from completion import waffle as completion_waffle
 from completion.models import BlockCompletion
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from openedx.core.djangoapps.theming.helpers import get_config_value_from_site_or_settings, get_current_site
+from util.password_policy_validators import password_complexity
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError
 
@@ -180,15 +182,86 @@ def retrieve_last_sitewide_block_completed(username):
     )
 
 
-def generate_password(length=12, chars=string.letters + string.digits):
+def generate_password(length=12, chars=string.letters + string.digits):  # pylint: disable=too-many-locals
     """Generate a valid random password"""
     if length < 8:
         raise ValueError("password must be at least 8 characters")
 
-    choice = random.SystemRandom().choice
-
     password = ''
-    password += choice(string.digits)
-    password += choice(string.letters)
-    password += ''.join([choice(chars) for _i in xrange(length - 2)])
+    choice = random.SystemRandom().choice
+    min_uppercase, min_lowercase, min_digits, min_words = 1, 1, 1, 1
+    min_punctuation = 0
+    password_length = max(length, settings.PASSWORD_MIN_LENGTH)
+    non_ascii_characters = [u'£', u'¥', u'€', u'©', u'®', u'™', u'†', u'§', u'¶', u'π', u'μ', u'±']
+
+    if settings.FEATURES.get('ENFORCE_PASSWORD_POLICY'):
+        complexity = password_complexity()
+        min_uppercase = complexity.get('UPPER', 0)
+        min_lowercase = complexity.get('LOWER', 0)
+        min_punctuation = complexity.get('PUNCTUATION', 0)
+        min_words = complexity.get('WORDS', min_words)
+        min_non_ascii = complexity.get('NON ASCII', 0)
+
+        # Merge DIGITS and NUMERIC policy
+        min_numeric = complexity.get('NUMERIC', 0)
+        min_digits = complexity.get('DIGITS', 0)
+        min_digits = max(min_digits, min_numeric)
+
+        # Lowercase and uppercase are alphabetic
+        min_alphabetic = complexity.get('ALPHABETIC', 0)
+        if min_alphabetic > min_uppercase + min_lowercase:
+            min_lowercase = min_alphabetic - min_uppercase
+
+    # We need to be able to delete values of the choice source sequence,
+    # because, _validate_password_complexity function, groups the validations policy inside
+    # of a set() iterable, which is a collection of unique elements,
+    # and repeated characters are no allowed.
+    digits = string.digits
+    list_digits = list(digits)
+    for _ in xrange(min_digits):
+        digit = choice(list_digits)
+        password += digit
+        del list_digits[list_digits.index(digit)]
+
+    lowercase = string.lowercase
+    list_lowercase = list(lowercase)
+    for _ in xrange(min_lowercase):
+        lower = choice(list_lowercase)
+        password += lower
+        del list_lowercase[list_lowercase.index(lower)]
+
+    uppercase = string.uppercase
+    list_uppercase = list(uppercase)
+    for _ in xrange(min_uppercase):
+        upper = choice(list_uppercase)
+        password += upper
+        del list_uppercase[list_uppercase.index(upper)]
+
+    punctuation = string.punctuation
+    list_punctuation = list(punctuation)
+    for _ in xrange(min_punctuation):
+        punct = choice(list_punctuation)
+        password += punct
+        del list_punctuation[list_punctuation.index(punct)]
+
+    non_ascii = non_ascii_characters
+    list_non_ascii = list(non_ascii)
+    for _ in xrange(min_non_ascii):
+        non = choice(list_non_ascii)
+        password += non
+        del list_non_ascii[list_non_ascii.index(non)]
+
+    policies = min_uppercase + min_lowercase + min_digits + min_punctuation
+    password += ''.join([choice(chars) for _i in xrange(password_length - policies)])
+
+    password_list = list(password)
+    random.shuffle(password_list)
+
+    password = ''.join(password_list)
+
+    if min_words > 1:
+        # Add the number of spaces to have the number of words required
+        word_size = password_length / min_words
+        password = ''.join(l + ' ' * (n % word_size == word_size - 1 and n < length - 1) for n, l in enumerate(password))
+
     return password
