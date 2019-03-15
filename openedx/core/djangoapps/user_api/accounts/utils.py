@@ -254,6 +254,11 @@ def generate_password(length=12, chars=string.letters + string.digits):  # pylin
     policies = min_uppercase + min_lowercase + min_digits + min_punctuation
     password += ''.join([choice(chars) for _i in xrange(password_length - policies)])
 
+    password_list = list(password)
+    random.shuffle(password_list)
+
+    password = ''.join(password_list)
+
     if min_words > 1:
         # Add the number of spaces to have the number of words required
         word_size = password_length / min_words
