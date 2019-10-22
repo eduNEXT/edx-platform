@@ -4,7 +4,7 @@
     <div id="new-email-status" />
 
     <label for="password"><%- gettext("Password") %></label>
-    <input id="password" type="password" name="password" value="" data-validate="required"/>
+    <input id="password" type="password" name="password" value="" data-validate="required" autocomplete="off"/>
     <div id="password-status" />
 
     <div class="submit-button">
