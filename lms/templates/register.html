@@ -109,7 +109,7 @@ import calendar
 
 <section class="register container">
   <section role="main" class="content">
-    <form role="form" id="register-form" method="post" data-remote="true" action="/create_account" novalidate>
+    <form role="form" id="register-form" autocomplete="off" method="post" data-remote="true" action="/create_account" novalidate>
 <%
   # allow for theming override on the registration form
   registration_form = static.get_template_path('register-form.html')

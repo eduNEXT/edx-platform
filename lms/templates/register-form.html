@@ -77,17 +77,17 @@ from student.models import UserProfile
   <ol class="list-input">
     <li class="field required text" id="field-email">
       <label for="email">${_('E-mail')}</label>
-      <input class="" id="email" type="email" name="email" value="${email}" placeholder="${_('example: username@domain.com')}" required aria-required="true" />
+      <input class="" id="email" type="email" name="email" autocomplete="off" value="${email}" placeholder="${_('example: username@domain.com')}" required aria-required="true" />
     </li>
 
     <li class="field required text" id="field-name">
       <label for="name">${_('Full Name')}</label>
-      <input id="name" type="text" name="name" value="${name}" placeholder="${_('example: Jane Doe')}" required aria-required="true" aria-describedby="name-tip" />
+      <input id="name" type="text" name="name" value="${name}" autocomplete="off" placeholder="${_('example: Jane Doe')}" required aria-required="true" aria-describedby="name-tip" />
       <span class="tip tip-input" id="name-tip">${_("Your legal name, used for any certificates you earn.")}</span>
     </li>
     <li class="field required text" id="field-username">
       <label for="username">${_('Public Username')}</label>
-      <input id="username" type="text" name="username" value="${username}" placeholder="${_('example: JaneDoe')}" required aria-required="true" aria-describedby="username-tip"/>
+      <input id="username" type="text" name="username" autocomplete="off" value="${username}" placeholder="${_('example: JaneDoe')}" required aria-required="true" aria-describedby="username-tip"/>
       <span class="tip tip-input" id="username-tip">${_('Will be shown in any discussions or forums you participate in')} <strong>(${_('cannot be changed later')})</strong></span>
     </li>
 
@@ -95,14 +95,14 @@ from student.models import UserProfile
 
     <li class="is-disabled field optional password" id="field-password" hidden>
       <label for="password">${_('Password')}</label>
-      <input id="password" type="password" name="password" value="" disabled required aria-required="true" />
+      <input id="password" type="password" name="password" autocomplete="off" value="" disabled required aria-required="true" />
     </li>
 
     % else:
 
     <li class="field required password" id="field-password">
       <label for="password">${_('Password')}</label>
-      <input id="password" type="password" name="password" value="" required aria-required="true" />
+      <input id="password" type="password" name="password" autocomplete="off" value="" required aria-required="true" />
     </li>
 
     % endif
@@ -121,14 +121,14 @@ from student.models import UserProfile
 
     <li class="field required text" id="field-email">
       <label for="email">${_("E-mail")}</label>
-      <input class="" id="email" type="email" name="email" value="" placeholder="${_('example: username@domain.com')}" />
+      <input class="" id="email" type="email" name="email" autocomplete="off" value="" placeholder="${_('example: username@domain.com')}" />
     </li>
 
     % endif
 
     <li class="field required text" id="field-username">
       <label for="username">${_('Public Display Name')}</label>
-      <input id="username" type="text" name="username" value="${extauth_username}" placeholder="${_('example: JaneDoe')}" required aria-required="true" aria-describedby="username-tip" />
+      <input id="username" type="text" name="username" autocomplete="off" value="${extauth_username}" placeholder="${_('example: JaneDoe')}" required aria-required="true" aria-describedby="username-tip" />
       <span class="tip tip-input" id="id="username-tip>${_('Will be shown in any discussions or forums you participate in')} <strong>(${_('cannot be changed later')})</strong></span>
     </li>
 
@@ -136,7 +136,7 @@ from student.models import UserProfile
 
     <li class="field required text" id="field-name">
       <label for="name">${_('Full Name')}</label>
-      <input id="name" type="text" name="name" value="" placeholder="$_('example: Jane Doe')}" aria-describedby="name-tip" />
+      <input id="name" type="text" name="name" autocomplete="off" value="" placeholder="$_('example: Jane Doe')}" aria-describedby="name-tip" />
       <span class="tip tip-input" id="name-tip">${_("Your legal name, used for any certificates you earn.")}</span>
     </li>
 
@@ -154,7 +154,7 @@ from student.models import UserProfile
     % if settings.REGISTRATION_EXTRA_FIELDS['city'] != 'hidden':
     <li class="field ${settings.REGISTRATION_EXTRA_FIELDS['city']} text" id="field-city">
       <label for="city">${_('City')}</label>
-      <input id="city" type="text" name="city" value="" placeholder="${_('example: New York')}" aria-describedby="city-tip" ${'required aria-required="true"' if settings.REGISTRATION_EXTRA_FIELDS['city'] == 'required' else ''} />
+      <input id="city" type="text" name="city" autocomplete="off" value="" placeholder="${_('example: New York')}" aria-describedby="city-tip" ${'required aria-required="true"' if settings.REGISTRATION_EXTRA_FIELDS['city'] == 'required' else ''} />
     </li>
     % endif
     % if settings.REGISTRATION_EXTRA_FIELDS['country'] != 'hidden':
@@ -238,7 +238,7 @@ from student.models import UserProfile
 
       % if has_extauth_info is UNDEFINED or ask_for_tos :
       <div class="field required checkbox" id="field-tos">
-        <input id="tos-yes" type="checkbox" name="terms_of_service" value="true" required aria-required="true" />
+        <input id="tos-yes" type="checkbox" name="terms_of_service" autocomplete="off" value="true" required aria-required="true" />
         <label for="tos-yes">${_('I agree to the {link_start}Terms of Service{link_end}').format(
           link_start='<a href="{url}" class="new-vp" tabindex="-1">'.format(url=marketing_link('TOS')),
           link_end='</a>')}</label>
@@ -249,7 +249,7 @@ from student.models import UserProfile
       ## check if we have an Honor Code link in our marketing map
       % if marketing_link('HONOR') and marketing_link('HONOR') != '#':
       <div class="field ${settings.REGISTRATION_EXTRA_FIELDS['honor_code']} checkbox" id="field-honorcode">
-        <input id="honorcode-yes" type="checkbox" name="honor_code" value="true" />
+        <input id="honorcode-yes" type="checkbox" name="honor_code" autocomplete="off" value="true" />
         <%
           honor_code_path = marketing_link('HONOR')
         %>

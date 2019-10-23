@@ -142,7 +142,7 @@ from third_party_auth import provider, pipeline
 
 <section class="login container">
   <section role="main" class="content">
-    <form role="form" id="login-form" method="post" data-remote="true" action="/login_ajax" novalidate>
+    <form role="form" id="login-form" autocomplete="off" method="post" data-remote="true" action="/login_ajax" novalidate>
 
       <!-- status messages -->
       <div role="alert" class="status message">
@@ -179,12 +179,12 @@ from third_party_auth import provider, pipeline
         <ol class="list-input">
           <li class="field required text" id="field-email">
             <label for="email">${_('E-mail')}</label>
-            <input class="" id="email" type="email" name="email" value="" placeholder="${_('example: username@domain.com')}" required aria-required="true" aria-described-by="email-tip" />
+            <input class="" id="email" type="email" name="email" autocomplete="off" value="" placeholder="${_('example: username@domain.com')}" required aria-required="true" aria-described-by="email-tip" />
             <span class="tip tip-input" id="email-tip">${_("This is the e-mail address you used to register with {platform}").format(platform=platform_name)}</span>
           </li>
           <li class="field required password" id="field-password">
             <label for="password">${_('Password')}</label>
-            <input id="password" type="password" name="password" value="" required aria-required="true" />
+            <input id="password" type="password" name="password" autocomplete="off" value="" required aria-required="true" />
             <span class="tip tip-input">
               <a href="#forgot-password-modal" rel="leanModal" class="pwd-reset action action-forgotpw" id="forgot-password-link" role="button" aria-haspopup="true">${_('Forgot password?')}</a>
             </span>
@@ -197,7 +197,7 @@ from third_party_auth import provider, pipeline
 
         <ol class="list-input">
           <li class="field required checkbox" id="field-remember">
-            <input id="remember-yes" type="checkbox" name="remember" value="true" />
+            <input id="remember-yes" type="checkbox" name="remember" autocomplete="off" value="true" />
             <label for="remember-yes">${_('Remember me')}</label>
           </li>
         </ol>
