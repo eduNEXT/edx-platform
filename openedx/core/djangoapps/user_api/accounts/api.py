@@ -47,6 +47,9 @@ from .serializers import (
     UserReadOnlySerializer, _visible_fields  # pylint: disable=invalid-name
 )
 
+# Import custom form model from campusromero_openedx_extensions plugin app.
+from campusromero_openedx_extensions.custom_registration_form.models import CustomFormFields
+
 # Public access point for this function.
 visible_fields = _visible_fields
 
@@ -272,10 +275,18 @@ def update_account_settings(requesting_user, update, username=None):
         if 'extended_profile' in update:
             meta = existing_user_profile.get_meta()
             new_extended_profile = update['extended_profile']
+            # We get the custom form fields by user.
+            custom_form_fields_obj, _ = CustomFormFields.objects.get_or_create(user=existing_user)
             for field in new_extended_profile:
                 field_name = field['field_name']
                 new_value = field['field_value']
-                meta[field_name] = new_value
+                if field_name in meta:
+                    meta[field_name] = new_value
+                # If field_name does not exist in meta we check that
+                # exist in custom_form_fields_obj and then we save it.
+                elif hasattr(custom_form_fields_obj, field_name):
+                    setattr(custom_form_fields_obj, field_name, new_value)
+            custom_form_fields_obj.save()
             existing_user_profile.set_meta(meta)
             existing_user_profile.save()
 

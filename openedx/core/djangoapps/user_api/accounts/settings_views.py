@@ -27,6 +27,8 @@ import third_party_auth
 from third_party_auth import pipeline
 from util.date_utils import strftime_localized
 
+# Import custom form model from campusromero_openedx_extensions plugin app.
+from campusromero_openedx_extensions.custom_registration_form.models import CustomFormFields
 
 log = logging.getLogger(__name__)
 
@@ -238,4 +240,27 @@ def _get_extended_profile_fields():
             field_dict["field_type"] = "TextField"
         extended_profile_fields.append(field_dict)
 
+    # We extend the extended_profile_fields and maintain data no related to custom form fields.
+    extended_profile_fields.extend(_get_custom_form_fields(CustomFormFields))
+
+    return extended_profile_fields
+
+
+def _get_custom_form_fields(custom_form_model):
+    """
+    Get the fields from the model and then create a list that contains,
+    every custom form field and its information.
+    """
+    custom_form_fields = custom_form_model._meta.fields  # pylint: disable=W0212
+    blacklisted_fields = ["id", "user"]
+    extended_profile_fields = []
+    for field in custom_form_fields:
+        if field.name in blacklisted_fields:
+            continue
+        extended_profile_fields.append({
+            "field_name": field.name,
+            "field_label": _(field.verbose_name),
+            "field_type": "TextField" if not field.choices else "ListField",
+            "field_options": [] if not field.choices else field.choices
+        })
     return extended_profile_fields

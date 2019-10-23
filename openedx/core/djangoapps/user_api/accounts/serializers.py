@@ -30,6 +30,9 @@ from . import (
 from .image_helpers import get_profile_image_urls_for_user
 from .utils import validate_social_link, format_social_link
 
+# Import custom form model from campusromero_openedx_extensions plugin app.
+from campusromero_openedx_extensions.custom_registration_form.models import CustomFormFields
+
 PROFILE_IMAGE_KEY_PREFIX = 'image_url'
 LOGGER = logging.getLogger(__name__)
 
@@ -459,7 +462,29 @@ def get_extended_profile(user_profile):
             "field_name": field_name,
             "field_value": extended_profile_fields_data.get(field_name, "")
         })
+    extended_profile.extend(get_custom_form_fields(user_profile.user, CustomFormFields))
     return extended_profile
+
+
+def get_custom_form_fields(user, custom_model):
+    """
+    Return the custom profile fields defined through a custom model definition
+    """
+    custom_fields = custom_model._meta.fields
+    try:
+        instance_custom_model = custom_model.objects.get(user=user)
+    except custom_model.DoesNotExist:
+        instance_custom_model = {}
+    custom_profile = []
+    blacklisted_fields = ["id", "user"]
+    for field in custom_fields:
+        if field.name in blacklisted_fields:
+            continue
+        custom_profile.append({
+            "field_name": field.name,
+            "field_value": getattr(instance_custom_model, field.name, "")
+        })
+    return custom_profile
 
 
 def get_profile_visibility(user_profile, user, configuration=None):
