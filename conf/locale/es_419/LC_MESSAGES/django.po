@@ -6738,7 +6738,9 @@ msgstr "registrarse"
 
 #: lms/djangoapps/courseware/views/views.py
 msgid "Your enrollment: Audit track"
-msgstr "Su inscripción: ruta de asistente"
+msgstr ""
+"Tu inscripción es gratuita, esta modalidad no ofrece un certificado al "
+"finalizar."
 
 #: lms/djangoapps/courseware/views/views.py
 msgid ""
