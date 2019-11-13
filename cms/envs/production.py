@@ -605,6 +605,9 @@ RETIREMENT_STATES = ENV_TOKENS.get('RETIREMENT_STATES', RETIREMENT_STATES)
 ############## Settings for Course Enrollment Modes ######################
 COURSE_ENROLLMENT_MODES = ENV_TOKENS.get('COURSE_ENROLLMENT_MODES', COURSE_ENROLLMENT_MODES)
 
+############# SCORMXBLOCK #########################
+SCORMXBLOCK_ASYNC_THRESHOLD = ENV_TOKENS.get('SCORMXBLOCK_ASYNC_THRESHOLD', 150)
+
 ####################### Plugin Settings ##########################
 
 # This is at the bottom because it is going to load more settings after base settings are loaded
