@@ -247,3 +247,6 @@ xblock-review==1.1.5
 xblock-utils==1.2.0
 xblock==1.2.2
 zendesk==1.1.1
+
+####### Custom packages
+-e https://github.com/edunext/eox-azure.git@v0.1.0#egg=eox-azure==0.1.0
