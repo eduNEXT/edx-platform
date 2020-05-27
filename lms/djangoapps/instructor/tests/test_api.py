@@ -3315,7 +3315,10 @@ class TestInstructorAPILevelsDataDump(SharedModuleStoreTestCase, LoginEnrollment
         ex_status = 503
         ex_reason = 'Slow Down'
         url = reverse('list_report_downloads', kwargs={'course_id': text_type(self.course.id)})
-        with patch('storages.backends.s3boto.S3BotoStorage.listdir', side_effect=BotoServerError(ex_status, ex_reason)):
+        with patch(
+            'storages.backends.s3boto3.S3Boto3Storage.listdir',
+            side_effect=BotoServerError(ex_status, ex_reason)
+        ):
             response = self.client.post(url, {})
         mock_error.assert_called_with(
             u'Fetching files failed for course: %s, status: %s, reason: %s',
