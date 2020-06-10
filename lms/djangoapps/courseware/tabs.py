@@ -29,6 +29,12 @@ class EnrolledTab(CourseTab):
         return user and user.is_authenticated and \
             bool(CourseEnrollment.is_enrolled(user, course.id) or has_access(user, 'staff', course, course.id))
 
+    @property
+    def uses_bootstrap(self):
+        """
+        Returns true if this tab is rendered with Bootstrap.
+        """
+        return True
 
 class CoursewareTab(EnrolledTab):
     """
@@ -76,6 +82,13 @@ class CourseInfoTab(CourseTab):
 
     @classmethod
     def is_enabled(cls, course, user=None):
+        return True
+
+    @property
+    def uses_bootstrap(self):
+        """
+        Returns true if this tab is rendered with Bootstrap.
+        """
         return True
 
 
@@ -136,6 +149,12 @@ class TextbookTabsBase(CourseTab):
         """
         raise NotImplementedError()
 
+    @property
+    def uses_bootstrap(self):
+        """
+        Returns true if this tab is rendered with Bootstrap.
+        """
+        return True
 
 class TextbookTabs(TextbookTabsBase):
     """
@@ -244,6 +263,13 @@ class LinkTab(CourseTab):
     def is_enabled(cls, course, user=None):
         return True
 
+    @property
+    def uses_bootstrap(self):
+        """
+        Returns true if this tab is rendered with Bootstrap.
+        """
+        return True
+
 
 class ExternalDiscussionCourseTab(LinkTab):
     """
@@ -309,6 +335,13 @@ class SingleTextbookTab(CourseTab):
     def to_json(self):
         raise NotImplementedError('SingleTextbookTab should not be serialized.')
 
+    @property
+    def uses_bootstrap(self):
+        """
+        Returns true if this tab is rendered with Bootstrap.
+        """
+        return True
+
 
 class DatesTab(CourseTab):
     """
@@ -335,6 +368,12 @@ class DatesTab(CourseTab):
         """Returns true if this tab is enabled."""
         return RELATIVE_DATES_FLAG.is_enabled(course.id)
 
+    @property
+    def uses_bootstrap(self):
+        """
+        Returns true if this tab is rendered with Bootstrap.
+        """
+        return True
 
 def get_course_tab_list(user, course):
     """
