@@ -397,3 +397,12 @@ if os.path.isfile(join(dirname(abspath(__file__)), 'private.py')):
 # ]
 # TEMPLATES[1]["DIRS"] = _make_mako_template_dirs
 # derive_settings(__name__)
+
+COMPREHENSIVE_THEME_DIRS = [
+"/edx/app/edx-themes/teclisboa-openedx-themes/edx-platform",
+]
+COMPREHENSIVE_THEME_LOCALE_PATHS = [
+"/edx/app/edx-themes/teclisboa-openedx-themes/conf/locale"
+]
+DEFAULT_SITE_THEME = "teclisboa"
+ENABLE_COMPREHENSIVE_THEMING = True

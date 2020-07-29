@@ -671,9 +671,12 @@ TPA_PROVIDER_SUSTAINED_THROTTLE = '50/hr'
 
 ################################## TEMPLATE CONFIGURATION #####################################
 # Mako templating
+theme_edx_root = REPO_ROOT.dirname().dirname().dirname()
+theme_hack = theme_edx_root / "app/edx-themes/teclisboa-openedx-themes/edx-platform/teclisboa/lms/templates"
 import tempfile  # pylint: disable=wrong-import-order
 MAKO_MODULE_DIR = os.path.join(tempfile.gettempdir(), 'mako_lms')
 MAKO_TEMPLATE_DIRS_BASE = [
+    theme_hack,
     PROJECT_ROOT / 'templates',
     COMMON_ROOT / 'templates',
     COMMON_ROOT / 'lib' / 'capa' / 'capa' / 'templates',
