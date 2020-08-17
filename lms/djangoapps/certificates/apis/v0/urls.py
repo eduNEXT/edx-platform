@@ -9,6 +9,7 @@ from django.conf.urls import include, url
 from lms.djangoapps.certificates.apis.v0 import views
 
 CERTIFICATES_URLS = ([
+    url(r'^getallcerts', views.CertificatesView.as_view()),
     url(
         r'^{username}/courses/{course_id}/$'.format(
             username=settings.USERNAME_PATTERN,

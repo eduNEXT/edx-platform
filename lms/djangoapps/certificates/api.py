@@ -59,7 +59,7 @@ def format_certificate_for_user(username, cert):
     """
     try:
         return {
-            "username": username,
+            "username": username if username else (cert.user.username if cert.user else ""),
             "course_key": cert.course_id,
             "type": cert.mode,
             "status": cert.status,
@@ -77,6 +77,15 @@ def format_certificate_for_user(username, cert):
         }
     except CourseOverview.DoesNotExist:
         return None
+
+
+def get_all_certificates():
+    certs = []
+    for cert in GeneratedCertificate.eligible_certificates.order_by("course_id"):
+        formatted_cert = format_certificate_for_user("", cert)
+        if formatted_cert:
+            certs.append(formatted_cert)
+    return certs
 
 
 def get_certificates_for_user(username):
