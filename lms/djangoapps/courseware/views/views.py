@@ -56,6 +56,7 @@ from courseware.courses import (
 from courseware.masquerade import setup_masquerade
 from courseware.model_data import FieldDataCache
 from courseware.models import BaseStudentModuleHistory, StudentModule
+from courseware.tabs import get_course_tab_by_type
 from courseware.url_helpers import get_redirect_url
 from courseware.user_state_client import DjangoXBlockUserStateClient
 from edxmako.shortcuts import marketing_link, render_to_response, render_to_string
@@ -510,7 +511,7 @@ class CourseTabView(EdxFragmentView):
             course = get_course_with_access(request.user, 'load', course_key)
             try:
                 # Render the page
-                tab = CourseTabList.get_tab_by_type(course.tabs, tab_type)
+                tab = get_course_tab_by_type(request, course, tab_type)
                 page_context = self.create_page_context(request, course=course, tab=tab, **kwargs)
 
                 # Show warnings if the user has limited access

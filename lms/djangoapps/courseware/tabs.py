@@ -350,3 +350,15 @@ def _get_dynamic_tabs(course, user):
                 dynamic_tabs.append(tab)
     dynamic_tabs.sort(key=lambda dynamic_tab: dynamic_tab.name)
     return dynamic_tabs
+
+
+def get_course_tab_by_type(request, course, tab_type):
+    """
+    Look for a tab with the specified type.   Returns the first matching tab.
+
+    Note: This looks in the dynamic and non-dynamic tabs.
+    """
+    tab = CourseTabList.get_tab_by_type(course.tabs, tab_type)
+    if tab is None:
+        tab = next((tab for tab in _get_dynamic_tabs(course, request.user) if tab.type == tab_type), None)
+    return tab
