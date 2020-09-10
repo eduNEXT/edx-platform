@@ -495,7 +495,7 @@ class VideoStudioViewHandlers(object):
                                 'file_format': Transcript.SJSON,
                                 'language_code': new_language_code
                             },
-                            file_data=ContentFile(sjson_subs),
+                            file_data=ContentFile(sjson_subs.encode('utf-8')),
                         )
                         payload = {
                             'edx_video_id': edx_video_id,
