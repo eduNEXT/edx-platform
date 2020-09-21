@@ -310,6 +310,7 @@ def _update_context_with_user_info(context, user, user_certificate):
     context['accomplishment_user_id'] = user.id
     context['accomplishment_copy_name'] = user_fullname
     context['accomplishment_copy_username'] = user.username
+    context['grade'] = user_certificate.grade
 
     context['accomplishment_more_title'] = _(u"More Information About {user_name}'s Certificate:").format(
         user_name=user_fullname
