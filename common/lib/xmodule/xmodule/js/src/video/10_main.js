@@ -155,7 +155,9 @@
                         })
                     });
                 } else {
-                    initialize(state, element);
+                    window.addEventListener('load', function () {
+                      initialize(state, element)
+                    })
                 }
 
                 if (!youtubeXhr) {

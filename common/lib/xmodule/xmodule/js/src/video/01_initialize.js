@@ -169,16 +169,7 @@ function(VideoPlayer, i18n, moment, _) {
                     _oldOnYouTubeIframeAPIReady = window.onYouTubeIframeAPIReady || undefined;
 
                     window.onYouTubeIframeAPIReady = function() {
-                        var i = 0;
-                        while(i < 10) {
-                            try {
-                                window.onYouTubeIframeAPIReady.resolve();
-                                i = 10;
-                            }
-                            catch(err) {
-                                setTimeout(function(){ console.log("Loading Youtube Video..."); i++}, 1000);
-                            }
-                        }
+                        window.onYouTubeIframeAPIReady.resolve();
                     };
 
                     window.onYouTubeIframeAPIReady.resolve = _youtubeApiDeferred.resolve;
