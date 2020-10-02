@@ -155,9 +155,13 @@
                         })
                     });
                 } else {
-                    window.addEventListener('load', function () {
-                      initialize(state, element)
-                    })
+                    if (document.readyState === "complete"){
+                        initialize(state, element);
+                    } else {
+                        window.addEventListener('load', function () {
+                            initialize(state, element);
+                        })
+                    }
                 }
 
                 if (!youtubeXhr) {
