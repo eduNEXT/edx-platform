@@ -114,7 +114,7 @@ class RegistryTest(testutil.TestCase):
         assert no_log_in_provider.provider_id not in provider_ids
         assert normal_provider.provider_id in provider_ids
 
-    def test_tpa_hint_provider_displayed_for_login(self):
+    def test_tpa_hint_hidden_provider_displayed_for_login(self):
         """
         Tests to ensure that an enabled-but-not-visible provider is presented
         for use in the UI when the "tpa_hint" parameter is specified
@@ -128,6 +128,7 @@ class RegistryTest(testutil.TestCase):
         ]
         assert hidden_provider.provider_id in provider_ids
 
+    def test_tpa_hint_exp_hidden_provider_displayed_for_login(self):
         # New providers are hidden (ie, not flagged as 'visible') by default
         # The tpa_hint parameter should work for these providers as well
         implicitly_hidden_provider = self.configure_linkedin_provider(enabled=True)
@@ -137,6 +138,7 @@ class RegistryTest(testutil.TestCase):
         ]
         assert implicitly_hidden_provider.provider_id in provider_ids
 
+    def test_tpa_hint_dis_hidden_provider_displayed_for_login(self):
         # Disabled providers should not be matched in tpa_hint scenarios
         disabled_provider = self.configure_twitter_provider(visible=True, enabled=False)
         provider_ids = [
@@ -145,6 +147,7 @@ class RegistryTest(testutil.TestCase):
         ]
         assert disabled_provider.provider_id not in provider_ids
 
+    def test_tpa_hint_no_log_hidden_provider_displayed_for_login(self):
         # Providers not utilized for learner authentication should not match tpa_hint
         no_log_in_provider = self.configure_lti_provider()
         provider_ids = [
