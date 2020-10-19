@@ -74,7 +74,7 @@ from util.db import outer_atomic
 from util.json_request import JsonResponse
 from xmodule.modulestore.django import modulestore
 
-log = logging.getLogger("edx.student")
+log =logging.getLogger("edx.student")
 
 AUDIT_LOG = logging.getLogger("audit")
 ReverifyInfo = namedtuple(
@@ -210,8 +210,13 @@ def compose_and_send_activation_email(user, profile, user_registration=None):
 
     root_url = configuration_helpers.get_value('LMS_ROOT_URL', settings.LMS_ROOT_URL)
     msg = compose_activation_email(root_url, user, user_registration, route_enabled, profile.name)
+    site_configuration = configuration_helpers.get_current_site_configuration()
+    if site_configuration:
+        site_id = site_configuration.site.id
+    else:
+        site_id = Site.objects.get_current().id
 
-    send_activation_email.delay(str(msg))
+    send_activation_email.delay(str(msg), site_id=site_id)
 
 
 @login_required
