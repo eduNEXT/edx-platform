@@ -30,6 +30,9 @@ def graded_subsections_for_course(course_structure):
         for subsection_key in course_structure.get_children(chapter_key):
             subsection = course_structure[subsection_key]
             if not _visible_to_staff_only(subsection) and subsection.graded:
+                # Store the chapter name in the subsection BlockData in order
+                # to use that in the gradebook api
+                subsection.chapter_name = course_structure[chapter_key].display_name
                 yield subsection
 
 

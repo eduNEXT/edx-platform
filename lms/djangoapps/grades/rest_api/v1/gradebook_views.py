@@ -468,6 +468,7 @@ class GradebookView(GradeViewMixin, PaginatedAPIView):
             breakdown.append({
                 'attempted': attempted,
                 'category': subsection_grade.format,
+                'chapter_name': subsection.chapter_name,
                 'label': short_label,
                 'module_id': text_type(subsection_grade.location),
                 'percent': subsection_grade.percent_graded,
