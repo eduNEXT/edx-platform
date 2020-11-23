@@ -132,7 +132,9 @@ class UsernameField(forms.CharField):
             allowed_patterns = settings.REGISTRATION_USERNAME_PATTERNS_ALLOWED
             
             if not any(re.match(pattern + "$", value) for pattern in allowed_patterns):
-                raise ValidationError(_(u"Unauthorized username."))
+                raise ValidationError(_(
+                    u"Unauthorized username, If you are a Técnico user (student, professor or staff) please register via Técnico-ID"
+                ))
 
         return super(UsernameField, self).clean(value)
 
@@ -252,7 +254,9 @@ class AccountCreationForm(forms.Form):
                 # they may have been manually invited by an instructor and if not,
                 # reject the registration.
                 if not CourseEnrollmentAllowed.objects.filter(email=email).exists():
-                    raise ValidationError(_(u"Unauthorized email address."))
+                    raise ValidationError(_(
+                        u"Unauthorized email, If you are a Técnico user (student, professor or staff) please register via Técnico-ID"
+                    ))
         if email_exists_or_retired(email):
             raise ValidationError(
                 _(
