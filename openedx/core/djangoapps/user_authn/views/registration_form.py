@@ -126,16 +126,6 @@ class UsernameField(forms.CharField):
         """
 
         value = self.to_python(value).strip()
-        
-        if settings.REGISTRATION_USERNAME_PATTERNS_ALLOWED is not None:
-            # This Open edX instance has restrictions on what usernames are allowed.
-            allowed_patterns = settings.REGISTRATION_USERNAME_PATTERNS_ALLOWED
-            
-            if not any(re.match(pattern + "$", value) for pattern in allowed_patterns):
-                raise ValidationError(_(
-                    u"Unauthorized username, If you are a Técnico user (student, professor or staff) please register via Técnico-ID"
-                ))
-
         return super(UsernameField, self).clean(value)
 
 
@@ -241,6 +231,19 @@ class AccountCreationForm(forms.Form):
             validate_password(password, temp_user)
         return password
 
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        if settings.REGISTRATION_USERNAME_PATTERNS_ALLOWED is not None:
+            # This Open edX instance has restrictions on what usernames are allowed.
+            allowed_patterns = settings.REGISTRATION_USERNAME_PATTERNS_ALLOWED
+        
+            if not any(re.match(pattern + "$", value) for pattern in allowed_patterns):
+                if not 'social_auth_provider' in self.data:
+                    raise ValidationError(_(
+                        u"Unauthorized username, If you are a Técnico user (student, professor or staff) please register via Técnico-ID"
+                    ))
+        return username
+
     def clean_email(self):
         """ Enforce email restrictions (if applicable) """
         email = self.cleaned_data["email"]
@@ -253,7 +256,7 @@ class AccountCreationForm(forms.Form):
                 # This email is not on the whitelist of allowed emails. Check if
                 # they may have been manually invited by an instructor and if not,
                 # reject the registration.
-                if not CourseEnrollmentAllowed.objects.filter(email=email).exists():
+                if not CourseEnrollmentAllowed.objects.filter(email=email).exists() and not 'social_auth_provider' in self.data:
                     raise ValidationError(_(
                         u"Unauthorized email, If you are a Técnico user (student, professor or staff) please register via Técnico-ID"
                     ))
