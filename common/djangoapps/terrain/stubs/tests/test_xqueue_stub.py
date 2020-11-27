@@ -58,7 +58,7 @@ class StubXQueueServiceTest(unittest.TestCase):
 
         # Check the response we receive
         # (Should be the default grading response)
-        expected_body = json.dumps({'correct': True, 'score': 1, 'msg': '<div></div>'})
+        expected_body = json.dumps({'correct': True, 'msg': '<div></div>', 'score': 1})
         self._check_grade_response(callback_url, expected_header, expected_body)
 
     def test_configure_default_response(self):
