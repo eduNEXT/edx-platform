@@ -4,19 +4,18 @@ This test tests that i18n extraction (`paver i18n_extract -v`) works properly.
 
 
 import os
-import pytest
 import random
 import re
 import string
 import subprocess
 import sys
+import unittest
 from datetime import datetime, timedelta
 from unittest import TestCase
 
 from i18n import config, dummy, extract, generate
 from polib import pofile
 from pytz import UTC
-from six.moves import range
 
 
 class TestGenerate(TestCase):
@@ -25,10 +24,10 @@ class TestGenerate(TestCase):
     """
     generated_files = ('django-partial.po', 'djangojs-partial.po', 'mako.po')
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     @classmethod
     def setUpClass(cls):
-        super(TestGenerate, cls).setUpClass()
+        super().setUpClass()
 
         sys.stderr.write(
             "\nThis test tests that i18n extraction (`paver i18n_extract`) works properly. "
@@ -52,10 +51,10 @@ class TestGenerate(TestCase):
         sys.stderr.flush()
         returncode = subprocess.call(cmd, shell=True)
         assert returncode == 0
-        super(TestGenerate, cls).tearDownClass()
+        super().tearDownClass()
 
     def setUp(self):
-        super(TestGenerate, self).setUp()
+        super().setUp()
 
         self.configuration = config.Configuration()
 
@@ -63,7 +62,7 @@ class TestGenerate(TestCase):
         # since os.path.getmtime() is not millisecond-accurate
         self.start_time = datetime.now(UTC) - timedelta(seconds=1)
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     def test_merge(self):
         """
         Tests merge script on English source files.
@@ -73,7 +72,7 @@ class TestGenerate(TestCase):
         self.assertTrue(os.path.exists(filename))
         os.remove(filename)
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     def test_main(self):
         """
         Runs generate.main() which should merge source files,

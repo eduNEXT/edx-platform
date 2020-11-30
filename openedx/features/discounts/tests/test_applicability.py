@@ -5,8 +5,10 @@
 from datetime import datetime, timedelta
 
 import ddt
+import os
 import pytest
 import pytz
+import unittest
 from django.contrib.sites.models import Site
 from django.utils.timezone import now
 from edx_toggles.toggles.testutils import override_waffle_flag
@@ -27,7 +29,7 @@ from xmodule.modulestore.tests.factories import CourseFactory
 from ..applicability import DISCOUNT_APPLICABILITY_FLAG, _is_in_holdback_and_bucket, can_receive_discount
 
 
-@pytest.mark.skip(reason="fails due to unknown reasons")
+@unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
 @ddt.ddt
 class TestApplicability(ModuleStoreTestCase):
     """

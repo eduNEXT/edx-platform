@@ -8,8 +8,9 @@ import json
 import unittest
 
 import mock
-import pytest
+import os
 import requests
+import unittest
 
 from ..xqueue import StubXQueueService
 
@@ -44,7 +45,7 @@ class StubXQueueServiceTest(unittest.TestCase):
         timer.side_effect = FakeTimer
         self.addCleanup(patcher.stop)
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     def test_grade_request(self):
 
         # Post a submission to the stub XQueue
@@ -60,7 +61,7 @@ class StubXQueueServiceTest(unittest.TestCase):
 
         # Check the response we receive
         # (Should be the default grading response)
-        expected_body = json.dumps({'correct': True, 'msg': '<div></div>', 'score': 1})
+        expected_body = json.dumps({'correct': True, 'score': 1, 'msg': '<div></div>'})
         self._check_grade_response(callback_url, expected_header, expected_body)
 
     def test_configure_default_response(self):

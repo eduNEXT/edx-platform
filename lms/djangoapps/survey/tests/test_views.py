@@ -6,8 +6,9 @@ Python tests for the Survey views
 import json
 from collections import OrderedDict
 
-import pytest
+import os
 import six
+import unittest
 from django.test.client import Client
 from django.urls import reverse
 
@@ -106,7 +107,7 @@ class SurveyViewsTests(ModuleStoreTestCase):
         )
         self.assertEqual(resp.status_code, 404)
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     def test_survey_postback(self):
         """
         Asserts that a well formed postback of survey answers is properly stored in the

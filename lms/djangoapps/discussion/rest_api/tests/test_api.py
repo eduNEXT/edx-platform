@@ -9,8 +9,9 @@ from datetime import datetime, timedelta
 import ddt
 import httpretty
 import mock
-import pytest
+import os
 import six
+import unittest
 from django.core.exceptions import ValidationError
 from django.test.client import RequestFactory
 from opaque_keys.edx.locator import CourseLocator
@@ -666,7 +667,7 @@ class GetThreadListTest(ForumsEnableMixin, CommentsServiceMockMixin, UrlResetMix
             "per_page": ["14"],
         })
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     def test_thread_content(self):
         self.course.cohort_config = {"cohorted": True}
         modulestore().update_item(self.course, ModuleStoreEnum.UserID.test)

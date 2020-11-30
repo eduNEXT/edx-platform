@@ -4,7 +4,8 @@
 from unittest import skipUnless
 
 import ddt
-import pytest
+import os
+import unittest
 from django.conf import settings
 from django.test import TestCase
 from mock import patch
@@ -36,7 +37,7 @@ class RequireJSPathOverridesTest(TestCase):
         "</script>"
     ]
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     def test_requirejs_path_overrides(self):
         result = render_require_js_path_overrides(self.OVERRIDES)
         # To make the string comparision easy remove the whitespaces

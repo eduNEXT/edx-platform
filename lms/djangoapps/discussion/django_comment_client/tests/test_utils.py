@@ -8,8 +8,10 @@ import sys
 
 import ddt
 import mock
+import os
 import pytest
 import six
+import unittest
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from edx_django_utils.cache import RequestCache
@@ -563,7 +565,7 @@ class CategoryMapTestCase(CategoryMapTestMixin, ModuleStoreTestCase):
             exclude_unstarted=False
         )
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     def test_tree(self):
         self.create_discussion("Chapter 1", "Discussion 1")
         self.create_discussion("Chapter 1", "Discussion 2")
@@ -732,7 +734,7 @@ class CategoryMapTestCase(CategoryMapTestMixin, ModuleStoreTestCase):
             }
         )
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @unittest.skipIf(os.environ.get("CIRCLECI") == 'true', "Skip this test in Circle CI.")
     def test_self_paced_start_date_filter(self):
         self.course.self_paced = True
 
@@ -953,7 +955,10 @@ class CategoryMapTestCase(CategoryMapTestMixin, ModuleStoreTestCase):
             }
         )
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @pytest.mark.skipif(
+        sys.version_info < (3, 7),
+        reason="Python 3.7 sorted dict insertion is considered"
+    )
     def test_sort_intermediates(self):
         self.create_discussion("Chapter B", "Discussion 2")
         self.create_discussion("Chapter C", "Discussion")
@@ -1014,7 +1019,10 @@ class CategoryMapTestCase(CategoryMapTestMixin, ModuleStoreTestCase):
             }
         )
 
-    @pytest.mark.skip(reason="fails due to unknown reasons")
+    @pytest.mark.skipif(
+        sys.version_info >= (3, 7),
+        reason="Python 3.7 sorted dict insertion is not considered"
+    )
     def test_sort_intermediates(self):
         self.create_discussion("Chapter B", "Discussion 2")
         self.create_discussion("Chapter C", "Discussion")
