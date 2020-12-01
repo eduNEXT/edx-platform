@@ -24,24 +24,15 @@ EXIT=0
 
 sleep $[ ( $RANDOM % 5 )  + 1 ]s
 
-# Manually installing the mongo-3.2
-apt-get update
 apt-get install wget -y
-wget -qO - https://www.mongodb.org/static/pgp/server-3.6.asc | sudo apt-key add -
-echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
 
 sudo apt-get update
 
 cat requirements/system/ubuntu/apt-packages.txt | DEBIAN_FRONTEND=noninteractive xargs apt-get -yq install
-apt-get install -y mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20
-
-service mongodb restart
 
 mkdir -p downloads
 
 DEBIAN_FRONTEND=noninteractive apt-get -yq install xvfb libasound2 libstartup-notification0
-
-
 
 export NODEJS_FILE="downloads/nodejs_12.18.4-1nodesource1_amd64.deb"
 if [ -f $NODEJS_FILE ]; then
@@ -51,8 +42,6 @@ else
    wget -O $NODEJS_FILE deb.nodesource.com/node_12.x/pool/main/n/nodejs/nodejs_12.18.4-1nodesource1_amd64.deb
 fi
 dpkg -i $NODEJS_FILE || DEBIAN_FRONTEND=noninteractive apt-get -fyq install
-
-
 
 export FIREFOX_FILE="downloads/firefox-mozilla-build_61.0-0ubuntu1_amd64.deb"
 if [ -f $FIREFOX_FILE ]; then

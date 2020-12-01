@@ -86,6 +86,9 @@ jobs:
   lms_unit_tests:
     docker:
       - image: edxops/xenial-common:latest
+      - image: circleci/mongo:3.6-ram
+        ports:
+          - "27017:27017"
     environment:
       - NO_PREREQ_INSTALL: "true"
     steps:
@@ -124,6 +127,9 @@ jobs:
   cms_unit_tests:
     docker:
       - image: edxops/xenial-common:latest
+      - image: circleci/mongo:3.6-ram
+        ports:
+          - "27017:27017"
     environment:
       - NO_PREREQ_INSTALL: "true"
     steps:
@@ -161,6 +167,9 @@ jobs:
   lib_unit_tests:
     docker:
       - image: edxops/xenial-common:latest
+      - image: circleci/mongo:3.6-ram
+        ports:
+          - "27017:27017"
     environment:
       - NO_PREREQ_INSTALL: "true"
     steps:
