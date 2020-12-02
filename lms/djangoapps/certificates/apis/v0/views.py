@@ -16,7 +16,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from lms.djangoapps.certificates.api import get_certificate_for_user, get_certificates_for_user
+from lms.djangoapps.certificates.api import get_all_certificates, get_certificate_for_user, get_certificates_for_user
 from openedx.core.djangoapps.catalog.utils import get_course_run_details
 from openedx.core.djangoapps.certificates.api import certificates_viewable_for_course
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
@@ -25,6 +25,38 @@ from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiv
 
 log = logging.getLogger(__name__)
 User = get_user_model()
+
+
+class CertificatesView(APIView):
+    authentication_classes = (
+        JwtAuthentication,
+        BearerAuthenticationAllowInactiveUser,
+        SessionAuthenticationAllowInactiveUser,
+    )
+
+    permission_classes = (permissions.JWT_RESTRICTED_APPLICATION_OR_USER_ACCESS,)
+
+    required_scopes = ['certificates:read']
+
+    def get(self, request):
+        certs = get_all_certificates()
+        jsoncerts = []
+        for cert in certs:
+            jsoncerts.append({
+                "username": cert.get('username'),
+                "course_id": six.text_type(cert.get('course_key')),
+                "certificate_type": cert.get('type'),
+                "created_date": cert.get('created'),
+                "status": cert.get('status'),
+                "is_passing": cert.get('is_passing'),
+                "download_url": cert.get('download_url'),
+                "grade": cert.get('grade')
+            })
+        return Response(
+            {
+                "items": jsoncerts
+            }
+        )
 
 
 class CertificatesDetailView(APIView):
