@@ -5423,6 +5423,454 @@ msgstr "Todas las posibles palabras, de todos los estudiantes."
 msgid "Top num_top_words words for word cloud."
 msgstr "Top de num_top_words para la nube de palabras."
 
+#: common/templates/student/edx_ace/accountactivation/email/body.html
+#, python-format
+msgid ""
+"This is a routed Account Activation email for %(routed_user)s "
+"(%(routed_user_email)s): %(routed_profile_name)s"
+msgstr ""
+"Este es un correo electrónico de activación de cuenta enrutado para "
+"%(routed_user)s (%(routed_user_email)s): %(routed_profile_name)s"
+
+#: common/templates/student/edx_ace/accountactivation/email/body.html
+msgid "Account Activation"
+msgstr "Activación de cuenta"
+
+#: common/templates/student/edx_ace/accountactivation/email/body.html
+#: common/templates/student/edx_ace/accountactivation/email/body.txt
+#, python-format
+msgid ""
+"You're almost there! Use the link below to activate your account to access "
+"engaging, high-quality %(platform_name)s courses. Note that you will not be "
+"able to log back into your account until you have activated it."
+msgstr ""
+"¡Su cuenta está casi lista! Use el enlace debajo para activar su Cuenta y "
+"acceder a cursos  interesantes y de alta calidad en %(platform_name)s. Note "
+"que no podrá iniciar sesión de nuevo hasta que su cuenta esté activa."
+
+#: common/templates/student/edx_ace/accountactivation/email/body.html
+msgid "Activate Your Account"
+msgstr "Activar su cuenta"
+
+#: common/templates/student/edx_ace/accountactivation/email/body.html
+#: common/templates/student/edx_ace/accountactivation/email/body.txt
+#, python-format
+msgid "Enjoy learning with %(platform_name)s."
+msgstr "Disfrute aprendiendo en %(platform_name)s."
+
+#: common/templates/student/edx_ace/accountactivation/email/body.html
+#, python-format
+msgid ""
+"If you need help, please use our web form at <a "
+"href=\"%(support_url)s\">%(support_url)s</a> or email <a "
+"href=\"mailto:%(support_email)s\">%(support_email)s</a>."
+msgstr ""
+"Si requiere ayuda, Por favor use el formulario web en <a "
+"href=\"%(support_url)s</a> o envíe un mensaje a <a"
+"href=\"mailto:%(support_email)s</a>."
+
+#: common/templates/student/edx_ace/accountactivation/email/body.html
+#: common/templates/student/edx_ace/accountactivation/email/body.txt
+#, python-format
+msgid ""
+"This email message was automatically sent by %(lms_url)s because someone "
+"attempted to create an account on %(platform_name)s using this email "
+"address."
+msgstr ""
+"Este mensaje fue enviado automáticamente por %(lms_url)s porque alguien "
+"trató de crear una cuenta en %(platform_name)s usando esta dirección de "
+"correo electrónico."
+
+#: common/templates/student/edx_ace/accountactivation/email/body.txt
+#, python-format
+msgid ""
+"If you need help, please use our web form at %(support_url)s or email "
+"%(support_email)s."
+msgstr ""
+"Si necesita asistencia, utilice el formulario en %(support_url)s o escriba "
+"un correo a %(support_email)s."
+
+#: common/templates/student/edx_ace/accountactivation/email/subject.txt
+#, python-format
+msgid "Action Required: Activate your %(platform_name)s account"
+msgstr "Acción Requerida: Active su cuenta en %(platform_name)s "
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.html
+#, python-format
+msgid ""
+"\n"
+"                    Welcome to %(course_name)s\n"
+"                "
+msgstr ""
+"\n"
+"                    Bienvenido a %(course_name)s\n"
+"                "
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.html
+#, python-format
+msgid "To get started, please visit https://%(site_name)s."
+msgstr "Para empezar, por favor visita https://%(site_name)s."
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.html
+msgid "The login information for your account follows:"
+msgstr ""
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.html
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.txt
+#, python-format
+msgid "email: %(email_address)s"
+msgstr "correo electrónico: %(email_address)s"
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.html
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.txt
+#, python-format
+msgid "password: %(password)s"
+msgstr "contraseña: %(password)s"
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.html
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.txt
+msgid "It is recommended that you change your password."
+msgstr "Se recomienda que cambies tu contraseña."
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.html
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.txt
+#, python-format
+msgid "Sincerely yours, The %(course_name)s Team"
+msgstr ""
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.txt
+#, python-format
+msgid "Welcome to %(course_name)s"
+msgstr "Bienvenido a %(course_name)s"
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/body.txt
+#, python-format
+msgid ""
+"To get started, please visit https://%(site_name)s. The login information "
+"for your account follows."
+msgstr ""
+"Para empezar, por favor visita https://%(site_name)s. La información de "
+"registro de tu cuenta aparece a continuación. "
+
+#: lms/templates/instructor/edx_ace/accountcreationandenrollment/email/subject.txt
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/subject.txt
+#, python-format
+msgid "You have been enrolled in %(course_name)s"
+msgstr "Te has inscrito a %(course_name)s"
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.html
+#, python-format
+msgid ""
+"\n"
+"                    You have been invited to be a beta tester for %(course_name)s at %(site_name)s\n"
+"                "
+msgstr ""
+"\n"
+"                    Has sido invitado a ser un beta tester de %(course_name)s en %(site_name)s\n"
+"                "
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.html
+msgid "The invitation has been sent by a member of the course staff."
+msgstr "Un miembro del equipo del curso ha enviado la invitación. "
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.html
+msgid "To start accessing course materials, please visit:"
+msgstr "Para acceder a los materiales del curso, por favor visita:"
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.html
+msgid "To enroll in this course and begin the beta test:"
+msgstr "Para inscribirte al curso y empezar el beta test:"
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.html
+#, python-format
+msgid "Visit %(course_name)s"
+msgstr "Visita %(course_name)s"
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.html
+#, python-format
+msgid "Visit %(site_name)s"
+msgstr "Visita %(site_name)s"
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.html
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.txt
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+#: lms/templates/instructor/edx_ace/allowedunenroll/email/body.html
+#: lms/templates/instructor/edx_ace/allowedunenroll/email/body.txt
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.html
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.txt
+#, python-format
+msgid ""
+"This email was automatically sent from %(site_name)s to %(email_address)s"
+msgstr ""
+"Este correo electrónico se envió automáticamente desde %(site_name)s "
+"a%(email_address)s"
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.txt
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.txt
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/body.txt
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.txt
+#, python-format
+msgid "Dear %(full_name)s"
+msgstr "Estimado %(full_name)s"
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.txt
+#, python-format
+msgid ""
+"You have been invited to be a beta tester for %(course_name)s at "
+"%(site_name)s by a member of the course staff."
+msgstr ""
+"Un miembro del equipo del curso te ha invitado a ser un beta tester de "
+"%(course_name)s en %(site_name)s."
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.txt
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/body.txt
+#, python-format
+msgid "To start accessing course materials, please visit %(course_url)s"
+msgstr "Para acceder al material del curso, por favor visita %(course_url)s"
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.txt
+#, python-format
+msgid ""
+"Visit %(course_about_url)s to enroll in this course and begin the beta test."
+msgstr ""
+"Visita %(course_about_url)s para inscribirte al curso y empezar el beta "
+"test. "
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/body.txt
+#, python-format
+msgid "Visit %(site_name)s to enroll in this course and begin the beta test."
+msgstr ""
+"Visita %(site_name)s para inscribirte a este curso y empezar el beta test."
+
+#: lms/templates/instructor/edx_ace/addbetatester/email/subject.txt
+#, python-format
+msgid "You have been invited to a beta test for %(course_name)s"
+msgstr "Has sido invitado a realizar un beta test de %(course_name)s"
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+#, python-format
+msgid "You have been invited to %(course_name)s"
+msgstr "Has sido invitado a %(course_name)s"
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+#, python-format
+msgid ""
+"You have been invited to join %(course_name)s at %(site_name)s by a member "
+"of the course staff."
+msgstr ""
+"Un miembro del equipo del curso te ha invitado a unirte a %(course_name)s "
+"en%(site_name)s."
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+msgid "To access this course click on the button below and login:"
+msgstr "Para acceder a este curso haz clic en el botón de abajo:"
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+msgid "To access this course visit it and register:"
+msgstr "Para acceder a este curso visítalo y regístrate:"
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+#, python-format
+msgid ""
+"Please finish your registration and fill out the registration form making "
+"sure to use %(email_address)s in the Email field:"
+msgstr ""
+"Por favor termina tu registro y rellena el formulario de inscripción "
+"asegurándote de usar %(email_address)s en el apartado de correo electrónico:"
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+msgid "Finish Your Registration"
+msgstr "Termina tu registro"
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+#, python-format
+msgid ""
+"Once you have registered and activated your account, you will see "
+"%(course_name)s listed on your dashboard."
+msgstr ""
+"Una vez te hayas registrado y hayas activado tu cuenta, verás que "
+"los %(course_name)s aparecen en tu panel del estudiante."
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+msgid ""
+"Once you have registered and activated your account, you will be able to "
+"access this course:"
+msgstr ""
+"Una vez te hayas registrado y hayas activado tu cuenta, podrás acceder a "
+"este curso:"
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+#, python-format
+msgid "You can then enroll in %(course_name)s."
+msgstr "Te puedes inscribir a %(course_name)s."
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+msgid "Dear student,"
+msgstr "Apreciado estudiante,"
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+#, python-format
+msgid "To access this course visit %(course_url)s and login."
+msgstr ""
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+#, python-format
+msgid ""
+"To access this course visit %(course_about_url)s and register for this "
+"course."
+msgstr ""
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+#, python-format
+msgid ""
+"To finish your registration, please visit %(registration_url)s and fill out "
+"the registration form making sure to use %(email_address)s in the Email "
+"field."
+msgstr ""
+"Para terminar tu registro, por favor visita %(registration_url)s y rellena "
+"el formulario de inscripción asegurándote de usar %(email_address)s en el "
+"apartado de correo electrónico."
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/body.txt
+#, python-format
+msgid ""
+"Once you have registered and activated your account, visit "
+"%(course_about_url)s to join this course."
+msgstr ""
+"Una vez te hayas registrado y hayas activado tu cuenta, visita "
+"%(course_about_url)s para unirte al curso."
+
+#: lms/templates/instructor/edx_ace/allowedenroll/email/subject.txt
+#, python-format
+msgid "You have been invited to register for %(course_name)s"
+msgstr "Has sido invitado a inscribirte a %(course_name)s"
+
+#: lms/templates/instructor/edx_ace/allowedunenroll/email/body.html
+#: lms/templates/instructor/edx_ace/allowedunenroll/email/subject.txt
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/subject.txt
+#, python-format
+msgid "You have been unenrolled from %(course_name)s"
+msgstr "Te han dado de baja en %(course_name)s"
+
+#: lms/templates/instructor/edx_ace/allowedunenroll/email/body.html
+#: lms/templates/instructor/edx_ace/allowedunenroll/email/body.txt
+#, python-format
+msgid ""
+"You have been unenrolled from the course %(course_name)s by a member of the "
+"course staff. Please disregard the invitation previously sent."
+msgstr ""
+"Un miembro del equipo del curso te ha dado de baja de %(course_name)s. Por "
+"favor, ignora la invitación enviada previamente."
+
+#: lms/templates/instructor/edx_ace/allowedunenroll/email/body.txt
+msgid "Dear Student,"
+msgstr "Apreciado estudiante,"
+
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.html
+#, python-format
+msgid ""
+"\n"
+"                    You have been unenrolled from %(course_name)s\n"
+"                "
+msgstr ""
+"\n"
+"                   Te han dado de baja de %(course_name)s\n"
+"                "
+
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.html
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.txt
+#, python-format
+msgid ""
+"You have been unenrolled from %(course_name)s at %(site_name)s by a member "
+"of the course staff. This course will no longer appear on your %(site_name)s"
+" dashboard."
+msgstr ""
+"Un miembro del equipo del curso te ha dado de baja de%(course_name)s en "
+"%(site_name)s. Este curso ya no aparecerá en tu panel de usuario de "
+"%(site_name)s."
+
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.html
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.txt
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.html
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.txt
+msgid "Your other courses have not been affected."
+msgstr "Tus otros cursos no se han visto afectados."
+
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.html
+#: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.txt
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/body.html
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/body.txt
+#, python-format
+msgid "This email was automatically sent from %(site_name)s to %(full_name)s"
+msgstr ""
+"Este correo electrónico se envio automáticamente desde %(site_name)s a "
+"%(full_name)s"
+
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/body.html
+#, python-format
+msgid ""
+"\n"
+"                    You have been enrolled in %(course_name)s\n"
+"                "
+msgstr ""
+"\n"
+"                    Te has inscrito a %(course_name)s\n"
+"                "
+
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/body.html
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/body.txt
+#, python-format
+msgid ""
+"You have been enrolled in %(course_name)s at %(site_name)s by a member of "
+"the course staff. This course will now appear on your %(site_name)s "
+"dashboard."
+msgstr ""
+"Un miembro del equipo del curso te ha inscrito a %(course_name)s en "
+"%(site_name)s. Este curso te aparecerá en tu panel de usuario de "
+"%(site_name)s."
+
+#: lms/templates/instructor/edx_ace/enrollenrolled/email/body.html
+msgid "Access the Course Materials Now"
+msgstr "Accede al material del curso ahora"
+
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.html
+#, python-format
+msgid ""
+"You have been removed as a beta tester for %(course_name)s at %(site_name)s"
+msgstr ""
+
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.html
+#, python-format
+msgid ""
+"You have been removed as a beta tester for %(course_name)s at %(site_name)s "
+"by a member of the course staff."
+msgstr ""
+
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.html
+msgid ""
+"This course will remain on your dashboard, but you will no longer be part of"
+" the beta testing group."
+msgstr ""
+"Este curso permanecerá en tu panel de usuario, pero ya no serás parte del "
+"grupo de beta testers."
+
+#: lms/templates/instructor/edx_ace/removebetatester/email/body.txt
+#, python-format
+msgid ""
+"You have been removed as a beta tester for %(course_name)s at %(site_name)s "
+"by a member of the course staff. This course will remain on your dashboard, "
+"but you will no longer be part of the beta testing group."
+msgstr ""
+
+#: lms/templates/instructor/edx_ace/removebetatester/email/subject.txt
+#, python-format
+msgid "You have been removed from a beta test for %(course_name)s"
+msgstr ""
+
 #: common/templates/student/edx_ace/passwordreset/email/body.html
 #: lms/templates/forgot_password_modal.html
 msgid "Password Reset"
@@ -12145,7 +12593,7 @@ msgstr "No se suministraron datos para actualizar la preferencia de usuario"
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.txt
 #, python-format
 msgid "Hello %(full_name)s,"
-msgstr ""
+msgstr "Hola %(full_name)s,"
 
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.html
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.txt
@@ -12154,6 +12602,8 @@ msgid ""
 "We received a deletion request for your account on %(platform_name)s. We're "
 "sorry to see you go!"
 msgstr ""
+"Recibimos una solicitud para borrar su cuenta en  %(platform_name)s. ¡ "
+"Lamentamos que se vaya.!"
 
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.html
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.txt
@@ -12163,6 +12613,12 @@ msgid ""
 "If you want to opt-out of emails before then, please unsubscribe from the "
 "footer of any email."
 msgstr ""
+"Su cuenta será eliminada prontamente. La eliminación de la cuenta, "
+"incluyendo remover información de listas de correo electrónico, puede tomar "
+"un par de semanas para ejecutar el proceso completamente en nuestro sistema."
+" Si desea optar por no recibir correos electrónicos antes de esa fecha, "
+"cancele su suscripción desde el pie de página de cualquier correo "
+"electrónico."
 
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.html
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.txt
@@ -12171,16 +12627,18 @@ msgid ""
 "This is an informational email only. If you did not initiate this request, "
 "please contact %(contact_email)s."
 msgstr ""
+"Este es un correo electrónico solo de información. Si usted no inició esta "
+"solicitud, por favor contacte%(contact_email)s."
 
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.html
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/body.txt
 #, python-format
 msgid "Best, %(platform_name)s"
-msgstr ""
+msgstr "El mejor, %(platform_name)s"
 
 #: openedx/core/djangoapps/user_api/templates/user_api/edx_ace/deletionnotificationmessage/email/subject.txt
 msgid "Your Account Has Been Queued For Deletion"
-msgstr ""
+msgstr "Su cuenta ha sido marcada para ser borrada"
 
 #: openedx/core/djangoapps/util/user_messages.py
 #, python-brace-format
@@ -18030,114 +18488,6 @@ msgstr "Ocultar notas"
 msgid "Show notes"
 msgstr "Mostrar notas"
 
-#: lms/templates/emails/account_creation_and_enroll_emailMessage.txt
-msgid "Welcome to {course_name}"
-msgstr "Bienvenido a {course_name}"
-
-#: lms/templates/emails/account_creation_and_enroll_emailMessage.txt
-msgid ""
-"To get started, please visit https://{site_name}. The login information for "
-"your account follows."
-msgstr ""
-"Para iniciar, por favor visita https://{site_name}. La siguiente es la "
-"información de acceso a tu cuenta."
-
-#: lms/templates/emails/account_creation_and_enroll_emailMessage.txt
-msgid "email: {email}"
-msgstr "Correo electrónico: {email}"
-
-#: lms/templates/emails/account_creation_and_enroll_emailMessage.txt
-msgid "password: {password}"
-msgstr "Contraseña: {password}"
-
-#: lms/templates/emails/account_creation_and_enroll_emailMessage.txt
-msgid "It is recommended that you change your password."
-msgstr "Se recomienda que cambies tu contraseña."
-
-#: lms/templates/emails/account_creation_and_enroll_emailMessage.txt
-msgid "Sincerely yours,The {course_name} Team"
-msgstr "Atentamente, el equipo {course_name}"
-
-#: lms/templates/emails/activation_email.txt
-msgid ""
-"You're almost there! Use the link to activate your account to access "
-"engaging, high-quality {platform_name} courses. Note that you will not be "
-"able to log back into your account until you have activated it."
-msgstr ""
-"¡Estás a punto de terminar! Usa el enlace para activar tu cuenta para "
-"acceder a cursos interesantes de alta calidad en {platform_name}. Fíjate que"
-" no podrás ingresar a tu cuenta nuevamente antes de activarla."
-
-#: lms/templates/emails/activation_email.txt
-msgid "Enjoy learning with {platform_name}."
-msgstr "Disfruta de tu aprendizaje con {platform_name}."
-
-#: lms/templates/emails/activation_email.txt
-msgid ""
-"If you need help, please use our web form at {support_url} or email "
-"{support_email}."
-msgstr ""
-"Si necesitas ayuda, por favor usa nuestro formulario web en {support_url} o "
-"mándenos un correo para {support_email}."
-
-#: lms/templates/emails/activation_email.txt
-msgid ""
-"This email message was automatically sent by {lms_url} because someone "
-"attempted to create an account on {platform_name} using this email address."
-msgstr ""
-"Este correo electrónico fue enviado automáticamente por {lms_url} porque "
-"alguien intentó crear una cuenta en {platform_name} usando esta dirección de"
-" correo electrónico."
-
-#: lms/templates/emails/activation_email_subject.txt
-msgid "Action Required: Activate your {platform_name} account"
-msgstr "Acción Necesaria: Activar tu cuenta en {platform_name}"
-
-#: lms/templates/emails/add_beta_tester_email_message.txt
-#: lms/templates/emails/enroll_email_enrolledmessage.txt
-#: lms/templates/emails/remove_beta_tester_email_message.txt
-#: lms/templates/emails/unenroll_email_enrolledmessage.txt
-msgid "Dear {full_name}"
-msgstr "Apreciado {full_name}"
-
-#: lms/templates/emails/add_beta_tester_email_message.txt
-msgid ""
-"You have been invited to be a beta tester for {course_name} at {site_name} "
-"by a member of the course staff."
-msgstr ""
-"Has sido invitado para participar como usuario de prueba para el curso "
-"{course_name} en {site_name} por un miembro del equipo del curso."
-
-#: lms/templates/emails/add_beta_tester_email_message.txt
-#: lms/templates/emails/enroll_email_enrolledmessage.txt
-msgid "To start accessing course materials, please visit {course_url}"
-msgstr ""
-"Para acceder a los materiales del curso, por favor visita {course_url}"
-
-#: lms/templates/emails/add_beta_tester_email_message.txt
-msgid "Visit {course_about_url} to join the course and begin the beta test."
-msgstr ""
-"Visita {course_about_url} para ingresar al curso y comenzar a probarlo en su"
-" versión beta."
-
-#: lms/templates/emails/add_beta_tester_email_message.txt
-msgid "Visit {site_name} to enroll in the course and begin the beta test."
-msgstr ""
-"Visita {site_name} para inscribirse al curso y comenzar a probarlo en su "
-"versión beta."
-
-#: lms/templates/emails/add_beta_tester_email_message.txt
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-#: lms/templates/emails/remove_beta_tester_email_message.txt
-#: lms/templates/emails/unenroll_email_allowedmessage.txt
-msgid "This email was automatically sent from {site_name} to {email_address}"
-msgstr ""
-"Este correo fue enviado automáticamente por {site_name} a {email_address}"
-
-#: lms/templates/emails/add_beta_tester_email_subject.txt
-msgid "You have been invited to a beta test for {course_name}"
-msgstr "Tú has sido invitado a una prueba beta para el curso {course_name}"
-
 #: lms/templates/emails/business_order_confirmation_email.txt
 msgid "Thank you for your purchase of "
 msgstr "Gracias por tu compra de"
@@ -18362,79 +18712,6 @@ msgid "Request to change {platform_name} account e-mail"
 msgstr ""
 "Solicitud de cambio de correo electrónico en una cuenta de {platform_name}"
 
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-msgid "Dear student,"
-msgstr "Apreciado estudiante,"
-
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-msgid ""
-"You have been invited to join {course_name} at {site_name} by a member of "
-"the course staff."
-msgstr ""
-"Has sido invitado para participar como miembro del equipo para el curso "
-"{course_name} en {site_name}."
-
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-msgid "To access the course visit {course_url} and login."
-msgstr "Para acceder al curso visita {course_url} e inicia sesión."
-
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-msgid ""
-"To access the course visit {course_about_url} and register for the course."
-msgstr "Para acceder al curso visita {course_about_url} y regístrate."
-
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-msgid ""
-"To finish your registration, please visit {registration_url} and fill out "
-"the registration form making sure to use {email_address} in the E-mail "
-"field."
-msgstr ""
-"Para concluir su proceso de registro, visite {registration_url} y diligencie"
-" el fomulario asegurándose de utilizar {email_address} en la casilla de "
-"correo electrónico."
-
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-msgid ""
-"Once you have registered and activated your account, you will see "
-"{course_name} listed on your dashboard."
-msgstr ""
-"Una vez se haya registrado y haya activado su cuenta, verá el curso "
-"{course_name} en su panel principal."
-
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-msgid ""
-"Once you have registered and activated your account, visit "
-"{course_about_url} to join the course."
-msgstr ""
-"Una vez se haya registrado y haya activado su cuenta, visite "
-"{course_about_url} para unirse al curso."
-
-#: lms/templates/emails/enroll_email_allowedmessage.txt
-msgid "You can then enroll in {course_name}."
-msgstr "Usted puede ahora inscribirse en el curso {course_name}."
-
-#: lms/templates/emails/enroll_email_allowedsubject.txt
-msgid "You have been invited to register for {course_name}"
-msgstr "Usted ha sido invitado para registrarse al curso {course_name}"
-
-#: lms/templates/emails/enroll_email_enrolledmessage.txt
-msgid ""
-"You have been enrolled in {course_name} at {site_name} by a member of the "
-"course staff. The course should now appear on your {site_name} dashboard."
-msgstr ""
-"Usted ha sido inscrito en el curso {course_name} en {site_name} por un "
-"miembro del equipo del curso. El curso debe aparecer ahora en su panel "
-"principal de {site_name}."
-
-#: lms/templates/emails/enroll_email_enrolledmessage.txt
-#: lms/templates/emails/unenroll_email_enrolledmessage.txt
-msgid "This email was automatically sent from {site_name} to {full_name}"
-msgstr "Este correo fue enviado automáticamente por {site_name} a {full_name}"
-
-#: lms/templates/emails/enroll_email_enrolledsubject.txt
-msgid "You have been enrolled in {course_name}"
-msgstr "Usted ha sido inscrito en el curso {course_name}"
-
 #: lms/templates/emails/order_confirmation_email.txt
 msgid ""
 "Your payment was successful. You will see the charge below on your next "
@@ -18628,26 +18905,6 @@ msgstr ""
 "nombre de {old_name} a {new_name}. Si necesita mayor asistencia, por favor "
 "envíe un correo electrónico al equipo del curso a {email}."
 
-#: lms/templates/emails/remove_beta_tester_email_message.txt
-msgid ""
-"You have been removed as a beta tester for {course_name} at {site_name} by a"
-" member of the course staff. The course will remain on your dashboard, but "
-"you will no longer be part of the beta testing group."
-msgstr ""
-"Ud ha sido eliminado como usuario de puebas para el curso {course_name} en "
-"{site_name} por un miembro del equipo del curso. El curso permanecerá en su "
-"panel principal, pero usted ya no hará parte del grupo de usuarios de "
-"prueba."
-
-#: lms/templates/emails/remove_beta_tester_email_message.txt
-#: lms/templates/emails/unenroll_email_enrolledmessage.txt
-msgid "Your other courses have not been affected."
-msgstr "Sus otros cursos no han sido afectados."
-
-#: lms/templates/emails/remove_beta_tester_email_subject.txt
-msgid "You have been removed from a beta test for {course_name}"
-msgstr "Usted ha sido eliminado de la prueba beta para el curso {course_name}"
-
 #: lms/templates/emails/reverification_processed.txt
 msgid ""
 "We have successfully verified your identity for the {assessment} assessment "
@@ -18705,32 +18962,6 @@ msgstr ""
 #: lms/templates/emails/reverification_processed.txt
 msgid "Thanks,"
 msgstr "Gracias,"
-
-#: lms/templates/emails/unenroll_email_allowedmessage.txt
-msgid "Dear Student,"
-msgstr "Apreciado estudiante,"
-
-#: lms/templates/emails/unenroll_email_allowedmessage.txt
-msgid ""
-"You have been un-enrolled from course {course_name} by a member of the "
-"course staff. Please disregard the invitation previously sent."
-msgstr ""
-"Usted ha sido desinscrito del curso {course_name} por un miembro del equipo "
-"del curso. Por favor ignore la invitación enviada previamente."
-
-#: lms/templates/emails/unenroll_email_enrolledmessage.txt
-msgid ""
-"You have been un-enrolled in {course_name} at {site_name} by a member of the"
-" course staff. The course will no longer appear on your {site_name} "
-"dashboard."
-msgstr ""
-"Usted ha sido desinscrito del curso {course_name} en {site_name} por un "
-"miembro del equipo del curso. El curso ya no aparecerá en su panel principal"
-" de {site_name}."
-
-#: lms/templates/emails/unenroll_email_subject.txt
-msgid "You have been un-enrolled from {course_name}"
-msgstr "Usted ha sido desinscrito del curso {course_name}"
 
 #: lms/templates/embargo/default_courseware.html
 #: lms/templates/embargo/default_enrollment.html
@@ -25745,29 +25976,6 @@ msgid ""
 msgstr ""
 "Este grupo ya no existe. Seleccione otro grupo o borre la restricción de "
 "acceso."
-
-#: cms/templates/emails/activation_email.txt
-msgid ""
-"Thank you for signing up for {studio_name}! To activate your account, please"
-" copy and paste this address into your web browser's address bar:"
-msgstr ""
-"Gracias por registrarse en {studio_name}! Para activar su cuenta, por favor "
-"ingrese a la siguiente dirección en una ventana de su navegador:"
-
-#: cms/templates/emails/activation_email.txt
-msgid ""
-"If you didn't request this, you don't need to do anything; you won't receive"
-" any more email from us. Please do not reply to this e-mail; if you require "
-"assistance, check the help section of the {studio_name} web site."
-msgstr ""
-"Si usted no solicitó este cambio, no necesita hacer nada; no recibirá ningún"
-" correo adicional por parte de nosotros. Por favor no responda a este "
-"correo; si requiere mayor asistencia, visite la sección de Ayuda en la "
-"página web de {studio_name} ."
-
-#: cms/templates/emails/activation_email_subject.txt
-msgid "Your account for {studio_name}"
-msgstr "Su cuenta de {studio_name}"
 
 #: cms/templates/emails/course_creator_admin_subject.txt
 msgid "{email} has requested {studio_name} course creator privileges on edge"
