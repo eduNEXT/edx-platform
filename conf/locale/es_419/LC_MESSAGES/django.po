@@ -9925,7 +9925,7 @@ msgid ""
 "of the course staff."
 msgstr ""
 "Un miembro del equipo del curso te ha invitado a unirte a %(course_name)s "
-"en%(site_name)s."
+"en %(site_name)s."
 
 #: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
 msgid "To access this course click on the button below and login:"
