@@ -306,6 +306,10 @@ class RegistrationView(APIView):
                         form_desc,
                         required=self._is_field_required(field_name)
                     )
+
+            # Order fields
+            form_desc.fields.sort(key=lambda field: self.field_order.index(field["name"]))
+
         else:
             # Go through the fields in the fields order and add them if they are required or visible
             for field_name in self.field_order:
