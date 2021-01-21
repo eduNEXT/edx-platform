@@ -21,7 +21,7 @@
     <% } %>
 
     <% if ( type === 'select' ) { %>
-        <select id="<%- form %>-<%- name %>"
+        <select autocomplete="off" id="<%- form %>-<%- name %>"
             name="<%- name %>"
             class="input-inline"
             <% if ( instructions ) { %>
@@ -49,7 +49,7 @@
             </div>
         <% } %>
     <% } else if ( type === 'textarea' ) { %>
-        <textarea id="<%- form %>-<%- name %>"
+        <textarea autocomplete="off" id="<%- form %>-<%- name %>"
             type="<%- type %>"
             name="<%- name %>"
             class="input-block"
@@ -76,7 +76,7 @@
         <% } %>
     <% } else if (type === 'plaintext' ) { %>
             <span class="plaintext-field"><%= HtmlUtils.HTML(label) %></span>
-            <input id="<%- form %>-<%- name %>"
+            <input autocomplete="off" id="<%- form %>-<%- name %>"
                type="hidden"
                name="<%- name %>"
                class="input-block"
@@ -90,7 +90,7 @@
                 </div>
             <% } %>
         <% } %>
-        <input id="<%- form %>-<%- name %>"
+        <input autocomplete="off" id="<%- form %>-<%- name %>"
            type="<%- type %>"
            name="<%- name %>"
            class="input-block <% if ( type === 'checkbox' ) { %>checkbox<% } %>"
