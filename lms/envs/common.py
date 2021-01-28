@@ -4043,6 +4043,10 @@ PASSWORD_RESET_EMAIL_RATE = '2/h'
 ############### Settings for Retirement #####################
 RETIRED_USERNAME_PREFIX = 'retired__user_'
 RETIRED_EMAIL_PREFIX = 'retired__user_'
+# .. setting_name: RETIRED_EMAIL_DOMAIN
+# .. setting_default: retired.invalid
+# .. setting_description: Set the domain part of hashed emails for retired users. Used by the derived
+#     setting RETIRED_EMAIL_FMT.
 RETIRED_EMAIL_DOMAIN = 'retired.invalid'
 RETIRED_USERNAME_FMT = lambda settings: settings.RETIRED_USERNAME_PREFIX + '{}'
 RETIRED_EMAIL_FMT = lambda settings: settings.RETIRED_EMAIL_PREFIX + '{}@' + settings.RETIRED_EMAIL_DOMAIN
