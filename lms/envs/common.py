@@ -4047,6 +4047,12 @@ RETIRED_EMAIL_DOMAIN = 'retired.invalid'
 RETIRED_USERNAME_FMT = lambda settings: settings.RETIRED_USERNAME_PREFIX + '{}'
 RETIRED_EMAIL_FMT = lambda settings: settings.RETIRED_EMAIL_PREFIX + '{}@' + settings.RETIRED_EMAIL_DOMAIN
 derived('RETIRED_USERNAME_FMT', 'RETIRED_EMAIL_FMT')
+# .. setting_name: RETIRED_USER_SALTS
+# .. setting_default: ['abc', '123']
+# .. setting_description: Set a list of salts used for hashing usernames and emails on users retirement.
+# .. setting_warning: Only the last item in this list is used as a salt for all new retirements, but
+#     historical salts are preserved in order to guarantee that all hashed usernames and emails can still
+#     be checked.
 RETIRED_USER_SALTS = ['abc', '123']
 RETIREMENT_SERVICE_WORKER_USERNAME = 'RETIREMENT_SERVICE_USER'
 
