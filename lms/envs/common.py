@@ -4045,6 +4045,11 @@ RETIRED_USERNAME_PREFIX = 'retired__user_'
 RETIRED_EMAIL_PREFIX = 'retired__user_'
 RETIRED_EMAIL_DOMAIN = 'retired.invalid'
 RETIRED_USERNAME_FMT = lambda settings: settings.RETIRED_USERNAME_PREFIX + '{}'
+# .. setting_name: RETIRED_EMAIL_FMT
+# .. setting_default: retired__user_{}@retired.invalid
+# .. setting_description: Set the format a retired user email field gets transformed into, where {} is
+#     replaced with the hash of the original email. This derived setting depends on RETIRED_EMAIL_PREFIX
+#     and RETIRED_EMAIL_DOMAIN values.
 RETIRED_EMAIL_FMT = lambda settings: settings.RETIRED_EMAIL_PREFIX + '{}@' + settings.RETIRED_EMAIL_DOMAIN
 derived('RETIRED_USERNAME_FMT', 'RETIRED_EMAIL_FMT')
 RETIRED_USER_SALTS = ['abc', '123']
