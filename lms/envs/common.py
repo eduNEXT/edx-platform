@@ -4048,6 +4048,10 @@ RETIRED_USERNAME_FMT = lambda settings: settings.RETIRED_USERNAME_PREFIX + '{}'
 RETIRED_EMAIL_FMT = lambda settings: settings.RETIRED_EMAIL_PREFIX + '{}@' + settings.RETIRED_EMAIL_DOMAIN
 derived('RETIRED_USERNAME_FMT', 'RETIRED_EMAIL_FMT')
 RETIRED_USER_SALTS = ['abc', '123']
+# .. setting_name: RETIREMENT_SERVICE_WORKER_USERNAME
+# .. setting_default: RETIREMENT_SERVICE_USER
+# .. setting_description: Set the username of the retirement service worker user. Retirement scripts
+#     authenticate with LMS as this user with oauth client credentials.
 RETIREMENT_SERVICE_WORKER_USERNAME = 'RETIREMENT_SERVICE_USER'
 
 # These states are the default, but are designed to be overridden in configuration.
