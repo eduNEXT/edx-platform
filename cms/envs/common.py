@@ -1727,6 +1727,7 @@ ADVANCED_PROBLEM_TYPES = [
 RETIRED_USERNAME_PREFIX = 'retired__user_'
 RETIRED_EMAIL_PREFIX = 'retired__user_'
 RETIRED_EMAIL_DOMAIN = 'retired.invalid'
+# See annotations in lms/envs/common.py for details.
 RETIRED_USERNAME_FMT = lambda settings: settings.RETIRED_USERNAME_PREFIX + '{}'
 RETIRED_EMAIL_FMT = lambda settings: settings.RETIRED_EMAIL_PREFIX + '{}@' + settings.RETIRED_EMAIL_DOMAIN
 derived('RETIRED_USERNAME_FMT', 'RETIRED_EMAIL_FMT')
