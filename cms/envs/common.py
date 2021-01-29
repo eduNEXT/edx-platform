@@ -1724,6 +1724,7 @@ ADVANCED_PROBLEM_TYPES = [
 ]
 
 ############### Settings for Retirement #####################
+# See annotations in lms/envs/common.py for details.
 RETIRED_USERNAME_PREFIX = 'retired__user_'
 RETIRED_EMAIL_PREFIX = 'retired__user_'
 RETIRED_EMAIL_DOMAIN = 'retired.invalid'

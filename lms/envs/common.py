@@ -4041,6 +4041,10 @@ PASSWORD_RESET_IP_RATE = '1/m'
 PASSWORD_RESET_EMAIL_RATE = '2/h'
 
 ############### Settings for Retirement #####################
+# .. setting_name: RETIRED_USERNAME_PREFIX
+# .. setting_default: retired__user_
+# .. setting_description: Set the prefix part of hashed usernames for retired users. Used by the derived
+#     setting RETIRED_USERNAME_FMT.
 RETIRED_USERNAME_PREFIX = 'retired__user_'
 RETIRED_EMAIL_PREFIX = 'retired__user_'
 RETIRED_EMAIL_DOMAIN = 'retired.invalid'
