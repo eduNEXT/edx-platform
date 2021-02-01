@@ -4,10 +4,22 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-20.04
-
+    strategy:
+      matrix:
+        python-version: [3.8]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
 
       - name: Cache dependencies
         id: cache-pip-packages
@@ -20,17 +32,17 @@ jobs:
         if: steps.cache-pip-packages.outputs.cache-hit != 'true'
         run: |
 
-            # If venv has not been restored by restore_cache, set it up.
-            export PATH=$PATH:$(npm bin)
-            [ ! -f /tmp/workspace/venv/bin/activate ] && virtualenv -p python3.8 /tmp/workspace/venv
+              # If venv has not been restored by restore_cache, set it up.
+              export PATH=$PATH:$(npm bin)
+              [ ! -f /tmp/workspace/venv/bin/activate ] && virtualenv -p python3.8 /tmp/workspace/venv
 
-            source /tmp/workspace/venv/bin/activate
+              source /tmp/workspace/venv/bin/activate
 
-            # All files listed here must be included in the cache key for pip packages.
-            pip install --exists-action w -r requirements/edx/django.txt
-            pip install --exists-action w -r requirements/edx/testing.txt
-            pip install --exists-action w -r requirements/edx/paver.txt
-            pip install --exists-action w -r requirements/edx/base.txt
+              # All files listed here must be included in the cache key for pip packages.
+              pip install --exists-action w -r requirements/edx/django.txt
+              pip install --exists-action w -r requirements/edx/testing.txt
+              pip install --exists-action w -r requirements/edx/paver.txt
+              pip install --exists-action w -r requirements/edx/base.txt
 
       - name: Persist packages to workspace
         uses: actions/upload-artifact@v2
@@ -51,3 +63,146 @@ jobs:
               node -v
               npm -v
               npm install
+
+  lms_unit_tests:
+    needs: build
+    runs-on: ubuntu-20.04
+    services:
+      mongodb:
+        image: mongo-3.6
+        ports:
+          - 27017:27017
+    env:
+      NO_PREREQ_INSTALL: "true"
+      TEST_SUIT: "lms-unit"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        id: cache-npm-packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: v2-${{ hashFiles('.github/workflows/CI.yml') }}-npm-deps-${{ hashFiles('package.json') }}
+
+      - name: Install local pip packages
+        run: |
+              source /tmp/workspace/venv/bin/activate
+              pip install -r requirements/edx/testing.txt
+
+      - name: Run tests
+        run: ./scripts/all-tests.sh
+
+  cms_unit_tests:
+    needs: build
+    runs-on: ubuntu-20.04
+    services:
+      mongodb:
+        image: mongo-3.6
+        ports:
+          - 27017:27017
+    env:
+      NO_PREREQ_INSTALL: "true"
+      TEST_SUIT: "cms-unit"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        id: cache-npm-packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: v2-${{ hashFiles('.github/workflows/CI.yml') }}-npm-deps-${{ hashFiles('package.json') }}
+
+      - name: Install local pip packages
+        run: |
+              source /tmp/workspace/venv/bin/activate
+              pip install -r requirements/edx/testing.txt
+
+      - name: Run tests
+        run: ./scripts/all-tests.sh
+
+  lib_unit_tests:
+    needs: build
+    runs-on: ubuntu-20.04
+    services:
+      mongodb:
+        image: mongo-3.6
+        ports:
+          - 27017:27017
+    env:
+      NO_PREREQ_INSTALL: "true"
+      TEST_SUITE: "commonlib-unit"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        id: cache-npm-packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: v2-${{ hashFiles('.github/workflows/CI.yml') }}-npm-deps-${{ hashFiles('package.json') }}
+
+      - name: Install local pip packages
+        run: |
+              source /tmp/workspace/venv/bin/activate
+              pip install -r requirements/edx/testing.txt
+
+      - name: Run tests
+        run: ./scripts/all-tests.sh
+
+  javascript_tests:
+    needs: build
+    runs-on: ubuntu-20.04
+    env:
+      NO_PREREQ_INSTALL: "true"
+      TEST_SUITE: "js-unit"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        id: cache-npm-packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: v2-${{ hashFiles('.github/workflows/CI.yml') }}-npm-deps-${{ hashFiles('package.json') }}
+
+      - name: Install local pip packages
+        run: |
+              source /tmp/workspace/venv/bin/activate
+              pip install -r requirements/edx/testing.txt
+
+      - name: Run tests
+        run: ./scripts/all-tests.sh
+
+  quality_tests:
+    needs: build
+    runs-on: ubuntu-20.04
+    env:
+      NO_PREREQ_INSTALL: "true"
+      TEST_SUITE: "quality"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        id: cache-npm-packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: v2-${{ hashFiles('.github/workflows/CI.yml') }}-npm-deps-${{ hashFiles('package.json') }}
+
+      - name: Install local pip packages
+        run: |
+              source /tmp/workspace/venv/bin/activate
+              pip install -r requirements/edx/testing.txt
+
+      - name: Run tests
+        run: ./scripts/all-tests.sh
