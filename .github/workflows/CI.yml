@@ -1,0 +1,53 @@
+name: CI workflow
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        id: cache-pip-packages
+        uses: actions/cache@v2
+        with:
+          path: /tmp/workspace/venv
+          key: v1-${{ hashFiles('.github/workflows/CI.yml') }}-pip-deps-${{ hashFiles('requirements/edx/base.txt') }}-${{ hashFiles('requirements/edx/testing.txt') }}-${{ hashFiles('requirements/edx/django.txt' }}-${{ hashFiles('requirements/edx/base.txt' }}
+
+      - name: Install pip packages
+        if: steps.cache-pip-packages.outputs.cache-hit != 'true'
+        run: |
+
+            # If venv has not been restored by restore_cache, set it up.
+            export PATH=$PATH:$(npm bin)
+            [ ! -f /tmp/workspace/venv/bin/activate ] && virtualenv -p python3.8 /tmp/workspace/venv
+
+            source /tmp/workspace/venv/bin/activate
+
+            # All files listed here must be included in the cache key for pip packages.
+            pip install --exists-action w -r requirements/edx/django.txt
+            pip install --exists-action w -r requirements/edx/testing.txt
+            pip install --exists-action w -r requirements/edx/paver.txt
+            pip install --exists-action w -r requirements/edx/base.txt
+
+      - name: Persist packages to workspace
+        uses: actions/upload-artifact@v2
+        with:
+          name: /tmp/workspace
+          path: venv
+
+      - name: Cache dependencies
+        id: cache-npm-packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: v2-${{ hashFiles('.github/workflows/CI.yml') }}-npm-deps-${{ hashFiles('package.json') }}
+
+      - name: Install npm packages
+        if: steps.cache-npm-packages.outputs.cache-hit != 'true'
+        run: |
+              node -v
+              npm -v
+              npm install
