@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/workspace/venv
-          key: v1-${{ hashFiles('.github/workflows/CI.yml') }}-pip-deps-${{ hashFiles('requirements/edx/base.txt') }}-${{ hashFiles('requirements/edx/testing.txt') }}-${{ hashFiles('requirements/edx/django.txt' }}-${{ hashFiles('requirements/edx/base.txt' }}
+          key: v1-${{ hashFiles('.github/workflows/CI.yml') }}-pip-deps-${{ hashFiles('requirements/edx/base.txt') }}-${{ hashFiles('requirements/edx/testing.txt') }}-${{ hashFiles('requirements/edx/django.txt') }}-${{ hashFiles('requirements/edx/base.txt' }}
 
       - name: Install pip packages
         if: steps.cache-pip-packages.outputs.cache-hit != 'true'
@@ -47,8 +47,8 @@ jobs:
       - name: Persist packages to workspace
         uses: actions/upload-artifact@v2
         with:
-          name: /tmp/workspace
-          path: venv
+          name: virtual-env
+          path: /tmp/workspace/venv
 
       - name: Cache dependencies
         id: cache-npm-packages
@@ -79,6 +79,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Download result from build
+        uses: actions/download-artifact@v2
+        with:
+          name: virtual-env
 
       - name: Cache dependencies
         id: cache-npm-packages
@@ -111,6 +116,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Download result from build
+        uses: actions/download-artifact@v2
+        with:
+          name: virtual-env
+
       - name: Cache dependencies
         id: cache-npm-packages
         uses: actions/cache@v2
@@ -142,6 +152,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Download result from build
+        uses: actions/download-artifact@v2
+        with:
+          name: virtual-env
+
       - name: Cache dependencies
         id: cache-npm-packages
         uses: actions/cache@v2
@@ -167,6 +182,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Download result from build
+        uses: actions/download-artifact@v2
+        with:
+          name: virtual-env
+
       - name: Cache dependencies
         id: cache-npm-packages
         uses: actions/cache@v2
@@ -191,6 +211,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Download result from build
+        uses: actions/download-artifact@v2
+        with:
+          name: virtual-env
 
       - name: Cache dependencies
         id: cache-npm-packages
