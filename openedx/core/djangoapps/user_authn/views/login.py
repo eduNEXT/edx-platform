@@ -261,6 +261,8 @@ def _handle_successful_authentication_and_login(user, request):
 
     _track_user_login(user, request)
 
+    do_action("post_login", user, request)
+
     try:
         django_login(request, user)
         request.session.set_expiry(604800 * 4)
@@ -461,8 +463,6 @@ def login_user(request):
 
     """
     _parse_analytics_param_for_course_id(request)
-
-    do_action("post_login", request, request.user)
 
     third_party_auth_requested = third_party_auth.is_enabled() and pipeline.running(request)
     first_party_auth_requested = bool(request.POST.get('email')) or bool(request.POST.get('password'))
