@@ -51,6 +51,8 @@ from common.djangoapps import third_party_auth
 from common.djangoapps.track import segment
 from common.djangoapps.util.json_request import JsonResponse
 from common.djangoapps.util.password_policy_validators import normalize_password
+from edx_django_utils.plugins import do_plugin_action
+from openedx.core.djangoapps.plugins.constants import ProjectType
 
 log = logging.getLogger("edx.student")
 AUDIT_LOG = logging.getLogger("audit")
@@ -259,6 +261,8 @@ def _handle_successful_authentication_and_login(user, request):
         LoginFailures.clear_lockout_counter(user)
 
     _track_user_login(user, request)
+
+    do_plugin_action(ProjectType.LMS,"post_login", user, request)
 
     try:
         django_login(request, user)
