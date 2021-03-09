@@ -436,3 +436,12 @@ PROCTORING_USER_OBFUSCATION_KEY = '85920908f28904ed733fe576320db18cabd7b6cd'
 
 # Don't tolerate deprecated edx-platform import usage in devstack.
 ERROR_ON_DEPRECATED_EDX_PLATFORM_IMPORTS = True
+
+HOOKS_EXTENSIONS = {
+      "post_login": {
+               "pipeline": [
+                     "eox_example.actions.post_login",
+                    ],
+               "async": False
+     },
+}

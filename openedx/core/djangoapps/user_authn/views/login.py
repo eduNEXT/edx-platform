@@ -24,6 +24,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.http import require_http_methods
+from edx_django_utils.hooks import do_action
 from edx_django_utils.monitoring import set_custom_attribute
 from ratelimit.decorators import ratelimit
 from rest_framework.views import APIView
@@ -460,6 +461,8 @@ def login_user(request):
 
     """
     _parse_analytics_param_for_course_id(request)
+
+    do_action("post_login", request, request.user)
 
     third_party_auth_requested = third_party_auth.is_enabled() and pipeline.running(request)
     first_party_auth_requested = bool(request.POST.get('email')) or bool(request.POST.get('password'))
