@@ -22,6 +22,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.debug import sensitive_post_parameters
 from edx_django_utils.monitoring import set_custom_attribute
+from edx_django_utils.hooks import trigger_action
 from edx_toggles.toggles import LegacyWaffleFlag, LegacyWaffleFlagNamespace
 from pytz import UTC
 from ratelimit.decorators import ratelimit
@@ -247,6 +248,8 @@ def create_account_with_params(request, params):
 
     # Announce registration
     REGISTER_USER.send(sender=None, user=user, registration=registration)
+
+    trigger_action("openedx.lms.auth.post_register.action.v1", user, registration)
 
     create_comments_service_user(user)
 
