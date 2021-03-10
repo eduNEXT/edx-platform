@@ -25,6 +25,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.http import require_http_methods
 from edx_django_utils.monitoring import set_custom_attribute
+from edx_django_utils.hooks import do_filter
 from ratelimit.decorators import ratelimit
 from rest_framework.views import APIView
 
@@ -33,7 +34,7 @@ from openedx.core.djangoapps.password_policy import compliance as password_polic
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.djangoapps.user_authn.views.login_form import get_login_session_form
 from openedx.core.djangoapps.user_authn.cookies import get_response_with_refreshed_jwt_cookies, set_logged_in_cookies
-from openedx.core.djangoapps.user_authn.exceptions import AuthFailedError
+from openedx.core.djangoapps.user_authn.exceptions import AuthFailedError, UnathorizedLoginByHookException
 from openedx.core.djangoapps.user_authn.toggles import should_redirect_to_authn_microfrontend
 from openedx.core.djangoapps.util.user_messages import PageLevelMessages
 from openedx.core.djangoapps.user_authn.views.password_reset import send_password_reset_email_for_user
@@ -466,6 +467,14 @@ def login_user(request):
     is_user_third_party_authenticated = False
 
     set_custom_attribute('login_user_course_id', request.POST.get('course_id'))
+
+    try:
+        do_filter("pre_login", request)
+    except UnathorizedLoginByHookException as error:
+        response_content = error.get_response()
+        log.exception(response_content)
+        response = JsonResponse(response_content, status=400)
+        return response
 
     if is_require_third_party_auth_enabled() and not third_party_auth_requested:
         return HttpResponseForbidden(

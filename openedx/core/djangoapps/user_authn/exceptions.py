@@ -1,5 +1,6 @@
 """ User Authn related Exceptions. """
 
+from edx_django_utils.hooks import HookException
 
 from openedx.core.djangolib.markup import Text
 
@@ -27,3 +28,9 @@ class AuthFailedError(Exception):
                 resp[attr] = self.__getattribute__(attr)
 
         return resp
+
+
+class UnathorizedLoginByHookException(AuthFailedError, HookException):
+    """
+    Custom exception used in hooks
+    """
