@@ -25,6 +25,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.http import require_http_methods
 from edx_django_utils.monitoring import set_custom_attribute
+from edx_django_utils.hooks import do_filter
 from ratelimit.decorators import ratelimit
 from rest_framework.views import APIView
 
@@ -466,6 +467,10 @@ def login_user(request):
     is_user_third_party_authenticated = False
 
     set_custom_attribute('login_user_course_id', request.POST.get('course_id'))
+    filter_result = do_filter('pre_login', request)
+
+    if filter_result.get("cannot_login"):
+        return HttpResponseForbidden("Login blocked by plugin")
 
     if is_require_third_party_auth_enabled() and not third_party_auth_requested:
         return HttpResponseForbidden(
