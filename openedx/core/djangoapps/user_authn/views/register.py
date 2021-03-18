@@ -22,7 +22,8 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.debug import sensitive_post_parameters
 from edx_django_utils.monitoring import set_custom_attribute
-from edx_django_utils.hooks import trigger_action
+from edx_django_utils.hooks import trigger_action, trigger_filter
+from edx_django_utils.hooks.exceptions import HookException
 from edx_toggles.toggles import LegacyWaffleFlag, LegacyWaffleFlagNamespace
 from pytz import UTC
 from ratelimit.decorators import ratelimit
@@ -524,6 +525,16 @@ class RegistrationView(APIView):
         response = self._handle_duplicate_email_username(request, data)
         if response:
             return response
+
+        try:
+            trigger_filter("openedx.lms.auth.pre_register.filter.v1", data)
+        except HookException as err:
+            errors = {
+                "hook_error": [{"user_message": err.message}]
+            }
+
+            return  self._create_response(request, errors, status_code=err.status_code)
+
 
         response, user = self._create_account(request, data)
         if response:
