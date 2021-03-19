@@ -10,9 +10,12 @@ from django.db import IntegrityError
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
+from edx_django_utils.hooks import trigger_action
+
 from lms.djangoapps.courseware.toggles import courseware_mfe_progress_milestones_are_active
 from common.djangoapps.student.helpers import EMAIL_EXISTS_MSG_FMT, USERNAME_EXISTS_MSG_FMT, AccountValidationError
 from common.djangoapps.student.models import CourseEnrollment, CourseEnrollmentCelebration, is_email_retired, is_username_retired  # lint-amnesty, pylint: disable=line-too-long
+from common.djangoapps.util.model_utils import get_changed_fields_dict
 
 
 @receiver(pre_save, sender=get_user_model())
@@ -70,3 +73,22 @@ def create_course_enrollment_celebration(sender, instance, created, **kwargs):
     except IntegrityError:
         # A celebration object was already created. Shouldn't happen, but ignore it if it does.
         pass
+
+
+@receiver(pre_save, sender=CourseEnrollment)
+def enrollment_pre_save_callback(sender, **kwargs):
+    """
+    Capture old fields on the user instance before save and cache them as a
+    private field on the current model for use in the post_save callback.
+    """
+    enrollment = kwargs['instance']
+    enrollment._changed_fields = get_changed_fields_dict(enrollment, sender)  # lint-amnesty, pylint: disable=protected-access
+
+
+@receiver(post_save, sender=CourseEnrollment)
+def trigger_post_enrollment_actions(sender, instance, created, **kwargs):
+    changed_fields = instance._changed_fields
+    if created or 'is_active' in changed_fields:
+        if instance.is_active:
+            print("triggering action")
+            trigger_action('openedx.lms.enrollment.post_enrollment.action.v1', instance, created)

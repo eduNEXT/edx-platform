@@ -439,6 +439,12 @@ HOOKS_EXTENSIONS_CONFIG = {
                     ],
                "async": True
      },
+      "openedx.lms.enrollment.post_enrollment.action.v1": {
+               "pipeline": [
+                     "openedx_basic_hooks.actions.post_enrollment.post_enrollment_tweet",
+                    ],
+               "async": True
+     },
       "openedx.lms.auth.pre_register.filter.v1": {
                "pipeline": [
                      "openedx_basic_hooks.filters.pre_register.check_year_of_birth",
