@@ -2,7 +2,7 @@
 Toggles for accounts related code.
 """
 
-from edx_toggles.toggles import LegacyWaffleFlag
+from edx_toggles.toggles import LegacyWaffleFlag, SettingDictToggle
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 # .. toggle_name: order_history.redirect_to_microfrontend
@@ -25,20 +25,19 @@ def should_redirect_to_order_history_microfrontend():
     )
 
 
-# .. toggle_name: account.redirect_to_microfrontend
-# .. toggle_implementation: WaffleFlag
-# .. toggle_default: False
-# .. toggle_description: Supports staged rollout of a new micro-frontend-based implementation of the account page.
-# .. toggle_use_cases: temporary, open_edx
-# .. toggle_creation_date: 2019-04-30
-# .. toggle_target_removal_date: 2020-12-31
-# .. toggle_warnings: Also set settings.ACCOUNT_MICROFRONTEND_URL and site's ENABLE_ACCOUNT_MICROFRONTEND.
-# .. toggle_tickets: DEPR-17
-REDIRECT_TO_ACCOUNT_MICROFRONTEND = LegacyWaffleFlag('account', 'redirect_to_microfrontend', __name__)
-
+# .. toggle_name: FEATURES['ENABLE_ACCOUNT_MICROFRONTEND']
+# .. toggle_implementation: SettingDictToggle
+# .. toggle_default: True
+# .. toggle_description: Enable account MFE by default.
+# .. toggle_warnings: Enabling this feature requires settings given here:
+# ..     https://github.com/edx/configuration/tree/master/playbooks/roles/mfe_deployer#comprehensive-example-of-a-deployment-using-subdirectories
+# .. toggle_use_cases: open_edx
+# .. toggle_creation_date: 2021-04-19
+ENABLE_ACCOUNT_MICROFRONTEND = SettingDictToggle(
+    "FEATURES", "ENABLE_ACCOUNT_MICROFRONTEND", default=False, module_name=__name__
+)
 
 def should_redirect_to_account_microfrontend():
     return (
-        configuration_helpers.get_value('ENABLE_ACCOUNT_MICROFRONTEND') and
-        REDIRECT_TO_ACCOUNT_MICROFRONTEND.is_enabled()
-    )
+        configuration_helpers.get_value('ENABLE_ACCOUNT_MICROFRONTEND', ENABLE_ACCOUNT_MICROFRONTEND.is_enabled())
+        )
