@@ -109,6 +109,11 @@ compile-requirements: ## Re-compile *.in requirements to *.txt
 upgrade: pre-requirements ## update the pip requirements files to use the latest releases satisfying our constraints
 	$(MAKE) compile-requirements COMPILE_OPTS="--upgrade"
 
+edunext-upgrade: export CUSTOM_COMPILE_COMMAND=make edunext-upgrade
+edunext-upgrade: #Update edunext dependencies.
+	pip install -qr requirements/edx/pip-tools.txt
+	pip-compile -v --no-emit-trusted-host --no-index --upgrade -o requirements/edunext/base.txt requirements/edunext/base.in || exit 1;
+
 # These make targets currently only build LMS images.
 docker_build:
 	docker build . -f Dockerfile --target lms -t openedx/edx-platform
