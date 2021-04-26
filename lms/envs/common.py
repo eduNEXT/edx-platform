@@ -1013,7 +1013,7 @@ LANGUAGES = [
     ('en-uk', u'English (United Kingdom)'),  # English (United Kingdom)
     ('en@lolcat', u'LOLCAT English'),  # LOLCAT English
     ('en@pirate', u'Pirate English'),  # Pirate English
-    ('es-419', u'Español (Latinoamérica)'),  # Spanish (Latin America)
+    ('es-419', u'Spanish'),  # Spanish (Latin America)
     ('es-ar', u'Español (Argentina)'),  # Spanish (Argentina)
     ('es-ec', u'Español (Ecuador)'),  # Spanish (Ecuador)
     ('es-es', u'Español (España)'),  # Spanish (Spain)
