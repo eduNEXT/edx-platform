@@ -433,8 +433,8 @@ FEATURES['ENABLE_PREREQUISITE_COURSES'] = True
 # (ref MST-637)
 PROCTORING_USER_OBFUSCATION_KEY = '85920908f28904ed733fe576320db18cabd7b6cd'
 
-HOOKS_EXTENSION_CONFIG = {
-      "openedx.lms.auth.pre_register.filter.v1": {
+HOOK_FILTERS_CONFIG = {
+      "org.openedx.lms.auth.user.registration.started.v1": {
                "pipeline": [
                      "openedx_basic_hooks.filters.pre_register.check_year_of_birth",
                     ],
