@@ -60,6 +60,8 @@ from openedx.core.djangoapps.user_authn.views.registration_form import (
     get_registration_extension_form
 )
 from openedx.core.djangoapps.user_authn.toggles import is_require_third_party_auth_enabled
+from openedx_filters.lms.auth.v1.registration import before_creation as pre_register_filter
+from openedx_filters.exceptions import HookFilterException
 from common.djangoapps.student.helpers import (
     AccountValidationError,
     authenticate_new_user,
@@ -523,6 +525,16 @@ class RegistrationView(APIView):
 
         data = request.POST.copy()
         self._handle_terms_of_service(data)
+
+        try:
+            data = pre_register_filter(data)
+
+        except HookFilterException as err:
+            errors = {
+                "hook_error": [{"user_message": err.message}]
+            }
+
+            return  self._create_response(request, errors, status_code=err.status_code)
 
         response = self._handle_duplicate_email_username(request, data)
         if response:
