@@ -37,7 +37,8 @@ ENABLE_ACCOUNT_MICROFRONTEND = SettingDictToggle(
     "FEATURES", "ENABLE_ACCOUNT_MICROFRONTEND", default=False, module_name=__name__
 )
 
+
 def should_redirect_to_account_microfrontend():
     return (
         configuration_helpers.get_value('ENABLE_ACCOUNT_MICROFRONTEND', ENABLE_ACCOUNT_MICROFRONTEND.is_enabled())
-        )
+    )
