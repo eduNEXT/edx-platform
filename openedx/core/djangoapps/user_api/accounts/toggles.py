@@ -30,14 +30,15 @@ def should_redirect_to_order_history_microfrontend():
 # .. toggle_default: False
 # .. toggle_description: Enable the account MFE globally.
 # .. toggle_warnings: Enabling this feature requires settings given here:
-# ..     https://github.com/edx/configuration/tree/master/playbooks/roles/mfe_deployer#comprehensive-example-of-a-deployment-using-subdirectories
+# ..     https://github.com/edx/configuration/tree/master/playbooks/roles/mfe_deployer#comprehensive-example-of-a-deployment-using-subdirectories # lint-amnesty, pylint: disable=line-too-long
 # .. toggle_use_cases: open_edx
 # .. toggle_creation_date: 2021-04-19
 ENABLE_ACCOUNT_MICROFRONTEND = SettingDictToggle(
     "FEATURES", "ENABLE_ACCOUNT_MICROFRONTEND", default=False, module_name=__name__
 )
 
+
 def should_redirect_to_account_microfrontend():
     return (
         configuration_helpers.get_value('ENABLE_ACCOUNT_MICROFRONTEND', ENABLE_ACCOUNT_MICROFRONTEND.is_enabled())
-        )
+    )
