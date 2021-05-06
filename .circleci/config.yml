@@ -27,3 +27,17 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
           docker_layer_caching: true
+
+      - run:
+          name: Prepare tutor environment
+          command: |
+            mkdir -p /tmp/tutor_build /tmp/tutor_build/tutor_root/tutor
+            cd /tmp/tutor_build
+            echo -e "export TUTOR_ROOT=/tmp/tutor_build/tutor_root/tutor\nexport TUTOR_PLUGINS_ROOT=/tmp/tutor_build/tutor_root/tutor-plugins" >> tutor_env
+            git clone -b v11.2.8 https://github.com/overhangio/tutor.git
+            virtualenv -p python3.8 /tmp/tutor_build/venv
+            source venv/bin/activate
+            cd tutor && pip install -e . && cd ..
+            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_devstack https://GoNeoSoft@bitbucket.org/edunext/plugin-distro-ednx.git tutor_plugins
+            apt install python3.8
+            ln -s /tmp/tutor_build/tutor_plugins /tmp/tutor_build/tutor_root/tutor-plugins
