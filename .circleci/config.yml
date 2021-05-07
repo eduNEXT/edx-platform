@@ -35,8 +35,8 @@ jobs:
             virtualenv -p python3.8 /tmp/tutor_build/venv
             source venv/bin/activate
             cd tutor && pip install -e . && cd ..
-            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_devstack git@bitbucket.org:edunext/plugin-distro-ednx.git tutor_plugins
-            ln -s /tmp/tutor_build/tutor_plugins /tmp/tutor_build/tutor_root/tutor-plugins
+            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b stage git@bitbucket.org:edunext/plugin-distro-ednx.git
+            pip install -e ./plugin-distro-ednx
 
       - run:
           name: Enable tutor_distro plugins
