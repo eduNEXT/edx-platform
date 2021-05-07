@@ -36,7 +36,6 @@ jobs:
             source venv/bin/activate
             cd tutor && pip install -e . && cd ..
             GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_devstack git@bitbucket.org:edunext/plugin-distro-ednx.git tutor_plugins
-            apt install python3.8
             ln -s /tmp/tutor_build/tutor_plugins /tmp/tutor_build/tutor_root/tutor-plugins
 
       - run:
@@ -61,7 +60,7 @@ jobs:
           docker_layer_caching: true
 
       - run:
-          name: Building openedx image with tutor
+          name: Building openedx image with tutor_distro
           working_directory: /tmp/tutor_build
           command: |
             source tutor_env
