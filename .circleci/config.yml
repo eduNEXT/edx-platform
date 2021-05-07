@@ -69,4 +69,18 @@ jobs:
           command: |
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
             tutor images push openedx
+
+      - run:
+          name: Building openedx dev image 
+          working_directory: /tmp/tutor_build
+          command: |
+            tutor images build openedx-dev
+            
+      
+      - run:
+          name: Pushing openedx dev image to Docker Registry with tutor_distro
+          working_directory: /tmp/tutor_build
+          command: |
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+            docker push docker.io/ednxops/ednx_distro_edxapp_dev:latest
   
