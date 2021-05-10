@@ -24,18 +24,18 @@ jobs:
           keys:
             - v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
 
-      - run:
-          name: Install deb packages
-          command: |
-            source ./scripts/circle-ci-configuration.sh
-      - save_cache:
-          key: v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
-          paths:
-            - "downloads"
+      # - run:
+      #     name: Install deb packages
+      #     command: |
+      #       source ./scripts/circle-ci-configuration.sh
+      # - save_cache:
+      #     key: v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
+      #     paths:
+      #       - "downloads"
 
-      - restore_cache:
-          keys:
-            - v1-{{ checksum ".circleci/config.yml" }}-pip-deps-{{ checksum "requirements/edx/base.txt" }}-{{ checksum "requirements/edx/testing.txt" }}-{{ checksum "requirements/edx/django.txt" }}-{{ checksum "requirements/edunext/base.txt" }}
+      # - restore_cache:
+      #     keys:
+      #       - v1-{{ checksum ".circleci/config.yml" }}-pip-deps-{{ checksum "requirements/edx/base.txt" }}-{{ checksum "requirements/edx/testing.txt" }}-{{ checksum "requirements/edx/django.txt" }}-{{ checksum "requirements/edunext/base.txt" }}
 
       - run:
           name: Install pip packages
