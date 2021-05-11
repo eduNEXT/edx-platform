@@ -7,7 +7,9 @@ workflows:
       - lms_unit_tests:
           requires:
             -  build
-
+      - cms_unit_tests:
+            requires:
+            -  build
       - build_edxapp_image:
           filters:
             branches:
@@ -81,12 +83,12 @@ jobs:
           keys:
             - v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
 
-      - run:
-          name: Install deb packages
-          command: |
-            source ./scripts/circle-ci-configuration.sh
-      - attach_workspace:
-          at: /tmp/workspace
+      # - run:
+      #     name: Install deb packages
+      #     command: |
+      #       source ./scripts/circle-ci-configuration.sh
+      # - attach_workspace:
+      #     at: /tmp/workspace
 
       - restore_cache:
           keys:
@@ -104,6 +106,41 @@ jobs:
             source /tmp/workspace/venv/bin/activate
             export PATH=$PATH:$(npm bin)
             paver test_system -s lms --cov-args="-p"
+
+  cms_unit_tests:
+    docker:
+      - image: edxops/xenial-common:latest
+    environment:
+      - NO_PREREQ_INSTALL: "true"
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
+
+      # - run:
+      #     name: Install deb packages
+      #     command: |
+      #       source ./scripts/circle-ci-configuration.sh
+      # - attach_workspace:
+      #     at: /tmp/workspace
+
+      # - restore_cache:
+      #     keys:
+      #       - v2-{{ checksum ".circleci/config.yml" }}-npm-deps-{{ checksum "package.json" }}
+
+      - run:
+          name: Install local pip packages
+          command: |
+            source /tmp/workspace/venv/bin/activate
+            pip install -r requirements/edx/testing.txt
+      - run:
+          name: Run tests
+          command: |
+            source /tmp/workspace/venv/bin/activate
+            export PATH=$PATH:$(npm bin)
+            paver test_system -s cms --cov-args="-p"
 
   build_edxapp_image:
     docker:
