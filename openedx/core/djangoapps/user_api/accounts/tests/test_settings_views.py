@@ -11,6 +11,7 @@ from django.test.utils import override_settings
 from django.urls import reverse
 from edx_rest_api_client import exceptions
 
+from edx_toggles.toggles.testutils import override_waffle_flag
 from lms.djangoapps.commerce.models import CommerceConfiguration
 from lms.djangoapps.commerce.tests import factories
 from lms.djangoapps.commerce.tests.mocks import mock_get_orders
@@ -20,6 +21,7 @@ from openedx.core.djangoapps.programs.tests.mixins import ProgramsApiConfigMixin
 from openedx.core.djangoapps.site_configuration.tests.factories import SiteFactory
 from openedx.core.djangoapps.site_configuration.tests.mixins import SiteMixin
 from openedx.core.djangoapps.user_api.accounts.settings_views import account_settings_context, get_user_orders
+from openedx.core.djangoapps.user_api.accounts.toggles import REDIRECT_TO_ACCOUNT_MICROFRONTEND
 from openedx.core.djangoapps.user_api.tests.factories import UserPreferenceFactory
 from openedx.core.djangolib.testing.utils import skip_unless_lms
 from openedx.features.enterprise_support.utils import get_enterprise_readonly_account_fields
@@ -239,18 +241,36 @@ class AccountSettingsViewTest(ThirdPartyAuthTestMixin, SiteMixin, ProgramsApiCon
         assert len(order_detail) == 1
 
     def test_redirect_view(self):
-
         old_url_path = reverse('account_settings')
+        with override_waffle_flag(REDIRECT_TO_ACCOUNT_MICROFRONTEND, active=True):
+            # Test with waffle flag active and none site setting, redirects to microfrontend
+            response = self.client.get(path=old_url_path)
+            self.client.login(username=self.USERNAME, password=self.PASSWORD)
+            self.assertRedirects(response, settings.ACCOUNT_MICROFRONTEND_URL, fetch_redirect_response=False)
 
-        # Test with setting toggle disabled, does not redirect
-        settings.FEATURES['ENABLE_ACCOUNT_MICROFRONTEND'] = False
-        with mock.patch.dict(settings.FEATURES, {"ENABLE_ACCOUNT_MICROFRONTEND": False}):
+        with override_waffle_flag(REDIRECT_TO_ACCOUNT_MICROFRONTEND, active=False):
+            # Test with waffle flag disabled and site setting disabled, does not redirect
             response = self.client.get(path=old_url_path)
             for attribute in self.FIELDS:
                 self.assertContains(response, attribute)
 
-        # Test with setting toggle enabled, redirects to microfrontend
-        with mock.patch.dict(settings.FEATURES, {"ENABLE_ACCOUNT_MICROFRONTEND": True}):
-            self.client.login(username=self.USERNAME, password=self.PASSWORD)
-            response = self.client.get(path=old_url_path)
-            self.assertRedirects(response, settings.ACCOUNT_MICROFRONTEND_URL, fetch_redirect_response=False)
+        # Test with site setting disabled, does not redirect
+        site_domain = 'othersite.example.com'
+        self.set_up_site(site_domain, {
+            'SITE_NAME': site_domain,
+            'ENABLE_ACCOUNT_MICROFRONTEND': False
+        })
+        self.client.login(username=self.USERNAME, password=self.PASSWORD)
+        response = self.client.get(path=old_url_path)
+        for attribute in self.FIELDS:
+            self.assertContains(response, attribute)
+
+        # Test with site setting enabled, redirects to microfrontend
+        site_domain = 'yetothersite.example.com'
+        self.set_up_site(site_domain, {
+            'SITE_NAME': site_domain,
+            'ENABLE_ACCOUNT_MICROFRONTEND': True
+        })
+        self.client.login(username=self.USERNAME, password=self.PASSWORD)
+        response = self.client.get(path=old_url_path)
+        self.assertRedirects(response, settings.ACCOUNT_MICROFRONTEND_URL, fetch_redirect_response=False)
