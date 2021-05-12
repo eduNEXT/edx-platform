@@ -245,14 +245,12 @@ class AccountSettingsViewTest(ThirdPartyAuthTestMixin, SiteMixin, ProgramsApiCon
         with override_waffle_flag(REDIRECT_TO_ACCOUNT_MICROFRONTEND, active=True):
             # Test with waffle flag active and none site setting, redirects to microfrontend
             response = self.client.get(path=old_url_path)
-            self.client.login(username=self.USERNAME, password=self.PASSWORD)
             self.assertRedirects(response, settings.ACCOUNT_MICROFRONTEND_URL, fetch_redirect_response=False)
 
-        with override_waffle_flag(REDIRECT_TO_ACCOUNT_MICROFRONTEND, active=False):
-            # Test with waffle flag disabled and site setting disabled, does not redirect
-            response = self.client.get(path=old_url_path)
-            for attribute in self.FIELDS:
-                self.assertContains(response, attribute)
+        # Test with waffle flag disabled and site setting disabled, does not redirect
+        response = self.client.get(path=old_url_path)
+        for attribute in self.FIELDS:
+            self.assertContains(response, attribute)
 
         # Test with site setting disabled, does not redirect
         site_domain = 'othersite.example.com'
