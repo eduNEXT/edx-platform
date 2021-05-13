@@ -4,9 +4,9 @@ workflows:
   build:
     jobs:
       - build
-      - lms_unit_tests:
-          requires:
-            -  build
+      # - lms_unit_tests:
+      #     requires:
+      #       -  build
       - build_edxapp_image:
           filters:
             branches:
