@@ -53,20 +53,20 @@ jobs:
       #     paths:
       #       - venv
 
-      - restore_cache:
-          keys:
-            - v2-{{ checksum ".circleci/config.yml" }}-npm-deps-{{ checksum "package.json" }}
+      # - restore_cache:
+      #     keys:
+      #       - v2-{{ checksum ".circleci/config.yml" }}-npm-deps-{{ checksum "package.json" }}
 
-      - run:
-          name: Install npm packages
-          command: |
-            node -v
-            npm -v
-            npm install
-      - save_cache:
-          key: v2-{{ checksum ".circleci/config.yml" }}-npm-deps-{{ checksum "package.json" }}
-          paths:
-            - "node_modules"
+      # - run:
+      #     name: Install npm packages
+      #     command: |
+      #       node -v
+      #       npm -v
+      #       npm install
+      # - save_cache:
+      #     key: v2-{{ checksum ".circleci/config.yml" }}-npm-deps-{{ checksum "package.json" }}
+      #     paths:
+      #       - "node_modules"
 
   lms_unit_tests:
     docker:
