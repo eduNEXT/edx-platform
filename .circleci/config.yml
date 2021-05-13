@@ -128,7 +128,7 @@ jobs:
           command: |
             mkdir -p /tmp/tutor_build /tmp/tutor_build/tutor_root/tutor
             cd /tmp/tutor_build
-            git clone -b v11.2.8 https://github.com/overhangio/tutor.git
+            git clone -b v11.2.9 https://github.com/overhangio/tutor.git
             cd tutor && pip install -e . && cd ..
             GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" pip install git+ssh://git@bitbucket.org/edunext/plugin-distro-ednx.git@stage#egg=plugin-distro-ednx==stage
 
