@@ -3,25 +3,25 @@ version: 2.1
 workflows:
   build:
     jobs:
-      - build
-      - lms_unit_tests:
-          requires:
-            -  build
+      # - build
+      # - lms_unit_tests:
+      #     requires:
+      #       -  build
       - build_edxapp_image:
           filters:
             branches:
               only: Gonzalo/tutor_master
 
 jobs:
-  build:
-    docker:
-      - image: edxops/xenial-common:latest
-    steps:
-      - checkout
+  # build:
+  #   docker:
+  #     - image: edxops/xenial-common:latest
+  #   steps:
+  #     - checkout
 
-      - restore_cache:
-          keys:
-            - v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
+  #     - restore_cache:
+  #         keys:
+  #           - v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
 
       # - run:
       #     name: Install deb packages
@@ -68,41 +68,41 @@ jobs:
       #     paths:
       #       - "node_modules"
 
-  lms_unit_tests:
-    docker:
-      - image: edxops/focal-common:latest
-    environment:
-      - NO_PREREQ_INSTALL: "true"
-    steps:
-      - checkout
+  # lms_unit_tests:
+  #   docker:
+  #     - image: edxops/focal-common:latest
+  #   environment:
+  #     - NO_PREREQ_INSTALL: "true"
+  #   steps:
+  #     - checkout
 
-      - restore_cache:
-          keys:
-            - v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
+  #     - restore_cache:
+  #         keys:
+  #           - v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
 
-      - run:
-          name: Install deb packages
-          command: |
-            source ./scripts/circle-ci-configuration.sh
-      - attach_workspace:
-          at: /tmp/workspace
+  #     - run:
+  #         name: Install deb packages
+  #         command: |
+  #           source ./scripts/circle-ci-configuration.sh
+  #     - attach_workspace:
+  #         at: /tmp/workspace
 
-      - restore_cache:
-          keys:
-            - v2-{{ checksum ".circleci/config.yml" }}-npm-deps-{{ checksum "package.json" }}
+  #     - restore_cache:
+  #         keys:
+  #           - v2-{{ checksum ".circleci/config.yml" }}-npm-deps-{{ checksum "package.json" }}
 
-      - run:
-          name: Install local pip packages
-          command: |
-            source /tmp/workspace/venv/bin/activate
-            pip install -r requirements/edx/testing.txt
-      - run:
-          name: Run tests
-          no_output_timeout: 30m
-          command: |
-            source /tmp/workspace/venv/bin/activate
-            export PATH=$PATH:$(npm bin)
-            paver test_system -s lms --cov-args="-p"
+  #     - run:
+  #         name: Install local pip packages
+  #         command: |
+  #           source /tmp/workspace/venv/bin/activate
+  #           pip install -r requirements/edx/testing.txt
+  #     - run:
+  #         name: Run tests
+  #         no_output_timeout: 30m
+  #         command: |
+  #           source /tmp/workspace/venv/bin/activate
+  #           export PATH=$PATH:$(npm bin)
+  #           paver test_system -s lms --cov-args="-p"
 
   build_edxapp_image:
     docker:
