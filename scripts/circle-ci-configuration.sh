@@ -51,7 +51,7 @@ curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key a
 sudo add-apt-repository "deb https://deb.nodesource.com/node_12.x focal main"
 sudo apt install nodejs
 
-sudo apt install firefox
+sudo apt install firefox -y
 firefox --version
 
 # To solve installation problems
