@@ -24,7 +24,7 @@ EXIT=0
 
 sleep $[ ( $RANDOM % 5 )  + 1 ]s
 
-# Manually installing the mongo-3.2
+# Manually installing the mongo-3.6
 apt-get update
 apt-get install wget -y
 wget -qO - https://www.mongodb.org/static/pgp/server-3.6.asc | sudo apt-key add -
@@ -33,35 +33,25 @@ echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" 
 sudo apt-get update
 
 cat requirements/system/ubuntu/apt-packages.txt | DEBIAN_FRONTEND=noninteractive xargs apt-get -yq install
+
+sudo add-apt-repository 'deb http://security.ubuntu.com/ubuntu bionic-security main'
+curl -fsSL https://www.mongodb.org/static/pgp/server-3.6.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+apt update
 apt-get install -y mongodb-org=3.6.20 mongodb-org-server=3.6.20 mongodb-org-shell=3.6.20 mongodb-org-mongos=3.6.20 mongodb-org-tools=3.6.20
 
-service mongodb restart
+#systemctl start mongod.service
+
 
 mkdir -p downloads
 
 DEBIAN_FRONTEND=noninteractive apt-get -yq install xvfb libasound2 libstartup-notification0
 
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
+sudo add-apt-repository "deb https://deb.nodesource.com/node_12.x focal main"
+sudo apt install nodejs
 
-
-export NODEJS_FILE="downloads/nodejs_12.18.4-1nodesource1_amd64.deb"
-if [ -f $NODEJS_FILE ]; then
-   echo "File $NODEJS_FILE found."
-else
-   echo "Downloading nodejs_12.18.4-1nodesource1_amd64.deb."
-   wget -O $NODEJS_FILE deb.nodesource.com/node_12.x/pool/main/n/nodejs/nodejs_12.18.4-1nodesource1_amd64.deb
-fi
-dpkg -i $NODEJS_FILE || DEBIAN_FRONTEND=noninteractive apt-get -fyq install
-
-
-
-export FIREFOX_FILE="downloads/firefox-mozilla-build_61.0-0ubuntu1_amd64.deb"
-if [ -f $FIREFOX_FILE ]; then
-   echo "File $FIREFOX_FILE found."
-else
-   echo "Downloading firefox-mozilla-build_61.0-0ubuntu1_amd64.deb."
-   wget -O $FIREFOX_FILE sourceforge.net/projects/ubuntuzilla/files/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_61.0.1-0ubuntu1_amd64.deb
-fi
-dpkg -i $FIREFOX_FILE || DEBIAN_FRONTEND=noninteractive apt-get -fyq install
+sudo apt install firefox
 firefox --version
 
 # To solve installation problems

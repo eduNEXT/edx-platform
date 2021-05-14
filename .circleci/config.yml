@@ -15,7 +15,7 @@ workflows:
 jobs:
   build:
     docker:
-      - image: edxops/xenial-common:latest
+      - image: edxops/focal-common:latest
     steps:
       - checkout
 
