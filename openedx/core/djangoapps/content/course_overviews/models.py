@@ -429,6 +429,12 @@ class CourseOverview(TimeStampedModel):
         return self._location
 
     @property
+    def utec_lowest_passing_grade(self):
+        store = modulestore()
+        descriptor = store.get_course(self.id)
+        return descriptor.utec_lowest_passing_grade
+
+    @property
     def number(self):
         """
         Returns this course's number.

@@ -237,7 +237,7 @@ class StudentDashboardTests(SharedModuleStoreTestCase, MilestonesTestCaseMixin, 
         response = self.client.get(reverse('dashboard'))
         # The final grade does not appear before the course has ended
         self.assertContains(response, 'Your final grade:')
-        self.assertContains(response, '<span class="grade-value">45%</span>')
+        self.assertContains(response, '<span class="grade-value">False</span>')
 
     def test_grade_not_appears_before_cert_available_date(self):
         """

@@ -112,6 +112,7 @@ class CourseEndingTest(TestCase):
                     'status': 'generating',
                     'show_survey_button': True,
                     'survey_url': survey_url,
+                    'utec_grade': 'False',
                     'grade': '1.0',
                     'mode': 'honor',
                     'linked_in_url': None,
@@ -126,6 +127,7 @@ class CourseEndingTest(TestCase):
                 'status': 'generating',
                 'show_survey_button': True,
                 'survey_url': survey_url,
+                'utec_grade': 'False',
                 'grade': '0.67',
                 'mode': 'honor',
                 'linked_in_url': None,
@@ -148,6 +150,7 @@ class CourseEndingTest(TestCase):
                 'download_url': download_url,
                 'show_survey_button': True,
                 'survey_url': survey_url,
+                'utec_grade': 'False',
                 'grade': '0.67',
                 'mode': 'honor',
                 'linked_in_url': None,
@@ -166,6 +169,7 @@ class CourseEndingTest(TestCase):
                 'status': 'notpassing',
                 'show_survey_button': True,
                 'survey_url': survey_url,
+                'utec_grade': 'False',
                 'grade': '0.67',
                 'mode': 'honor',
                 'linked_in_url': None,
@@ -188,6 +192,7 @@ class CourseEndingTest(TestCase):
                 'mode': 'honor',
                 'linked_in_url': None,
                 'can_unenroll': True,
+                'utec_grade': 'False'
             }
         )
 
@@ -255,6 +260,7 @@ class CourseEndingTest(TestCase):
                     'status': 'generating',
                     'show_survey_button': True,
                     'survey_url': survey_url,
+                    'utec_grade': 'False',
                     'grade': six.text_type(expected_grade),
                     'mode': 'honor',
                     'linked_in_url': None,
