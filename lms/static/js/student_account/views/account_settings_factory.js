@@ -166,7 +166,8 @@
                         //         passwordResetSupportUrl: passwordResetSupportUrl,
                         //         linkTitle: gettext('Reset Your Password'),
                         //         linkHref: fieldsData.password.url,
-                        //         helpMessage: gettext('Check your email account for instructions to reset your password.')  // eslint-disable-line max-len
+                        //         eslint-disable-next-line max-len
+                        //         helpMessage: gettext('Check your email account for instructions to reset your password.')
                         //     })
                         // },
                         {

@@ -111,11 +111,11 @@ def account_settings_context(request):
         'nav_hidden': True,
         'fields': {
             'country': {
-                'options': [(u'UY', u'Uruguay')], # For all options use list(countries)
+                'options': [(u'UY', u'Uruguay')],  # For all options use list(countries)
             }, 'gender': {
                 'options': [(choice[0], _(choice[1])) for choice in UserProfile.GENDER_CHOICES],
             }, 'language': {
-                'options': [(u'es', u'Español')], # for all options use released_languages(),
+                'options': [(u'es', u'Español')],  # For all options use released_languages(),
             }, 'level_of_education': {
                 'options': [(choice[0], _(choice[1])) for choice in UserProfile.LEVEL_OF_EDUCATION_CHOICES],
             }, 'password': {
@@ -123,7 +123,7 @@ def account_settings_context(request):
             }, 'year_of_birth': {
                 'options': year_of_birth_options,
             }, 'preferred_language': {
-                'options': [(u'es', u'Español')],
+                'options': [(u'es', u'Español')],  # For all options use all_languages()
             }, 'time_zone': {
                 'options': TIME_ZONE_CHOICES,
             }
