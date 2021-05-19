@@ -1,0 +1,53 @@
+{
+    "consumer": {
+      "name": "eox-tagging-consumer"
+    },
+    "provider": {
+      "name": "eox-tagging-provider"
+    },
+    "interactions": [
+      {
+        "description": "GET all tags.",
+        "providerState": "normal conditions.",
+        "request": {
+          "method": "GET",
+          "path": "/eox-tagging/api/v1/tags/"
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "count": 1,
+            "results": [
+              {
+                "meta": {
+                  "target_type": "User",
+                  "target_id": "staff",
+                  "owner_id": "admin",
+                  "owner_type": "User"
+                },
+                "tag_type": "subscription_level_user",
+                "access": "PUBLIC"
+              }
+            ]
+          },
+          "matchingRules": {
+            "$.headers.Content-Type": {
+              "match": "regex",
+              "regex": "application\\/json"
+            },
+            "$.body": {
+              "match": "type"
+            }
+          }
+        }
+      }
+    ],
+    "metadata": {
+      "pactSpecification": {
+        "version": "2.0.0"
+      }
+    }
+  }
