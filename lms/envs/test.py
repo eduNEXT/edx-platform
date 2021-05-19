@@ -597,3 +597,30 @@ REGISTRATION_RATELIMIT = '5/minute'
 
 RESET_PASSWORD_TOKEN_VALIDATE_API_RATELIMIT = '2/m'
 RESET_PASSWORD_API_RATELIMIT = '2/m'
+
+EOX_TAGGING_DEFINITIONS = [
+    {
+        "access": "public",
+        "owner_object": "site",
+        "tag_type": "subscription_level",
+        "validate_target_object": "user"
+    },
+    {
+        "access": "public",
+        "owner_object": "site",
+        "tag_type": "subscription_level_enrollment",
+        "validate_target_object": "courseenrollment"
+    },
+    {
+        "access": "public",
+        "owner_object": "site",
+        "tag_type": "subscription_level_course",
+        "validate_target_object": "OpaqueKeyProxyModel"
+    },
+    {
+        "access": "public",
+        "owner_object": "user",
+        "tag_type": "subscription_level_user",
+        "validate_target_object": "user"
+    }
+]

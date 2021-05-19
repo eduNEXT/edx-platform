@@ -128,3 +128,6 @@ docker_push: docker_tag docker_auth ## push to docker hub
 	docker push "openedx/edx-platform:${GITHUB_SHA}"
 	docker push 'openedx/edx-platform:latest-newrelic'
 	docker push "openedx/edx-platform:${GITHUB_SHA}-newrelic"
+
+eox_tagging_test_pacts:
+	pytest -v --pact-files=common/djangoapps/pacts/pacts_v1.json common/djangoapps/pacts/tests/test_pacts.py
