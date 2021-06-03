@@ -546,6 +546,17 @@ def _cert_info(user, course_overview, cert_status):
                     cert_status['download_url']
                 )
 
+    def get_utec_grade_from_standard_grade(standard_grade):
+        """
+        This method receives a float standard grade and returns the corresponding utec grade label
+        """
+        if settings.FEATURES.get('UTEC_CUSTOM_CERTS_GRADE', False):
+            for val in settings.FEATURES['UTEC_GRADE'].values():
+                if float(val['min']) <= standard_grade <= float(val['max']):
+                    return val['label']
+        else:
+            return False
+
     if status in {'generating', 'downloadable', 'notpassing', 'restricted', 'auditing', 'unverified'}:
         cert_grade_percent = -1
         persisted_grade_percent = -1
@@ -568,6 +579,9 @@ def _cert_info(user, course_overview, cert_status):
             else max(filter(lambda x: x is not None, grades_input))
         )
         status_dict['grade'] = text_type(max_grade)
+        status_dict['utec_grade'] = text_type(
+            get_utec_grade_from_standard_grade(max_grade)
+        )
 
     return status_dict
 
