@@ -24,7 +24,11 @@
     </p>
     <p><%- gettext("To continue learning with this account, sign in below.") %></p>
 <% } else { %>
-    <h2><%- gettext("Sign In") %></h2>
+    <% if ( context.utecThirdPartyAuthPriority == false ) { %>
+        <h2><%- gettext("Sign In") %></h2>
+    <% } else { %>
+        <h2><%- gettext("Iniciar sesión usando tu cuenta UTEC") %></h2>
+    <% } %>
 <% } %>
 
 <form id="login" class="login-form" tabindex="-1" method="POST">
@@ -50,17 +54,21 @@
         </div>
     <% } %>
 
-    <%= HtmlUtils.HTML(context.fields) %>
+    <% if ( context.utecThirdPartyAuthPriority == false ) { %>
+        <%= HtmlUtils.HTML(context.fields) %>
 
-    <button type="submit" class="action action-primary action-update js-login login-button"><%- gettext("Sign in") %></button>
+        <button type="submit" class="action action-primary action-update js-login login-button"><%- gettext("Sign in") %></button>
+    <% } %>
 
     <% if ( context.providers.length > 0 && !context.currentProvider) { %>
     <div class="login-providers">
-        <div class="section-title lines">
-            <h3>
-                <span class="text"><%- gettext("or sign in with") %></span>
-            </h3>
-        </div>
+        <% if ( context.utecThirdPartyAuthPriority == false ) { %>
+            <div class="section-title lines">
+                <h3>
+                    <span class="text"><%- gettext("or sign in with") %></span>
+                </h3>
+            </div>
+        <% } %>
 
         <% _.each( context.providers, function( provider ) {
             if ( provider.loginUrl ) { %>
