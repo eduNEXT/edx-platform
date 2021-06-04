@@ -10,7 +10,7 @@ workflows:
       - build_edxapp_image:
           filters:
             branches:
-              only: Gonzalo/tutor_master
+              only: Gonzalo/tutor_test
 
 jobs:
   build:
@@ -71,6 +71,7 @@ jobs:
   lms_unit_tests:
     docker:
       - image: edxops/focal-common:latest
+      - image: circleci/mongo:3.6-xenial
     environment:
       - NO_PREREQ_INSTALL: "true"
     steps:
