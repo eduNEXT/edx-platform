@@ -7,6 +7,9 @@ workflows:
       - lms_unit_tests:
           requires:
             -  build
+          filters:
+            branches:
+              only: eric/distro_fix_tests
       - build_edxapp_image:
           filters:
             branches:
