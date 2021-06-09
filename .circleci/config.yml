@@ -44,7 +44,7 @@ jobs:
           command: |
             # If venv has not been restored by restore_cache, set it up.
             export PATH=$PATH:$(npm bin)
-            [ ! -f /tmp/workspace/venv/bin/activate ] && virtualenv -p python3.5 /tmp/workspace/venv
+            [ ! -f /tmp/workspace/venv/bin/activate ] && virtualenv -p python3.8 /tmp/workspace/venv
             source /tmp/workspace/venv/bin/activate
             # All files listed here must be included in the cache key for pip packages.
             pip install --exists-action w -r requirements/edx/django.txt
