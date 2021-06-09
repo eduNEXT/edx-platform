@@ -248,7 +248,7 @@ def create_account_with_params(request, params):
     _track_user_registration(user, profile, params, third_party_provider)
 
     # Announce registration
-    STUDENT_REGISTRATION_COMPLETED.send(
+    STUDENT_REGISTRATION_COMPLETED.send_event(
         user=StudentData(
             username=user.username,
             email=user.email,
