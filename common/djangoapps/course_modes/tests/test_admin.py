@@ -61,19 +61,20 @@ class AdminCourseModePageTest(ModuleStoreTestCase):
         # Create a new course mode from django admin page
         response = self.client.post(reverse('admin:course_modes_coursemode_add'), data=data)
         self.assertRedirects(response, reverse('admin:course_modes_coursemode_changelist'))
+        course_mode_pk = CourseMode.objects.all().first().pk
 
         # Verify that datetime is appears on list page
         response = self.client.get(reverse('admin:course_modes_coursemode_changelist'))
         self.assertContains(response, get_time_display(expiration, '%B %d, %Y, %H:%M  %p'))
 
         # Verify that on the edit page the datetime value appears as UTC.
-        resp = self.client.get(reverse('admin:course_modes_coursemode_change', args=(1,)))
+        resp = self.client.get(reverse('admin:course_modes_coursemode_change', args=(course_mode_pk,)))
         self.assertContains(resp, expiration.date())
         self.assertContains(resp, expiration.time())
 
         # Verify that the expiration datetime is the same as what we set
         # (hasn't changed because of a timezone translation).
-        course_mode = CourseMode.objects.get(pk=1)
+        course_mode = CourseMode.objects.get(pk=course_mode_pk)
         self.assertEqual(course_mode.expiration_datetime.replace(tzinfo=None), expiration.replace(tzinfo=None))
 
 
