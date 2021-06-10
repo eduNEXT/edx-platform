@@ -7,6 +7,10 @@ workflows:
           filters:
             branches:
               only: eric/distro_fix_tests
+      - cms_unit_tests:
+          filters:
+            branches:
+              only: eric/distro_fix_tests
       - build_edxapp_image:
           filters:
             branches:
@@ -74,6 +78,7 @@ jobs:
       - image: circleci/mongo:3.6-xenial
     environment:
       - NO_PREREQ_INSTALL: "true"
+      - SERVICE_VARIANT: ""
     working_directory: /openedx/edx-platform
     steps:
       - checkout
@@ -94,6 +99,34 @@ jobs:
           name: Run tests
           no_output_timeout: 30m
           command: paver test_system -s lms --cov-args="-p"
+
+  cms_unit_tests:
+    docker:
+      - image: overhangio/openedx:11.3.1
+      - image: circleci/mongo:3.6-xenial
+    environment:
+      - NO_PREREQ_INSTALL: "true"
+      - SERVICE_VARIANT: ""
+    working_directory: /openedx/edx-platform
+    steps:
+      - checkout
+
+      - run:
+          name: Install ubuntu dependencies
+          command: |
+            curl -fsSL https://www.mongodb.org/static/pgp/server-3.6.asc | apt-key add -
+            echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+            apt update
+            apt-get install -y mongodb-org-shell=3.6.20
+
+      - run:
+          name: Install testing requirements
+          command: pip install -r requirements/edx/testing.txt
+
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: paver test_system -s cms --cov-args="-p"
 
   build_edxapp_image:
     docker:
