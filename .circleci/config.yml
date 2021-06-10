@@ -14,7 +14,9 @@ tests_common_steps: &tests_common_steps
         curl -fsSL https://www.mongodb.org/static/pgp/server-3.6.asc | apt-key add -
         echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
         apt update
-        apt-get install -y mongodb-org-shell=3.6.20
+        apt install -y mongodb-org-shell=3.6.20
+        DEBIAN_FRONTEND=noninteractive apt -yq install xvfb libasound2 libstartup-notification0
+        apt install firefox -y
   - run: &python_requirements
       name: Install testing requirements
       command: pip install -r requirements/edx/testing.txt
@@ -59,7 +61,7 @@ jobs:
       - run:
           name: Run tests
           no_output_timeout: 30m
-          command: paver test_system -s lms --fail-fast --fasttest --processes 4 --cov-args="-p"
+          command: paver test_system -s lms --fail-fast --fasttest --cov-args="-p"
 
   cms_unit_tests:
     <<: *tests_common_setup
