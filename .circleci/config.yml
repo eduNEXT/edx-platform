@@ -78,9 +78,17 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - v1-{{ checksum ".circleci/config.yml" }}-configuration-{{ checksum "scripts/circle-ci-configuration.sh" }}
+      - run:
+          name: Install ubuntu dependencies
+          command: |
+            curl -fsSL https://www.mongodb.org/static/pgp/server-3.6.asc | apt-key add -
+            echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+            apt update
+            apt-get install -y mongodb-org-shell=3.6.20
+
+      - run:
+          name: Install testing requirements
+          command: pip install -r requirements/edx/testing.txt
 
       - run:
           name: Run tests
