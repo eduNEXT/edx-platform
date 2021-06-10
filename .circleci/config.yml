@@ -36,6 +36,14 @@ workflows:
           filters:
             branches:
               only: eric/distro_fix_tests
+      - javascript_tests:
+          filters:
+            branches:
+              only: eric/distro_fix_tests
+      - quality_tests:
+          filters:
+            branches:
+              only: eric/distro_fix_tests
       - build_edxapp_image:
           filters:
             branches:
@@ -51,7 +59,7 @@ jobs:
       - run:
           name: Run tests
           no_output_timeout: 30m
-          command: paver test_system -s lms --cov-args="-p"
+          command: paver test_system -s lms --fail-fast --fasttest --processes 4 --cov-args="-p"
 
   cms_unit_tests:
     <<: *tests_common_setup
@@ -85,6 +93,18 @@ jobs:
           name: Run tests
           no_output_timeout: 30m
           command: xvfb-run --server-args="-screen 0 1280x1024x24" paver test_js --coverage
+
+  quality_tests:
+    <<: *tests_common_setup
+    steps:
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: CIRCLE_NODE_TOTAL=workflows CIRCLE_NODE_INDEX=0 ./scripts/all-tests.sh
+
 
 
   build_edxapp_image:
