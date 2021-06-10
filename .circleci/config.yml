@@ -8,15 +8,14 @@ tests_common_setup: &tests_common_setup
   working_directory: /openedx/edx-platform
 
 tests_common_steps: &tests_common_steps
-  - checkout
-  - run:
+  - run: &ubuntu_dependencies
       name: Install ubuntu dependencies
       command: |
         curl -fsSL https://www.mongodb.org/static/pgp/server-3.6.asc | apt-key add -
         echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
         apt update
         apt-get install -y mongodb-org-shell=3.6.20
-  - run:
+  - run: &python_requirements
       name: Install testing requirements
       command: pip install -r requirements/edx/testing.txt
 
@@ -46,7 +45,9 @@ jobs:
   lms_unit_tests:
     <<: *tests_common_setup
     steps:
-      <<: *tests_common_steps
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
       - run:
           name: Run tests
           no_output_timeout: 30m
@@ -55,7 +56,9 @@ jobs:
   cms_unit_tests:
     <<: *tests_common_setup
     steps:
-      <<: *tests_common_steps
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
       - run:
           name: Run tests
           no_output_timeout: 30m
@@ -64,7 +67,9 @@ jobs:
   lib_unit_tests:
     <<: *tests_common_setup
     steps:
-      <<: *tests_common_steps
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
       - run:
           name: Run tests
           no_output_timeout: 30m
@@ -73,7 +78,9 @@ jobs:
   javascript_tests:
     <<: *tests_common_setup
     steps:
-      <<: *tests_common_steps
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
       - run:
           name: Run tests
           no_output_timeout: 30m
