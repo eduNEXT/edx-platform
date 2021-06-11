@@ -76,7 +76,6 @@ jobs:
               "openedx/features" \
               | sed '/pycache/d' | sed '/coveragerc/d' \
               | circleci tests split --split-by=timings)
-            cp -f .circleci/resources/pytest_build_config.ini pytest.ini
             python -Wd -m pytest --ds=lms.envs.test --junitxml=/openedx/edx-platform/reports/lms/tests.xml -p no:randomly $TEST_FILES
       - store_test_results:
           path: reports/lms/tests.xml
