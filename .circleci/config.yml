@@ -54,7 +54,7 @@ workflows:
 jobs:
   lms_unit_tests:
     <<: *tests_common_setup
-    parallelism: 4
+    parallelism: 5
     steps:
       - checkout
       - run: *ubuntu_dependencies
