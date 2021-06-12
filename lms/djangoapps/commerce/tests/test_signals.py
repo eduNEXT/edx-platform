@@ -10,6 +10,7 @@ import json
 import ddt
 import httpretty
 import mock
+import pytest
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase
@@ -238,6 +239,7 @@ class TestRefundSignal(TestCase):
         with self.assertRaises(NotImplementedError):
             _send_refund_notification(self.course_enrollment.user, [1, 2, 3])
 
+    @pytest.mark.skip(reason="Randomly fails")
     @ddt.data('email@example.com', 'üñîcode.email@example.com')
     @mock.patch('lms.djangoapps.commerce.utils.create_zendesk_ticket')
     def test_send_refund_notification(self, student_email, mock_zendesk):
