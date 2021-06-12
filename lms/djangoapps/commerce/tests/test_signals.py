@@ -239,7 +239,6 @@ class TestRefundSignal(TestCase):
         with self.assertRaises(NotImplementedError):
             _send_refund_notification(self.course_enrollment.user, [1, 2, 3])
 
-    @pytest.mark.skip(reason="Randomly fails")
     @ddt.data('email@example.com', 'üñîcode.email@example.com')
     @mock.patch('lms.djangoapps.commerce.utils.create_zendesk_ticket')
     def test_send_refund_notification(self, student_email, mock_zendesk):
@@ -290,6 +289,7 @@ class TestRefundSignal(TestCase):
             self.assertFalse(success)
             self.assertTrue(mock_post.called)
 
+    @pytest.mark.skip(reason="Randomly fails")
     @httpretty.activate
     def test_create_zendesk_ticket(self):
         """ Verify the Zendesk API is called. """
