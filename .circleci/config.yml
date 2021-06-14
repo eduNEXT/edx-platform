@@ -54,7 +54,7 @@ workflows:
 jobs:
   lms_unit_tests:
     <<: *tests_common_setup
-    # parallelism: 3
+    parallelism: 3
     steps:
       - checkout
       - run: *ubuntu_dependencies
@@ -64,18 +64,19 @@ jobs:
           no_output_timeout: 30m
           command: |
             TEST_FILES=$(circleci tests glob \
-              "lms/djangoapps/*" \
-              "common/djangoapps/*" \
-              "openedx/core/djangoapps/*" \
-              "openedx/tests/*" \
-              "openedx/core/lib/*" \
-              "lms/lib/*" \
+              "lms/djangoapps/**/test*/test*.py" \
+              "common/djangoapps/**/test*/test*.py" \
+              "openedx/core/djangoapps/**/test*/test*.py" \
+              "openedx/tests/**/test*.py" \
+              "openedx/core/lib/**/test*/test*.py" \
+              "lms/lib/**/test*/test*.py" \
               "lms/tests.py" \
-              "openedx/core/djangolib/*" \
-              "openedx/core/tests/*" \
-              "openedx/features" \
+              "openedx/core/djangolib/**/test*/test*.py" \
+              "openedx/core/tests/test*.py" \
+              "openedx/features/**/test*/test*.py" \
               | sed '/pycache/d' | sed '/coveragerc/d' \
               | circleci tests split --split-by=timings)
+            echo $TEST_FILES
             python -Wd -m pytest --ds=lms.envs.test --junitxml=/openedx/edx-platform/reports/lms/tests.xml -p no:randomly $TEST_FILES
       - store_test_results:
           path: reports/lms
