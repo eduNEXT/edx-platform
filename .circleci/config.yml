@@ -1,12 +1,131 @@
+tests_common_setup: &tests_common_setup
+  docker:
+    - image: overhangio/openedx:11.3.1
+    - image: circleci/mongo:3.6-xenial
+  environment:
+    - NO_PREREQ_INSTALL: "true"
+    - SERVICE_VARIANT: ""
+  working_directory: /openedx/edx-platform
+
+tests_common_steps: &tests_common_steps
+  - run: &ubuntu_dependencies
+      name: Install ubuntu dependencies
+      command: |
+        curl -fsSL https://www.mongodb.org/static/pgp/server-3.6.asc | apt-key add -
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+        apt update
+        apt install -y mongodb-org-shell=3.6.20
+        DEBIAN_FRONTEND=noninteractive apt -yq install xvfb libasound2 libstartup-notification0
+        apt install firefox -y
+  - run: &python_requirements
+      name: Install testing requirements
+      command: pip install -r requirements/edx/testing.txt
+
 version: 2.1
 
 workflows:
   build:
     jobs:
+      - lms_unit_tests:
+          filters:
+            branches:
+              only: eric/distro_ci
+      - cms_unit_tests:
+          filters:
+            branches:
+              only: eric/distro_ci
+      - lib_unit_tests:
+          filters:
+            branches:
+              only: eric/distro_ci
+      - javascript_tests:
+          filters:
+            branches:
+              only: eric/distro_ci
+      - quality_tests:
+          filters:
+            branches:
+              only: eric/distro_ci
       - build_edxapp_image:
           filters:
             branches:
               only: open-release/koa.distro
+
+jobs:
+  lms_unit_tests:
+    <<: *tests_common_setup
+    parallelism: 3
+    steps:
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: |
+            TEST_FILES=$(circleci tests glob \
+              "lms/djangoapps/**/test*.py" \
+              "common/djangoapps/**/test*.py" \
+              "openedx/core/djangoapps/**/test*.py" \
+              "openedx/tests/**/test*.py" \
+              "openedx/core/lib/**/test*.py" \
+              "lms/lib/**/test*.py" \
+              "lms/tests.py" \
+              "openedx/core/djangolib/**/test*.py" \
+              "openedx/core/tests/test*.py" \
+              "openedx/features/**/test*.py" \
+              | sed '/pycache/d' | sed '/coveragerc/d' \
+              | circleci tests split --split-by=timings)
+            echo $TEST_FILES
+            python -Wd -m pytest --ds=lms.envs.test --junitxml=/openedx/edx-platform/reports/lms/tests.xml -p no:randomly $TEST_FILES
+      - store_test_results:
+          path: reports/lms
+      - store_artifacts:
+          path: reports/lms
+
+  cms_unit_tests:
+    <<: *tests_common_setup
+    steps:
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: paver test_system -s cms --cov-args="-p"
+
+  lib_unit_tests:
+    <<: *tests_common_setup
+    steps:
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: paver test_lib --cov-args="-p"
+
+  javascript_tests:
+    <<: *tests_common_setup
+    steps:
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: xvfb-run --server-args="-screen 0 1280x1024x24" paver test_js --coverage
+
+  quality_tests:
+    <<: *tests_common_setup
+    steps:
+      - checkout
+      - run: *ubuntu_dependencies
+      - run: *python_requirements
+      - run:
+          name: Run tests
+          no_output_timeout: 30m
+          command: CIRCLE_NODE_TOTAL=workflows CIRCLE_NODE_INDEX=0 ./scripts/all-tests.sh
 
 
   build_edxapp_image:
@@ -35,17 +154,20 @@ workflows:
             git clone -b v11.2.9 https://github.com/overhangio/tutor.git
             cd tutor && pip install -e . && cd ..
             GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" pip install git+ssh://git@bitbucket.org/edunext/plugin-distro-ednx.git@stage#egg=plugin-distro-ednx==stage
+
       - run:
           name: Enable tutor_distro plugins
           working_directory: /tmp/tutor_build
           command: |
             tutor plugins enable distro_ednx
+
       - run:
           name: Creating tutor config
           working_directory: /tmp/tutor_build
           command: |
             tutor plugins list
             tutor config save
+
       - setup_remote_docker:
           version: 19.03.13
           docker_layer_caching: true
@@ -64,6 +186,7 @@ workflows:
           command: |
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
             tutor images push openedx
+
       - run:
           name: Building openedx dev image 
           working_directory: /tmp/tutor_build
