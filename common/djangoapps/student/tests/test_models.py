@@ -16,6 +16,8 @@ from freezegun import freeze_time
 from opaque_keys.edx.keys import CourseKey
 from pytz import UTC
 
+from openedx_events.learning.data import CourseEnrollmentData, StudentData, UserProfileData, CourseOverviewData
+
 from common.djangoapps.course_modes.models import CourseMode
 from common.djangoapps.course_modes.tests.factories import CourseModeFactory
 from common.djangoapps.student.models import (
@@ -728,3 +730,53 @@ class TestUserPostSaveCallback(SharedModuleStoreTestCase):
                 course_enrollment.save()
 
         return user
+
+
+@skip_unless_lms
+class EnrollmentEventsTest(SharedModuleStoreTestCase):
+    """Tests for the events associated with the registration process through the user API."""
+
+    def setUp(self):  # pylint: disable=arguments-differ
+        super().setUp()
+        self.course = CourseFactory.create()
+        self.user = UserFactory(
+            username="somestudent",
+            first_name="Student",
+            last_name="Person",
+            email="robot@robot.org",
+            is_active=True
+        )
+
+    @mock.patch("common.djangoapps.student.models.COURSE_ENROLLMENT_CREATED")
+    def test_enrollment_event_emitted(self, enrollment_event):
+        """
+        Test whether the student registration event is sent during the user's
+        registration process.
+
+        Expected result:
+            - STUDENT_REGISTRATION_COMPLETED is sent via send_event.
+            - The arguments match the event definition.
+        """
+        CourseEnrollment.enroll(self.user, self.course.id)
+
+        enrollment_event.send_event.assert_called_once_with(
+            enrollment=CourseEnrollmentData(
+                user=StudentData(
+                    username=self.user.username,
+                    email=self.user.email,
+                    first_name=self.user.first_name,
+                    last_name=self.user.last_name,
+                    is_active=self.user.is_active,
+                    profile=UserProfileData(
+                        meta=self.user.profile.meta,
+                        name=self.user.profile.name,
+                    )
+                ),
+                course=CourseOverviewData(
+                    course_key=self.course.id,
+                    display_name=self.course.display_name
+                ),
+                mode='audit',
+                is_active=True
+            )
+        )

@@ -55,6 +55,9 @@ from simple_history.models import HistoricalRecords
 from slumber.exceptions import HttpClientError, HttpServerError
 from user_util import user_util
 
+from openedx_events.learning.data import CourseEnrollmentData, StudentData, UserProfileData, CourseOverviewData
+from openedx_events.learning.signals import COURSE_ENROLLMENT_CREATED
+
 import openedx.core.djangoapps.django_comment_common.comment_client as cc
 from common.djangoapps.course_modes.models import CourseMode, get_cosmetic_verified_display_price
 from common.djangoapps.student.emails import send_proctoring_requirements_email
@@ -1591,7 +1594,28 @@ class CourseEnrollment(models.Model):
         # User is allowed to enroll if they've reached this point.
         enrollment = cls.get_or_create_enrollment(user, course_key)
         enrollment.update_enrollment(is_active=True, mode=mode)
-        enrollment.send_signal(EnrollStatusChange.enroll)
+
+        COURSE_ENROLLMENT_CREATED.send_event(
+            enrollment=CourseEnrollmentData(
+                user=StudentData(
+                    username=user.username,
+                    email=user.email,
+                    first_name=user.first_name,
+                    last_name=user.last_name,
+                    is_active=user.is_active,
+                    profile=UserProfileData(
+                        meta=user.profile.meta,
+                        name=user.profile.name,
+                    )
+                ),
+                course=CourseOverviewData(
+                    course_key=enrollment.course.id,
+                    display_name=enrollment.course.display_name
+                ),
+                mode=enrollment.mode,
+                is_active=enrollment.is_active
+            )
+        )
 
         return enrollment
 
