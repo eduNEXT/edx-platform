@@ -55,6 +55,13 @@ from simple_history.models import HistoricalRecords
 from slumber.exceptions import HttpClientError, HttpServerError
 from user_util import user_util
 
+from openedx_events.learning.data import (
+    CourseData,
+    CourseEnrollmentData,
+    UserData,
+    UserPersonalData,
+)
+from openedx_events.learning.signals import COURSE_ENROLLMENT_CREATED
 import openedx.core.djangoapps.django_comment_common.comment_client as cc
 from common.djangoapps.course_modes.models import CourseMode, get_cosmetic_verified_display_price
 from common.djangoapps.student.emails import send_proctoring_requirements_email
@@ -1597,6 +1604,27 @@ class CourseEnrollment(models.Model):
         enrollment = cls.get_or_create_enrollment(user, course_key)
         enrollment.update_enrollment(is_active=True, mode=mode, enterprise_uuid=enterprise_uuid)
         enrollment.send_signal(EnrollStatusChange.enroll)
+
+        COURSE_ENROLLMENT_CREATED.send_event(
+            enrollment=CourseEnrollmentData(
+                user=UserData(
+                    pii=UserPersonalData(
+                        username=user.username,
+                        email=user.email,
+                        name=user.profile.name,
+                    ),
+                    id=user.id,
+                    is_active=user.is_active,
+                ),
+                course=CourseData(
+                    course_key=enrollment.course.id,
+                    display_name=enrollment.course.display_name
+                ),
+                mode=enrollment.mode,
+                is_active=enrollment.is_active,
+                creation_date=enrollment.created,
+            )
+        )
 
         return enrollment
 
