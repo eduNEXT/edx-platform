@@ -30,6 +30,8 @@ from ratelimit.decorators import ratelimit
 from rest_framework.views import APIView
 
 from common.djangoapps.edxmako.shortcuts import render_to_response
+from openedx_events.learning.data import StudentData, UserProfileData
+from openedx_events.learning.signals import SESSION_LOGIN_COMPLETED
 from openedx.core.djangoapps.password_policy import compliance as password_policy_compliance
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.djangoapps.user_authn.views.login_form import get_login_session_form
@@ -292,6 +294,19 @@ def _handle_successful_authentication_and_login(user, request):
         django_login(request, user)
         request.session.set_expiry(604800 * 4)
         log.debug("Setting user session expiry to 4 weeks")
+        SESSION_LOGIN_COMPLETED.send_event(
+            user=StudentData(
+                username=user.username,
+                email=user.email,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                is_active=user.is_active,
+                profile=UserProfileData(
+                    meta=user.profile.meta,
+                    name=user.profile.name,
+                ),
+            ),
+        )
     except Exception as exc:
         AUDIT_LOG.critical("Login failed - Could not create session. Is memcached running?")
         log.critical("Login failed - Could not create session. Is memcached running?")

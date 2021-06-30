@@ -22,6 +22,7 @@ from edx_toggles.toggles.testutils import override_waffle_flag, override_waffle_
 from freezegun import freeze_time
 from common.djangoapps.student.tests.factories import RegistrationFactory, UserFactory, UserProfileFactory
 
+from openedx_events.learning.data import StudentData, UserProfileData
 from openedx.core.djangoapps.password_policy.compliance import (
     NonCompliantPasswordException,
     NonCompliantPasswordWarning
@@ -1114,3 +1115,51 @@ class LoginSessionViewTest(ApiTestCase):
 
         # Missing both email and password
         response = self.client.post(self.url, {})
+
+
+@skip_unless_lms
+class LoginSessionEventTest(ApiTestCase):
+    """Tests for the events associated with the login process through the user API."""
+
+    def setUp(self):  # pylint: disable=arguments-differ
+        super().setUp()
+        self.url = reverse("user_api_login_session", kwargs={'api_version': 'v1'})
+        UserFactory.create(
+            username="bob",
+            email="bob@example.com",
+            password="password",
+            first_name="Bob",
+            last_name="Smith",
+        )
+
+
+    @patch("openedx.core.djangoapps.user_authn.views.login.SESSION_LOGIN_COMPLETED")
+    def test_send_login_event(self, login_event):
+        """
+        Test whether the student login event is sent during the user's
+        login process.
+
+        Expected result:
+            - SESSION_LOGIN_COMPLETED is sent via send_event.
+            - The arguments match the event definition.
+        """
+        data = {
+            "email": "bob@example.com",
+            "password": "password",
+        }
+
+        self.client.post(self.url, data)
+
+        login_event.send_event.assert_called_once_with(
+            user=StudentData(
+                username="bob",
+                email="bob@example.com",
+                first_name="Bob",
+                last_name="Smith",
+                is_active=True,
+                profile=UserProfileData(
+                    meta="",
+                    name="Bob Smith",
+                )
+            )
+        )
