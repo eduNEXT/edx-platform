@@ -49,27 +49,27 @@ else
     case $CIRCLE_NODE_INDEX in
         0)  # run the quality metrics
             echo "Finding fixme's and storing report..."
-            paver find_fixme > fixme.log || { cat fixme.log; EXIT=1; }
+            paver find_fixme > test_root/log/fixme.log || { cat test_root/log/fixme.log; EXIT=1; }
 
             echo "Finding PEP 8 violations and storing report..."
-            paver run_pep8 > pep8.log || { cat pep8.log; EXIT=1; }
+            paver run_pep8 > test_root/log/pep8.log || { cat test_root/log/pep8.log; EXIT=1; }
 
             echo "Finding pylint violations and storing in report..."
             # HACK: we need to print something to the console, otherwise circleci
             # fails and aborts the job because nothing is displayed for > 10 minutes.
-            paver run_pylint -l $LOWER_PYLINT_THRESHOLD:$UPPER_PYLINT_THRESHOLD | tee pylint.log || EXIT=1
+            paver run_pylint -l $LOWER_PYLINT_THRESHOLD:$UPPER_PYLINT_THRESHOLD | tee test_root/log/pylint.log || EXIT=1
 
             mkdir -p reports
             PATH=$PATH:node_modules/.bin
 
             echo "Finding ESLint violations and storing report..."
-            paver run_eslint -l $ESLINT_THRESHOLD > eslint.log || { cat eslint.log; EXIT=1; }
+            paver run_eslint -l $ESLINT_THRESHOLD > test_root/log/eslint.log || { cat test_root/log/eslint.log; EXIT=1; }
 
             echo "Finding Stylelint violations and storing report..."
-            paver run_stylelint -l $STYLELINT_THRESHOLD > stylelint.log || { cat stylelint.log; EXIT=1; }
+            paver run_stylelint -l $STYLELINT_THRESHOLD > test_root/log/stylelint.log || { cat test_root/log/stylelint.log; EXIT=1; }
 
             # Run quality task. Pass in the 'fail-under' percentage to diff-quality
-            paver run_quality -p 100 || EXIT=1
+            paver run_quality -p 100 -b "open-release/distro.master" || EXIT=1
 
             exit $EXIT
             ;;

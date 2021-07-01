@@ -43,6 +43,73 @@ def parse_path_data(path_data):
 
 
 @python_2_unicode_compatible
+class XBlockCache(TimeStampedModel):
+    """
+    XBlockCache model to store info about xblocks.
+
+    .. no_pii:
+    """
+
+    course_key = CourseKeyField(max_length=255, db_index=True)
+    usage_key = UsageKeyField(max_length=255, db_index=True, unique=True)
+
+    display_name = models.CharField(max_length=255, default='')
+    _paths = JSONField(
+        db_column='paths', default=[], help_text='All paths in course tree to the corresponding block.'
+    )
+
+    def __str__(self):
+        return six.text_type(self.usage_key)
+
+    @property
+    def paths(self):
+        """
+        Return paths.
+
+        Returns:
+            list of list of PathItems.
+        """
+        return [parse_path_data(path) for path in self._paths] if self._paths else self._paths
+
+    @paths.setter
+    def paths(self, value):
+        """
+        Set paths.
+
+        Arguments:
+            value (list of list of PathItems): The list of paths to cache.
+        """
+        self._paths = [prepare_path_for_serialization(path) for path in value] if value else value
+
+    @classmethod
+    def create(cls, data):
+        """
+        Create an XBlockCache object.
+
+        Arguments:
+            data (dict): The data to create the object with.
+
+        Returns:
+            An XBlockCache object.
+        """
+        data = dict(data)
+
+        usage_key = data.pop('usage_key')
+        usage_key = usage_key.replace(course_key=modulestore().fill_in_run(usage_key.course_key))
+
+        data['course_key'] = usage_key.course_key
+        xblock_cache, created = cls.objects.get_or_create(usage_key=usage_key, defaults=data)
+
+        if not created:
+            new_display_name = data.get('display_name', xblock_cache.display_name)
+            if xblock_cache.display_name != new_display_name:
+                xblock_cache.display_name = new_display_name
+                xblock_cache.save()
+
+        return xblock_cache
+
+
+@python_2_unicode_compatible
 class Bookmark(TimeStampedModel):
     """
     Bookmarks model.
@@ -54,7 +121,7 @@ class Bookmark(TimeStampedModel):
     usage_key = UsageKeyField(max_length=255, db_index=True)
     _path = JSONField(db_column='path', help_text='Path in course tree to the block')
 
-    xblock_cache = models.ForeignKey('bookmarks.XBlockCache', on_delete=models.CASCADE)
+    xblock_cache = models.ForeignKey(XBlockCache, on_delete=models.CASCADE)
 
     class Meta(object):
         """
@@ -191,70 +258,3 @@ class Bookmark(TimeStampedModel):
                     )
 
         return path_data
-
-
-@python_2_unicode_compatible
-class XBlockCache(TimeStampedModel):
-    """
-    XBlockCache model to store info about xblocks.
-
-    .. no_pii:
-    """
-
-    course_key = CourseKeyField(max_length=255, db_index=True)
-    usage_key = UsageKeyField(max_length=255, db_index=True, unique=True)
-
-    display_name = models.CharField(max_length=255, default='')
-    _paths = JSONField(
-        db_column='paths', default=[], help_text='All paths in course tree to the corresponding block.'
-    )
-
-    def __str__(self):
-        return six.text_type(self.usage_key)
-
-    @property
-    def paths(self):
-        """
-        Return paths.
-
-        Returns:
-            list of list of PathItems.
-        """
-        return [parse_path_data(path) for path in self._paths] if self._paths else self._paths
-
-    @paths.setter
-    def paths(self, value):
-        """
-        Set paths.
-
-        Arguments:
-            value (list of list of PathItems): The list of paths to cache.
-        """
-        self._paths = [prepare_path_for_serialization(path) for path in value] if value else value
-
-    @classmethod
-    def create(cls, data):
-        """
-        Create an XBlockCache object.
-
-        Arguments:
-            data (dict): The data to create the object with.
-
-        Returns:
-            An XBlockCache object.
-        """
-        data = dict(data)
-
-        usage_key = data.pop('usage_key')
-        usage_key = usage_key.replace(course_key=modulestore().fill_in_run(usage_key.course_key))
-
-        data['course_key'] = usage_key.course_key
-        xblock_cache, created = cls.objects.get_or_create(usage_key=usage_key, defaults=data)
-
-        if not created:
-            new_display_name = data.get('display_name', xblock_cache.display_name)
-            if xblock_cache.display_name != new_display_name:
-                xblock_cache.display_name = new_display_name
-                xblock_cache.save()
-
-        return xblock_cache

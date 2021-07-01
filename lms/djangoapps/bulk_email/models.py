@@ -152,7 +152,7 @@ class CohortTarget(Target):
 
     .. no_pii:
     """
-    cohort = models.ForeignKey('course_groups.CourseUserGroup', on_delete=models.CASCADE)
+    cohort = models.ForeignKey(CourseUserGroup, on_delete=models.CASCADE)
 
     class Meta:
         app_label = "bulk_email"
@@ -198,7 +198,7 @@ class CourseModeTarget(Target):
 
     .. no_pii:
     """
-    track = models.ForeignKey('course_modes.CourseMode', on_delete=models.CASCADE)
+    track = models.ForeignKey(CourseMode, on_delete=models.CASCADE)
 
     class Meta:
         app_label = "bulk_email"

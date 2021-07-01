@@ -1,5 +1,6 @@
 # Vendor files and generated test artifacts
 **/vendor
+**/bundles
 test_root/staticfiles
 
 

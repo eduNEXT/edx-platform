@@ -131,7 +131,7 @@ def get_units_with_due_date(course):
     # Pass in a schedule here so that we get back any relative dates in the course, but actual value
     # doesn't matter, since we don't care about the dates themselves, just whether they exist.
     # Thus we don't save or care about this temporary schedule object.
-    schedule = Schedule(start_date=course.start)
+    schedule = Schedule(start_date=course.start)  # pylint: skip-file
     course_dates = api.get_dates_for_course(course.id, schedule=schedule)
 
     def visit(node):

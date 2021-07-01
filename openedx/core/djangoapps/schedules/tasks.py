@@ -164,6 +164,7 @@ def _upgrade_reminder_schedule_send(site_id, msg_str):
         UPGRADE_REMINDER_LOG_PREFIX,
     )
 
+
 @task(base=LoggedTask, ignore_result=True)
 @set_code_owner_attribute
 def _course_update_schedule_send(site_id, msg_str):

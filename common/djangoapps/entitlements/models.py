@@ -165,7 +165,7 @@ class CourseEntitlement(TimeStampedModel):
     )
     mode = models.CharField(max_length=100, help_text=u'The mode of the Course that will be applied on enroll.')
     enrollment_course_run = models.ForeignKey(
-        'student.CourseEnrollment',
+        CourseEnrollment,
         null=True,
         help_text=u'The current Course enrollment for this entitlement. If NULL the Learner has not enrolled.',
         blank=True,
@@ -488,7 +488,7 @@ class CourseEntitlementSupportDetail(TimeStampedModel):
         (CREATE, u'Create new entitlement'),
     )
 
-    entitlement = models.ForeignKey('entitlements.CourseEntitlement', on_delete=models.CASCADE)
+    entitlement = models.ForeignKey(CourseEntitlement, on_delete=models.CASCADE)
     support_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     #Deprecated: use action instead.

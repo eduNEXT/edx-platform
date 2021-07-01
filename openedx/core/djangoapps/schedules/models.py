@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
 from simple_history.models import HistoricalRecords
+from common.djangoapps.student.models import CourseEnrollment
 
 
 class Schedule(TimeStampedModel):
@@ -14,7 +15,7 @@ class Schedule(TimeStampedModel):
     .. no_pii:
     """
 
-    enrollment = models.OneToOneField('student.CourseEnrollment', null=False, on_delete=models.CASCADE)
+    enrollment = models.OneToOneField(CourseEnrollment, null=False, on_delete=models.CASCADE)
     active = models.BooleanField(
         default=True,
         help_text=_('Indicates if this schedule is actively used')

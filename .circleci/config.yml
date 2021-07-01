@@ -132,8 +132,16 @@ jobs:
       - run:
           name: Run tests
           no_output_timeout: 30m
-          command: CIRCLE_NODE_TOTAL=workflows CIRCLE_NODE_INDEX=0 ./scripts/all-tests.sh
-
+          command: |
+            rm -rf lms/envs/tutor
+            rm -rf cms/envs/tutor
+            git fetch --force origin '+refs/heads/open-release/distro.master:refs/remotes/origin/open-release/distro.master'
+            git branch open-release/distro.master origin/open-release/distro.master
+            CIRCLE_NODE_TOTAL=workflows CIRCLE_NODE_INDEX=0 ./scripts/all-tests.sh
+      - store_test_results:
+          path: reports/quality_junitxl
+      - store_artifacts:
+          path: test_root/log
 
   build_edxapp_image:
     docker:
