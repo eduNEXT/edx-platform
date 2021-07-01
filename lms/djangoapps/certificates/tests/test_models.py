@@ -574,3 +574,47 @@ class EnrollmentEventsTest(SharedModuleStoreTestCase):
                 name='Certificate'
             )
         )
+
+    @patch("lms.djangoapps.certificates.models.CERTIFICATE_CHANGED")
+    def test_certificate_changed_event_emitted(self, certificate_changed_event):
+        """
+        Test whether the certificate changed event is sent during the certificate
+        modification process.
+
+        Expected result:
+            - CERTIFICATE_CHANGED is sent via send_event.
+            - The arguments match the event definition.
+        """
+        GeneratedCertificateFactory.create(
+            status=CertificateStatuses.notpassing,
+            user=self.user,
+            course_id=self.course.id,
+            mode=GeneratedCertificate.MODES.honor,
+            name='Certificate',
+            grade='100',
+            download_url='https://certificate.pdf'
+        )
+
+        certificate_changed_event.send_event.assert_called_once_with(
+            certificate=CertificateData(
+                user=StudentData(
+                    username=self.user.username,
+                    email=self.user.email,
+                    first_name=self.user.first_name,
+                    last_name=self.user.last_name,
+                    is_active=self.user.is_active,
+                    profile=UserProfileData(
+                        meta=self.user.profile.meta,
+                        name=self.user.profile.name,
+                    )
+                ),
+                course=CourseOverviewData(
+                    course_key=self.course.id,
+                ),
+                mode=GeneratedCertificate.MODES.honor,
+                grade='100',
+                status=CertificateStatuses.notpassing,
+                download_url='https://certificate.pdf',
+                name='Certificate'
+            )
+        )
