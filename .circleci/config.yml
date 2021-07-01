@@ -34,14 +34,20 @@ workflows:
           filters:
             branches:
               only: eric/distro_ci
+          requires:
+            - lms_unit_tests
       - lib_unit_tests:
           filters:
             branches:
               only: eric/distro_ci
+          requires:
+            - quality_tests
       - javascript_tests:
           filters:
             branches:
               only: eric/distro_ci
+          requires:
+            - quality_tests
       - quality_tests:
           filters:
             branches:
