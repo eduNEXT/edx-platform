@@ -618,3 +618,52 @@ class EnrollmentEventsTest(SharedModuleStoreTestCase):
                 name='Certificate'
             )
         )
+
+    @patch("lms.djangoapps.certificates.models.CERTIFICATE_REVOKED")
+    def test_certificate_revoked_event_emitted(self, certificate_revoked_event):
+        """
+        Test whether the certificate revoked event is sent during the certificate
+        annulation process.
+
+        Expected result:
+            - CERTIFICATE_REVOKED is sent via send_event.
+            - The arguments match the event definition.
+        """
+        certificate_generated = GeneratedCertificateFactory.create(
+            status=CertificateStatuses.downloadable,
+            user=self.user,
+            course_id=self.course.id,
+            mode=GeneratedCertificate.MODES.honor,
+            name='Certificate',
+            grade='100',
+            download_url='https://certificate.pdf'
+        )
+
+        certificate_generated._revoke_certificate(
+            CertificateStatuses.downloadable,
+            grade='100'
+        )
+
+        certificate_revoked_event.send_event.assert_called_once_with(
+            certificate=CertificateData(
+                user=StudentData(
+                    username=self.user.username,
+                    email=self.user.email,
+                    first_name=self.user.first_name,
+                    last_name=self.user.last_name,
+                    is_active=self.user.is_active,
+                    profile=UserProfileData(
+                        meta=self.user.profile.meta,
+                        name=self.user.profile.name,
+                    )
+                ),
+                course=CourseOverviewData(
+                    course_key=self.course.id,
+                ),
+                mode=GeneratedCertificate.MODES.honor,
+                grade='100',
+                status=CertificateStatuses.downloadable,
+                download_url='',
+                name='Certificate'
+            )
+        )

@@ -22,7 +22,7 @@ from model_utils import Choices
 from model_utils.fields import AutoCreatedField
 from model_utils.models import TimeStampedModel
 from openedx_events.learning.data import CertificateData, StudentData, CourseOverviewData, UserProfileData
-from openedx_events.learning.signals import CERTIFICATE_CREATED, CERTIFICATE_CHANGED
+from openedx_events.learning.signals import CERTIFICATE_CREATED, CERTIFICATE_CHANGED, CERTIFICATE_REVOKED
 from opaque_keys.edx.django.models import CourseKeyField
 from simple_history.models import HistoricalRecords
 
@@ -386,12 +386,28 @@ class GeneratedCertificate(models.Model):
         self.status = status
         self.save()
 
-        COURSE_CERT_REVOKED.send_robust(
-            sender=self.__class__,
-            user=self.user,
-            course_key=self.course_id,
-            mode=self.mode,
-            status=self.status,
+        CERTIFICATE_REVOKED.send_event(
+                certificate=CertificateData(
+                    user=StudentData(
+                        username=self.user.username,
+                        email=self.user.email,
+                        first_name=self.user.first_name,
+                        last_name=self.user.last_name,
+                        is_active=self.user.is_active,
+                        profile=UserProfileData(
+                            meta=self.user.profile.meta,
+                            name=self.user.profile.name,
+                        )
+                    ),
+                    course=CourseOverviewData(
+                        course_key=self.course_id,
+                    ),
+                    mode=self.mode,
+                    grade=self.grade,
+                    status=self.status,
+                    download_url=self.download_url,
+                    name=self.name
+                )
         )
 
         if previous_certificate_status == CertificateStatuses.downloadable:
