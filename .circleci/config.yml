@@ -15,7 +15,7 @@ tests_common_steps: &tests_common_steps
         echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/3.6 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.6.list
         apt update
         apt install -y mongodb-org-shell=3.6.20
-        DEBIAN_FRONTEND=noninteractive apt -yq install xvfb libasound2 libstartup-notification0
+        DEBIAN_FRONTEND=noninteractive apt -yq install xvfb libasound2 libstartup-notification0 wget
         apt install firefox -y
   - run: &python_requirements
       name: Install testing requirements
@@ -114,7 +114,14 @@ jobs:
       - run:
           name: Run tests
           no_output_timeout: 30m
-          command: xvfb-run --server-args="-screen 0 1280x1024x24" paver test_js --coverage
+          command: |
+            wget -O /tmp/firefox-61.0.tar.bz2 "https://ftp.mozilla.org/pub/firefox/releases/61.0/linux-x86_64/en-US/firefox-61.0.tar.bz2" 
+            tar -xjf /tmp/firefox-61.0.tar.bz2 -C /usr/lib
+            rm /usr/bin/firefox
+            ln -s /usr/lib/firefox/firefox /usr/bin/firefox
+            firefox --version
+            karma --version
+            xvfb-run --server-args="-screen 0 1280x1024x24" paver test_js --coverage
 
   quality_tests:
     <<: *tests_common_setup

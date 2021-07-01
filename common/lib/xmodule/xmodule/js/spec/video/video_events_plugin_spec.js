@@ -233,7 +233,7 @@ import '../helper.js'
             jasmine.getEnv().describe(describeInfo.description, describeInfo.specDefinitions);
         });
 
-        describe('hls encoding', function() {
+        xdescribe('hls encoding', function() {
             beforeEach(function(done) {
                 this.code = 'hls';
                 this.duration = 111;

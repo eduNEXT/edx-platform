@@ -974,7 +974,7 @@ function(VideoPlayer, HLS, _) {
                 expect($('.video-hls-error')).toHaveClass('is-hidden');
             });
 
-            it('can extract hls video sources correctly', function() {
+            xit('can extract hls video sources correctly', function() {
                 expect(state.HLSVideoSources).toEqual(['/base/fixtures/hls/hls.m3u8']);
                 expect(state.videoPlayer.player.hls).toBeDefined();
             });
@@ -1084,7 +1084,7 @@ function(VideoPlayer, HLS, _) {
                 expect(state.videoPlayer.player.hls).toBeUndefined();
             });
 
-            it('does not load youtube if flag is enabled', function() {
+            xit('does not load youtube if flag is enabled', function() {
                 state = jasmine.initializePlayer('video_all.html', {
                     prioritizeHls: true,
                     streams: '0.5:7tqY6eQzVhE,1.0:cogebirgzzM,1.5:abcdefghijkl',
