@@ -12,6 +12,8 @@ from django.db import models, transaction
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.utils.encoding import python_2_unicode_compatible
+from openedx_events.learning.data import StudentData, UserProfileData, CourseOverviewData, CohortData
+from openedx_events.learning.signals import COHORT_MEMBERSHIP_CHANGED
 from opaque_keys.edx.django.models import CourseKeyField
 
 from openedx.core.djangolib.model_mixins import DeletableByUserValue
@@ -129,7 +131,25 @@ class CohortMembership(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.full_clean(validate_unique=False)
-
+        if self.pk is None:
+            COHORT_MEMBERSHIP_CHANGED.send_event(
+                cohort=CohortData(
+                    user=StudentData(
+                        username=self.user.username,
+                        email=self.user.email,
+                        first_name=self.user.first_name,
+                        last_name=self.user.last_name,
+                        is_active=self.user.is_active,
+                        profile=UserProfileData(
+                            meta=self.user.profile.meta,
+                            name=self.user.profile.name,
+                        )
+                    ),
+                    course=CourseOverviewData(
+                        course_key=self.course_id,
+                    ),
+                )
+            )
         log.info("Saving CohortMembership for user '%s' in '%s'", self.user.id, self.course_id)
         return super().save(
             force_insert=force_insert,
