@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.test.utils import override_settings
+from openedx_events.learning.data import CertificateData, StudentData, CourseOverviewData, UserProfileData
 from opaque_keys.edx.locator import CourseKey, CourseLocator
 from path import Path as path
 
@@ -514,3 +515,62 @@ class CertificateAllowlistTest(SharedModuleStoreTestCase):
         item = ret[0]
         assert item['id'] == allowlist_item.id
         assert item['certificate_generated'] == cert.created_date.strftime("%B %d, %Y")
+
+
+class EnrollmentEventsTest(SharedModuleStoreTestCase):
+    """Tests for the events associated with the certification process."""
+
+    def setUp(self):  # pylint: disable=arguments-differ
+        super().setUp()
+        self.course = CourseOverviewFactory()
+        self.user = UserFactory(
+            username="somestudent",
+            first_name="Student",
+            last_name="Person",
+            email="robot@robot.org",
+            is_active=True
+        )
+
+    @patch("lms.djangoapps.certificates.models.CERTIFICATE_CREATED")
+    def test_certificate_creation_event_emitted(self, certificate_creation_event):
+        """
+        Test whether the certificate creation event is sent during the certificate
+        generation process.
+
+        Expected result:
+            - CERTIFICATE_CREATED is sent via send_event.
+            - The arguments match the event definition.
+        """
+        GeneratedCertificateFactory.create(
+            status=CertificateStatuses.downloadable,
+            user=self.user,
+            course_id=self.course.id,
+            mode=GeneratedCertificate.MODES.honor,
+            name='Certificate',
+            grade='100',
+            download_url='https://certificate.pdf'
+        )
+
+        certificate_creation_event.send_event.assert_called_once_with(
+            certificate=CertificateData(
+                user=StudentData(
+                    username=self.user.username,
+                    email=self.user.email,
+                    first_name=self.user.first_name,
+                    last_name=self.user.last_name,
+                    is_active=self.user.is_active,
+                    profile=UserProfileData(
+                        meta=self.user.profile.meta,
+                        name=self.user.profile.name,
+                    )
+                ),
+                course=CourseOverviewData(
+                    course_key=self.course.id,
+                ),
+                mode=GeneratedCertificate.MODES.honor,
+                grade='100',
+                status=CertificateStatuses.downloadable,
+                download_url='https://certificate.pdf',
+                name='Certificate'
+            )
+        )
