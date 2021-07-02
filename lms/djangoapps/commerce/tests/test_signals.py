@@ -323,4 +323,6 @@ class TestRefundSignal(TestCase):
                 'tags': ['LMS'] + tags
             }
         }
-        self.assertDictEqual(json.loads(last_request.body.decode('utf8')), expected)
+        content = json.loads(last_request.body.decode('utf8'))
+        content['ticket']['tags'] = sorted(content['ticket']['tags'])
+        self.assertDictEqual(content, expected)
