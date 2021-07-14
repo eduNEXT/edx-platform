@@ -13996,8 +13996,8 @@ msgid "Starts: {date}"
 msgstr "Inicia: {date}"
 
 #: lms/templates/courses_list.html
-msgid "View all Courses"
-msgstr "Ver todos os Cursos"
+msgid "View all running Courses"
+msgstr "Ver todos os cursos ativos"
 
 #: lms/templates/dashboard.html lms/templates/user_dropdown.html
 #: lms/templates/header/user_dropdown.html
