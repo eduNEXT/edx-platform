@@ -1,180 +1,85 @@
-# #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Spanish (Latin America) (http://www.transifex.com/open-edx/edx-platform/language/es_419/).
-# Copyright (C) 2020 EdX
+# #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
+# edunext helper translation file for Spanish.
+# Copyright (C) 2016 eduNEXT
+# #-#-#-#-#  edx_proctoring-js.po (edx-proctoring)  #-#-#-#-#
+# #-#-#-#-#  django.po (edx-proctoring)  #-#-#-#-#
+# edX translation file
+# Copyright (C) 2018 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
+# EdX Team <info@edx.org>, 2018.
 #
 # Translators:
-# Addi Hazel Mendoza Sánchez <addictivoh@gmail.com>, 2015
-# Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2018-2019
-# Andres Garcia <afgarcia0479@misena.edu.co>, 2019
-# Antonio Pardo <apardo@alabs.org>, 2013
-# Antonio Pardo <apardo@alabs.org>, 2013
-# Carlos Arias Fernandez <cararias@gmail.com>, 2016
-# Cristian Salamea <ovnicraft@gmail.com>, 2013-2015
-# morsoinferno <cristobal.acosta@usach.cl>, 2014-2015
-# David Salazar <imdjsg@gmail.com>, 2014
-# David Salazar <imdjsg@gmail.com>, 2014
-# Eduardo Zambrano <ezambrano@edx.org>, 2017,2019
-# Elias Estay <eestay@u.uchile.cl>, 2015
-# Poxtic <erandelle@outlook.com>, 2017
-# Felipe Schmidt M <fschmidt@cercano.cl>, 2015
-# Fernando Abramowitz <ferabra@gmail.com>, 2014
-# Gerardo Laster, 2014
-# Gerardo Laster, 2014
-# Javier Galnares Arias <javigalnares@yahoo.es>, 2015
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2013
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2015-2018
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2013-2014
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2013
-# karlman72 <karlman72@gmail.com>, 2014
-# Lalo Cabrera <laloogcabrera@yahoo.com.mx>, 2014
-# Laura Silva <lingison@edx.org>, 2015-2016
-# Luis Manuel Moreno <luis.moreno@edunext.co>, 2019
-# Luis Moreno <morenoluisma@gmail.com>, 2017
-# Luis Ricardo Ruiz <luislicardo1307@gmail.com>, 2013
-# Luis Ricardo Ruiz <luislicardo1307@gmail.com>, 2013
-# Marina Pastor <mpastor@edx.org>, 2018
-# Mecabotware <mecabotware.ideas@gmail.com>, 2015
-# Michael Terry <mterry@edx.org>, 2018
-# Miguel Bonilla <mbonilla@edx.org>, 2019
-# Natalia, 2013
-# Natalia, 2013-2014,2016,2018
-# Ned Batchelder <ned@edx.org>, 2017
-# Ned Weitzman <nweitzman@edx.org>, 2017-2018
-# Nuri Plans Toral <nplans@gmail.com>, 2015
-# Cristian Salamea <ovnicraft@gmail.com>, 2013
-# palichis <palichis@solid-ec.org>, 2015
-# Sarina Canelake <sarina@edx.org>, 2015
-# Ernesto Sánchez Benitez <sbernesto@gmail.com>, 2016
-# UAbierta Universidad de Chile <uabierta@u.uchile.cl>, 2015
-# Valeria Freire <valtodopds@hotmail.com>, 2014-2015
-# Yovany Alexander Álvarez Correa <yalvarez@innovapues.com>, 2018
-# José Luis <alagunajs@gmail.com>, 2016
-# #-#-#-#-#  djangojs-studio.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Spanish (Latin America) (http://www.transifex.com/open-edx/edx-platform/language/es_419/).
-# Copyright (C) 2020 EdX
-# This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-#
-# Translators:
-# Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2018-2019
-# Anatoli F. Peña Castillo <djanatoli@gmail.com>, 2016
-# Andres Garcia <afgarcia0479@misena.edu.co>, 2019
-# Antonio Pardo <apardo@alabs.org>, 2013
-# Cristian Guerra <cristian.guerra.maya@gmail.com>, 2016
-# Cristian Salamea <ovnicraft@gmail.com>, 2014-2016
-# Diego Rojas <diego.rojas@edunext.co>, 2017
-# David Salazar <imdjsg@gmail.com>, 2014
-# Felipe Schmidt M <fschmidt@cercano.cl>, 2015
-# Félix Antonio Valdez Noverola <felix@itesm.mx>, 2015
-# Fernando Abramowitz <ferabra@gmail.com>, 2014
-# Francisco Palm <francisco.palm@gmail.com>, 2017
-# gildardo lasso bañol <gildardolasso@hotmail.com>, 2016
-# 1673e3cf8bd85685e54576636ae7f409, 2014
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2013-2014
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2015-2017
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2014
-# Juan Fernando Villa <elite.linux@gmail.com>, 2015
-# Juan <juan.marrero@utec.edu.uy>, 2015
-# Laura Silva <lingison@edx.org>, 2015-2016
-# Luis Ricardo Ruiz <luislicardo1307@gmail.com>, 2013
-# Marina Pastor <mpastor@edx.org>, 2018
-# Natalia, 2013
-# Natalia, 2014,2018
-# Ned Batchelder <ned@edx.org>, 2017
-# Cristian Salamea <ovnicraft@gmail.com>, 2013
-# palichis <palichis@solid-ec.org>, 2015
-# Pedro Guimarães Martins <pedrogmartins7@gmail.com>, 2014
-# Yovany Alexander Álvarez Correa <yalvarez@innovapues.com>, 2018
-# #-#-#-#-#  djangojs-account-settings-view.po (0.1a)  #-#-#-#-#
-# edX community translations have been downloaded from Spanish (Latin America) (https://www.transifex.com/open-edx/teams/6205/es_419/).
-# Copyright (C) 2020 EdX
-# This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
-# EdX Team <info@edx.org>, 2020.
-#
-# Translators:
-# morsoinferno <cristobal.acosta@usach.cl>, 2019
-# Laura Silva <lingison@edx.org>, 2019
+# Nicolas CS <nicolascs23@gmail.com>, 2016
+# Ernesto Franz Achá Mamani <fachaa2@hotmail.com>, 2016
+# Antonio Pardo <apardo@alabs.org>, 2016
+# Ned Weitzman <nweitzman@edx.org>, 2017
+# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2017
+# Farhanah Sheets <fsheets@edx.org>, 2018
 # Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2019
 #
-# #-#-#-#-#  underscore.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Spanish (Latin America) (http://www.transifex.com/open-edx/edx-platform/language/es_419/)
-# Copyright (C) 2020 edX
+# #-#-#-#-#  edx_sga-js.po  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# #-#-#-#-#  openassessment-js.po (edx-platform)  #-#-#-#-#
+# #-#-#-#-#  djangojs.po (edx-ora2)  #-#-#-#-#
+# edX translation file
+# Copyright (C) 2018 edX
 # This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
 #
 # Translators:
-# Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2018-2019
-# Lohenrex <lohenrex.ragnarok@gmail.com>, 2018
-# Alex Dzul <alexexc2@gmail.com>, 2016
-# Anatoli F. Peña Castillo <djanatoli@gmail.com>, 2016
-# Andres Garcia <afgarcia0479@misena.edu.co>, 2019
-# Claudio Anibal Barahona Flores <claudio.barahona@unah.edu.hn>, 2015
-# Cristian Salamea <ovnicraft@gmail.com>, 2014-2016
+# Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2018
+# Cristian Salamea <ovnicraft@gmail.com>, 2015
 # Diego Rojas <diego.rojas@edunext.co>, 2017
-# Eduardo Zambrano <ezambrano@edx.org>, 2018
-# Giancarlo  De  Agostini <giancarlo.deagostini@iaen.edu.ec>, 2015
-# 1673e3cf8bd85685e54576636ae7f409, 2014
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2015-2018
+# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2016-2017
 # Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2014
-# Juan Fernando Villa <elite.linux@gmail.com>, 2015
-# Juan <juan.marrero@utec.edu.uy>, 2015
-# Laura Silva <lingison@edx.org>, 2016
-# Leandro Agustín Barrientos <agustinbarrientos@outlook.com>, 2016
 # Luis Manuel Moreno <luis.moreno@edunext.co>, 2019
-# Marcos Buccella <marcosfiore07@hotmail.com>, 2018
-# Marina Pastor <mpastor@edx.org>, 2020
-# Mecabotware <mecabotware.ideas@gmail.com>, 2015
-# Muhammad Adeel Khan <adeel@edx.org>, 2020
-# Natalia Aguillon, 2016
-# Natalia, 2018
+# Morphyne <cirrosis60@gmail.com>, 2014
 # Ned Weitzman <nweitzman@edx.org>, 2017
-# Nuri Plans Toral <nplans@gmail.com>, 2014
-# Patricia Colmenares <patrusca38@hotmail.com>, 2015
-# palichis <palichis@solid-ec.org>, 2015
-# Sergio A. Salazar <sergiosalazar@live.ru>, 2016
-# Thomas Castro <snaketh@gmail.com>, 2014
-# UAbierta Universidad de Chile <uabierta@u.uchile.cl>, 2015
-# Valeria Freire <valtodopds@hotmail.com>, 2014-2015
-# #-#-#-#-#  underscore-studio.po (edx-platform)  #-#-#-#-#
-# edX community translations have been downloaded from Spanish (Latin America) (http://www.transifex.com/open-edx/edx-platform/language/es_419/)
-# Copyright (C) 2020 edX
-# This file is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
+# Rubén Torres <r.torres@usal.es>, 2015
+# #-#-#-#-#  poll-js.po  #-#-#-#-#
+# Translators:
+# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2018
+# fco.aguilarm <fco.aguilarm@gmail.com>, 2018
+# Diego Rojas <diego.rojas@edunext.co>, 2018
+# Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2018
+#
+# #-#-#-#-#  problem_builder-js.po (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  underscore.po (PROJECT VERSION)  #-#-#-#-#
+# Translations template for PROJECT.
+# Copyright (C) 2019 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+#
+# #-#-#-#-#  djangojs-partial.po (PACKAGE VERSION)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # Translators:
-# Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2018-2019
-# Anatoli F. Peña Castillo <djanatoli@gmail.com>, 2016
-# Andres Garcia <afgarcia0479@misena.edu.co>, 2019
-# Morphyne <cirrosis60@gmail.com>, 2014
-# Cristian Guerra <cristian.guerra.maya@gmail.com>, 2016
-# Cristian Salamea <ovnicraft@gmail.com>, 2014-2015
-# Diego Rojas <diego.rojas@edunext.co>, 2017
-# Poxtic <erandelle@outlook.com>, 2017
-# Javier Galnares Arias <javigalnares@yahoo.es>, 2015
-# Jose Antonio Sanchez Romero <isc.antonio.sr@gmail.com>, 2017
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2015-2017
-# Juan Camilo Montoya Franco <juan.montoya@edunext.co>, 2014
-# Juan <juan.marrero@utec.edu.uy>, 2015
-# karlman72 <karlman72@gmail.com>, 2014
-# Laura Silva <lingison@edx.org>, 2016
-# Leandro Bohnhoff <leandro.bohnhoff@gmail.com>, 2015
-# Natalia, 2018
-# Ned Batchelder <ned@edx.org>, 2016
-# Patricia Colmenares <patrusca38@hotmail.com>, 2015
-# Tala Aoun <talaaoun@gmail.com>, 2016
-# UAbierta Universidad de Chile <uabierta@u.uchile.cl>, 2015
+# Omar Al-Ithawi <i@omardo.com>, 2019
+# Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2019
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: edx-platform\n"
-"Report-Msgid-Bugs-To: openedx-translation@googlegroups.com\n"
-"POT-Creation-Date: 2020-04-27 09:11+0000\n"
-"PO-Revision-Date: 2020-04-27 09:13+0000\n"
-"Last-Translator: edx_transifex_bot <i18n-working-group+edx-transifex-bot@edx.org>\n"
-"Language-Team: Spanish (Latin America) (http://www.transifex.com/open-edx/edx-platform/language/es_419/)\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-07-31 14:04+0300\n"
+"PO-Revision-Date: 2019-07-27 14:08+0000\n"
+"Last-Translator: Albeiro Gonzalez <albeiro.gonzalez@edunext.co>, 2019\n"
+"Language-Team: Spanish (Latin America) (https://www.transifex.com/open-edx/teams/6205/es_419/)\n"
 "Language: es_419\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 2.7.0\n"
+"#-#-#-#-#  djangojs-partial.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"#-#-#-#-#  openassessment-js.po (edx-platform)  #-#-#-#-#\n"
 
 #: cms/static/cms/js/xblock/cms.runtime.v1.js
 #: cms/static/js/certificates/views/signatory_details.js
@@ -211,6 +116,7 @@ msgstr "Guardando"
 #: cms/templates/js/video-transcripts.underscore
 #: cms/templates/js/xblock-outline.underscore
 #: common/static/common/templates/discussion/templates.underscore
+#: poll/public/handlebars/poll_studio.handlebars
 msgid "Delete"
 msgstr "Borrar"
 
@@ -253,6 +159,7 @@ msgstr "Cancelar"
 msgid "Uploading"
 msgstr "Subiendo"
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. #-#-#-#-#  djangojs-partial.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
@@ -262,8 +169,8 @@ msgstr "Subiendo"
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 #: lms/static/js/student_account/tos_modal.js
 #: cms/templates/js/course-video-settings.underscore
-#: common/static/common/templates/image-modal.underscore
 #: common/static/common/templates/discussion/templates.underscore
+#: common/static/common/templates/image-modal.underscore
 #: openedx/features/learner_profile/static/learner_profile/templates/share_modal.underscore
 msgid "Close"
 msgstr "Cerrar"
@@ -381,14 +288,16 @@ msgstr "Eliminando"
 msgid "Your changes have been saved."
 msgstr "Sus cambios han sido guardados."
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. Translators: This message will be added to the front of messages of type
 #. warning,
 #. e.g. "Warning: this component has not been configured yet".
 #: cms/static/js/views/xblock_validation.js
 #: common/static/common/js/discussion/views/discussion_inline_view.js
 msgid "Warning"
-msgstr ""
+msgstr "Advertencia"
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. Translators: This message will be added to the front of messages of type
 #. error,
 #. e.g. "Error: required field is missing".
@@ -460,32 +369,32 @@ msgstr "Responder a la anotación"
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{num_points} point possible (graded, results hidden)"
 msgid_plural "{num_points} points possible (graded, results hidden)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num_points} punto posible (calificable, resultado oculto)"
+msgstr[1] "{num_points} puntos posibles (calificables, resultados ocultos)"
 
 #. Translators: {num_points} is the number of points possible (examples: 1, 3,
 #. 10).;
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{num_points} point possible (ungraded, results hidden)"
 msgid_plural "{num_points} points possible (ungraded, results hidden)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num_points} punto posible (no calificable, resultado oculto)"
+msgstr[1] "{num_points} puntos posibles (no calificables, resultados ocultos)"
 
 #. Translators: {num_points} is the number of points possible (examples: 1, 3,
 #. 10).;
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{num_points} point possible (graded)"
 msgid_plural "{num_points} points possible (graded)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num_points} punto posible (calificable)"
+msgstr[1] "{num_points} puntos posibles (calificables)"
 
 #. Translators: {num_points} is the number of points possible (examples: 1, 3,
 #. 10).;
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{num_points} point possible (ungraded)"
 msgid_plural "{num_points} points possible (ungraded)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num_points} punto posible (no calificable)"
+msgstr[1] "{num_points} puntos posibles (no calificables)"
 
 #. Translators: {earned} is the number of points earned. {possible} is the
 #. total number of points (examples: 0/1, 1/1, 2/3, 5/10). The total number of
@@ -494,8 +403,8 @@ msgstr[1] ""
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{earned}/{possible} point (graded)"
 msgid_plural "{earned}/{possible} points (graded)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{earned}/{possible} punto (calificado)"
+msgstr[1] "{earned}/{possible} puntos (calificado)"
 
 #. Translators: {earned} is the number of points earned. {possible} is the
 #. total number of points (examples: 0/1, 1/1, 2/3, 5/10). The total number of
@@ -504,8 +413,8 @@ msgstr[1] ""
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "{earned}/{possible} point (ungraded)"
 msgid_plural "{earned}/{possible} points (ungraded)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{earned}/{possible} punto (no calificado)"
+msgstr[1] "{earned}/{possible} puntos (no calificado)"
 
 #: common/lib/xmodule/xmodule/js/src/capa/display.js
 msgid "The grading process is still running. Refresh the page to see updates."
@@ -562,7 +471,9 @@ msgstr "No enviado"
 msgid ""
 "{paragraph}=p;{preformatted}=pre;{heading3}=h3;{heading4}=h4;{heading5}=h5;{heading6}=h6"
 msgstr ""
+"{paragraph}=p;{preformatted}=pre;{heading3}=h3;{heading4}=h4;{heading5}=h5;{heading6}=h6"
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
@@ -573,24 +484,28 @@ msgstr "Párrafo"
 msgid "Preformatted"
 msgstr "Preformateado"
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 msgid "Heading 3"
 msgstr "Encabezado 3"
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 msgid "Heading 4"
 msgstr "Encabezado 4"
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
 msgid "Heading 5"
 msgstr "Encabezado 5"
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. Translators: this is a message from the raw HTML editor displayed in the
 #. browser when a user needs to edit HTML
 #: common/lib/xmodule/xmodule/js/src/html/edit.js
@@ -2584,9 +2499,9 @@ msgid "Not specific to a course"
 msgstr "No específico para un curso"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-#: lms/djangoapps/teams/static/teams/js/views/topic_card.js
-msgid "Topic"
-msgstr "Tema"
+#: lms/static/js/instructor_dashboard/util.js
+msgid "Subject"
+msgstr "Asunto"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 #: lms/templates/student_account/account_settings.underscore
@@ -2623,11 +2538,11 @@ msgstr "Maestrías"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "MicroMasters"
-msgstr ""
+msgstr "MicroMasters"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "MicroBachelors"
-msgstr ""
+msgstr "MicroBachelors"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "Photo Verification"
@@ -2639,7 +2554,7 @@ msgstr "Supervisión"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "Security"
-msgstr ""
+msgstr "Seguridad"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 #: cms/templates/js/asset-library.underscore
@@ -2647,31 +2562,46 @@ msgid "Other"
 msgstr "Otro"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "What can we help you with, {username}?"
-msgstr "¿En qué podemos ayudarte, {username}?"
+msgid "Course Discussion Forum"
+msgstr "Foro de discusión del curso"
+
+#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
+msgid ""
+"While our support team is happy to assist with the edX platform, the course "
+"staff has the expertise for specific assignment questions, grading or the "
+"proper procedures in each course. Please post all course related questions "
+"within the Discussion Forum where the Course Staff can directly respond."
+msgstr ""
+"Si bien nuestro equipo de soporte está encantado de ayudar con la plataforma"
+" edX, el personal del curso tiene la experiencia para preguntas específicas "
+"del curso, calificación o los procedimientos adecuados en cada curso. "
+"Publique todas las preguntas relacionadas con el curso en el Foro de "
+"discusión donde el personal del curso pueda responder directamente."
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "Details"
 msgstr "Detalles"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
-msgid "The more you tell us, the more quickly and helpfully we can respond!"
-msgstr "Cuanto más nos digas, antes y mejor podremos ayudarte."
+msgid "the more quickly and helpfully we can respond!"
+msgstr "¡lo más rápido y servicial que podemos responder!"
 
 #: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
 msgid "Create Support Ticket"
-msgstr ""
+msgstr "Crear caso de soporte"
+
+#: lms/djangoapps/support/static/support/jsx/logged_in_user.jsx
+msgid "What can we help you with, {username}?"
+msgstr "¿En qué podemos ayudarte, {username}?"
 
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
 msgid "Sign in to {platform} so we can help you better."
 msgstr "Ingrese a  {platform} para que podamos ayudarle mejor."
 
 #: lms/djangoapps/support/static/support/jsx/logged_out_user.jsx
-msgid ""
-"If you are unable to access your account contact us via email using {email}."
-msgstr ""
-"Si no puedes acceder a tu cuenta, contáctanos por correo electrónico a "
-"{email}."
+#: lms/templates/student_account/form_field.underscore
+msgid "Need help logging in?"
+msgstr "¿Necesita ayuda para iniciar sesión?"
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 msgid ""
@@ -2682,12 +2612,28 @@ msgstr ""
 "solicitud de soporte."
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
-msgid "Select a topic for your support request."
-msgstr ""
+msgid "Select a subject for your support request."
+msgstr "Elige un tema para tu petición de ayuda."
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 msgid "Enter some details for your support request."
 msgstr "Describe los detalles de tu solicitud de ayuda."
+
+#: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
+msgid ""
+"Due to the recent increase in interest in online education and edX, we are "
+"currently experiencing an unusually high volume of support requests. We "
+"appreciate your patience as we work to review each request. Please check the"
+" "
+msgstr ""
+"Debido al reciente aumento en el interés en la educación en línea y en edX, "
+"actualmente estamos experimentando un volumen inusualmente alto de "
+"solicitudes de soporte. Agradecemos su paciencia mientras trabajamos para "
+"revisar cada solicitud. Por favor, consulte el"
+
+#: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
+msgid " as many questions may have already been answered."
+msgstr "ya que muchas preguntas comunes pueden ya haber sido respondidas."
 
 #: lms/djangoapps/support/static/support/jsx/single_support_form.jsx
 #: lms/djangoapps/support/static/support/jsx/success.jsx
@@ -2716,6 +2662,8 @@ msgid ""
 "Thank you for submitting a request! We appreciate your patience while we "
 "work to review your request."
 msgstr ""
+"¡Gracias por su envío! Agradecemos su paciencia mientras trabajamos para "
+"revisar su solicitud."
 
 #: lms/djangoapps/support/static/support/jsx/upload_progress.jsx
 msgid "Cancel upload"
@@ -2852,6 +2800,8 @@ msgid ""
 "This learner will be removed from the team,allowing another learner to take "
 "the available spot."
 msgstr ""
+"Este estudiante será removido del equipo, permitiendo a otro estudiante "
+"tomar su lugar."
 
 #: lms/djangoapps/teams/static/teams/js/views/instructor_tools.js
 msgid "Delete this team?"
@@ -2862,6 +2812,9 @@ msgid ""
 "Deleting a team is permanent and cannot be undone.All members are removed "
 "from the team, and team discussions can no longer be accessed."
 msgstr ""
+"Borrar un equipo es una acción permanente y no puede ser revertida. Todos "
+"los miembros son removidos del equipo, y las discusiones creadas en el "
+"equipo no pueden ser accedidas de nuevo."
 
 #: lms/djangoapps/teams/static/teams/js/views/instructor_tools.js
 msgid "Team \"{team}\" successfully deleted."
@@ -2870,7 +2823,7 @@ msgstr "Equipo \"{team}\" eliminado exitosamente."
 #: lms/djangoapps/teams/static/teams/js/views/manage.js
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "Manage"
-msgstr ""
+msgstr "Administrar"
 
 #: lms/djangoapps/teams/static/teams/js/views/my_teams.js
 msgid "You are not currently a member of any team."
@@ -2886,11 +2839,11 @@ msgstr "y otros"
 #. * relative timestamp (see: http://momentjs.com/)
 #: lms/djangoapps/teams/static/teams/js/views/team_card.js
 msgid "Last activity {date}"
-msgstr ""
+msgstr "Última actividad {date}"
 
 #: lms/djangoapps/teams/static/teams/js/views/team_card.js
 msgid "View {span_start} {team_name} {span_end}"
-msgstr ""
+msgstr "Ver {span_start} {team_name} {span_end}"
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile.js
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
@@ -2906,6 +2859,8 @@ msgid ""
 "If you leave, you can no longer post in this team's discussions.Your place "
 "will be available to another learner."
 msgstr ""
+"Si deja el equipo, no puede volver a publicar discusiones dentro del equipo."
+" Su lugar en el quipo estará disponible para otro estudiante."
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile.js
 #: lms/static/js/verify_student/views/reverify_view.js
@@ -2915,7 +2870,7 @@ msgstr "Confirmar"
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
 msgid "You already belong to another team in this team set."
-msgstr ""
+msgstr "Usted ya pertenece a otro equipo en este conjunto."
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
 msgid "This team is full."
@@ -2923,13 +2878,13 @@ msgstr "Este equipo está lleno."
 
 #: lms/djangoapps/teams/static/teams/js/views/team_profile_header_actions.js
 msgid "Cannot join instructor managed team"
-msgstr ""
+msgstr "No se puede unir al equipo administrado por el instructor"
 
 #: lms/djangoapps/teams/static/teams/js/views/team_utils.js
 msgid " Member"
 msgid_plural " Members"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Miembro"
+msgstr[1] "Miembros"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams.js
 msgid "All teams"
@@ -2945,7 +2900,7 @@ msgstr "Temas"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "My Teams"
-msgstr ""
+msgstr "Mis equipos"
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 #: lms/templates/instructor/instructor_dashboard_2/certificate-bulk-white-list.underscore
@@ -3022,16 +2977,21 @@ msgid ""
 "by topic. Join an open public team to collaborate with other learners who "
 "are interested in the same topic as you are."
 msgstr ""
+"Vea todos los equipos a los que pertenece y todos los equipos públicos en su"
+" curso, organizados por tema. Únase a un equipo público abierto para "
+"colaborar con otros estudiantes interesados en el mismo tema que usted."
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid ""
 "See all teams you belong to and all public teams in your course, organized "
 "by topic."
 msgstr ""
+"Vea todos los equipos a los que pertenece y todos los equipos públicos en su"
+" curso, organizados por tema."
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 msgid "See all teams you belong to."
-msgstr ""
+msgstr "Ver todos los equipos a los que usted pertenece."
 
 #: lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 #: lms/djangoapps/discussion/static/discussion/templates/fake-breadcrumbs.underscore
@@ -3053,12 +3013,16 @@ msgstr "El equipo \"{team}\" no pudo ser encontrado."
 #: lms/djangoapps/teams/static/teams/js/views/topic_card.js
 msgid "{team_count} Team"
 msgid_plural "{team_count} Teams"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{team_count} equipo"
+msgstr[1] "{team_count} Equipos"
+
+#: lms/djangoapps/teams/static/teams/js/views/topic_card.js
+msgid "Topic"
+msgstr "Tema"
 
 #: lms/djangoapps/teams/static/teams/js/views/topic_card.js
 msgid "View Teams in the {topic_name} Topic"
-msgstr ""
+msgstr "Ver equipos en el tema {topic_name}"
 
 #: lms/djangoapps/teams/static/teams/js/views/topic_teams.js
 msgid ""
@@ -3985,11 +3949,14 @@ msgstr "Marcar código de inscripción como no utilizado"
 #: cms/templates/js/transcript-organization-credentials.underscore
 #: lms/djangoapps/support/static/support/templates/manage_user.underscore
 #: lms/templates/financial-assistance/financial_assessment_form.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/course_allowances.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
 msgid "Username"
 msgstr "Nombre de usuario"
 
 #: lms/static/js/instructor_dashboard/membership.js
 #: lms/djangoapps/support/static/support/templates/manage_user.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/course_allowances.underscore
 msgid "Email"
 msgstr "Correo electrónico"
 
@@ -4551,6 +4518,7 @@ msgstr "Id de la tarea"
 msgid "Requester"
 msgstr "Solicitante"
 
+#. #-#-#-#-#  djangojs.po (edx-platform)  #-#-#-#-#
 #. Translators: A timestamp of when a task (eg, sending email) was submitted
 #. appears after this
 #: lms/static/js/instructor_dashboard/util.js
@@ -4588,10 +4556,6 @@ msgid ""
 msgstr ""
 "Ocurrió un error al recuperar tu correo. Por favor intenta nuevamente más "
 "tarde. Si el problema persiste, contacta a soporte técnico."
-
-#: lms/static/js/instructor_dashboard/util.js
-msgid "Subject"
-msgstr "Asunto"
 
 #: lms/static/js/instructor_dashboard/util.js
 msgid "Sent By"
@@ -4811,7 +4775,6 @@ msgid "Reset My Password"
 msgstr "Restablecer mi contraseña"
 
 #: lms/static/js/student_account/components/PasswordResetConfirmation.jsx
-#: lms/static/js/student_account/views/account_settings_factory.js
 msgid "Reset Your Password"
 msgstr "Restablecer tu contraseña"
 
@@ -4859,6 +4822,11 @@ msgid ""
 "{strongStart}you will no longer be able to use the same email on "
 "{platformName}.{strongEnd}"
 msgstr ""
+"{strongStart}Advertencia: La eliminación de la cuenta es "
+"permanente.{strongEnd} Por favor lea cuidadosamente la información en la "
+"parte superior antes de proceder. Esta es una acción irreversible, y "
+"{strongStart}no podrá volver a usar el mismo correo electrónico en "
+"{platformName}.{strongEnd}"
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid ""
@@ -4866,12 +4834,17 @@ msgid ""
 "cannot be undone. {platformName} will not be able to recover your account or"
 " the data that is deleted."
 msgstr ""
+"Cuidado: la eliminación de su cuenta y datos personales es permanente e "
+"irreversible. {platformName} no podrá recuperar ni su cuenta ni los datos "
+"eliminados."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid ""
 "Once your account is deleted, you cannot use it to take courses on the "
 "{platformName} app, {siteName}, or any other site hosted by {platformName}."
 msgstr ""
+"Una vez tu cuenta es borrada, no podrás usarla ni tomar cursos en la app "
+"{platformName}, {siteName}, ni en cualquier otro sitio de {platformName}."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
@@ -4879,6 +4852,8 @@ msgid ""
 "This includes access to {siteName} from your employer’s or university’s "
 "system{additionalSiteSpecificDeletionText}."
 msgstr ""
+"Esto incluye acceso a {siteName} desde el sistema de tu empleador o "
+"universidad{additionalSiteSpecificDeletionText}."
 
 #: lms/static/js/student_account/components/StudentAccountDeletion.jsx
 msgid "We’re sorry to see you go!"
@@ -4919,6 +4894,9 @@ msgid ""
 " data is permanent and cannot be undone. {platformName} will not be able to "
 "recover your account or the data that is deleted."
 msgstr ""
+"Ha seleccionado “Eliminar mi cuenta”. La eliminación de su cuenta y datos "
+"personales es permanente e irreversible. {platformName} no podrá recuperar "
+"su cuenta o los datos que se hayan borrado."
 
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
 msgid ""
@@ -4926,6 +4904,8 @@ msgid ""
 "the {platformName} app, {siteName}, or any other site hosted by "
 "{platformName}."
 msgstr ""
+"Si procedes, no podrás usarla ni tomar cursos en la app {platformName}, "
+"{siteName}, ni en cualquier otro sitio de {platformName}."
 
 #: lms/static/js/student_account/components/StudentAccountDeletionModal.jsx
 msgid ""
@@ -5030,7 +5010,7 @@ msgstr ""
 
 #: lms/static/js/student_account/views/LoginView.js
 msgid "An unexpected error has occurred."
-msgstr ""
+msgstr "Ha ocurrido un error inesperado."
 
 #: lms/static/js/student_account/views/LoginView.js
 msgid ""
@@ -5136,17 +5116,6 @@ msgstr ""
 "de usuario."
 
 #: lms/static/js/student_account/views/account_settings_factory.js
-#: lms/templates/student_account/account.underscore
-msgid "Password"
-msgstr "Contraseña"
-
-#: lms/static/js/student_account/views/account_settings_factory.js
-msgid "Check your email account for instructions to reset your password."
-msgstr ""
-"Revise en su correo electrónico las instrucciones para cambiar su "
-"contraseña."
-
-#: lms/static/js/student_account/views/account_settings_factory.js
 msgid ""
 "The language used throughout this site. This site is currently available in "
 "a limited number of languages. Changing the value of this field will cause "
@@ -5228,7 +5197,6 @@ msgid "Enter your "
 msgstr "Ingrese su"
 
 #: lms/static/js/student_account/views/account_settings_factory.js
-#: lms/static/js/student_account/views/account_settings_view.js
 msgid "Linked Accounts"
 msgstr "Cuentas vinculadas"
 
@@ -5579,10 +5547,12 @@ msgstr "Expandir todo"
 msgid "Collapse All"
 msgstr "Colapsar todo"
 
+#: openedx/features/course_experience/static/course_experience/js/WelcomeMessage.js
 #: lms/templates/courseware/proctored-exam-status.underscore
 msgid "Show More"
 msgstr "Mostrar más"
 
+#: openedx/features/course_experience/static/course_experience/js/WelcomeMessage.js
 #: lms/templates/courseware/proctored-exam-status.underscore
 msgid "Show Less"
 msgstr "Mostrar menos"
@@ -5590,8 +5560,8 @@ msgstr "Mostrar menos"
 #: openedx/features/course_search/static/course_search/js/views/search_results_view.js
 msgid "{total_results} result"
 msgid_plural "{total_results} results"
-msgstr[0] "{total_results} resultado"
-msgstr[1] "{total_results} resultados"
+msgstr[0] ""
+msgstr[1] ""
 
 #: openedx/features/learner_profile/static/learner_profile/js/learner_profile_factory.js
 msgid "Profile Visibility:"
@@ -5741,6 +5711,10 @@ msgstr "Si, permitir modificaciones al certificado activo."
 msgid "certificate"
 msgstr "certificado"
 
+#: cms/static/js/certificates/views/certificate_preview.js
+msgid "Deactivating"
+msgstr ""
+
 #: cms/static/js/certificates/views/certificates_list.js
 msgid "Set up your certificate"
 msgstr "Configurar su certificado"
@@ -5752,8 +5726,8 @@ msgid "You have not created any certificates yet."
 msgstr "Todavía no ha creado ningún certificado."
 
 #: cms/static/js/certificates/views/signatory_editor.js
-msgid "Delete \"<%= signatoryName %>\" from the list of signatories?"
-msgstr "¿Desea borrar \"<%= signatoryName %>\" de la lista de signatarios?"
+msgid "Delete \"<%- signatoryName %>\" from the list of signatories?"
+msgstr ""
 
 #: cms/static/js/certificates/views/signatory_editor.js
 #: cms/static/js/views/course_info_update.js
@@ -5894,7 +5868,7 @@ msgstr "Ha habido un error con la subida del archivo"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Organization:"
-msgstr ""
+msgstr "Organización:"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Course Number:"
@@ -5902,7 +5876,7 @@ msgstr "Número del curso:"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Course Run:"
-msgstr ""
+msgstr "Edición del Curso:"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "(Read-only)"
@@ -5910,8 +5884,9 @@ msgstr "(Solo-lectura)"
 
 #: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 msgid "Re-run Course"
-msgstr ""
+msgstr "Relanzar Curso"
 
+#: cms/static/js/features_jsx/studio/CourseOrLibraryListing.jsx
 #: cms/templates/js/show-textbook.underscore
 msgid "View Live"
 msgstr "Ver en vivo"
@@ -6075,11 +6050,11 @@ msgstr "Todos los capítulos deben tener un nombre y un recurso"
 
 #: cms/static/js/models/uploads.js
 msgid ""
-"Only <%= fileTypes %> files can be uploaded. Please select a file ending in "
-"<%= fileExtensions %> to upload."
+"Only <%- fileTypes %> files can be uploaded. Please select a file ending in "
+"<%- (fileExtensions) %> to upload."
 msgstr ""
-"Sólo pueden cargarse archivos de tipo <%= fileTypes %>. Por favor selecciona"
-" un archivo que termine en <%= fileExtensions %> para ser cargado."
+"Solo archivos <%- fileTypes %> pueden ser cargados. Por favor seleccione un "
+"archivo que finalice en <%- (fileExtensions) %> para cargarlo."
 
 #: cms/static/js/models/uploads.js
 #: lms/templates/student_account/hinted_login.underscore
@@ -6174,6 +6149,7 @@ msgstr "Fecha añadida"
 
 #: cms/static/js/views/assets.js cms/templates/js/asset-library.underscore
 #: lms/djangoapps/support/static/support/templates/certificates_results.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
 msgid "Type"
 msgstr "Tipo"
 
@@ -6207,6 +6183,10 @@ msgstr "Cargar otro archivo"
 #: cms/static/js/views/utils/xblock_utils.js
 msgid "Adding"
 msgstr "Añadiendo"
+
+#: cms/static/js/views/container.js
+msgid "{startTag}{requestToken}{endTag}{selector}"
+msgstr ""
 
 #: cms/static/js/views/course_info_update.js
 msgid "Are you sure you want to delete this update?"
@@ -6262,8 +6242,8 @@ msgid "{selectedProvider} credentials saved"
 msgstr "{selectedProvider} credenciales guardadas"
 
 #: cms/static/js/views/edit_chapter.js
-msgid "Upload a new PDF to “<%= name %>”"
-msgstr "Subir un nuevo PDF a “<%= name %>”"
+msgid "Upload a new PDF to “<%- name %>”"
+msgstr "cargar un nuevo PDF a “<%- name %>”"
 
 #: cms/static/js/views/edit_chapter.js
 msgid "Please select a PDF file to upload."
@@ -6636,7 +6616,7 @@ msgstr "Fecha de adición"
 #. edited.
 #: cms/static/js/views/pages/container.js
 msgid "Editing access for: {title}"
-msgstr ""
+msgstr "Editando acceso para: {title}"
 
 #: cms/static/js/views/pages/container_subviews.js
 msgid "Publishing"
@@ -6844,7 +6824,7 @@ msgstr "Subir tu miniatura de la imagen del video"
 
 #: cms/static/js/views/show_textbook.js
 msgid "Delete “<%- name %>”?"
-msgstr ""
+msgstr "Eliminar “<%- name %>”?"
 
 #: cms/static/js/views/show_textbook.js
 msgid ""
@@ -6878,18 +6858,14 @@ msgstr "Lo sentimos, ha habido un error"
 #: cms/static/js/views/utils/create_course_utils.js
 msgid ""
 "The combined length of the organization, course number, and course run "
-"fields cannot be more than <%=limit%> characters."
+"fields cannot be more than <%- limit %> characters."
 msgstr ""
-"La longitud combinada de los campos para la organización, número de curso y "
-"grupo no puede superar los <%=limit%> caracteres."
 
 #: cms/static/js/views/utils/create_library_utils.js
 msgid ""
 "The combined length of the organization and library code fields cannot be "
-"more than <%=limit%> characters."
+"more than <%- limit %> characters."
 msgstr ""
-"La longitud combinada de los campos para la organización y código de la "
-"librería no puede superar los <%=limit%> caracteres."
 
 #: cms/static/js/views/utils/move_xblock_utils.js
 msgid "Success! \"{displayName}\" has been moved."
@@ -7100,6 +7076,7 @@ msgid "Video duration is {humanizeDuration}"
 msgstr "La duración del vídeo es {humanizeDuration}"
 
 #: cms/static/js/views/video_thumbnail.js
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
 msgid "minutes"
 msgstr "minutos"
 
@@ -7215,35 +7192,18 @@ msgstr "Nuevo {component_type}"
 msgid "Updating Tags"
 msgstr "Actualizando Etiquetas"
 
-#: lms/static/js/student_account/views/account_settings_view.js
-msgid "Account Information"
-msgstr "Información de la cuenta"
-
-#: lms/static/js/student_account/views/account_settings_view.js
-msgid "Order History"
-msgstr "Historial de órdenes"
-
-#: lms/static/js/student_account/views/account_settings_view.js
-msgid ""
-"You have set your language to {beta_language}, which is currently not fully "
-"translated. You can help us translate this language fully by joining the "
-"Transifex community and adding translations from English for learners that "
-"speak {beta_language}."
-msgstr ""
-"Ha establecido su idioma en {beta_language}, el cual no está traducido "
-"completamente. Puede ayudarnos a traducir este idioma totalmente uniéndose "
-"la comunidad Transifex y adicionando traducciones desde el Inglés para los "
-"estudiantes que hablan {beta_language}."
-
-#: lms/static/js/student_account/views/account_settings_view.js
-msgid "Help Translate into {beta_language}"
-msgstr "Ayude a traducir a {beta_language}"
-
 #: cms/templates/js/asset-library.underscore
 #: cms/templates/js/basic-modal.underscore
 #: lms/templates/instructor/instructor_dashboard_2/enrollment-code-lookup-links.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/course_allowances.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
 msgid "Actions"
 msgstr "Acciones"
+
+#: cms/templates/js/course-outline.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+msgid "Timed Exam"
+msgstr "Examen cronometrado"
 
 #: cms/templates/js/course-outline.underscore
 #: cms/templates/js/publish-xblock.underscore
@@ -7321,6 +7281,8 @@ msgstr "Añade tu respuesta:"
 
 #: common/static/common/templates/discussion/templates.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
+#: poll/public/handlebars/poll_results.handlebars
+#: poll/public/handlebars/survey_results.handlebars
 msgid "Submit"
 msgstr "Enviar"
 
@@ -7563,6 +7525,7 @@ msgstr ""
 "Discusión para compartir tus ideas y comenzar conversaciones. (Requerido)"
 
 #: common/static/common/templates/discussion/templates.underscore
+#: poll/public/handlebars/poll_studio.handlebars
 msgid "Question"
 msgstr "Pregunta"
 
@@ -7700,6 +7663,7 @@ msgid "Course Key"
 msgstr "Llave del curso"
 
 #: lms/djangoapps/support/static/support/templates/certificates_results.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
 msgid "Status"
 msgstr "Estado"
 
@@ -8007,33 +7971,25 @@ msgid "Remove unit %(unitName)s"
 msgstr "Borrar unidad %(unitName)s"
 
 #: lms/templates/commerce/provider.underscore
-#, python-format
 msgid ""
-"You still need to visit the %(display_name)s website to complete the credit "
+"You still need to visit the {display_name} website to complete the credit "
 "process."
 msgstr ""
-"Todavía debe visitar el sitio web de %(display_name)s para completar el "
-"proceso de crédito."
 
 #: lms/templates/commerce/provider.underscore
-#, python-format
 msgid ""
-"To finalize course credit, %(display_name)s requires %(platform_name)s "
-"learners to submit a credit request."
+"To finalize course credit, {display_name} requires {platform_name} learners "
+"to submit a credit request."
 msgstr ""
-"Para finalizar un crédito de curso, %(display_name)s requieres "
-"%(platform_name)s profesores para postular una solicitud de crédito."
 
 #: lms/templates/commerce/provider.underscore
 msgid "Get Credit"
-msgstr "Obtenga créditos"
+msgstr "Obten créditos"
 
 #: lms/templates/commerce/receipt.underscore
-#, python-format
 msgid ""
-"Thank you %(full_name)s! We have received your payment for %(course_name)s."
+"Thank you {full_name}! We have received your payment for {course_name}."
 msgstr ""
-"Gracias %(full_name)s! Hemos recibido su pago para el curso %(course_name)s."
 
 #: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
@@ -8041,13 +7997,13 @@ msgid ""
 "Please print this page for your records; it serves as your receipt. You will"
 " also receive an email with the same information."
 msgstr ""
-"Por favor imprima esta página para sus registros; la misma es válida como su"
-" recibo. También recibirá un correo electrónico con la esta información."
+"Por favor imprime esta página para tus registros; la misma sirve como tu "
+"recibo. También recibirás un correo electrónico con esta misma información."
 
 #: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Order No."
-msgstr "Orden Num."
+msgstr "Número de orden"
 
 #: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
@@ -8098,7 +8054,7 @@ msgstr ""
 #: lms/templates/commerce/receipt.underscore
 #: lms/templates/verify_student/payment_confirmation_step.underscore
 msgid "Want to confirm your identity later?"
-msgstr "¿Desea confirmar su identidad después?"
+msgstr "¿Deseas confirmar tu identidad después?"
 
 #: lms/templates/commerce/receipt.underscore
 msgid "Verify Now"
@@ -8646,14 +8602,6 @@ msgid "You can change sessions until {expiration_date}."
 msgstr "Puede cambiar ediciones hasta {expiration_date}."
 
 #: lms/templates/learner_dashboard/course_enroll.underscore
-msgid "Final Grade"
-msgstr "Calificación Final"
-
-#: lms/templates/learner_dashboard/course_enroll.underscore
-msgid "for {courseName}"
-msgstr "Para {courseName}"
-
-#: lms/templates/learner_dashboard/course_enroll.underscore
 msgid "View Archived Course"
 msgstr "Ver curso archivado"
 
@@ -8863,6 +8811,10 @@ msgid "New Address"
 msgstr "Nueva dirección "
 
 #: lms/templates/student_account/account.underscore
+msgid "Password"
+msgstr "Contraseña"
+
+#: lms/templates/student_account/account.underscore
 msgid "Change My Email Address"
 msgstr "Cambiar mi dirección de correo electrónico"
 
@@ -8877,10 +8829,6 @@ msgstr "Cambiar idioma de nuevo."
 #: lms/templates/student_account/account_settings_section.underscore
 msgid "An error occurred. Please reload the page."
 msgstr "Ocurrió un error. Por favor recargue la página."
-
-#: lms/templates/student_account/form_field.underscore
-msgid "Need help logging in?"
-msgstr "¿Necesita ayuda para iniciar sesión?"
 
 #: lms/templates/student_account/hinted_login.underscore
 #: lms/templates/student_account/login.underscore
@@ -8972,6 +8920,10 @@ msgid "Sign In"
 msgstr "Iniciar sesión"
 
 #: lms/templates/student_account/login.underscore
+msgid "Iniciar sesión usando tu cuenta UTEC"
+msgstr ""
+
+#: lms/templates/student_account/login.underscore
 msgid ""
 "Sign in here using your email address and password, or use one of the "
 "providers listed below."
@@ -8992,7 +8944,7 @@ msgstr ""
 
 #: lms/templates/student_account/login.underscore
 msgid "Use my university info"
-msgstr ""
+msgstr "Usar información de mi universidad"
 
 #: lms/templates/student_account/login.underscore
 msgid "or sign in with"
@@ -9097,13 +9049,15 @@ msgstr "Lo que necesita para la verificación"
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid "Device with Camera"
-msgstr ""
+msgstr "Dispositivo con cámara"
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid ""
 "You need a device that has a webcam. If you receive a browser prompt for "
 "access to your camera, please make sure to click 'Allow'."
 msgstr ""
+"Necesita un dispositivo que tenga una cámara web. Si recibe un mensaje del "
+"navegador para acceder a su cámara, asegúrese de hacer clic en \"Permitir\"."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid "Photo Identification"
@@ -9111,7 +9065,7 @@ msgstr "Identificación fotográfica."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid "You need a valid ID that contains your full name and photo."
-msgstr ""
+msgstr "Necesita un ID válida que contenga su nombre completo y foto."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
@@ -9123,6 +9077,8 @@ msgid ""
 "When your face is in position, use the Take Photo button {icon} below to "
 "take your photo."
 msgstr ""
+"Cuando su cara esté en posición, use el botón Tomar foto {icon} a "
+"continuación para tomar su foto."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 msgid "To take a successful photo, make sure that:"
@@ -9141,6 +9097,8 @@ msgid ""
 "To take the photo of your face, click on the camera button {icon}. If you "
 "need to try again, click 'Retake Photo'."
 msgstr ""
+"Para tomar la foto de su cara, haga clic en el botón de la cámara {icon}. Si"
+" necesita volver a intentarlo, haga clic en 'Retomar foto'."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -9160,6 +9118,8 @@ msgid ""
 "We use your verification photos to confirm your identity and ensure the "
 "validity of your certificate."
 msgstr ""
+"Utilizamos sus fotos de verificación para confirmar su identidad y "
+"garantizar la validez de su certificado."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -9176,6 +9136,10 @@ msgid ""
 "review. Your photo and information are not saved or visible anywhere on "
 "%(platformName)s after the verification process is complete."
 msgstr ""
+"Ciframos su foto de forma segura y la enviamos a nuestro servicio de "
+"autorización para su revisión. Su foto e información no se guardan ni son "
+"visibles en ningún lugar de  %(platformName)s después de que se complete el "
+"proceso de verificación."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -9184,6 +9148,8 @@ msgid ""
 "What if I can't see the camera image, or if I can't see my photo do "
 "determine which side is visible?"
 msgstr ""
+"¿Qué sucede si no puedo ver la imagen de la cámara, o si no puedo ver mi "
+"foto para determinar qué lado es visible?"
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
@@ -9195,6 +9161,13 @@ msgid ""
 " (30-45 centimeters) from the camera, with your head centered relative to "
 "the computer screen. "
 msgstr ""
+"Es posible que pueda completar el procedimiento de captura de imágenes sin "
+"ayuda, pero puede tomar un par de intentos de envío para obtener la posición"
+" correcta de la cámara. El posicionamiento óptimo de la cámara varía con "
+"cada computadora, pero generalmente la mejor posición para la doma de la "
+"cabeza es de aproximadamente 12-18 pulgadas (30-45 centímetros) de la "
+"cámara, con la cabeza centrada en relación con la pantalla de la "
+"computadora."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -9204,6 +9177,10 @@ msgid ""
 "orientation to change the lighting angle.  The most common reason for "
 "rejection is inability to read the text on the ID card."
 msgstr ""
+"Si las fotos que envía son rechazadas, intente mover la computadora o la "
+"orientación de la cámara para cambiar el ángulo de iluminación. La razón más"
+" común para el rechazo es la imposibilidad de leer el texto en la tarjeta de"
+" identificación."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
@@ -9211,6 +9188,8 @@ msgid ""
 "What if I have difficulty holding my head in position relative to the "
 "camera?"
 msgstr ""
+"¿Qué sucede si tengo dificultades para mantener la cabeza en posición con "
+"respecto a la cámara?"
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -9220,6 +9199,8 @@ msgid ""
 "If you require assistance with taking either photo for submission, contact "
 "%(platformName)s support for additional suggestions."
 msgstr ""
+"Si requiere asistencia tomando cualquiera de las fotos para enviarlas, "
+"contacte soporte%(platformName)s para sugerencias adicionales."
 
 #: lms/templates/verify_student/face_photo_step.underscore
 #: lms/templates/verify_student/id_photo_step.underscore
@@ -9236,12 +9217,16 @@ msgstr "Toma una Foto de tu Identificación"
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid "Use your webcam to take a photo of your ID."
 msgstr ""
+"Use su cámara web para tomar una fotografía de su documento de "
+"identificación."
 
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid ""
 "You need an ID with your name and photo. A driver's license, passport, or ID"
 " are all acceptable."
 msgstr ""
+"Necesita un documento de identificación con su nombre y foto. Licencia de "
+"conducir, pasaporte o cédula son aceptados."
 
 #: lms/templates/verify_student/id_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
@@ -9261,11 +9246,12 @@ msgstr "Asegurese que su documento está bien iluminado"
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid "Once in position, use the Take Photo button {icon} to capture your ID"
 msgstr ""
+"Una vez en posición, use el botón Tomar foto {icon} para captura su ID"
 
 #: lms/templates/verify_student/id_photo_step.underscore
 #: lms/templates/verify_student/incourse_reverify.underscore
 msgid "Use the Retake Photo button if you are not pleased with your photo"
-msgstr ""
+msgstr "Use el botón Retomar foto si no está satisfecho con su foto"
 
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid ""
@@ -9273,6 +9259,10 @@ msgid ""
 "a photo ID. Our authorization service confirms your identity by comparing "
 "the photo you take with the photo on your ID."
 msgstr ""
+"Como parte del proceso de verificación, usted tomará una foto de su cara y "
+"de su documento de identificación con foto. Nuestro servicio de autorización"
+" confirma su identidad comparando la foto que toma con la foto en su "
+"identificación."
 
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid ""
@@ -9283,11 +9273,19 @@ msgid ""
 "(20-30 centimeters) from the camera, with the ID card centered relative to "
 "the camera. "
 msgstr ""
+"Es posible que pueda completar el procedimiento de captura de imágenes sin "
+"ayuda, pero puede tomar un par de intentos de envío para obtener la posición"
+" correcta de la cámara. El posicionamiento óptimo de la cámara varía con "
+"cada computadora, pero en general, la mejor posición para una foto de una "
+"tarjeta de identificación es de 8 a 12 pulgadas (20-30 centímetros) de la "
+"cámara, con la tarjeta de identificación centrada en relación con la cámara."
 
 #: lms/templates/verify_student/id_photo_step.underscore
 msgid ""
 "What if I have difficulty holding my ID in position relative to the camera?"
 msgstr ""
+"¿Qué sucede si tengo dificultades para mantener mi identificación en "
+"posición con respecto a la cámara?"
 
 #: lms/templates/verify_student/image_input.underscore
 msgid "Preview of uploaded image"
@@ -9317,6 +9315,7 @@ msgstr "Verifique que su cara está completamente dentro del marco de la foto"
 msgid ""
 "Once in position, use the Take Photo button {icon} to capture your photo"
 msgstr ""
+"Una vez en posición, use el botón Tomar foto {icon} para captura su foto"
 
 #: lms/templates/verify_student/incourse_reverify.underscore
 msgid "Can we match the photo you took with the one on your ID?"
@@ -9582,13 +9581,13 @@ msgstr "Verificación de identidad en progreso"
 msgid ""
 "We have received your information and are verifying your identity. You will "
 "see a message on your dashboard when the verification process is complete "
-"(usually within 1-2 days). In the meantime, you can still access all "
+"(usually within 5-7 days). In the meantime, you can still access all "
 "available course content."
 msgstr ""
-"Hemos recibido la información enviada y estamos verificando su identidad. "
-"Recibir un mensaje en su Panel principal cuando el proceso de verificación "
-"esté completado (usualmente entre 1-2 días). Durante este tiempo, igualmente"
-" tendrá acceso a todo el contenido de su curso."
+"Hemos recibido su información y estamos verificando su identidad. Verá un "
+"mensaje en su tablero cuando se complete el proceso de verificación "
+"(generalmente dentro de 5-7 días). Mientras tanto, aún puede acceder a todo "
+"el contenido del curso disponible."
 
 #: lms/templates/verify_student/reverify_success_step.underscore
 msgid "Return to Your Dashboard"
@@ -9678,6 +9677,75 @@ msgstr "Tomar nuevamente la foto"
 msgid "Take Photo"
 msgstr "Tomar foto"
 
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+msgid "Add a New Allowance"
+msgstr "Añadir nueva autorización"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+msgid "Special Exam"
+msgstr "Examen especial"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
+#, python-format
+msgid " %(exam_display_name)s "
+msgstr "%(exam_display_name)s"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+msgid "Exam Type"
+msgstr "Tipo de examen"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/course_allowances.underscore
+msgid "Allowance Type"
+msgstr "Tipo de autorización"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+msgid "Additional Time (minutes)"
+msgstr "Tiempo adicional (minutos)"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+msgid "Value"
+msgstr "Valor"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/add-new-allowance.underscore
+msgid "Username or Email"
+msgstr "Nombre de usuario o correo electrónico"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/course_allowances.underscore
+msgid "Allowances"
+msgstr "Autorizaciones"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/course_allowances.underscore
+msgid "Add Allowance"
+msgstr "Añadir autorización"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/course_allowances.underscore
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
+msgid "Exam Name"
+msgstr "Nombre del examen"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/course_allowances.underscore
+msgid "Allowance Value"
+msgstr "Valor de la autorización"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
+msgid "Time Limit"
+msgstr "Límite de tiempo"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
+msgid "Started At"
+msgstr "Iniciado a las"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
+msgid "Completed At"
+msgstr "Finalizado a las"
+
+#: node_modules/@edx/edx-proctoring/edx_proctoring/static/proctoring/templates/student-proctored-exam-attempts.underscore
+#, python-format
+msgid " %(username)s "
+msgstr "%(username)s"
+
 #: openedx/features/course_bookmarks/static/course_bookmarks/templates/bookmarks-list.underscore
 msgid "Bookmarked on"
 msgstr "Añadido a marcadores en"
@@ -9760,6 +9828,8 @@ msgid ""
 "Create a {link_start}Mozilla Backpack{link_end} account, or log in to your "
 "existing account"
 msgstr ""
+"Crear una {link_start}cuenta en Mozilla Backpack{link_end} o iniciar sesión "
+"en una cuenta existente."
 
 #: openedx/features/learner_profile/static/learner_profile/templates/share_modal.underscore
 msgid ""
@@ -9767,6 +9837,9 @@ msgid ""
 "as){link_end} and then {upload_link_start}upload{link_end} it to your "
 "backpack."
 msgstr ""
+"{download_link_start}descargar esta imagen (clic derecho, guardar "
+"como){link_end} y luego {upload_link_start} carguela {link_end} a su bolsa "
+"en Mozilla Backpack."
 
 #: cms/templates/js/access-editor.underscore
 msgid "Limit Access"
@@ -9778,7 +9851,7 @@ msgid ""
 "minimum completion percentage to limit access to this subsection. Allowed "
 "values are 0-100"
 msgstr ""
-"Seleccione una sub-sección con prerequisito e ingrese un porcentaje de "
+"Seleccione una sub-sección con prerrequisito e ingrese un porcentaje de "
 "calificación mínimo y un porcentaje mínimo a ser completado para limitar el "
 "acceso a esta sub-sección. Los valores permitidos son de 0 a 100."
 
@@ -10129,7 +10202,7 @@ msgstr ""
 
 #: cms/templates/js/copy-clipboard-button.underscore
 msgid "Copy Component Location"
-msgstr ""
+msgstr "Copiar la ubicación del Componente"
 
 #: cms/templates/js/course-highlights-enable.underscore
 msgid "Weekly Highlight Emails"
@@ -10256,10 +10329,6 @@ msgstr "Practica de examen supervisado"
 #: cms/templates/js/course-outline.underscore
 msgid "Proctored Exam"
 msgstr "Examen supervisado"
-
-#: cms/templates/js/course-outline.underscore
-msgid "Timed Exam"
-msgstr "Examen cronometrado"
 
 #: cms/templates/js/course-outline.underscore
 #: cms/templates/js/xblock-outline.underscore
@@ -10574,7 +10643,7 @@ msgstr "Añadir capítulo"
 
 #: cms/templates/js/edit-title-button.underscore
 msgid "Edit Title"
-msgstr ""
+msgstr "Editar título"
 
 #: cms/templates/js/grading-editor.underscore
 msgid "Grading"
@@ -11354,12 +11423,12 @@ msgid "Read more"
 msgstr "Leer más"
 
 #: cms/templates/js/video-transcripts.underscore
-msgid "Show transcripts ({totalTranscripts})"
-msgstr "Mostrar transcripciones ({totalTranscripts})"
-
-#: cms/templates/js/video-transcripts.underscore
 msgid "No transcript uploaded."
 msgstr "No se ha subido ninguna transcripción"
+
+#: cms/templates/js/video-transcripts.underscore
+msgid "Show transcripts ({totalTranscripts})"
+msgstr "Mostrar transcripciones ({totalTranscripts})"
 
 #: cms/templates/js/xblock-access-editor.underscore
 msgid "Set Access"
@@ -11549,3 +11618,1284 @@ msgstr ""
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid "Use Current Transcript"
 msgstr "Usar la transcripción actual"
+
+msgid "internally reviewed"
+msgstr "revisado internamente"
+
+msgid "All Unreviewed"
+msgstr "Todos los no revisados"
+
+msgid "All Unreviewed Failures"
+msgstr "Todos los fracasos no revisados"
+
+msgid "active proctored exams"
+msgstr "exámenes supervisados activos"
+
+msgid "courses with active proctored exams"
+msgstr "cursos con exámenes supervisados activos"
+
+msgid "Course Id"
+msgstr "Id de Curso"
+
+msgid "Created"
+msgstr "Creado"
+
+msgid "Download Software Clicked"
+msgstr "'Descargar aplicación' seleccionado"
+
+msgid "Ready To Start"
+msgstr "Listo para comenzar"
+
+msgid "Started"
+msgstr "Inició"
+
+msgid "Ready To Submit"
+msgstr "Listo para enviar"
+
+msgid "Declined"
+msgstr "Negado"
+
+msgid "Timed Out"
+msgstr "Tiempo agotado"
+
+msgid "Second Review Required"
+msgstr "Segunda revisión requerida"
+
+msgid "Verified"
+msgstr "Verificado"
+
+msgid "Rejected"
+msgstr "Rechazado"
+
+msgid "your course"
+msgstr "su curso"
+
+#, python-brace-format
+msgid "Proctoring Session Results Update for {course_name} {exam_name}"
+msgstr ""
+"Actualización de resultados de sesión supervisada para {course_name} "
+"{exam_name}"
+
+msgid "Taking As Proctored Exam"
+msgstr "Tomando como examen supervisado"
+
+msgid "Proctored Option Available"
+msgstr "Opción supervisada disponible"
+
+msgid "Taking As Open Exam"
+msgstr "Tomando como examen abierto"
+
+msgid "Pending Session Review"
+msgstr "Revisión de sesión pendiente"
+
+msgid "Passed Proctoring"
+msgstr "Supervisión aprobada"
+
+msgid "Failed Proctoring"
+msgstr "Supervisión fallida"
+
+msgid "Proctored Option No Longer Available"
+msgstr "La opción supervisado ya no está disponible"
+
+msgid "Ungraded Practice Exam"
+msgstr "Examen de práctica no calificado"
+
+msgid "Practice Exam Completed"
+msgstr "Examen de práctica completado"
+
+msgid "Practice Exam Failed"
+msgstr "Examen de práctica no aprobado"
+
+msgid "pending"
+msgstr "pendiente"
+
+msgid "satisfactory"
+msgstr "adecuado"
+
+msgid "unsatisfactory"
+msgstr "inadecuado"
+
+msgid "Taking as Proctored"
+msgstr "Tomando como examen supervisado"
+
+msgid "Is Sample Attempt"
+msgstr "Es un intento de muestra"
+
+msgid "Review Policy Exception"
+msgstr "Revisar excepción a la política"
+
+#, python-format
+msgid ""
+"\n"
+"\n"
+"This email is to let you know that the status of your proctoring session review for %(exam_name)s in\n"
+"<a href=\"%(course_url)s\">%(course_name)s </a> is %(status)s. If you have any questions about proctoring,\n"
+"contact %(platform)s support at %(contact_email)s.\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"Este mensaje es para avisarle que el estado de revisión de su examen supervisado para  %(exam_name)s en\n"
+"<a href=\"%(course_url)s\">%(course_name)s </a> es %(status)s. Si tiene preguntas sobre la supervisión,\n"
+"comuníquese con el equipo de ayuda para %(platform)s en %(contact_email)s.\n"
+"\n"
+
+msgid ""
+"\n"
+"      Try a proctored exam\n"
+"    "
+msgstr ""
+"\n"
+"Intentar un examen supervisado"
+
+msgid ""
+"\n"
+"      Get familiar with proctoring for real exams later in the course. This practice exam has no impact\n"
+"      on your grade in the course.\n"
+"    "
+msgstr ""
+"\n"
+"Familiaricese con la supervisión para los exámenes reales que estarán más adelante en el curso. Este examen de práctica no tiene impacto ninguno\n"
+"en su calificación para el curso."
+
+msgid "Continue to my practice exam"
+msgstr "Continuar a mi examen de práctica"
+
+msgid ""
+"\n"
+"        You will be guided through steps to set up online proctoring software and to perform various checks.\n"
+"      "
+msgstr ""
+"\n"
+"        Será guiado en los pasos para establecer el programa de revisión online y como hacer varias verificaciones.\n"
+"      "
+
+msgid ""
+"\n"
+"      There was a problem with your practice proctoring session\n"
+"    "
+msgstr ""
+"\n"
+"Hubo un problema con su sesión supervisada de práctica."
+
+msgid ""
+"\n"
+"      Your practice proctoring results: <b class=\"failure\"> Unsatisfactory </b>\n"
+"    "
+msgstr ""
+"\n"
+"El resultado de su sesión supervisada de práctica: <b class=\"failure\"> inadecuado </b>"
+
+msgid ""
+"\n"
+"      Your proctoring session ended before you completed this practice exam.\n"
+"      You can retry this practice exam if you had problems setting up the online proctoring software.\n"
+"    "
+msgstr ""
+"\n"
+"Su sesión supervisada terminó antes de que completara este examen de práctica.\n"
+"Puede comenzar el examen de nuevo si tuvo problemas iniciando el programa de supervisión online."
+
+msgid "Try this practice exam again"
+msgstr "Comenzar este examen de práctica nuevamente"
+
+msgid ""
+"\n"
+"      You have submitted this practice proctored exam\n"
+"    "
+msgstr ""
+"\n"
+"Ha enviado este examen de práctica supervisado"
+
+msgid ""
+"\n"
+"      Practice exams do not affect your grade or your credit eligibility.\n"
+"      You have completed this practice exam and can continue with your course work.\n"
+"    "
+msgstr ""
+"\n"
+"Los exámenes de práctica no afectan su calificación ni su elegibilidad para crédito.\n"
+"Ha completado este examen de práctica y puede seguir con el curso."
+
+msgid "You can also retry this practice exam"
+msgstr "También puede comenzar este examen de práctica nuevamente"
+
+msgid ""
+"\n"
+"        Are you sure you want to take this exam without proctoring?\n"
+"      "
+msgstr ""
+"\n"
+"¿Está seguro que quiere tomar este examen sin supervisión?"
+
+msgid ""
+"\n"
+"        If you take this exam without proctoring, you will <strong> no longer be eligible for academic credit. </strong>\n"
+"      "
+msgstr ""
+"\n"
+"Si toma este examen sin supervisión, <strong> ya no será elegible para crédito académico. </strong>"
+
+msgid "Continue Exam Without Proctoring"
+msgstr "Continuar Examen Sin Supervisión"
+
+msgid "Go Back"
+msgstr "Volver Atrás"
+
+msgid ""
+"\n"
+"      This exam is proctored\n"
+"    "
+msgstr ""
+"\n"
+"Este examen es supervisado"
+
+msgid ""
+"\n"
+"      To be eligible for course credit or for a MicroMasters credential, you must pass the proctoring review for this exam.\n"
+"    "
+msgstr ""
+"\n"
+"Para ser elegible para crédito académico o una credencial MicroMasters, debe aprobar la revisión de supervisión para este examen."
+
+msgid "Continue to my proctored exam. I want to be eligible for credit."
+msgstr "Continuar a mi examen supervisado. Quiero ser elegible para crédito."
+
+msgid ""
+"\n"
+"        You will be guided through steps to set up online proctoring software and to perform various checks.</br>\n"
+"      "
+msgstr ""
+"\n"
+"        Será guiado en los pasos para establecer el programa de revisión online y como hacer varias verificaciones.</br>\n"
+"      "
+
+msgid ""
+"\n"
+"      Error with proctored exam\n"
+"    "
+msgstr ""
+"\n"
+"Error en examen supervisado"
+
+#, python-format
+msgid ""
+"\n"
+"      A technical error has occurred with your proctored exam. To resolve this problem, contact\n"
+"      <a href=\"mailto:%(tech_support_email)s\">technical support</a>. All exam data, including answers\n"
+"      for completed problems, has been lost. When the problem is resolved you will need to restart\n"
+"      the exam and complete all problems again.\n"
+"    "
+msgstr ""
+"\n"
+"Se ha producido un error técnico en su examen supervisado. Para resolver el problema, comuníquese con <a href=\"mailto:%(tech_support_email)s\">ayuda técnica</a>. Todos los datos del examen, incluso respuestas\n"
+"para problemas completados, han sido perdidos. Cuando el problema esté resuelto, tendrá que reiniciar\n"
+"el examen y completar todos los problemas de nuevo."
+
+#, python-format
+msgid ""
+"\n"
+"      View your credit eligibility status on your <a href=\"%(progress_page_url)s\">Progress</a> page.\n"
+"    "
+msgstr ""
+"\n"
+"Revise el estado de su elegibilidad para crédito en su <a href=\"%(progress_page_url)s\">página de progreso</a>."
+
+msgid ""
+"\n"
+"      If you have concerns about your proctoring session results, contact your course team.\n"
+"    "
+msgstr ""
+"\n"
+"Si tiene dudas sobre los resultados de su sesión supervisada, comuníquese con el equipo del curso."
+
+msgid ""
+"\n"
+"      The due date for this exam has passed\n"
+"    "
+msgstr ""
+"\n"
+"La fecha límite para este examen ha pasado."
+
+msgid ""
+"\n"
+"      Because the due date has passed, you are no longer able to take this exam.\n"
+"    "
+msgstr ""
+"\n"
+"Debido a que la fecha límite ha pasado, ya no puede tomar este examen."
+
+#, python-format
+msgid ""
+"\n"
+"    You did not satisfy the requirements for taking this exam with proctoring, and are not eligible for credit. See your <a href=\"%(progress_page_url)s\">Progress</a> page for a list of requirements and your status for each.\n"
+"    "
+msgstr ""
+"\n"
+"No cumplió los requisitos para hacer este examen con supervisión, y no es elegible para crédito. Revise su <a href=\"%(progress_page_url)s\">página de progreso</a> para ver una lista de los requisitos y su estado en cada uno."
+
+msgid ""
+"\n"
+"    You did not satisfy the following prerequisites:\n"
+"    "
+msgstr ""
+"\n"
+"No cumplió los siguientes prerrequisitos:"
+
+msgid ""
+"\n"
+"        Due to unsatisfied prerequisites, you can only take this exam without proctoring.\n"
+"      "
+msgstr ""
+"\n"
+"Debido a prerrequisitos no cumplidos, solo puede tomar este examen sin supervisión."
+
+#, python-format
+msgid ""
+"\n"
+"      If you have questions about the status of your requirements for course credit, contact %(platform_name)s Support.\n"
+"    "
+msgstr ""
+"\n"
+"Si tiene preguntas sobre su estado con los requisitos para crédito académico en este curso, contáctese con el equipo de ayuda para %(platform_name)s."
+
+msgid ""
+"\n"
+"        About Proctored Exams\n"
+"        "
+msgstr ""
+"\n"
+"Acerca de los exámenes supervisados"
+
+msgid ""
+"\n"
+"                Complete your verification before starting the proctored exam.\n"
+"            "
+msgstr ""
+"\n"
+"Complete su verificación antes de iniciar el examen supervisado."
+
+msgid ""
+"\n"
+"                You must successfully complete identity verification before you can start the proctored exam.\n"
+"            "
+msgstr ""
+"\n"
+"Es necesario completar la verificación de su identidad antes de iniciar el examen supervisado."
+
+msgid ""
+"\n"
+"                    Your verification is pending. Results should be available 2-3 days after you\n"
+"                    submit your verification.\n"
+"                "
+msgstr ""
+"\n"
+"Su verificación está en proceso. Los resultados deben estar disponibles entre 2-3 días después del\n"
+"envío de su verificación."
+
+msgid ""
+"\n"
+"                    Your verification attempt failed. Please read our guidelines to make\n"
+"                    sure you understand the requirements for successfully completing verification,\n"
+"                    then try again.\n"
+"                "
+msgstr ""
+"\n"
+"Su verificación no fue aprobada. Por favor, lea nuestra guía para asegurarse\n"
+"de que entienda los requisitos para completar la verificación exitósamente,\n"
+"y después intente de nuevo."
+
+msgid "Retry Verification"
+msgstr "Reenviar verificación"
+
+msgid ""
+"\n"
+"                    Your verification has expired. You must successfully complete a new identity verification\n"
+"                    before you can start the proctored exam.\n"
+"                "
+msgstr ""
+"\n"
+"Su verificación ha expirado. Debe completar la verificación de identidad nuevamente\n"
+"antes de poder iniciar el examen supervisado."
+
+msgid "Continue to Verification"
+msgstr "Continuar a la verificación"
+
+msgid ""
+"\n"
+"                    Make sure you are on a computer with a webcam, and that you have valid photo identification\n"
+"                    such as a driver's license or passport, before you continue.\n"
+"                "
+msgstr ""
+"\n"
+"Asegúrese de que esté usando una computadora con cámara web, y que tiene una identificación fotográfica válida\n"
+"como una licencia para conducir o un pasaporte, antes de seguir."
+
+msgid ""
+"\n"
+"      Follow these steps to set up and start your proctored exam.\n"
+"    "
+msgstr ""
+"\n"
+"Siga estos pasos para preparar e iniciar su examen supervisado."
+
+msgid ""
+"\n"
+"        1. Copy this unique exam code. You will be prompted to paste this code later before you start the exam.\n"
+"      "
+msgstr ""
+"\n"
+"1. Copie este código único de examen. Se le pedira introducir este código más tarde antes de iniciar el examen."
+
+msgid ""
+"\n"
+"        Select the exam code, then copy it using Command+C (Mac) or Control+C (Windows).\n"
+"      "
+msgstr ""
+"\n"
+"Seleccione el código del examen, y cópielo usando Command+C (Mac) o Control+C (Windows)."
+
+msgid ""
+"\n"
+"        2. Follow the link below to set up proctoring.\n"
+"      "
+msgstr ""
+"\n"
+"2. Siga en enlace de abajo para configurar la supervisión"
+
+msgid "Start System Check"
+msgstr "Empezar chequeo del sistema"
+
+msgid ""
+"\n"
+"        A new window will open. You will run a system check before downloading the proctoring application.\n"
+"      "
+msgstr ""
+"\n"
+"Aparecerá una nueva ventana. Usted iniciará una revisión del sistema antes de descargar la aplicación de supervisión."
+
+msgid ""
+"\n"
+"        You will be asked to verify your identity as part of the proctoring exam set up.\n"
+"        Make sure you are on a computer with a webcam, and that you have valid photo identification\n"
+"        such as a driver's license or passport, before you continue.\n"
+"      "
+msgstr ""
+"\n"
+"Le será pedido verificar su identidad como parte de la preparación para el examen supervisado.\n"
+"Confirme que esté usando una computadora con una cámara web, y que tenga una identificación fotográfica válida\n"
+"como una licencia para conducir o un pasaporte, antes de seguir."
+
+msgid ""
+"\n"
+"          3. When you have finished setting up proctoring, start the exam.\n"
+"        "
+msgstr ""
+"\n"
+"3. Una vez que haya terminado de configurar la supervisión, inicie el examen."
+
+msgid "Start Proctored Exam"
+msgstr "Iniciar Examen Supervisado"
+
+msgid "Cannot Start Proctored Exam"
+msgstr "No se puede Iniciar el Examen Supervisado"
+
+msgid "Take this exam without proctoring."
+msgstr "Tomar este examen sin supervisión."
+
+msgid "Doing so means that you are no longer eligible for academic credit."
+msgstr "Hacer esto significa que ya no será elegible para crédito académico."
+
+#, python-format
+msgid ""
+"\n"
+"    You have not completed the prerequisites for this exam. All requirements must be satisfied before you can take this proctored exam and be eligible for credit. See your <a href=\"%(progress_page_url)s\">Progress</a> page for a list of requirements in the order that they must be completed.\n"
+"    "
+msgstr ""
+"\n"
+"No cumplió los requisitos para hacer este examen con supervisión. Es necesario cumplir todos los requisitos para poder tomar este examen supervisado y ser elegible para crédito. Revise su <a href=\"%(progress_page_url)s\">página de progreso</a> para una lista de los requisitos y el orden en que se tiene que cumplir cada uno."
+
+msgid ""
+"\n"
+"    The following prerequisites are in a <strong>pending</strong> state and must be successfully completed before you can proceed:\n"
+"    "
+msgstr ""
+"\n"
+"Los siguientes requisitos están en un estado <strong>pendiente</strong> y tienen que ser cumplidos exitosamente antes de que pueda proceder:"
+
+#, python-format
+msgid ""
+"\n"
+"    You can take this exam with proctoring only when all prerequisites have been successfully completed. Check your <a href=\"%(progress_page_url)s\">Progress</a>  page to see if prerequisite results have been updated. You can also take this exam now without proctoring, but you will not be eligible for credit.\n"
+"    "
+msgstr ""
+"\n"
+"Solo puede tomar este examen con supervisión una vez haya cumplido con todos los requisitos. Revise su <a href=\"%(progress_page_url)s\">página de progreso</a> para ver si los resultados de los requisitos han sido actualizados. En este momento puede tomar este examen sin supervisión, pero no será elegible para crédito académico."
+
+msgid " Your Proctoring Session Has Started "
+msgstr "Su Sesión Supervisada Ha Comenzado"
+
+#, python-format
+msgid ""
+" From this point in time, you must follow the <a "
+"href=\"%(link_urls.online_proctoring_rules)s\" target=\"_blank\">online "
+"proctoring rules</a> to pass the proctoring review for your exam. "
+msgstr ""
+"A partir de este momento, debe seguir las <a "
+"href=\"%(link_urls.online_proctoring_rules)s\" target=\"_blank\">reglas de "
+"supervisión online</a> para aprobar la revisión de la supervisión para su "
+"examen."
+
+msgid ""
+"\n"
+"            Do not close this window before you finish your exam. if you close this window, your proctoring session ends, and you will not successfully complete the proctored exam.\n"
+"          "
+msgstr ""
+"\n"
+"No cierre esta ventana antes de completar su examen. Si la cierra, su sesión supervisada terminará, y no completará el examen supervisado."
+
+#, python-format
+msgid ""
+"\n"
+"            Return to the %(platform_name)s course window to start your exam. When you have finished your exam and\n"
+"            have marked it as complete, you can close this window to end the proctoring session\n"
+"            and upload your proctoring session data for review.\n"
+"          "
+msgstr ""
+"\n"
+"Regrese a la ventana del curso de %(platform_name)s para iniciar su examen. Una vez que haya completado su examen y\n"
+"lo haya marcado como completo, puede cerrar esta ventana para terminar la sesión supervisada\n"
+"y enviar su grabación para la revisión de los supervisores."
+
+msgid ""
+"\n"
+"        I am not interested in academic credit.\n"
+"      "
+msgstr ""
+"\n"
+"No tengo interés en crédito académico."
+
+msgid ""
+"\n"
+"      Follow these instructions\n"
+"    "
+msgstr ""
+"\n"
+"Siga estas instrucciones"
+
+#, python-format
+msgid ""
+"\n"
+"        &#8226; When you start your exam you will have %(total_time)s to complete it. </br>\n"
+"        &#8226; You cannot stop the timer once you start. </br>\n"
+"        &#8226; If time expires before you finish your exam, your completed answers will be\n"
+"                submitted for review. </br>\n"
+"      "
+msgstr ""
+"\n"
+"&#8226; Una vez que haya iniciado su examen tendrá %(total_time)s para completarlo. </br>\n"
+"&#8226; No se puede parar el cronometro una vez iniciado. </br>\n"
+"&#8226; Si el tiempo se agota antes de que termine su examen, sus respuestas completadas serán\n"
+"enviadas para calificación. </br>"
+
+msgid ""
+"\n"
+"          Start my exam\n"
+"        "
+msgstr ""
+"\n"
+"Iniciar mi examen"
+
+msgid ""
+"\n"
+"      Are you sure you want to end your proctored exam?\n"
+"    "
+msgstr ""
+"\n"
+"¿Está seguro de que quiere finalizar su examen supervisado?"
+
+msgid ""
+"\n"
+"      Make sure that you have selected \"Submit\" for each problem before you submit your exam.\n"
+"    "
+msgstr ""
+"\n"
+"Confirme que haya seleccionado \"Enviar\" para cada problema antes de enviar el examen completo.."
+
+msgid ""
+"\n"
+"      After you submit your exam, your responses are graded and your proctoring session is reviewed.\n"
+"      You might be eligible to earn academic credit for this course if you complete all required exams\n"
+"      as well as achieve a final grade that meets credit requirements for the course.\n"
+"    "
+msgstr ""
+"\n"
+"Después de enviar su examen, sus respuestas son calificadas y su sesión supervisada es revisada.\n"
+"Es posible que Usted sea elegible para obtener crédito académico para este curso si cumple con todos los exámenes requeridos\n"
+"además de lograr una calificación final que cumple con los requisitos de crédito para el curso."
+
+msgid ""
+"\n"
+"      Yes, end my proctored exam\n"
+"    "
+msgstr ""
+"\n"
+"Sí, finalizar mi examen supervisado"
+
+msgid ""
+"\n"
+"        No, I'd like to continue working\n"
+"      "
+msgstr ""
+"\n"
+"No, quiero seguir trabajando."
+
+msgid ""
+"\n"
+"      Your proctoring session was reviewed and did not pass requirements\n"
+"    "
+msgstr ""
+"\n"
+"Su sesión supervisada fue revisada y no cumplió con los requisitos"
+
+#, python-format
+msgid ""
+"\n"
+"      You are no longer eligible for academic credit for this course, regardless of your final grade.\n"
+"      If you have questions about the status of your proctored exam results, contact %(platform_name)s Support.\n"
+"    "
+msgstr ""
+"\n"
+"Ya no es elegible para crédito académico en este curso independientemente de cualquier calificación final que haya logrado.\n"
+"Si tiene preguntas sobre el estado de los resultados de su examen supervisado, comuníquese con el equipo de ayuda de %(platform_name)s."
+
+msgid ""
+"\n"
+"      You have submitted this proctored exam for review\n"
+"    "
+msgstr ""
+"\n"
+"Ha enviado este examen supervisado para revisión"
+
+msgid ""
+"\n"
+"      If the proctoring software window is still open, you can close it now. Confirm that you want to quit the application when you are prompted.\n"
+"    "
+msgstr ""
+"\n"
+"Si la aplicación de supervisión todavía está abierta, la puede cerrar ahora. Confirme que quiere cerrar la aplicación cuando le sea preguntado."
+
+msgid ""
+"\n"
+"      &#8226; After you quit the proctoring session, the recorded data is uploaded for review. </br>\n"
+"      &#8226; Proctoring results are usually available within 5 business days after you submit your exam.\n"
+"    "
+msgstr ""
+"\n"
+"&#8226; Después de salir de la sesión supervisada, los datos grabados son subidos para revisión. </br>\n"
+"&#8226; Los resultados de la sesión supervisada normalmente están disponibles dentro de 5 días hábiles después de el envío de su examen."
+
+#, python-format
+msgid ""
+"\n"
+"      If you have questions about the status of your proctored exam results, contact %(platform_name)s Support.\n"
+"    "
+msgstr ""
+"\n"
+"Si tiene preguntas sobre el estado de los resultados de su examen supervisado, contáctese con el equipo de apoyo de %(platform_name)s."
+
+msgid ""
+"\n"
+"      Your proctoring session was reviewed and passed all requirements\n"
+"    "
+msgstr ""
+"\n"
+"Su sesión supervisada fue revisada y cumplió con todos los requisitos"
+
+msgid ""
+"\n"
+"      You are eligible to purchase academic credit for this course if you complete all required exams\n"
+"      and also achieve a final grade that meets the credit requirements for the course.\n"
+"    "
+msgstr ""
+"\n"
+"Usted es eligible para comprar crédito académico en este curso si completa todos los exámenes requeridos \n"
+"y también si logra una nota final que cumpla con los requisitos para crédito en este curso."
+
+msgid ""
+"\n"
+"      To view your exam questions and responses, select <strong>View my exam</strong>. The exam's review status is shown in the left navigation pane.\n"
+"    "
+msgstr ""
+"\n"
+"Para ver las preguntas y respuestas de su examen, seleccione <strong>Ver mi examen</strong>. El estado de revisión del examen se muestra en el panel de navegación a la izquierda."
+
+msgid "View my exam"
+msgstr "Ver mi examen"
+
+msgid ""
+"\n"
+"      After the due date for this exam has passed, you will be able to review your answers on this page.\n"
+"    "
+msgstr ""
+"\n"
+"Después de que la fecha límite de este examen haya pasado, podrá revisar sus respuestas en esta página."
+
+#, python-format
+msgid ""
+"\n"
+"    %(exam_name)s is a Timed Exam (%(total_time)s)\n"
+"    "
+msgstr ""
+"\n"
+"%(exam_name)s es un examen cronometrado (%(total_time)s)"
+
+msgid "This exam has a time limit associated with it."
+msgstr "Esta examen tiene un límite de tiempo."
+
+msgid "To pass this exam, you must complete the problems in the time allowed."
+msgstr ""
+"Para aprobar este examen, hay que completar los problemas durante el tiempo "
+"permitido."
+
+msgid "After you select "
+msgstr "Después de seleccionar"
+
+msgid "I am ready to start this timed exam,"
+msgstr "Estoy listo/a para empezar este examen cronometrado,"
+
+msgid "you will have "
+msgstr "Tendrá"
+
+msgid " to complete and submit the exam."
+msgstr "para completar y enviar el examen."
+
+msgid ""
+"\n"
+"        I am ready to start this timed exam.\n"
+"      "
+msgstr ""
+"\n"
+"Estoy listo/a para empezar este examen cronometrado."
+
+msgid "Can I request additional time to complete my exam?"
+msgstr "¿Puedo pedir tiempo adicional para completar mi examen?"
+
+msgid ""
+"\n"
+"      If you have disabilities,\n"
+"      you might be eligible for an additional time allowance on timed exams.\n"
+"      Ask your course team for information about additional time allowances.\n"
+"    "
+msgstr ""
+"\n"
+"Si tiene una discapacidad,\n"
+"puede ser eligible para un permiso de tiempo adicional en los exámenes cronometrados.\n"
+"Solicite información sobre tiempo adicional al equipo del curso."
+
+msgid ""
+"\n"
+"      Are you sure that you want to submit your timed exam?\n"
+"    "
+msgstr ""
+"\n"
+"¿Está seguro de que quiere enviar su examen cronometrado?"
+
+msgid ""
+"\n"
+"      After you submit your exam, your exam will be graded.\n"
+"    "
+msgstr ""
+"\n"
+"Después de enviar el examen, el examen será calificado."
+
+msgid ""
+"\n"
+"      Yes, submit my timed exam.\n"
+"    "
+msgstr ""
+"\n"
+"Sí, enviar my examen cronometrado."
+
+msgid ""
+"\n"
+"        No, I want to continue working.\n"
+"      "
+msgstr ""
+"\n"
+"No, quiero seguir trabajando."
+
+msgid ""
+"\n"
+"        The time allotted for this exam has expired. Your exam has been submitted and any work you completed will be graded.\n"
+"      "
+msgstr ""
+"\n"
+"El tiempo permitido para este examen ha vencido. Su examen ha sido enviado y el progreso que completó será calificado."
+
+msgid ""
+"\n"
+"        You have submitted your timed exam.\n"
+"      "
+msgstr ""
+"\n"
+"Ha enviado su examen cronometrado."
+
+#, python-format
+msgid ""
+"\n"
+"      Your grade for this timed exam will be immediately available on the <a href=\"%(progress_page_url)s\">Progress</a> page.\n"
+"    "
+msgstr ""
+"\n"
+"Su calificación de este examen cronometrado estará  disponible inmediatamente en la <a href=\"%(progress_page_url)s\">página de progreso</a>."
+
+msgid ""
+"\n"
+"        After the due date has passed, you can review the exam, but you cannot change your answers.\n"
+"      "
+msgstr ""
+"\n"
+"Después de que la fecha límite ha pasado, podrá revisar el examen, pero no podrá cambiar sus respuestas."
+
+#, python-brace-format
+msgid "{num_of_hours} hour"
+msgstr "{num_of_hours} hora"
+
+#, python-brace-format
+msgid "{num_of_hours} hours"
+msgstr "{num_of_hours} horas"
+
+#, python-brace-format
+msgid "{num_of_minutes} minutes"
+msgstr "{num_of_minutes} minutos"
+
+#, python-brace-format
+msgid " and {num_of_minutes} minute"
+msgstr "y {num_of_minutes} minuto"
+
+#, python-brace-format
+msgid "{num_of_minutes} minute"
+msgstr "{num_of_minutes} minuto"
+
+#, python-brace-format
+msgid " and {num_of_minutes} minutes"
+msgstr "y {num_of_minutes} minutos"
+
+msgid "could not determine the course_id"
+msgstr "No se pudo determinar la ID del curso"
+
+msgid "Must be a Staff User to Perform this request."
+msgstr "Hay que ser un usuario del equipo para cumplir esta petición."
+
+#, python-brace-format
+msgid "you have {remaining_time} remaining"
+msgstr "usted tiene {remaining_time} para terminar"
+
+msgid "you have less than a minute remaining"
+msgstr "Queda menos de un minuto"
+
+msgid "timed"
+msgstr "cronometrado"
+
+msgid "practice"
+msgstr "práctica"
+
+msgid "proctored"
+msgstr "supervisado"
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Started preparing student submissions zip file. This may take a while."
+msgstr ""
+"Preparando archivo zip de envíos por los estudiantes. Este proceso puede "
+"tomar algún tiempo."
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Submission failed. Please contact your course instructor."
+msgstr "El envío falló. Por favor contacte al instructor del curso."
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Uploading..."
+msgstr "Subiendo..."
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "The file you are trying to upload is too large."
+msgstr "El archivo que está intentando subir es muy grande."
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "There was an error uploading your file."
+msgstr "Hubo un error subiendo su archivo."
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Uploading... %(percent)s %"
+msgstr "Subiendo... %(percent)s %"
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "yes"
+msgstr "sí"
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Grade must be a number."
+msgstr "La calificación debe ser un número."
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Grade must be an integer."
+msgstr "La calificación debe ser un entero."
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Grade must be positive."
+msgstr "La calificación debe ser un entero positivo."
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Maximum score is %(max_score)s"
+msgstr "El puntaje máximo es %(max_score)s"
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "No grade to remove."
+msgstr "No hay una calificación para remover"
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid ""
+"The download file was not created. Please try again or contact "
+"%(support_email)s"
+msgstr ""
+"El archivo no fue creado. Por favor intente de nuevo o contacte "
+"%(support_email)s"
+
+#: edx_sga/static/js/src/edx_sga.js
+msgid "Student submission file ready for download"
+msgstr "El archivo subido por el estudiante está listo para descargar."
+
+msgid "This section could not be loaded."
+msgstr "Esta sección no pudo ser cargada."
+
+msgid "The staff assessment form could not be loaded."
+msgstr "La valoración del equipo del curso no pudo ser cargada."
+
+msgid "The display of ungraded and checked out responses could not be loaded."
+msgstr "La lista de respuestas marcadas y no calificadas no pudo ser cargada."
+
+msgid "This response could not be submitted."
+msgstr "Esta respuesta no pudo ser enviada."
+
+msgid "This response could not be saved."
+msgstr "Esta respuesta no pudo ser guardada."
+
+msgid "This feedback could not be submitted."
+msgstr "Este comentario no pudo ser enviado."
+
+msgid "This assessment could not be submitted."
+msgstr "Esta revisión no pudo ser enviada."
+
+msgid "One or more rescheduling tasks failed."
+msgstr "Una o más tareas de re-programación falló."
+
+msgid "This problem could not be saved."
+msgstr "Este problema no pudo ser guardado."
+
+msgid "The server could not be contacted."
+msgstr "No se ha podido contactar con el servidor."
+
+msgid "Could not retrieve upload url."
+msgstr "No se pudo recuperar la url de subida."
+
+msgid "Server error."
+msgstr "Error en el servidor."
+
+msgid "Could not retrieve download url."
+msgstr "No se pudo recuperar la url de descarga."
+
+msgid "The submission could not be removed from the grading pool."
+msgstr "La entrega no pudo ser eliminada de la lista de evaluaciones"
+
+msgid "Unable to load"
+msgstr "No se ha podido cargar"
+
+msgid "Unit Name"
+msgstr "Nombre de la unidad"
+
+msgid "Assessment"
+msgstr "Evaluación"
+
+msgid "Assessments"
+msgstr "Evaluaciones"
+
+msgid "Total Responses"
+msgstr "Total de respuestas"
+
+msgid "Training"
+msgstr "Entrenamiento"
+
+msgid "Peer"
+msgstr "Par"
+
+msgid "Self"
+msgstr "Auto"
+
+msgid "Waiting"
+msgstr "Esperando"
+
+msgid "Final Grade Received"
+msgstr "Calificación final recibida"
+
+msgid "List of Open Assessments is unavailable"
+msgstr "Lista de evaluaciones abiertas no disponible"
+
+msgid "Please wait"
+msgstr "Por favor espere"
+
+msgid "Block view is unavailable"
+msgstr "Vista de bloque no disponible"
+
+msgid "Back to Full List"
+msgstr "Volver a la lista completa"
+
+msgid ""
+"If you leave this page without submitting your peer assessment, you will "
+"lose any work you have done."
+msgstr ""
+"Si abandona esta página sin enviar su trabajo, perderá todos los cambios "
+"realizados."
+
+msgid ""
+"After you upload new files all your previously uploaded files will be "
+"overwritten. Continue?"
+msgstr ""
+"Después de subir nuevos archivos, todos sus archivos subidos anteriormente "
+"serán borrados. ¿Proceder?"
+
+msgid "Your file "
+msgstr "Su archivo"
+
+msgid "Status of Your Response"
+msgstr "Estado de su respuesta"
+
+msgid "This response has not been saved."
+msgstr "Esta respuesta no ha sido guardada."
+
+msgid ""
+"If you leave this page without saving or submitting your response, you will "
+"lose any work you have done on the response."
+msgstr ""
+"Si abandona esta página sin guardar o enviar su respuesta, perderá todo el "
+"trabajo realizado en la respuesta."
+
+msgid "Saving..."
+msgstr "Guardando..."
+
+msgid "This response has been saved but not submitted."
+msgstr "La respuesta ha sido guardada, pero no enviada."
+
+msgid "Do you want to upload your file before submitting?"
+msgstr "Quieres subir tu archivo antes de enviarlo ?"
+
+msgid ""
+"You're about to submit your response for this assignment. After you submit "
+"this response, you can't change it or submit a new response."
+msgstr ""
+"Está a punto de subir su respuesta para esta tarea. Después de subirla, no "
+"podrá cambiarla o subir una nueva respuesta."
+
+msgid "File size must be {max_files_mb}MB or less."
+msgstr "El tamaño del archivo debe ser de {max_files_mb}MB o menos."
+
+msgid "You can upload files with these file types: "
+msgstr "Puedes subir archivos de estos tipos:"
+
+msgid "File type is not allowed."
+msgstr "Tipo de archivo no permitido."
+
+msgid "Describe "
+msgstr "Describir"
+
+msgid "(required):"
+msgstr "(requerido):"
+
+msgid "Thumbnail view of "
+msgstr "Vista miniatura de"
+
+msgid ""
+"If you leave this page without submitting your self assessment, you will "
+"lose any work you have done."
+msgstr ""
+"Si abandona esta página sin enviar su auto evaluación, perderá todos los "
+"cambios realizados."
+
+msgid "Unexpected server error."
+msgstr "Ocurrió un error inesperado en el servidor."
+
+msgid "You must provide a learner name."
+msgstr "Debe ingresar un nombre."
+
+msgid "Error getting the number of ungraded responses"
+msgstr "Error al obtener el número de respuestas no calificadas."
+
+msgid ""
+"If you leave this page without submitting your staff assessment, you will "
+"lose any work you have done."
+msgstr ""
+"Si abandona esta página sin enviar su evaluación, se perderán todos los "
+"cambios realizados."
+
+msgid "Feedback available for selection."
+msgstr "Comentarios disponibles para esta selección."
+
+msgid "Unnamed Option"
+msgstr "Opción sin nombre"
+
+msgid "Not Selected"
+msgstr "No seleccionado"
+
+msgid "Couldn't Save This Assignment"
+msgstr "No se ha podido salvar esta tarea."
+
+msgid "Please correct the outlined fields."
+msgstr "Por favor corrija los campos resaltados."
+
+msgid ""
+"This problem has already been released. Any changes will apply only to "
+"future assessments."
+msgstr ""
+"Este problema ya ha sido liberado. Cualquier cambio en el mismo se aplicará "
+"solo a los envío futuros."
+
+msgid "Criterion Added"
+msgstr "Criterio añadido."
+
+msgid ""
+"You have added a criterion. You will need to select an option for the "
+"criterion in the Learner Training step. To do this, click the Settings tab."
+msgstr ""
+"Ha añadido un nuevo criterio. Deberá seleccionar una opción para el criterio"
+" que se usará en el paso de entrenamiento del estudiante.  Para hacer esto, "
+"haga clic en la pestaña de Configuración. "
+
+msgid "Option Deleted"
+msgstr "Opción borrada."
+
+msgid ""
+"You have deleted an option. That option has been removed from its criterion "
+"in the sample responses in the Learner Training step. You might have to "
+"select a new option for the criterion."
+msgstr ""
+"Has borrado esta opción. Esta opción ha sido removida del criterio en el "
+"ejemplo de respuestas en el paso de entrenamiento del estudiante. Es posible"
+" que tenga que seleccionar una nueva opción para el criterio."
+
+msgid ""
+"You have deleted all the options for this criterion. The criterion has been "
+"removed from the sample responses in the Learner Training step."
+msgstr ""
+"Has eliminado todas las opciones para este criterio. El criterio ha sido "
+"removido de las respuestas de ejemplo en el paso de entrenamiento del "
+"estudiante."
+
+msgid "Criterion Deleted"
+msgstr "Criterio borrado."
+
+msgid ""
+"You have deleted a criterion. The criterion has been removed from the "
+"example responses in the Learner Training step."
+msgstr ""
+"Ha borrado un criterio. El criterio ha sido removido de los ejemplos de "
+"respuesta en el paso de entrenamiento del estudiante."
+
+msgid ""
+"Changes to steps that are not selected as part of the assignment will not be"
+" saved."
+msgstr ""
+"Los cambios en los pasos que no están seleccionados como parte de la tarea "
+"no serán guardados."
+
+msgid "File types can not be empty."
+msgstr "Tipo de archivo no puede ser vacío."
+
+msgid "The following file types are not allowed: "
+msgstr "Los siguientes tipos de archivos son soportados:"
+
+msgid "File size must be 5MB or less."
+msgstr "El tamaño del archivo debe ser de 5 MB o menos."
+
+#: poll/public/handlebars/poll_results.handlebars
+#: poll/public/handlebars/survey_results.handlebars
+msgid "Results"
+msgstr "Resultados"
+
+#: poll/public/handlebars/poll_results.handlebars
+#: poll/public/handlebars/survey_results.handlebars
+msgid "Results gathered from {total} respondent."
+msgid_plural "Results gathered from {total} respondents."
+msgstr[0] "Resultados obtenidos de {total} encuestado."
+msgstr[1] "Resultados obtenidos de {total} encuestados."
+
+#: poll/public/handlebars/poll_results.handlebars
+#: poll/public/handlebars/survey_results.handlebars
+msgid "Feedback"
+msgstr "Retroalimentación"
+
+#: poll/public/handlebars/poll_studio.handlebars
+msgid "move poll up"
+msgstr "mover la encuesta arriba"
+
+#: poll/public/handlebars/poll_studio.handlebars
+msgid "move poll down"
+msgstr "mover la encuesta abajo"
+
+#: poll/public/handlebars/poll_studio.handlebars
+msgid "Answer"
+msgstr "Respuesta"
+
+#: poll/public/handlebars/poll_studio.handlebars
+msgid "Image URL"
+msgstr "URL de la imagen"
+
+#: poll/public/handlebars/poll_studio.handlebars
+msgid "Image alternative text"
+msgstr "Texto alternativo de la imagen"
+
+#: poll/public/handlebars/poll_studio.handlebars
+msgid ""
+"You can make limited use of Markdown in answer texts, preferably only bold "
+"and italics."
+msgstr ""
+"Puede hacer uso limitado de Markdown en los textos de respuesta, "
+"preferiblemente solo negritas e itálicas."
+
+#: poll/public/handlebars/poll_studio.handlebars
+msgid ""
+"This must have an image URL or text, and can have both.  If you add an "
+"image, you must also provide an alternative text that describes the image in"
+" a way that would allow someone to answer the poll if the image did not "
+"load."
+msgstr ""
+"Esto debe tener una URL de imagen o texto, y puede tener ambos. Si agrega "
+"una imagen, debe además proporcionar un texto alternativo que describa la "
+"imagen de manera que permita a alguien responder la encuesta aún si la "
+"imagen no carga."
+
+#: templates/html/mentoring_attempts.underscore
+msgid "You have used {num_used} of 1 submission."
+msgid_plural "You have used {num_used} of {max_attempts} submissions."
+msgstr[0] "Ha usado {num_used} de 1 envío."
+msgstr[1] "Ha usado {num_used} de {max_attempts} envíos."
+
+#: public/js/instructor_tool.js
+msgid "All"
+msgstr "Todo"
+
+#: public/js/instructor_tool.js
+msgid "Data export failed. Reason: <%= error %>"
+msgstr "Error en la exportación de los datos. Motivo: <%= error %>"
+
+#: public/js/instructor_tool.js
+msgid "Results retrieved on <%= creation_time %> (<%= seconds %> second)."
+msgid_plural ""
+"Results retrieved on <%= creation_time %> (<%= seconds %> seconds)."
+msgstr[0] ""
+"Resultados obtenidos en <%= creation_time %> (<%= seconds %> second)."
+msgstr[1] ""
+"Resultados obtenidos en <%= creation_time %> (<%= seconds %> seconds)."
+
+#: public/js/instructor_tool.js
+msgid "The report is currently being generated…"
+msgstr "El informe se está generando..."
