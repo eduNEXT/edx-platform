@@ -91,6 +91,8 @@ jobs:
           cd tmp/ArgoCD-Test
           cp tmp/workspace/deployment.yaml .
           sed -i 's/\(circleci-webappdemo\)\(.*\)/\1:'$TAG'/' ./deployment.yaml
+          git config --global user.email "gonzalo.romero@edunext.co"
+          git config --global user.name "NeOneSoft"
           git add .
           git commit -m "Update via CircleCI"
           # Push quietly to prevent showing the token in log
