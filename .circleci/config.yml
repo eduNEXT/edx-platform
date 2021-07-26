@@ -87,9 +87,9 @@ jobs:
       
       - run : |
           TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
-          git clone https://github.com/NeOneSoft/ArgoCD-Test /tmp/ArgoCD-Test
-          cd /tmp/ArgoCD-Test
-          cp /tmp/workspace/deployment.yaml .
+          git clone https://github.com/NeOneSoft/ArgoCD-Test tmp/ArgoCD-Test
+          cd tmp/ArgoCD-Test
+          cp tmp/workspace/deployment.yaml .
           sed -i 's/\(circleci-webappdemo\)\(.*\)/\1:'$TAG'/' ./deployment.yaml
           git add .
           git commit -m "Update via CircleCI"
