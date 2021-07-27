@@ -87,8 +87,8 @@ jobs:
       
       - run : |
           TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
-          git clone https://github.com/NeOneSoft/ArgoCD-Test tmp/ArgoCD-Test
-          cd tmp/ArgoCD-Test
+          git clone https://github.com/NeOneSoft/ArgoCD-Test-1 tmp/ArgoCD-Test1
+          cd tmp/ArgoCD-Test1
           cp tmp/workspace/deployment.yaml .
           sed -i 's/\(circleci-webappdemo\)\(.*\)/\1:'$TAG'/' ./deployment.yaml
           git config --global user.email "gonzalo.romero@edunext.co"
@@ -96,4 +96,4 @@ jobs:
           git add .
           git commit -m "New UPDATE via CircleCI"
           # Push quietly to prevent showing the token in log
-          git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test.git main
+          git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test1.git main
