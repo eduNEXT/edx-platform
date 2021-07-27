@@ -80,7 +80,7 @@ jobs:
       #     working_directory: /tmp/tutor_build
       #     command: |
       #       echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-      #       docker push docker.io/ednxops/ednx_distro_edxapp_dev:latest
+      #       docker p.circleci/config.ymlush docker.io/ednxops/ednx_distro_edxapp_dev:latest
 
       - attach_workspace:
           at: /tmp/workspace
@@ -96,4 +96,4 @@ jobs:
           git add .
           git commit -m "New UPDATE via CircleCI"
           # Push quietly to a new repository
-          git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test1.git main
+          git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git main
