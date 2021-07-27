@@ -95,5 +95,5 @@ jobs:
           git config --global user.name "NeOneSoft"
           git add .
           git commit -m "New UPDATE via CircleCI to create new yaml files"
-          # Push quietly to a new repository
+          # Push quietly to a new repository adding new files
           git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git main
