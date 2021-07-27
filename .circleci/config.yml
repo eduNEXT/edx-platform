@@ -95,5 +95,4 @@ jobs:
           git config --global user.name "NeOneSoft"
           git add .
           git commit -m "Update via CircleCI"
-          # Push quietly to prevent showing the token in log
           git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test.git main
