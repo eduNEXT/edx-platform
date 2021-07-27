@@ -89,11 +89,11 @@ jobs:
           TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
           git clone https://github.com/NeOneSoft/ArgoCD-Test-1 tmp/ArgoCD-Test1
           cd tmp/ArgoCD-Test1
-          cp tmp/workspace/deployment.yaml .
-          sed -i 's/\(circleci-webappdemo\)\(.*\)/\1:'$TAG'/' ./deployment.yaml
+          cp tmp/workspace/deployment-1.yaml .
+          sed -i 's/\(circleci-webappdemo\)\(.*\)/\1:'$TAG'/' ./deployment-1.yaml
           git config --global user.email "gonzalo.romero@edunext.co"
           git config --global user.name "NeOneSoft"
           git add .
-          git commit -m "New UPDATE via CircleCI"
+          git commit -m "New UPDATE via CircleCI to create new yaml files"
           # Push quietly to a new repository
           git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git main
