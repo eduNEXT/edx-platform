@@ -105,4 +105,4 @@ jobs:
           working_directory: /tmp/tutor_build
           command: |
             GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_0-1 git@bitbucket.org:edunext/ops-distro-ednx.git
-            tutor config save
+
