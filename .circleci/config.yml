@@ -16,9 +16,9 @@ jobs:
       TUTOR_PLUGINS_ROOT: "/tmp/tutor_build/tutor_root/tutor-plugins"
 
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - 68:dc:49:40:bc:a3:2b:b2:ab:55:b1:42:a6:09:68:f1
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - 68:dc:49:40:bc:a3:2b:b2:ab:55:b1:42:a6:09:68:f1
 
       # - run:
       #     name: Installing Docker CLI
@@ -104,4 +104,4 @@ jobs:
       #     git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git main
 
       - run : |
-          git clone -b eric/distro_0-1 git@bitbucket.org:edunext/ops-distro-ednx.git
+          GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_0-1 git@bitbucket.org:edunext/ops-distro-ednx.git
