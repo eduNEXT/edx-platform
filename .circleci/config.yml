@@ -12,7 +12,7 @@ jobs:
     docker:
       - image: edxops/focal-common:latest
     environment:
-      TUTOR_ROOT: "tmp/tutor_build/tutor_root/tutor\nexport"
+      TUTOR_ROOT: "tmp/tutor_build/tutor_root/tutor"
       TUTOR_PLUGINS_ROOT: "/tmp/tutor_build/tutor_root/tutor-plugins"
 
     steps:
