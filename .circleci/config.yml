@@ -105,7 +105,7 @@ jobs:
           working_directory: /tmp/tutor_build
           command: |
             TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
-            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_0-1 git@bitbucket.org:edunext/ops-distro-ednx.git
+            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_0-1 git@bitbucket.org:edunext/ops-distro-ednx.git env
             cd env
             cp tmp/tutor_build/tutor_root/tutor/config.yml .
             sed -i 's/\(tutor-CICD\)\(.*\)/\1:'$TAG'/' ./config.yml
