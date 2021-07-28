@@ -101,5 +101,4 @@ jobs:
       #     git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git main
 
       - run : |
-          TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
           git clone -b eric/distro_0-1 git clone git@bitbucket.org:edunext/ops-distro-ednx.git
