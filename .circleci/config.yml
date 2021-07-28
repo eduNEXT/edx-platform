@@ -107,11 +107,4 @@ jobs:
             TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
             GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_0-1 git@bitbucket.org:edunext/ops-distro-ednx.git
             cd tmp/tutor_build/tutor_root/tutor
-            cp config.yml .
-            sed -i 's/\(tutor-CICD\)\(.*\)/\1:'$TAG'/' ./config-1.yml
-            git config --global user.email "gonzalo.romero@edunext.co"
-            git config --global user.name "GoNeoSoft"
-            git add .
-            git commit -m "New UPDATE via CircleCI to create new yaml files"
-            # Push quietly to a new repository adding files
-            git push -q https://$GITHUB_PERSONAL_TOKEN@bitbucket.org/ops-distro-ednx.git main
+            ls
