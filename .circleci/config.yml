@@ -109,7 +109,7 @@ jobs:
             cp tmp/tutor_build/tutor_root/tutor/config.yml .
             sed -i 's/\(tutor-CICD\)\(.*\)/\1:'$TAG'/' ./config.yml
             git config --global user.email "gonzalo.romero@edunext.co"
-            # git config --global user.name "GoNeoSoft"
+            git config --global user.name "GoNeoSoft"
             # git add .
             # git commit -m "New UPDATE via CircleCI to create new yaml files"
             # # Push quietly to a new repository adding files
