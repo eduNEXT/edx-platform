@@ -17,30 +17,30 @@ jobs:
 
     steps:
 
-      # - run:
-      #     name: Installing Docker CLI
-      #     command: |
-      #       apt update
-      #       apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
-      #       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-      #       add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-      #       apt install docker-ce-cli=5:19.03.13~3-0~ubuntu-focal -y
+      - run:
+          name: Installing Docker CLI
+          command: |
+            apt update
+            apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+            add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+            apt install docker-ce-cli=5:19.03.13~3-0~ubuntu-focal -y
     
 
-      # - run:
-      #     name: Prepare tutor_distro environment
-      #     command: |
-      #       mkdir -p /tmp/tutor_build /tmp/tutor_build/tutor_root/tutor
-      #       cd /tmp/tutor_build
-      #       git clone -b v11.2.9 https://github.com/overhangio/tutor.git
-      #       cd tutor && pip install -e . && cd ..
-      #       GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" pip install git+ssh://git@bitbucket.org/edunext/plugin-distro-ednx.git@stage#egg=plugin-distro-ednx==stage
+      - run:
+          name: Prepare tutor_distro environment
+          command: |
+            mkdir -p /tmp/tutor_build /tmp/tutor_build/tutor_root/tutor
+            cd /tmp/tutor_build
+            git clone -b v11.2.9 https://github.com/overhangio/tutor.git
+            cd tutor && pip install -e . && cd ..
+            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" pip install git+ssh://git@bitbucket.org/edunext/plugin-distro-ednx.git@stage#egg=plugin-distro-ednx==stage
 
-      # - run:
-      #     name: Enable tutor_distro plugins
-      #     working_directory: /tmp/tutor_build
-      #     command: |
-      #       tutor plugins enable distro_ednx
+      - run:
+          name: Enable tutor_distro plugins
+          working_directory: /tmp/tutor_build
+          command: |
+            tutor plugins enable distro_ednx
 
       - run:
           name: Creating tutor config
