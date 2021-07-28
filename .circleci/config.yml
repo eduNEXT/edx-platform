@@ -108,7 +108,7 @@ jobs:
             GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_0-1 git@bitbucket.org:edunext/ops-distro-ednx.git
             cd tmp/tutor_build/tutor_root/tutor
             cp config.yml .
-            sed -i 's/\(tutor-CICD\)\(.*\)/\1:'$TAG'/' ./config.yml
+            sed -i 's/\(tutor-CICD\)\(.*\)/\1:'$TAG'/' ./config-1.yml
             git config --global user.email "gonzalo.romero@edunext.co"
             git config --global user.name "GoNeoSoft"
             git add .
