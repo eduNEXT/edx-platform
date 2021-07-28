@@ -110,7 +110,7 @@ jobs:
             sed -i 's/\(tutor-CICD\)\(.*\)/\1:'$TAG'/' ./config.yml
             git config --global user.email "gonzalo.romero@edunext.co"
             git config --global user.name "GoNeoSoft"
-            # git add .
+            git add .
             # git commit -m "New UPDATE via CircleCI to create new yaml files"
             # # Push quietly to a new repository adding files
             # git push bitbucket.org/ops-distro-ednx main 
