@@ -82,18 +82,25 @@ jobs:
       #       echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
       #       docker p.circleci/config.ymlush docker.io/ednxops/ednx_distro_edxapp_dev:latest
 
-      - attach_workspace:
-          at: /tmp/workspace
+
+      # ESTE BLOQUE FUE CREADO SOLO CON FINES DE PRUEBA
+      # - attach_workspace:
+      #     at: /tmp/workspace
       
+      # - run : |
+      #     TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
+      #     git clone https://github.com/NeOneSoft/ArgoCD-Test-1 tmp/ArgoCD-Test1
+      #     cd tmp/ArgoCD-Test1
+      #     cp tmp/workspace/deployment-1.yaml .
+      #     sed -i 's/\(circleci-webappdemo\)\(.*\)/\1:'$TAG'/' ./deployment-1.yaml
+      #     git config --global user.email "gonzalo.romero@edunext.co"
+      #     git config --global user.name "NeOneSoft"
+      #     git add .
+      #     git commit -m "New UPDATE via CircleCI to create new yaml files"
+      #     # Push quietly to a new repository adding files
+      #     git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git main
+
       - run : |
           TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
-          git clone https://github.com/NeOneSoft/ArgoCD-Test-1 tmp/ArgoCD-Test1
-          cd tmp/ArgoCD-Test1
-          cp tmp/workspace/deployment-1.yaml .
-          sed -i 's/\(circleci-webappdemo\)\(.*\)/\1:'$TAG'/' ./deployment-1.yaml
-          git config --global user.email "gonzalo.romero@edunext.co"
-          git config --global user.name "NeOneSoft"
-          git add .
-          git commit -m "New UPDATE via CircleCI to create new yaml files"
-          # Push quietly to a new repository adding files
-          git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git main
+          GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_0-1 git clone git@bitbucket.org:edunext/ops-distro-ednx.git
+            
