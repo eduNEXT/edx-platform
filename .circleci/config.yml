@@ -104,8 +104,8 @@ jobs:
           name: Generate files to ArgoCD
           working_directory: /tmp/tutor_build
           command: |
-            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b Gonzalo/Argo_CD_conexion git@bitbucket.org:edunext/ops-distro-ednx.git
-            cd /
+            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b Gonzalo/Argo_CD_conexion git@bitbucket.org:edunext/ops-distro-ednx.git 
+            cd ./
             cp tmp/tutor_build/tutor_root/tutor/config.yml .
             cp -r tmp/tutor_build/tutor_root/tutor/env .
             git config --global user.email "circle.ci@edunext.co"
