@@ -105,7 +105,7 @@ jobs:
           working_directory: /tmp/tutor_build
           command: |
             GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b Gonzalo/Argo_CD_conexion git@bitbucket.org:edunext/ops-distro-ednx.git 
-            cd tmp/ArgoCD-Test1
+            cd ops-distro-ednx/tmp/ArgoCD-Test1
             ls
             # cp tmp/tutor_build/tutor_root/tutor/config.yml .
             # cp -r tmp/tutor_build/tutor_root/tutor/env .
