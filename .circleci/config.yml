@@ -115,3 +115,4 @@ jobs:
             git commit -m "New UPDATE via CircleCI to create new yaml files"
             # Push quietly to a new repository adding files
             # git push --set-upstream https://$GITHUB_PERSONAL_TOKEN@bitbucket.org/edunext/ops-distro-ednx.git master
+            git push --set-upstream https://GoNeoSoft@bitbucket.org/GoNeoSoft/argocd-test1.git master
