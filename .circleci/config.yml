@@ -17,9 +17,9 @@ jobs:
 
     steps:
 
-      - add_ssh_keys:
-          fingerprints:
-            - "a9:e4:2e:98:e5:ca:d8:4d:82:79:46:4c:a5:9f:39:ca"
+      # - add_ssh_keys:
+      #     fingerprints:
+      #       - "a9:e4:2e:98:e5:ca:d8:4d:82:79:46:4c:a5:9f:39:ca"
 
       - run:
           name: Installing Docker CLI
