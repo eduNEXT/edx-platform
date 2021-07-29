@@ -113,8 +113,8 @@ jobs:
             tutor config save
             cp tmp/tutor_build/tutor_root/tutor/config.yml .
             cp -r tmp/tutor_build/tutor_root/tutor/env .
-            git config --global user.email "circle.ci@edunext.co"
-            git config --global user.name "CircleCI"
+            git config --global user.email "gonzalo.romero@edunext.co"
+            git config --global user.name "GoNeoSoft"
             git add .
             git commit -m "New UPDATE via CircleCI to create new yaml files"
             # Push quietly to a new repository adding file
