@@ -106,7 +106,7 @@ jobs:
           command: |
             # TAG=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
             GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b eric/distro_0-1 git@bitbucket.org:edunext/ops-distro-ednx.git
-            cp tmp/tutor_build/tutor_root/tutor/config.yml .
+            cp tmp/tutor_build/tutor_root/tutor/config.yml 
             # sed -i 's/\(tutor-CICD\)\(.*\)/\1:'$TAG'/' ./config.yml
             git config --global user.email "gonzalo.romero@edunext.co"
             git config --global user.name "GoNeoSoft"
@@ -116,4 +116,4 @@ jobs:
             # Push quietly to a new repository adding files
             # git push --set-upstream https://$GITHUB_PERSONAL_TOKEN@bitbucket.org/edunext/ops-distro-ednx.git master
             # git push --set-upstream https://GoNeoSoft@bitbucket.org/GoNeoSoft/argocd-test1.git master
-            git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git main
+            # git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git 
