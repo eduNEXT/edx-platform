@@ -20,8 +20,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "a9:e4:2e:98:e5:ca:d8:4d:82:79:46:4c:a5:9f:39:ca"
-            - "68:dc:49:40:bc:a3:2b:b2:ab:55:b1:42:a6:09:68:f1"
-
+            
       - run:
           name: Installing Docker CLI
           command: |
@@ -119,7 +118,7 @@ jobs:
             git add .
             git commit -m "New UPDATE via CircleCI to create new yaml files"
             # Push quietly to a new repository adding file
-            git push origin Gonzalo/Argo_CD_conexion
+            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push origin Gonzalo/Argo_CD_conexion
             # git push --set-upstream https://$GITHUB_PERSONAL_TOKEN@bitbucket.org/edunext/ops-distro-ednx.git master
             # git push --set-upstream https://GoNeoSoft@bitbucket.org/GoNeoSoft/argocd-test1.git master
             # git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git 
