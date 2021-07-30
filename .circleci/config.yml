@@ -111,6 +111,7 @@ jobs:
            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b Gonzalo/Argo_CD_conexion git@bitbucket.org:edunext/ops-distro-ednx.git
            cd ops-distro-ednx
            tutor plugins enable distro_ednx
+           tutor plugins list
            tutor config save
            cp tmp/tutor_build/tutor_root/tutor/config.yml .
            cp -r tmp/tutor_build/tutor_root/tutor/env .
