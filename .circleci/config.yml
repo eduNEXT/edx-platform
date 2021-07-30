@@ -108,17 +108,18 @@ jobs:
           name: Generate files to ArgoCD
           working_directory: /tmp/tutor_build
           command: |
-            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b Gonzalo/Argo_CD_conexion git@bitbucket.org:edunext/ops-distro-ednx.git 
-            cd ops-distro-ednx
-            tutor config save
-            cp tmp/tutor_build/tutor_root/tutor/config.yml .
-            cp -r tmp/tutor_build/tutor_root/tutor/env .
-            git config --global user.email "devops@edunext.co"
-            git config --global user.name "Devops-CircleCI"
-            git add .
-            git commit -m "New UPDATE via CircleCI to create new yaml files"
-            # Push quietly to a new repository adding file
-            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push origin Gonzalo/Argo_CD_conexion
-            # git push --set-upstream https://$GITHUB_PERSONAL_TOKEN@bitbucket.org/edunext/ops-distro-ednx.git master
-            # git push --set-upstream https://GoNeoSoft@bitbucket.org/GoNeoSoft/argocd-test1.git master
-            # git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git 
+            tail -f /dev/nul
+            # GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone -b Gonzalo/Argo_CD_conexion git@bitbucket.org:edunext/ops-distro-ednx.git 
+            # cd ops-distro-ednx
+            # tutor config save
+            # cp tmp/tutor_build/tutor_root/tutor/config.yml .
+            # cp -r tmp/tutor_build/tutor_root/tutor/env .
+            # git config --global user.email "devops@edunext.co"
+            # git config --global user.name "Devops-CircleCI"
+            # git add .
+            # git commit -m "New UPDATE via CircleCI to create new yaml files"
+            # # Push quietly to a new repository adding file
+            # GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push origin Gonzalo/Argo_CD_conexion
+            # # git push --set-upstream https://$GITHUB_PERSONAL_TOKEN@bitbucket.org/edunext/ops-distro-ednx.git master
+            # # git push --set-upstream https://GoNeoSoft@bitbucket.org/GoNeoSoft/argocd-test1.git master
+            # # git push -q https://$GITHUB_PERSONAL_TOKEN@github.com/NeOneSoft/ArgoCD-Test-1.git 
