@@ -108,4 +108,5 @@ jobs:
           name: Generate files to ArgoCD
           working_directory: /tmp/tutor_build
           command: |
-            tail -f /dev/nul
+            tail -f
+            tutor config save
