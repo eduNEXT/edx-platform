@@ -5921,6 +5921,16 @@ msgstr ""
 msgid "All rights reserved"
 msgstr "Todos los derechos reservados."
 
+#: openedx/core/djangoapps/ace_common/templates/ace_common/edx_ace/common/base_body.html
+#: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html
+msgid "You received this email because you registered for a Global Communications Academy course. If you received this email in error please contact "
+msgstr "Has recibido este correo electrónico porque te has inscrito en un curso de Global Communications Academy. Si has recibido este correo electrónico por error, póngase en contacto con "
+
+#: openedx/core/djangoapps/ace_common/templates/ace_common/edx_ace/common/base_body.html
+#: themes/red-theme/lms/templates/ace_common/edx_ace/common/base_body.html
+msgid "Privacy notice."
+msgstr "Aviso de privacidad."
+
 #. Translators:  This text is bound to the HTML 'title' element of the page
 #. and appears
 #. in the browser title bar when a requested certificate is not found or
@@ -9887,7 +9897,7 @@ msgid ""
 "of the course staff."
 msgstr ""
 "Un miembro del equipo del curso te ha invitado a unirte a %(course_name)s "
-"en%(site_name)s."
+"en %(site_name)s."
 
 #: lms/templates/instructor/edx_ace/allowedenroll/email/body.html
 msgid "To access this course click on the button below and login:"
@@ -10034,7 +10044,7 @@ msgstr "Tus otros cursos no se han visto afectados."
 msgid "This email was automatically sent from %(site_name)s to %(full_name)s"
 msgstr ""
 "Este correo electrónico se envio automáticamente desde %(site_name)s a "
-"%(full_name)s"
+" %(full_name)s"
 
 #: lms/templates/instructor/edx_ace/enrollenrolled/email/body.html
 #, python-format
