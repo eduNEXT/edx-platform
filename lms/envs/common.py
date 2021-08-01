@@ -917,17 +917,17 @@ FEATURES = {
     # .. toggle_warnings: None
     # .. toggle_tickets: 'https://openedx.atlassian.net/browse/OSPR-5290'
     'ENABLE_BULK_USER_RETIREMENT': False,
-    
+
     # .. toggle_name: ENABLE_CODEJAIL_REST_SERVICE
     # .. toggle_implementation: DjangoSetting
     # .. toggle_default: False
     # .. toggle_description: Set this to True if you want to run Codejail code using
     #   a separate VM or container and communicate with edx-platform using REST API.
-    # .. toggle_use_cases: tutor
+    # .. toggle_use_cases: open_edx
     # .. toggle_creation_date: 2021-08-19
     # .. toggle_target_removal_date: None
-    # .. toggle_warnings: 
-    # .. toggle_tickets: 
+    # .. toggle_warnings:
+    # .. toggle_tickets:
     'ENABLE_CODEJAIL_REST_SERVICE': False,
 }
 
@@ -1608,6 +1608,9 @@ COURSES_WITH_UNSAFE_CODE = []
 
 # Cojail REST service
 CODE_JAIL_REST_SERVICE_HOST = 'http://127.0.0.1:8550'
+CODE_JAIL_REST_SERVICE_CONNECT_TIMEOUT = 0.5  # time in seconds
+CODE_JAIL_REST_SERVICE_READ_TIMEOUT = 3.5  # time in seconds
+
 
 ############################### DJANGO BUILT-INS ###############################
 # Change DEBUG in your environment settings files, not here
