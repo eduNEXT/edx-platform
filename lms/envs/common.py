@@ -1596,6 +1596,9 @@ COURSES_WITH_UNSAFE_CODE = []
 
 # Cojail REST service
 CODE_JAIL_REST_SERVICE_HOST = 'http://127.0.0.1:8550'
+CODE_JAIL_REST_SERVICE_CONNECT_TIMEOUT = 0.5  # time in seconds
+CODE_JAIL_REST_SERVICE_READ_TIMEOUT = 3.5  # time in seconds
+
 
 ############################### DJANGO BUILT-INS ###############################
 # Change DEBUG in your environment settings files, not here
