@@ -58,8 +58,9 @@ from openedx.core.djangoapps.user_authn.views.registration_form import (
     get_registration_extension_form
 )
 from openedx.core.djangoapps.user_authn.toggles import is_require_third_party_auth_enabled
-from openedx_filters.lms.auth.v1.registration import before_creation as pre_register_filter
-from openedx_filters.exceptions import HookFilterException
+from openedx_filters.learning.data import UserData, UserPersonalData
+from openedx_filters.learning.filters import STUDENT_REGISTRATION_STARTED
+from openedx_filters.exceptions import OpenEdxFilterException
 from common.djangoapps.student.helpers import (
     AccountValidationError,
     authenticate_new_user,
@@ -525,11 +526,19 @@ class RegistrationView(APIView):
         self._handle_terms_of_service(data)
 
         try:
-            data = pre_register_filter(data)
+            data = STUDENT_REGISTRATION_STARTED.execute_filter(
+                user=UserData(
+                    pii=UserPersonalData(
+                        username=data.get('username'),
+                        email=data.get('email'),
+                        name=data.get('name'),
+                    )
+                )
+            )
 
-        except HookFilterException as err:
+        except OpenEdxFilterException as err:
             errors = {
-                "hook_error": [{"user_message": err.message}]
+                "filter_error": [{"user_message": err.message}]
             }
             return  self._create_response(request, errors, status_code=err.status_code)
 
