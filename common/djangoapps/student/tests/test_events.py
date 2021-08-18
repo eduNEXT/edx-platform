@@ -18,7 +18,6 @@ from openedx_events.learning.data import (
     CourseData,
     CourseEnrollmentData,
     UserData,
-    UserNonPersonalData,
     UserPersonalData,
 )
 from openedx.core.djangolib.testing.utils import skip_unless_lms

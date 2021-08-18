@@ -250,6 +250,8 @@ def create_account_with_params(request, params):
     _track_user_registration(user, profile, params, third_party_provider)
 
     # Announce registration
+    REGISTER_USER.send(sender=None, user=user, registration=registration)
+
     STUDENT_REGISTRATION_COMPLETED.send_event(
         user=UserData(
             user_pii=UserPersonalData(
