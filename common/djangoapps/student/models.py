@@ -1618,8 +1618,7 @@ class CourseEnrollment(models.Model):
                     is_active=user.is_active,
                 ),
                 course=CourseData(
-                    course_key=enrollment.course.id,
-                    display_name=enrollment.course.display_name
+                    course_key=course_key,
                 ),
                 mode=enrollment.mode,
                 is_active=enrollment.is_active,

@@ -238,7 +238,6 @@ class EnrollmentEventsTest(SharedModuleStoreTestCase):
                 ),
                 course=CourseData(
                     course_key=self.course.id,
-                    display_name=self.course.display_name
                 ),
                 mode='audit',
                 is_active=True,
