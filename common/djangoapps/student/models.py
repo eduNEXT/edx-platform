@@ -1612,7 +1612,7 @@ class CourseEnrollment(models.Model):
                     pii=UserPersonalData(
                         username=user.username,
                         email=user.email,
-                        name=user.profile.name,
+                        name=user.profile.name if hasattr(user, "profile") else "",
                     ),
                     id=user.id,
                     is_active=user.is_active,
