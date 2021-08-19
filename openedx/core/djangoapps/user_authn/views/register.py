@@ -254,7 +254,7 @@ def create_account_with_params(request, params):
 
     STUDENT_REGISTRATION_COMPLETED.send_event(
         user=UserData(
-            user_pii=UserPersonalData(
+            pii=UserPersonalData(
                 username=user.username,
                 email=user.email,
                 name=user.profile.name,
