@@ -15,7 +15,11 @@ release = ""
 
 # -- General configuration ---------------------------------------------------
 
-extensions = ["code_annotations.contrib.sphinx.extensions.featuretoggles", "code_annotations.contrib.sphinx.extensions.settings"]
+extensions = [
+    "code_annotations.contrib.sphinx.extensions.featuretoggles",
+    "code_annotations.contrib.sphinx.extensions.settings",
+    "code_annotations.contrib.sphinx.extensions.events",
+]
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
@@ -35,6 +39,10 @@ featuretoggles_repo_version = edx_platform_version
 settings_source_path = edxplatform_source_path
 settings_repo_url = edxplatform_repo_url
 settings_repo_version = edx_platform_version
+
+openedxevents_source_path = "/edx/src/openedx-events"
+openedxevents_repo_url = "https://github.com/eduNEXT/openedx-events"
+openedxevents_repo_version = "main"
 
 # -- Options for HTML output -------------------------------------------------
 
