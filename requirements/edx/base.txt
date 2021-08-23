@@ -687,7 +687,7 @@ oauthlib==3.0.1
     #   social-auth-core
 openedx-calc==2.0.1
     # via -r requirements/edx/base.in
-openedx-events==0.4.1
+git+https://github.com/eduNEXT/openedx-events@MJG/isolate_signal_sending#egg=openedx-events==0.5.0_alpha
     # via -r requirements/edx/base.in
 ora2==3.6.18
     # via -r requirements/edx/base.in

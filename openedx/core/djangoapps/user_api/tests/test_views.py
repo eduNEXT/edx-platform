@@ -11,6 +11,7 @@ from openedx.core.djangoapps.django_comment_common import models
 from openedx.core.djangolib.testing.utils import CacheIsolationTestCase, skip_unless_lms
 from openedx.core.lib.api.test_utils import TEST_API_KEY, ApiTestCase
 from openedx.core.lib.time_zone_utils import get_display_time_zone
+from openedx_events.tests.utils import OpenEdxEventsTestCase
 from common.djangoapps.student.tests.factories import UserFactory
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
@@ -28,7 +29,7 @@ USER_PREFERENCE_LIST_URI = "/api/user/v1/user_prefs/"
 ROLE_LIST_URI = "/api/user/v1/forum_roles/Moderator/users/"
 
 
-class UserAPITestCase(ApiTestCase):
+class UserAPITestCase(ApiTestCase, OpenEdxEventsTestCase):
     """
     Parent test case for User API workflow coverage
     """

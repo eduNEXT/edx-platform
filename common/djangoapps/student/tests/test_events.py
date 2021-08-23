@@ -20,6 +20,7 @@ from openedx_events.learning.data import (
     UserData,
     UserPersonalData,
 )
+from openedx_events.tests.utils import OpenEdxEventsTestCase
 from openedx.core.djangolib.testing.utils import skip_unless_lms
 
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase

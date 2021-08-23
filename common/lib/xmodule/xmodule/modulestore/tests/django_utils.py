@@ -28,6 +28,7 @@ from xmodule.modulestore.django import SignalHandler, clear_existing_modulestore
 from xmodule.modulestore.tests.factories import XMODULE_FACTORY_LOCK
 from xmodule.modulestore.tests.mongo_connection import MONGO_HOST, MONGO_PORT_NUM
 
+from openedx_events.tests.utils import OpenEdxEventsTestCase
 
 class CourseUserType(Enum):
     """
@@ -363,7 +364,11 @@ class ModuleStoreTestUsersMixin():
 
 
 class SharedModuleStoreTestCase(
-    ModuleStoreTestUsersMixin, FilteredQueryCountMixin, ModuleStoreIsolationMixin, CacheIsolationTestCase
+    ModuleStoreTestUsersMixin,
+    FilteredQueryCountMixin,
+    ModuleStoreIsolationMixin,
+    CacheIsolationTestCase,
+    OpenEdxEventsTestCase,
 ):
     """
     Subclass for any test case that uses a ModuleStore that can be shared
