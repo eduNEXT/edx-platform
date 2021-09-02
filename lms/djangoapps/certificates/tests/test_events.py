@@ -9,8 +9,6 @@ Classes:
 """
 from unittest.mock import Mock
 
-from django.contrib.auth.models import User  # lint-amnesty, pylint: disable=imported-auth-user
-from django.urls import reverse
 from openedx_events.learning.data import CertificateData, CourseData, UserData, UserPersonalData
 from openedx_events.learning.signals import CERTIFICATE_CHANGED, CERTIFICATE_CREATED, CERTIFICATE_REVOKED
 from openedx_events.tests.utils import OpenEdxEventsTestMixin

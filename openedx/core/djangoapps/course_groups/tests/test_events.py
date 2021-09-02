@@ -10,19 +10,15 @@ Classes:
 from openedx.core.djangoapps.course_groups.models import CohortMembership
 from unittest.mock import Mock
 
-from django.contrib.auth.models import User  # lint-amnesty, pylint: disable=imported-auth-user
-from django.urls import reverse
 from openedx_events.learning.data import CohortData, CourseData, UserData, UserPersonalData
 from openedx_events.learning.signals import COHORT_MEMBERSHIP_CHANGED
 from openedx_events.tests.utils import OpenEdxEventsTestMixin
 
 from common.djangoapps.student.tests.factories import UserFactory
-from lms.djangoapps.certificates.tests.factories import GeneratedCertificateFactory
-from lms.djangoapps.certificates.models import GeneratedCertificate, CertificateStatuses
 from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 from openedx.core.djangolib.testing.utils import skip_unless_lms
 
-from openedx.core.djangoapps.course_groups.tests.helpers import CohortFactory, CourseCohortFactory
+from openedx.core.djangoapps.course_groups.tests.helpers import CohortFactory
 
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 

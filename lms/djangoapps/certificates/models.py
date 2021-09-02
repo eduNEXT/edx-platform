@@ -525,6 +525,7 @@ class GeneratedCertificate(models.Model):
                 )
             )
 
+
 class CertificateGenerationHistory(TimeStampedModel):
     """
     Model for storing Certificate Generation History.
