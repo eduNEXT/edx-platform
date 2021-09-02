@@ -55,7 +55,7 @@ class AutoAuthEnabledTestCase(AutoAuthTestCase, ModuleStoreTestCase):
         self.url = '/auto_auth'
         self.client = Client()
         self.course_key = CourseLocator("edX", "Test101", "2014_Spring")
-        CourseOverviewFactory(id=self.course_key)
+        CourseOverviewFactory.create(id=self.course_key)
 
     def test_create_user(self):
         """

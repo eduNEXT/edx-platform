@@ -5,7 +5,6 @@ Unit tests for instructor.enrollment methods.
 
 import json
 from abc import ABCMeta
-from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 from unittest.mock import patch
 
 import ddt
@@ -39,6 +38,7 @@ from lms.djangoapps.instructor.enrollment import (
 from lms.djangoapps.teams.models import CourseTeamMembership
 from lms.djangoapps.teams.tests.factories import CourseTeamFactory
 from openedx.core.djangoapps.ace_common.tests.mixins import EmailTemplateTagMixin
+from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 from openedx.core.djangolib.testing.utils import CacheIsolationTestCase, get_mock_request
 from xmodule.modulestore.tests.django_utils import TEST_DATA_SPLIT_MODULESTORE, SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory

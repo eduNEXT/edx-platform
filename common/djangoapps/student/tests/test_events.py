@@ -118,7 +118,7 @@ class TestUserEvents(UserSettingsEventTestMixin, TestCase):
         self.reset_tracker()
         self.table = 'auth_user'
         self.course_key = CourseLocator("edX", "toy", "2012_Fall")
-        CourseOverviewFactory(id=self.course_key)
+        CourseOverviewFactory.create(id=self.course_key)
 
     def test_change_one_field(self):
         """
