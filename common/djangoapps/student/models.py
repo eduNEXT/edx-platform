@@ -61,7 +61,11 @@ from openedx_events.learning.data import (
     UserData,
     UserPersonalData,
 )
-from openedx_events.learning.signals import COURSE_ENROLLMENT_CREATED
+from openedx_events.learning.signals import (
+    COURSE_ENROLLMENT_CHANGED,
+    COURSE_ENROLLMENT_CREATED,
+    COURSE_UNENROLLMENT_COMPLETED,
+)
 import openedx.core.djangoapps.django_comment_common.comment_client as cc
 from common.djangoapps.course_modes.models import CourseMode, get_cosmetic_verified_display_price
 from common.djangoapps.student.emails import send_proctoring_requirements_email
@@ -1425,6 +1429,27 @@ class CourseEnrollment(models.Model):
                 CourseEnrollmentState(self.mode, self.is_active),
             )
 
+            COURSE_ENROLLMENT_CHANGED.send_event(
+                enrollment=CourseEnrollmentData(
+                    user=UserData(
+                        pii=UserPersonalData(
+                            username=self.user.username,
+                            email=self.user.email,
+                            name=self.user.profile.name,
+                        ),
+                        id=self.user.id,
+                        is_active=self.user.is_active,
+                    ),
+                    course=CourseData(
+                        course_key=self.course_id,
+                        display_name=self.course.display_name,
+                    ),
+                    mode=self.mode,
+                    is_active=self.is_active,
+                    creation_date=self.created,
+                )
+            )
+
         if activation_changed:
             if self.is_active:
                 self.emit_event(EVENT_NAME_ENROLLMENT_ACTIVATED, enterprise_uuid=enterprise_uuid)
@@ -1432,6 +1457,27 @@ class CourseEnrollment(models.Model):
                 UNENROLL_DONE.send(sender=None, course_enrollment=self, skip_refund=skip_refund)
                 self.emit_event(EVENT_NAME_ENROLLMENT_DEACTIVATED)
                 self.send_signal(EnrollStatusChange.unenroll)
+
+                COURSE_UNENROLLMENT_COMPLETED.send_event(
+                    enrollment=CourseEnrollmentData(
+                        user=UserData(
+                            pii=UserPersonalData(
+                                username=self.user.username,
+                                email=self.user.email,
+                                name=self.user.profile.name,
+                            ),
+                            id=self.user.id,
+                            is_active=self.user.is_active,
+                        ),
+                        course=CourseData(
+                            course_key=self.course_id,
+                            display_name=self.course.display_name,
+                        ),
+                        mode=self.mode,
+                        is_active=self.is_active,
+                        creation_date=self.created,
+                    )
+                )
 
         if mode_changed:
             # If mode changed to one that requires proctoring, send proctoring requirements email
