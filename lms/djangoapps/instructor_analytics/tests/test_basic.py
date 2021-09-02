@@ -3,6 +3,7 @@ Tests for instructor.basic
 """
 
 
+from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 from unittest.mock import MagicMock, Mock, patch
 
 import ddt
@@ -38,6 +39,7 @@ class TestAnalyticsBasic(ModuleStoreTestCase):
     def setUp(self):
         super().setUp()
         self.course_key = self.store.make_course_key('robot', 'course', 'id')
+        CourseOverviewFactory(id=self.course_key)
         self.users = tuple(UserFactory() for _ in range(30))
         self.ces = tuple(CourseEnrollment.enroll(user, self.course_key)
                          for user in self.users)

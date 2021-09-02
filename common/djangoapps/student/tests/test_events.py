@@ -9,6 +9,7 @@ import pytest
 from django.db.utils import IntegrityError
 from django.test import TestCase
 from django_countries.fields import Country
+from opaque_keys.edx.locator import CourseLocator
 
 from common.djangoapps.student.models import CourseEnrollmentAllowed, CourseEnrollment
 from common.djangoapps.student.tests.factories import CourseEnrollmentAllowedFactory, UserFactory, UserProfileFactory
@@ -26,6 +27,7 @@ from openedx_events.learning.signals import (
     COURSE_UNENROLLMENT_COMPLETED,
 )
 from openedx_events.tests.utils import OpenEdxEventsTestMixin
+from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 from openedx.core.djangolib.testing.utils import skip_unless_lms
 
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
@@ -115,6 +117,8 @@ class TestUserEvents(UserSettingsEventTestMixin, TestCase):
         self.user = UserFactory.create()
         self.reset_tracker()
         self.table = 'auth_user'
+        self.course_key = CourseLocator("edX", "toy", "2012_Fall")
+        CourseOverviewFactory(id=self.course_key)
 
     def test_change_one_field(self):
         """
@@ -191,7 +195,7 @@ class TestUserEvents(UserSettingsEventTestMixin, TestCase):
         # Changing the e-mail to the enrollment-allowed e-mail should enroll
         self.user.email = 'test@edx.org'
         self.user.save()
-        self.assert_user_enrollment_occurred('edX/toy/2012_Fall')
+        self.assert_user_enrollment_occurred('course-v1:edX+toy+2012_Fall')
 
         # CEAs shouldn't have been affected
         assert CourseEnrollmentAllowed.objects.count() == 1

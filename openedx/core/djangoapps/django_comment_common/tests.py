@@ -9,6 +9,7 @@ from openedx.core.djangoapps.course_groups.cohorts import CourseCohortsSettings
 from openedx.core.djangoapps.django_comment_common.models import CourseDiscussionSettings, Role
 from common.djangoapps.student.models import CourseEnrollment
 from common.djangoapps.student.tests.factories import UserFactory
+from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 from xmodule.modulestore import ModuleStoreEnum
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
@@ -35,6 +36,7 @@ class RoleAssignmentTest(TestCase):
             email="hacky@fake.edx.org",
         )
         self.course_key = CourseLocator("edX", "Fake101", "2012")
+        CourseOverviewFactory(id=self.course_key)
         CourseEnrollment.enroll(self.staff_user, self.course_key)
         CourseEnrollment.enroll(self.student_user, self.course_key)
 

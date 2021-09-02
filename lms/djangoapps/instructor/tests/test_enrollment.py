@@ -5,6 +5,7 @@ Unit tests for instructor.enrollment methods.
 
 import json
 from abc import ABCMeta
+from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 from unittest.mock import patch
 
 import ddt
@@ -48,6 +49,7 @@ class TestSettableEnrollmentState(CacheIsolationTestCase):
     def setUp(self):
         super().setUp()
         self.course_key = CourseLocator('Robot', 'fAKE', 'C--se--ID')
+        CourseOverviewFactory(id=self.course_key)
 
     def test_mes_create(self):
         """
@@ -77,6 +79,7 @@ class TestEnrollmentChangeBase(CacheIsolationTestCase, metaclass=ABCMeta):
     def setUp(self):
         super().setUp()
         self.course_key = CourseLocator('Robot', 'fAKE', 'C--se--ID')
+        CourseOverviewFactory(id=self.course_key)
 
     def _run_state_change_test(self, before_ideal, after_ideal, action):
         """
@@ -107,6 +110,12 @@ class TestEnrollmentChangeBase(CacheIsolationTestCase, metaclass=ABCMeta):
 @ddt.ddt
 class TestInstructorEnrollDB(TestEnrollmentChangeBase):
     """ Test instructor.enrollment.enroll_email """
+
+    def setUp(self):
+        super().setUp()
+        self.course_key = CourseLocator("Robot", "fAKE", "C--se--ID")
+        CourseOverviewFactory(id=self.course_key)
+
     def test_enroll(self):
         before_ideal = SettableEnrollmentState(
             user=True,

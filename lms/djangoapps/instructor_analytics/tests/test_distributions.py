@@ -1,6 +1,7 @@
 """ Tests for analytics.distributions """
 
 
+from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 import pytest
 from django.test import TestCase
 from opaque_keys.edx.locator import CourseLocator
@@ -16,7 +17,7 @@ class TestAnalyticsDistributions(TestCase):
     def setUp(self):
         super().setUp()
         self.course_id = CourseLocator('robot', 'course', 'id')
-
+        CourseOverviewFactory(id=self.course_id)
         self.users = [UserFactory(
             profile__gender=['m', 'f', 'o'][i % 3],
             profile__level_of_education=['a', 'hs', 'el'][i % 3],
@@ -79,6 +80,7 @@ class TestAnalyticsDistributionsNoData(TestCase):
     def setUp(self):
         super().setUp()
         self.course_id = CourseLocator('robot', 'course', 'id')
+        CourseOverviewFactory(id=self.course_id)
 
         self.users = [UserFactory(
             profile__year_of_birth=i + 1930,

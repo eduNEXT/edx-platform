@@ -2,6 +2,7 @@
 
 
 import json
+from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
 from unittest.mock import Mock, patch
 
 import ddt
@@ -53,6 +54,8 @@ class AutoAuthEnabledTestCase(AutoAuthTestCase, ModuleStoreTestCase):
         super().setUp()
         self.url = '/auto_auth'
         self.client = Client()
+        self.course_key = CourseLocator("edX", "Test101", "2014_Spring")
+        CourseOverviewFactory(id=self.course_key)
 
     def test_create_user(self):
         """
