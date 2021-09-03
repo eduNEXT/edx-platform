@@ -191,7 +191,7 @@ class CourseAccessRoleFactory(DjangoModelFactory):  # lint-amnesty, pylint: disa
         model = CourseAccessRole
 
     user = factory.SubFactory(UserFactory)
-    course_id = CourseKey.from_string('edX/toy/2012_Fall')
+    course_id = CourseKey.from_string('course-v1:edX+toy+2012_Fall')
     role = 'TestRole'
 
 
@@ -200,7 +200,7 @@ class CourseEnrollmentAllowedFactory(DjangoModelFactory):  # lint-amnesty, pylin
         model = CourseEnrollmentAllowed
 
     email = 'test@edx.org'
-    course_id = CourseKey.from_string('edX/toy/2012_Fall')
+    course_id = CourseKey.from_string('course-v1:edX+toy+2012_Fall')
 
 
 class PendingEmailChangeFactory(DjangoModelFactory):
