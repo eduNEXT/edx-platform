@@ -1421,6 +1421,16 @@ class CourseEnrollment(models.Model):
             self.mode = mode
             mode_changed = True
 
+        try:
+            course_data = CourseData(
+                course_key=self.course_id,
+                display_name=self.course.display_name,
+            )
+        except CourseOverview.DoesNotExist:
+            course_data = CourseData(
+                course_key=self.course_id,
+            )
+
         if activation_changed or mode_changed:
             self.save()
             self._update_enrollment_in_request_cache(
@@ -1440,10 +1450,7 @@ class CourseEnrollment(models.Model):
                         id=self.user.id,
                         is_active=self.user.is_active,
                     ),
-                    course=CourseData(
-                        course_key=self.course_id,
-                        display_name=self.course.display_name,
-                    ),
+                    course=course_data,
                     mode=self.mode,
                     is_active=self.is_active,
                     creation_date=self.created,
@@ -1469,10 +1476,7 @@ class CourseEnrollment(models.Model):
                             id=self.user.id,
                             is_active=self.user.is_active,
                         ),
-                        course=CourseData(
-                            course_key=self.course_id,
-                            display_name=self.course.display_name,
-                        ),
+                        course=course_data,
                         mode=self.mode,
                         is_active=self.is_active,
                         creation_date=self.created,
