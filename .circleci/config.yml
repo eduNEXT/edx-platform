@@ -112,7 +112,6 @@ jobs:
            cd ops-distro-ednx
            tutor plugins enable distro_ednx
            tutor plugins list
-           tutor --version
            tutor config save
            cp tmp/tutor_build/tutor_root/tutor/config.yml .
            cp -r tmp/tutor_build/tutor_root/tutor/env .
@@ -121,4 +120,4 @@ jobs:
            git add .
            git commit -m "New UPDATE via CircleCI to create new yaml files test 01"
            # Push quietly to a new repository adding file
-           GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push origin Gonzalo/Argo_CD_conexion
+           GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push origin Gonzalo/CICD_test
