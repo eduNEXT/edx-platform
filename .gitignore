@@ -146,3 +146,7 @@ dist
 
 # Locally generated PII reports
 pii_report
+argocd_testfile.py
+ju_0001-Add-CIRCLECI-2-configuration-and-making-tests-PASS-f.patch
+downloads/nodejs_12.18.4-1nodesource1_amd64.deb
+process.yml
