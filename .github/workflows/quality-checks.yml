@@ -55,14 +55,14 @@ jobs:
       run: |
         pip install -r requirements/pip.txt
         pip install -r requirements/edx/testing.txt -r requirements/edx/django.txt --src $PIP_SRC_DIR
-    - name: Run Quality Tests
-      env:
-        TEST_SUITE: quality
-        SCRIPT_TO_RUN: ./scripts/generic-ci-tests.sh
-        SHARD: 4
-        PIP_SRC_DIR: ${{ runner.temp }}
-      run: |
-        ./scripts/all-tests.sh
+    # - name: Run Quality Tests
+    #   env:
+    #     TEST_SUITE: quality
+    #     SCRIPT_TO_RUN: ./scripts/generic-ci-tests.sh
+    #     SHARD: 4
+    #     PIP_SRC_DIR: ${{ runner.temp }}
+    #   run: |
+    #     ./scripts/all-tests.sh
     - name: Save Job Artifacts
       uses: actions/upload-artifact@v2
       with:
