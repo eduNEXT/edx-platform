@@ -132,7 +132,7 @@ define(['backbone',
                 var dropdownFields = [
                     sectionsData[1].fields[0],
                     sectionsData[1].fields[1],
-                    sectionsData[1].fields[2]
+                    sectionsData[1].fields[3]
                 ];
                 _.each(dropdownFields, function(field) {
                     var view = field.view;
@@ -191,8 +191,8 @@ define(['backbone',
             var additionalInfoFields = {
                 EDUCATION: 0,
                 GENDER: 1,
-                YEAR_OF_BIRTH: 2,
-                PREFERRED_LANGUAGE: 3
+                YEAR_OF_BIRTH: 3,
+                PREFERRED_LANGUAGE: 2
             };
 
             beforeEach(function() {
