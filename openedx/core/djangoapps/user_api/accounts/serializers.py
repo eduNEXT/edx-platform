@@ -33,6 +33,7 @@ from . import (
 )
 from .image_helpers import get_profile_image_urls_for_user
 from .utils import format_social_link, validate_social_link
+from campusromero_openedx_extensions.custom_registration_form.context_extender import update_account_serializer
 
 PROFILE_IMAGE_KEY_PREFIX = 'image_url'
 LOGGER = logging.getLogger(__name__)
@@ -192,6 +193,7 @@ class UserReadOnlySerializer(serializers.Serializer):
                 }
             )
 
+        update_account_serializer(data, user)
         if self.custom_fields:
             fields = self.custom_fields
         elif user_profile:

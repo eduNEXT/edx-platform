@@ -36,6 +36,8 @@ from student.models import UserProfile
 from third_party_auth import pipeline
 from util.date_utils import strftime_localized
 
+from campusromero_openedx_extensions.custom_registration_form.context_extender import update_account_view
+
 log = logging.getLogger(__name__)
 
 
@@ -176,6 +178,7 @@ def account_settings_context(request):
             # in with, or if the user is already authenticated with them.
         } for state in auth_states if state.provider.display_for_login or state.has_account]
 
+    update_account_view(context, user)
     return context
 
 
