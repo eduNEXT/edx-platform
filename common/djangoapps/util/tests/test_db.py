@@ -197,7 +197,7 @@ class MigrationTests(TestCase):
     Tests for migrations.
     """
 
-    @override_settings(MIGRATION_MODULES={})
+    @override_settings(MIGRATION_MODULES={'custom_registration_form': None})
     def test_migrations_are_in_sync(self):
         """
         Tests that the migration files are in sync with the models.
