@@ -26,9 +26,11 @@ sleep $[ ( $RANDOM % 5 )  + 1 ]s
 
 apt-get install wget -y
 
-sudo apt-get update
+apt-get update
 
 cat requirements/system/ubuntu/apt-packages.txt | DEBIAN_FRONTEND=noninteractive xargs apt-get -yq install
+
+rm /etc/ssl/certs/DST_Root_CA_X3.pem
 
 mkdir -p downloads
 
