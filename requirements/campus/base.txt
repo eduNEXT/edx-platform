@@ -1,0 +1,2 @@
+# Campus Romero plugin
+-e git+https://github.com/eduNEXT/campusromero-openedx-extensions.git@f115f0b7d12762ded01d2142f538f8436f11dc7a#egg=campusromero-openedx-extensions
