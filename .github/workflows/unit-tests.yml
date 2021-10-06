@@ -13,7 +13,7 @@ jobs:
       matrix:
         include:
           - module-name: lms-1
-            path: "lms/djangoapps/badges/"
+            path: "lms/djangoapps/branding/"
 
     name: Python ${{ matrix.module-name }}
     steps:
