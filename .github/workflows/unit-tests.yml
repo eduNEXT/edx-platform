@@ -19,9 +19,9 @@ jobs:
     steps:
       # - run: sudo su
       - uses: actions/checkout@v2
-      - name: start mongodb service
-        run: |
-          sudo /etc/init.d/mongodb start
+      # - name: start mongodb service
+      #   run: |
+      #     sudo /etc/init.d/mongodb start
       - name: install requirements
         run: |
           sudo pip install -r requirements/pip.txt
