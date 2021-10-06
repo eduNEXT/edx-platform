@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.8']
-        django-version: ["3.0"]
+        django-version: ["3.1"]
         test_module: [
             "lms/djangoapps/badges/ lms/djangoapps/branding/ lms/djangoapps/bulk_email/ lms/djangoapps/bulk_enroll/ lms/djangoapps/bulk_user_retirement/ lms/djangoapps/ccx/ lms/djangoapps/certificates/ lms/djangoapps/commerce/",
             "lms/djangoapps/course_api/ lms/djangoapps/course_blocks/ lms/djangoapps/course_home_api/ lms/djangoapps/course_wiki/ lms/djangoapps/coursewarehistoryextended/ lms/djangoapps/dashboard/ lms/djangoapps/debug/",
