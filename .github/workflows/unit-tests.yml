@@ -6,7 +6,7 @@ on:
       - Gonzalo/unit_tests_github_actions
 
 jobs:
-  run_pylint:
+  run-tests:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -15,7 +15,7 @@ jobs:
           - module-name: lms-1
             path: "lms/djangoapps/badges/"
 
-    name: pylint ${{ matrix.module-name }}
+    name: Python ${{ matrix.module-name }}
     steps:
 
     - uses: actions/checkout@v2
@@ -48,4 +48,4 @@ jobs:
 
     - name: Run Unit Tests
       run: |
-        pylint ${{ matrix.path }}
+        pytest ${{ matrix.path }}
