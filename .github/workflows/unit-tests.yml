@@ -12,7 +12,7 @@ jobs:
       matrix:
         python-version: ['3.8']
         django-version: ["2.2"]
-        test_module: ["lms", "cms", "openedx", "common"]
+        test_module: [""]
 
 
     name: Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }} ${{ matrix.test_module }}
