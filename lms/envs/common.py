@@ -1595,6 +1595,8 @@ CODE_JAIL = {
 COURSES_WITH_UNSAFE_CODE = []
 
 # Cojail REST service
+ENABLE_CODEJAIL_REST_SERVICE = False
+CODE_JAIL_REST_SERVICE_REMOTE_EXEC = 'common.lib.capa.capa.remote_exec.send_safe_exec_request_v0'
 CODE_JAIL_REST_SERVICE_HOST = 'http://127.0.0.1:8550'
 CODE_JAIL_REST_SERVICE_CONNECT_TIMEOUT = 0.5  # time in seconds
 CODE_JAIL_REST_SERVICE_READ_TIMEOUT = 3.5  # time in seconds
