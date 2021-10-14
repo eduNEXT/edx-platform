@@ -550,7 +550,14 @@ class AccountSettingsOnCreationTest(CreateAccountMixin, TestCase):
             'language_proficiencies': [],
             'account_privacy': PRIVATE_VISIBILITY,
             'accomplishments_shared': False,
-            'extended_profile': [],
+            'extended_profile': [
+                {'field_value': None, 'field_name': 'month_of_birth'},
+                {'field_value': None, 'field_name': 'day_of_birth'},
+                {'field_value': '', 'field_name': 'dni'},
+                {'field_value': None, 'field_name': 'phone_number'},
+                {'field_value': '', 'field_name': 'institution'},
+                {'field_value': None, 'field_name': 'province'}
+            ],
             'secondary_email': None,
             'secondary_email_enabled': None,
             'time_zone': None,

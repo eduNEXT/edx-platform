@@ -37,6 +37,8 @@ from openedx.core.djangoapps.user_authn.views.registration_form import validate_
 from openedx.core.lib.api.view_utils import add_serializer_errors
 from openedx.features.enterprise_support.utils import get_enterprise_readonly_account_fields
 from .serializers import AccountLegacyProfileSerializer, AccountUserSerializer, UserReadOnlySerializer, _visible_fields
+from campusromero_openedx_extensions.custom_registration_form.context_extender import partial_update_account
+
 
 # Public access point for this function.
 visible_fields = _visible_fields
@@ -159,6 +161,8 @@ def update_account_settings(requesting_user, update, username=None):
         _store_old_name_if_needed(old_name, user_profile, requesting_user)
         _update_extended_profile_if_needed(update, user_profile)
         _update_state_if_needed(update, user_profile)
+
+        partial_update_account(update, user)
 
     except PreferenceValidationError as err:
         raise AccountValidationError(err.preference_errors)
