@@ -10017,11 +10017,11 @@ msgstr "Apreciado estudiante,"
 #, python-format
 msgid ""
 "\n"
-"                    Cancelamos tu inscripción en el curso %(course_name)s\n"
+"                    You have been unenrolled from %(course_name)s\n"
 "                "
 msgstr ""
 "\n"
-"                   Te han dado de baja de %(course_name)s\n"
+"                   Cancelamos tu inscripción en el curso %(course_name)s\n"
 "                "
 
 #: lms/templates/instructor/edx_ace/enrolledunenroll/email/body.html
@@ -18242,11 +18242,11 @@ msgstr "Activación de cuenta"
 #: lms/templates/emails/activation_email.txt
 msgid ""
 "You're almost there! Use the link below to activate your account to access "
-"engaging, high-quality {{ platform_name }} courses. Note that you will not be "
+"engaging, high-quality %(platform_name)s courses. Note that you will not be "
 "able to log back into your account until you have activated it."
 msgstr ""
 "¡Ya casi terminas! Usa el siguiente enlace para activar tu cuenta e "
-"ingresar a los atractivos cursos de alta calidad de {platform_name}. Ten en cuenta que "
+"ingresar a los atractivos cursos de alta calidad de %(platform_name)s. Ten en cuenta que "
 "no podrás volver a entrar a tu cuenta hasta que la hayas activado."
 
 #: common/templates/student/edx_ace/accountactivation/email/body.html
@@ -18254,8 +18254,8 @@ msgid "Activate Your Account"
 msgstr "Activa tu cuenta"
 
 #: lms/templates/emails/activation_email.txt
-msgid "Enjoy learning with {{ platform_name }}."
-msgstr "Disfruta aprendiendo con {{ platform_name }}."
+msgid "Enjoy learning with %(platform_name)s."
+msgstr "Disfruta aprendiendo con %(platform_name)s."
 
 #: lms/templates/emails/activation_email.txt
 msgid ""
