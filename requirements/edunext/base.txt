@@ -57,6 +57,7 @@ newrelic==6.2.0.156       # via -c requirements/edunext/../edx/base.txt, edx-dja
 oauthlib==3.0.1           # via -c requirements/edunext/../edx/base.txt, django-oauth-toolkit, requests-oauthlib, social-auth-core
 openedx-events==0.6.0     # via -r requirements/edunext/base.in, eox-hooks
 packaging==20.9           # via -c requirements/edunext/../edx/base.txt, drf-yasg
+git+https://github.com/eduNEXT/openedx-filters.git@MJG/class_filter_tooling#egg=openedx_filters==1__1  # via -r requirements/edunext/base.in
 pbr==5.5.1                # via -c requirements/edunext/../edx/base.txt, stevedore
 psutil==5.8.0             # via -c requirements/edunext/../edx/base.txt, edx-django-utils
 pyasn1==0.4.8             # via python-jose, rsa

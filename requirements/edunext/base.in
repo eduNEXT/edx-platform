@@ -42,6 +42,7 @@ openedx-events                      # Open edX Events from Hooks Extension Frame
 #   Libraries     #
 ###################
 openedx-events                      # Open edX Events from Hooks Extension Framework (OEP-50)
+git+https://github.com/eduNEXT/openedx-filters.git@MJG/class_filter_tooling#egg=openedx_filters==1__1  # Open edX Filters from Hooks Extension Framework (OEP-50)
 
 #####################
 # eduNEXT Xblocks #
