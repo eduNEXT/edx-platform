@@ -38,6 +38,11 @@ eox-theming                         # Edunext theming plugin. This plugin allows
 ###################
 openedx-events                      # Open edX Events from Hooks Extension Framework (OEP-50)
 
+###################
+#   Libraries     #
+###################
+openedx-events                      # Open edX Events from Hooks Extension Framework (OEP-50)
+
 #####################
 # eduNEXT Xblocks #
 #####################
@@ -45,5 +50,3 @@ openedx-events                      # Open edX Events from Hooks Extension Frame
 #####################
 # Community Xblocks #
 #####################
-
-openedx-events                      # Open edX Events from Hooks Extension Framework (OEP-50)
