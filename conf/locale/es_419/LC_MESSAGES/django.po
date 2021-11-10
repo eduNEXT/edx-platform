@@ -2629,6 +2629,7 @@ msgstr ""
 #: openedx/core/djangoapps/dark_lang/templates/dark_lang/preview-language-fragment.html
 #: openedx/core/djangoapps/theming/templates/theming/theming-admin-fragment.html
 #: themes/stanford-style/lms/templates/register-shib.html
+#: edx_sga/templates/staff_graded_assignment/show.html
 msgid "Submit"
 msgstr "Enviar"
 
@@ -27377,3 +27378,22 @@ msgid ""
 msgstr ""
 "Una nueva revisión ha sido creada: Fusión entre la revisión #%(r1)d y la "
 "revisión #%(r2)d"
+
+# SGA translations
+
+#: edx_sga/templates/staff_graded_assignment/show.html
+msgid "Upload your assignment"
+msgstr "Carga tu asignación"
+
+#: edx_sga/templates/staff_graded_assignment/show.html
+msgid "File uploaded"
+msgstr "Archivo cargado"
+
+#: edx_sga/templates/staff_graded_assignment/show.html
+msgid "Upload a different file"
+msgstr "Carga un archivo distinto"
+
+#: edx_sga/templates/staff_graded_assignment/show.html
+msgid "This assignment has not yet been graded."
+msgstr "Esta asignación aún no ha sido calificada."
+
