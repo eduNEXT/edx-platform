@@ -35,16 +35,6 @@ class TestEnrollmentPipelineStep(PipelineStep):
         }
 
 
-@override_settings(
-        OPEN_EDX_FILTERS_CONFIG={
-            "org.openedx.learning.course.enrollment.started.v1": {
-                "pipeline": [
-                    "common.djangoapps.student.tests.tests_filters.TestEnrollmentPipelineStep",
-                ],
-                "fail_silently": False,
-            },
-        },
-    )
 @skip_unless_lms
 class EnrollmentFiltersTest(ModuleStoreTestCase):
     """
@@ -64,6 +54,16 @@ class EnrollmentFiltersTest(ModuleStoreTestCase):
         )
         self.user_profile = UserProfileFactory.create(user=self.user, name="Test Example")
 
+    @override_settings(
+        OPEN_EDX_FILTERS_CONFIG={
+            "org.openedx.learning.course.enrollment.started.v1": {
+                "pipeline": [
+                    "common.djangoapps.student.tests.test_filters.TestEnrollmentPipelineStep",
+                ],
+                "fail_silently": False,
+            },
+        },
+    )
     def test_enrollment_filter_executed(self):
         """
         Test whether the student enrollment event is sent after the user's
@@ -74,10 +74,20 @@ class EnrollmentFiltersTest(ModuleStoreTestCase):
             - The arguments that the receiver gets are the arguments sent by the event
             except the metadata generated on the fly.
         """
-        enrollment = CourseEnrollment.enroll(self.user, self.course.id, 'audit')
+        enrollment = CourseEnrollment.enroll(self.user, self.course.id, mode='audit')
 
         self.assertEqual('honor', enrollment.mode)
 
+    @override_settings(
+        OPEN_EDX_FILTERS_CONFIG={
+            "org.openedx.learning.course.enrollment.started.v1": {
+                "pipeline": [
+                    "common.djangoapps.student.tests.test_filters.TestEnrollmentPipelineStep",
+                ],
+                "fail_silently": False,
+            },
+        },
+    )
     def test_enrollment_filter_prevent_enroll(self):
         """
         Test whether the student enrollment event is sent after the user's
@@ -89,4 +99,4 @@ class EnrollmentFiltersTest(ModuleStoreTestCase):
             except the metadata generated on the fly.
         """
         with self.assertRaises(PreEnrollmentFilter.PreventEnrollment):
-            CourseEnrollment.enroll(self.user, self.course.id, 'no-id-professional')
+            CourseEnrollment.enroll(self.user, self.course.id, mode='no-id-professional')
