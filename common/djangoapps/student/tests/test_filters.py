@@ -8,7 +8,7 @@ from django.db.utils import IntegrityError
 from django.test import TestCase
 from django_countries.fields import Country
 
-from common.djangoapps.student.models import CourseEnrollment
+from common.djangoapps.student.models import CourseEnrollment, EnrollmentNotAllowed
 from common.djangoapps.student.tests.factories import UserFactory, UserProfileFactory
 
 from openedx.core.djangolib.testing.utils import skip_unless_lms
@@ -96,5 +96,5 @@ class EnrollmentFiltersTest(ModuleStoreTestCase):
             - The arguments that the receiver gets are the arguments sent by the event
             except the metadata generated on the fly.
         """
-        with self.assertRaises(PreEnrollmentFilter.PreventEnrollment):
+        with self.assertRaises(EnrollmentNotAllowed):
             CourseEnrollment.enroll(self.user, self.course.id, mode='no-id-professional')
