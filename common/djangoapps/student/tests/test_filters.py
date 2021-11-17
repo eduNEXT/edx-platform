@@ -1,13 +1,6 @@
 """
 Test that various filters are fired for models in the student app.
 """
-from unittest import mock
-import pytest
-
-from django.db.utils import IntegrityError
-from django.test import TestCase
-from django_countries.fields import Country
-
 from common.djangoapps.student.models import CourseEnrollment, EnrollmentNotAllowed
 from common.djangoapps.student.tests.factories import UserFactory, UserProfileFactory
 
@@ -20,6 +13,7 @@ from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
 
 from openedx_filters import PipelineStep
+
 
 class TestEnrollmentPipelineStep(PipelineStep):
     """
@@ -36,10 +30,11 @@ class TestEnrollmentPipelineStep(PipelineStep):
 @skip_unless_lms
 class EnrollmentFiltersTest(ModuleStoreTestCase):
     """
-    Tests for the Open edX Events associated with the enrollment process through the enroll method.
+    Tests for the Open edX Filters associated with the enrollment process through the enroll method.
 
-    This class guarantees that the following events are sent during the user's enrollment, with
-    the exact Data Attributes as the event definition stated:
+    This class guarantees that the following filters are triggered during the user's enrollment:
+
+    - PreEnrollmentFilter
     """
 
     def setUp(self):  # pylint: disable=arguments-differ
@@ -64,13 +59,13 @@ class EnrollmentFiltersTest(ModuleStoreTestCase):
     )
     def test_enrollment_filter_executed(self):
         """
-        Test whether the student enrollment event is sent after the user's
+        Test whether the student enrollment filter is triggered before the user's
         enrollment process.
 
         Expected result:
-            - COURSE_ENROLLMENT_CREATED is sent and received by the mocked receiver.
-            - The arguments that the receiver gets are the arguments sent by the event
-            except the metadata generated on the fly.
+            - PreEnrollmentFilter is triggered and executes TestEnrollmentPipelineStep.
+            - The arguments that the receiver gets are the arguments used by the filter
+            with the enrollment mode changed.
         """
         enrollment = CourseEnrollment.enroll(self.user, self.course.id, mode='audit')
 
@@ -88,13 +83,11 @@ class EnrollmentFiltersTest(ModuleStoreTestCase):
     )
     def test_enrollment_filter_prevent_enroll(self):
         """
-        Test whether the student enrollment event is sent after the user's
-        enrollment process.
+        Test prevent the user's enrollment through a pipeline step.
 
         Expected result:
-            - COURSE_ENROLLMENT_CREATED is sent and received by the mocked receiver.
-            - The arguments that the receiver gets are the arguments sent by the event
-            except the metadata generated on the fly.
+            - PreEnrollmentFilter is triggered and executes TestEnrollmentPipelineStep.
+            - The user can't enroll.
         """
         with self.assertRaises(EnrollmentNotAllowed):
             CourseEnrollment.enroll(self.user, self.course.id, mode='no-id-professional')
