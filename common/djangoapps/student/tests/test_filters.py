@@ -30,9 +30,7 @@ class TestEnrollmentPipelineStep(PipelineStep):
         """Pipeline steps that changes mode to honor."""
         if mode == "no-id-professional":
             raise PreEnrollmentFilter.PreventEnrollment()
-        return {
-            "user": user, "course_key": course_key, "mode": "honor",
-        }
+        return {"mode": "honor"}
 
 
 @skip_unless_lms

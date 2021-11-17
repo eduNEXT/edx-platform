@@ -1114,6 +1114,10 @@ class AlreadyEnrolledError(CourseEnrollmentException):
     pass
 
 
+class EnrollmentNotAllowed(CourseEnrollmentException):
+    pass
+
+
 class CourseEnrollmentManager(models.Manager):
     """
     Custom manager for CourseEnrollment with Table-level filter methods.
@@ -1620,7 +1624,7 @@ class CourseEnrollment(models.Model):
                 user=user, course_key=course_key, mode=mode,
             )
         except PreEnrollmentFilter.PreventEnrollment as exc:
-            raise exc
+            raise EnrollmentNotAllowed(str(exc)) from exc
 
         if mode is None:
             mode = _default_course_mode(str(course_key))
