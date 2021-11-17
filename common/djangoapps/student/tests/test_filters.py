@@ -26,7 +26,7 @@ class TestEnrollmentPipelineStep(PipelineStep):
     Utility function used when getting steps for pipeline.
     """
 
-    def do_filter(self, user, course_key, mode):
+    def run(self, user, course_key, mode):
         """Pipeline steps that changes mode to honor."""
         if mode == "no-id-professional":
             raise PreEnrollmentFilter.PreventEnrollment()
