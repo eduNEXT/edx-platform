@@ -36,6 +36,7 @@ from openedx.core.djangoapps.xmodule_django.models import NoneToEmptyManager
 
 from openedx_events.learning.data import CourseData, UserData, UserPersonalData, CertificateData  # lint-amnesty, pylint: disable=wrong-import-order
 from openedx_events.learning.signals import CERTIFICATE_CHANGED, CERTIFICATE_CREATED, CERTIFICATE_REVOKED  # lint-amnesty, pylint: disable=wrong-import-order
+from openedx_filters.learning.filters import PreCertificateCreationFilter
 
 log = logging.getLogger(__name__)
 User = get_user_model()
@@ -463,6 +464,13 @@ class GeneratedCertificate(models.Model):
         The COURSE_CERT_AWARDED signal helps determine if a Program Certificate can be awarded to a learner in the
         Credentials IDA.
         """
+        try:
+            self.user, self.course_id, self.mode, self.status = PreCertificateCreationFilter.run(
+                user=self.user, course_id=self.course_id, mode=self.mode, status=self.status,
+            )
+        except PreCertificateCreationFilter.PreventCertificateCreation as exc:
+            raise exc
+
         super().save(*args, **kwargs)
         COURSE_CERT_CHANGED.send_robust(
             sender=self.__class__,
