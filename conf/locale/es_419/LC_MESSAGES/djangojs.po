@@ -12899,3 +12899,11 @@ msgstr[1] ""
 #: public/js/instructor_tool.js
 msgid "The report is currently being generated…"
 msgstr "El informe se está generando..."
+
+#: lms/static/js/student_account/views/account_settings_views.js
+msgid "Account Information"
+msgstr "Información de la cuenta"
+
+#: lms/static/js/student_account/views/account_settings_views.js
+msgid "Order History"
+msgstr "Historial de ordenes"
