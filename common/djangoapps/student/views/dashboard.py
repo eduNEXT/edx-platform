@@ -60,11 +60,24 @@ from common.djangoapps.student.models import (
 from common.djangoapps.util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore  # lint-amnesty, pylint: disable=wrong-import-order
 
-from openedx_filters.learning.dashboard import PreDashboardRenderFilter
+from openedx_filters.learning.filters import DashboardRenderStarted
 
 log = logging.getLogger("edx.student")
 
 experiments_namespace = LegacyWaffleFlagNamespace(name='student.experiments')
+
+class DashboardException(Exception):
+    """
+    Exception class that requires redirecting to a URL.
+    """
+    def __init__(self, url):
+        super().__init__()
+        self.url = url
+
+
+class DashboardRenderNotAllowed(DashboardException):
+    def __init__(self, url):
+        super().__init__(url)
 
 
 def get_org_black_and_whitelist_for_site():
@@ -866,9 +879,9 @@ def student_dashboard(request):  # lint-amnesty, pylint: disable=too-many-statem
     })
 
     try:
-        context = PreDashboardRenderFilter.run(context=context)
-    except PreDashboardRenderFilter.PreventDashboardRender as exc:
-        raise exc
+        context = DashboardRenderStarted.run_filter(context=context)
+    except DashboardRenderStarted.PreventDashboardRender as exc:
+        raise DashboardRenderNotAllowed(reverse(exc.redirect_to or 'account_settings')) from exc
 
     response = render_to_response('dashboard.html', context)
     if show_account_activation_popup:

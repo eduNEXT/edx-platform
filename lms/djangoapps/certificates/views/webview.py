@@ -58,7 +58,7 @@ from openedx.core.lib.courses import course_image_url
 from openedx.core.lib.courses import get_course_by_id
 from xmodule.data import CertificatesDisplayBehaviors  # lint-amnesty, pylint: disable=wrong-import-order
 
-from openedx_filters.learning.certificates import PreCertificateRenderFilter
+from openedx_filters.learning.filters import CertificateRenderStarted
 
 log = logging.getLogger(__name__)
 _ = translation.gettext
@@ -646,8 +646,8 @@ def render_html_view(request, course_id, certificate=None):
         _track_certificate_events(request, course, user, user_certificate)
 
         try:
-            context = PreCertificateRenderFilter.run(context=context)
-        except PreCertificateRenderFilter.PreventCertificateRender:
+            context = CertificateRenderStarted.run_filter(context=context)
+        except CertificateRenderStarted.PreventCertificateRender:
             return _render_invalid_certificate(request, course_id, platform_name, configuration)
 
         # Render the certificate

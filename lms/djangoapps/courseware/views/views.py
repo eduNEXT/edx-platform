@@ -141,7 +141,7 @@ from openedx.features.course_experience.waffle import ENABLE_COURSE_ABOUT_SIDEBA
 from openedx.features.course_experience.waffle import waffle as course_experience_waffle
 from openedx.features.enterprise_support.api import data_sharing_consent_required
 
-from openedx_filters.learning.courses import PreCourseAboutRenderFilter
+from openedx_filters.learning.filters import CourseAboutRenderStarted
 
 from ..context_processor import user_timezone_locale_prefs
 from ..entrance_exams import user_can_skip_entrance_exam
@@ -1028,9 +1028,9 @@ def course_about(request, course_id):
         }
 
         try:
-            context = PreCourseAboutRenderFilter.run(context=context)
-        except PreCourseAboutRenderFilter.PreventCourseAboutRender as exc:
-            raise exc
+            context = CourseAboutRenderStarted.run_filter(context=context)
+        except CourseAboutRenderStarted.PreventCourseAboutRender as exc:
+            raise CourseAccessRedirect(reverse(exc.redirect_to or 'dashboard')) from exc
 
         return render_to_response('courseware/course_about.html', context)
 
