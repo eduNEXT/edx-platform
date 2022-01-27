@@ -36,7 +36,7 @@ from openedx.core.djangoapps.xmodule_django.models import NoneToEmptyManager
 
 from openedx_events.learning.data import CourseData, UserData, UserPersonalData, CertificateData  # lint-amnesty, pylint: disable=wrong-import-order
 from openedx_events.learning.signals import CERTIFICATE_CHANGED, CERTIFICATE_CREATED, CERTIFICATE_REVOKED  # lint-amnesty, pylint: disable=wrong-import-order
-from openedx_filters.learning.filters import PreCertificateCreationFilter
+from openedx_filters.learning.filters import CertificateCreationRequested
 
 log = logging.getLogger(__name__)
 User = get_user_model()
@@ -49,6 +49,14 @@ class CertificateSocialNetworks:
     linkedin = 'LinkedIn'
     facebook = 'Facebook'
     twitter = 'Twitter'
+
+
+class GeneratedCertificateException(Exception):
+    pass
+
+
+class CertificateGenerationNotAllowed(GeneratedCertificateException):
+    pass
 
 
 class CertificateAllowlist(TimeStampedModel):
@@ -465,11 +473,11 @@ class GeneratedCertificate(models.Model):
         Credentials IDA.
         """
         try:
-            self.user, self.course_id, self.mode, self.status = PreCertificateCreationFilter.run(
+            self.user, self.course_id, self.mode, self.status = CertificateCreationRequested.run_filter(
                 user=self.user, course_id=self.course_id, mode=self.mode, status=self.status,
             )
-        except PreCertificateCreationFilter.PreventCertificateCreation as exc:
-            raise exc
+        except CertificateCreationRequested.PreventCertificateCreation as exc:
+            raise CertificateGenerationNotAllowed(str(exc)) from exc
 
         super().save(*args, **kwargs)
         COURSE_CERT_CHANGED.send_robust(
