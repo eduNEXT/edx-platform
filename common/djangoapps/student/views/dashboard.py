@@ -76,8 +76,7 @@ class DashboardException(Exception):
 
 
 class DashboardRenderNotAllowed(DashboardException):
-    def __init__(self, url):
-        super().__init__(url)
+    pass
 
 
 def get_org_black_and_whitelist_for_site():
