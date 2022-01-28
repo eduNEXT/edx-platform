@@ -16,12 +16,12 @@ from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import Count
 from django.dispatch import receiver
-
 from django.utils.translation import gettext_lazy as _
 from edx_name_affirmation.api import get_verified_name, should_use_verified_name_for_certs
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
 from opaque_keys.edx.django.models import CourseKeyField
+from openedx_filters.learning.filters import CertificateCreationRequested
 from simple_history.models import HistoricalRecords
 
 from common.djangoapps.student import models_api as student_api
@@ -36,7 +36,6 @@ from openedx.core.djangoapps.xmodule_django.models import NoneToEmptyManager
 
 from openedx_events.learning.data import CourseData, UserData, UserPersonalData, CertificateData  # lint-amnesty, pylint: disable=wrong-import-order
 from openedx_events.learning.signals import CERTIFICATE_CHANGED, CERTIFICATE_CREATED, CERTIFICATE_REVOKED  # lint-amnesty, pylint: disable=wrong-import-order
-from openedx_filters.learning.filters import CertificateCreationRequested
 
 log = logging.getLogger(__name__)
 User = get_user_model()

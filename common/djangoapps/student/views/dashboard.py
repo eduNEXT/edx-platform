@@ -18,6 +18,7 @@ from edx_django_utils import monitoring as monitoring_utils
 from edx_django_utils.plugins import get_plugins_view_context
 from edx_toggles.toggles import LegacyWaffleFlag, LegacyWaffleFlagNamespace
 from opaque_keys.edx.keys import CourseKey
+from openedx_filters.learning.filters import DashboardRenderStarted
 from pytz import UTC
 
 from lms.djangoapps.bulk_email.api import is_bulk_email_feature_enabled
@@ -60,11 +61,10 @@ from common.djangoapps.student.models import (
 from common.djangoapps.util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore  # lint-amnesty, pylint: disable=wrong-import-order
 
-from openedx_filters.learning.filters import DashboardRenderStarted
-
 log = logging.getLogger("edx.student")
 
 experiments_namespace = LegacyWaffleFlagNamespace(name='student.experiments')
+
 
 class DashboardException(Exception):
     """

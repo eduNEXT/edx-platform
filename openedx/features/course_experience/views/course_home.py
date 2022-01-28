@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_control
 from django.views.decorators.csrf import ensure_csrf_cookie
 from opaque_keys.edx.keys import CourseKey
+from openedx_filters.learning.filters import CourseHomeRenderStarted
 from web_fragments.fragment import Fragment
 
 from lms.djangoapps.course_home_api.toggles import course_home_legacy_is_active
@@ -47,8 +48,6 @@ from openedx.features.discounts.utils import format_strikeout_price
 from common.djangoapps.student.models import CourseEnrollment
 from common.djangoapps.util.views import ensure_valid_course_key
 from xmodule.course_module import COURSE_VISIBILITY_PUBLIC, COURSE_VISIBILITY_PUBLIC_OUTLINE  # lint-amnesty, pylint: disable=wrong-import-order
-
-from openedx_filters.learning.filters import CourseHomeRenderStarted
 
 EMPTY_HANDOUTS_HTML = '<ol></ol>'
 

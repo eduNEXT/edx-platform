@@ -18,6 +18,7 @@ from django.utils.encoding import smart_str
 from eventtracking import tracker
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
+from openedx_filters.learning.filters import CertificateRenderStarted
 from organizations import api as organizations_api
 from edx_django_utils.plugins import pluggable_override
 
@@ -57,8 +58,6 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 from openedx.core.lib.courses import course_image_url
 from openedx.core.lib.courses import get_course_by_id
 from xmodule.data import CertificatesDisplayBehaviors  # lint-amnesty, pylint: disable=wrong-import-order
-
-from openedx_filters.learning.filters import CertificateRenderStarted
 
 log = logging.getLogger(__name__)
 _ = translation.gettext
