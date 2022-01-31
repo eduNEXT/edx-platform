@@ -4,12 +4,12 @@ Open edX Filters
 How to use
 ----------
 
-Using openedx-events in your code is very straight forward. We can consider the
-two possible cases, sending or receiving an event.
+Using openedx-filters in your code is very straight forward. We can consider the
+two possible cases, running a filter or configuring it.
 
 
-Configuring and using filters
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Configuring an existing filter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is one of the most common use cases for plugins. The edx-platform will send
 and event and you want to react to it in your plugin.
@@ -50,8 +50,8 @@ use the django syntax since the apps.py method will not be available without the
 plugin.
 
 
-Executing filters
-^^^^^^^^^^^^^^^^^
+Running filters
+^^^^^^^^^^^^^^^^
 
 Sending events requires you to import both the event definition as well as the
 attr data classes that encapsulate the event data.
