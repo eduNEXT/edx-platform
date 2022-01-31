@@ -44,3 +44,9 @@ them run in the same python process as the lms or cms. Furthermore, events block
 the running process. Listeners of an event are encouraged to monitor the
 performance or use alternative arch patterns such as receiving the event and
 defer to launching async tasks than do the slow processing.
+
+On the other hand, filters are implemented using a pipeline mechanism, that executes
+a list of functions called ``steps``, that are configured through Django settings. Each
+pipeline step receives an argument, process the data and returns an output. During
+this process, they can alter the application execution flow, halting the process
+or modifying their input arguments.
