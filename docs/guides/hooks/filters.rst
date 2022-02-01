@@ -7,71 +7,55 @@ How to use
 Using openedx-filters in your code is very straight forward. We can consider the
 two possible cases, running a filter or configuring it.
 
-
 Configuring an existing filter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Running filters
+^^^^^^^^^^^^^^^
+
+Let's say you have your own custom API for enrollments implemented in a plugin, and you 
+want that the enrollment behaves the same as in edx-platform. Then, you could include
+the filter in your plugin and run it when needed:
 
 This is one of the most common use cases for plugins. The edx-platform will send
 and event and you want to react to it in your plugin.
 
 For this you need to:
 
-1. Include openedx-events in your dependencies.
+1. Include openedx-filters in your dependencies.
 2. Connect your receiver functions to the signals being sent.
 
 Connecting signals can be done using regular django syntax:
 
 .. code-block:: python
-
-    from openedx_events.learning.signals import SESSION_LOGIN_COMPLETED
-
-    @receiver(SESSION_LOGIN_COMPLETED)
-    # your receiver function here
-
-
-Or at the apps.py
-
-.. code-block:: python
-
-    "signals_config": {
-        "lms.djangoapp": {
-            "relative_path": "your_module_name",
-            "receivers": [
-                {
-                    "receiver_func_name": "your_receiver_function",
-                    "signal_path": "openedx_events.learning.signals.SESSION_LOGIN_COMPLETED",
-                },
-            ],
-        }
-    },
+    
+    try:
+        record = CourseUnenrollmentStarted.run_filter(enrollment=record)
+    except CourseUnenrollmentStarted.PreventUnenrollment as exc:
+        raise UnenrollmentNotAllowed(str(exc)) from exc
 
 In case you are listening to an event in the edx-platform repo, you can directly
 use the django syntax since the apps.py method will not be available without the
 plugin.
 
 
-Running filters
-^^^^^^^^^^^^^^^^
+Configuring an existing filter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sending events requires you to import both the event definition as well as the
 attr data classes that encapsulate the event data.
 
 .. code-block:: python
 
-    from openedx_events.learning.data import UserData, UserPersonalData
-    from openedx_events.learning.signals import STUDENT_REGISTRATION_COMPLETED
-
-    STUDENT_REGISTRATION_COMPLETED.send_event(
-        user=UserData(
-            pii=UserPersonalData(
-                username=user.username,
-                email=user.email,
-                name=user.profile.name,
-            ),
-            id=user.id,
-            is_active=user.is_active,
-        ),
-    )
+    OPEN_EDX_FILTERS_CONFIG = {
+        "org.openedx.learning.certificate.creation.requested.v1": {
+            "fail_silently": False,
+            "pipeline": [
+            "openedx_filters_samples.samples.pipeline.ModifyCertificateModeBeforeCreation",
+                "openedx_filters_samples.samples.pipeline.StopCertificateCreation"
+            ]
+        },
+    }
 
 You can do this both from the edx-platform code as well as from an openedx
 plugin.
