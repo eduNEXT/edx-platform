@@ -5,45 +5,46 @@ How to use
 ----------
 
 Using openedx-filters in your code is very straight forward. We can consider the
-two possible cases, running a filter or configuring it.
+two possible cases:
 
-Configuring an existing filter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Configuring a filter
+^^^^^^^^^^^^^^^^^^^^
 
-Running filters
-^^^^^^^^^^^^^^^
+Implement pipeline steps
+************************
 
-Let's say you have your own custom API for enrollments implemented in a plugin, and you 
-want that the enrollment behaves the same as in edx-platform. Then, you could include
-the filter in your plugin and run it when needed:
-
-This is one of the most common use cases for plugins. The edx-platform will send
-and event and you want to react to it in your plugin.
-
-For this you need to:
-
-1. Include openedx-filters in your dependencies.
-2. Connect your receiver functions to the signals being sent.
-
-Connecting signals can be done using regular django syntax:
+Let's say you want to consult student's information with a third party service
+before generating the students certificate. This is a common use case for filters,
+where the functions part of the filter's pipeline will perform the consulting tasks and
+decide the execution flow for the application. These functions are the pipeline steps,
+and can be implemented in an installable Python library:
 
 .. code-block:: python
     
-    try:
-        record = CourseUnenrollmentStarted.run_filter(enrollment=record)
-    except CourseUnenrollmentStarted.PreventUnenrollment as exc:
-        raise UnenrollmentNotAllowed(str(exc)) from exc
+    # Step implementation taken from openedx-filters-samples plugin
+    from openedx_filters import PipelineStep
+    from openedx_filters.learning.filters import CertificateCreationRequested
+    
+    class StopCertificateCreation(PipelineStep):
 
-In case you are listening to an event in the edx-platform repo, you can directly
-use the django syntax since the apps.py method will not be available without the
-plugin.
+        def run_filter(self, user, course_id, mode, status):
+            # Consult third party service and check if continue
+            raise CertificateCreationRequested.PreventCertificateCreation(
+                "You can't generate a certificate from this site."
+            )
+        
+There's two key components to the implementation:
 
+1. The filter step must be a subclass of ``PipelineStep``.
 
-Configuring an existing filter
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2. The ``run_filter`` signature must match the filters execution, eg.,
+the previous step matches the definition in CertificateCreationRequested.
 
-Sending events requires you to import both the event definition as well as the
-attr data classes that encapsulate the event data.
+Attach/hook pipeline to filter
+******************************
+
+After implementing the pipeline steps, we have to tell the certificate creation
+filter to execute our pipeline. 
 
 .. code-block:: python
 
@@ -51,55 +52,69 @@ attr data classes that encapsulate the event data.
         "org.openedx.learning.certificate.creation.requested.v1": {
             "fail_silently": False,
             "pipeline": [
-            "openedx_filters_samples.samples.pipeline.ModifyCertificateModeBeforeCreation",
                 "openedx_filters_samples.samples.pipeline.StopCertificateCreation"
             ]
         },
     }
 
-You can do this both from the edx-platform code as well as from an openedx
-plugin.
+Triggering a filter
+^^^^^^^^^^^^^^^^^^^
 
+In order to execute a filter in your own plugin/library, you must install the
+library where the steps are implemented and also, ``openedx-filters``.
+
+.. code-block:: python
+
+    from openedx_filters.learning.filters import CertificateCreationRequested
+    
+    try:
+        self.user, self.course_id, self.mode, self.status = CertificateCreationRequested.run_filter(
+            user=self.user, course_id=self.course_id, mode=self.mode, status=self.status,
+        )
+    except CertificateCreationRequested.PreventCertificateCreation as exc:
+        raise CertificateGenerationNotAllowed(str(exc)) from exc
 
 Testing filters
 ^^^^^^^^^^^^^^^
 
-Testing your code in CI, specially for plugins is now possible without having to
-import the complete edx-platform as a dependency.
-
-To test your functions you need to include the openedx-events library in your
-testing dependencies and make the signal connection in your test case.
+The main limitation while testing filters it's their arguments, as they are edxapp memory
+objects, but that can be solved in CI using mocks. To test your pipeline steps you need
+to include the openedx-filters library in your testing dependencies and configure them
+in your test case.
 
 .. code-block:: python
 
-    from openedx_events.learning.signals import STUDENT_REGISTRATION_COMPLETED
+   from openedx_filters.learning.filters import CertificateCreationRequested
 
-    def test_your_receiver(self):
-        STUDENT_REGISTRATION_COMPLETED.connect(your_function)
-        STUDENT_REGISTRATION_COMPLETED.send_event(
-            user=UserData(
-                pii=UserPersonalData(
-                    username='test_username',
-                    email='test_email@example.com',
-                    name='test_name',
-                ),
-                id=1,
-                is_active=True,
-            ),
-        )
+    @override_settings(
+        OPEN_EDX_FILTERS_CONFIG={
+            "org.openedx.learning.certificate.creation.requested.v1": {
+                "fail_silently": False,
+                "pipeline": [
+                    "openedx_filters_samples.samples.pipeline.StopCertificateCreation"
+                ]
+            }
+        }
+    )
+    def test_stop_certificate_creation(self):
+        """
+        Test that the certificate creation request stops.
+        """
+        with self.assertRaises(CertificateCreationRequested.PreventCertificateCreation):
+            CertificateCreationRequested.run_filter(
+                user=self.user, course_key=self.course_key, mode="audit",
+            )
 
         # run your assertions
 
-
-Changes in the openedx-events library that are not compatible with your code
+Changes in the openedx-filters library that are not compatible with your code
 should break this kind of test in CI and let you know you need to upgrade your
-code.
-
+code. 
 
 Live example
 ^^^^^^^^^^^^
 
-For a complete and detailed example you can see the `openedx-events-2-zapier`_
+For a complete and detailed example you can see the `openedx-filters-samples`_
 plugin. This is a fully functional plugin that connects to
 ``STUDENT_REGISTRATION_COMPLETED`` and ``COURSE_ENROLLMENT_CREATED`` and sends
 the relevant information to zapier.com using a webhook.
