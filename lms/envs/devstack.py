@@ -350,7 +350,7 @@ FEATURES.update({
     'ENABLE_ENTERPRISE_INTEGRATION': True,
 })
 
-ENABLE_MKTG_SITE = os.environ.get('ENABLE_MARKETING_SITE', False)
+ENABLE_MKTG_SITE = False
 MARKETING_SITE_ROOT = os.environ.get('MARKETING_SITE_ROOT', 'http://localhost:8080')
 
 MKTG_URLS = {
@@ -428,4 +428,30 @@ if os.path.isfile(join(dirname(abspath(__file__)), 'private.py')):
 
 # Uncomment the lines below if you'd like to see SQL statements in your devstack LMS log.
 # LOGGING['handlers']['console']['level'] = 'DEBUG'
+
 # LOGGING['loggers']['django.db.backends'] = {'handlers': ['console'], 'level': 'DEBUG', 'propagate': False}
+
+
+
+
+from .common import _make_mako_template_dirs
+ENABLE_COMPREHENSIVE_THEMING = True
+COMPREHENSIVE_THEME_DIRS = [
+    "/edx/app/edx-themes/"
+]
+LOCALE_PATHS = [
+    "/edx/app/edx-themes/nelp-edx-theme/conf/locale",
+    "/edx/app/edxapp/edx-platform/conf/locale",
+]
+TEMPLATES[1]["DIRS"] = _make_mako_template_dirs
+derive_settings(__name__)
+DEFAULT_SITE_THEME = 'nelp-edx-theme'
+
+USE_EOX_TENANT = True
+EOX_MAX_CONFIG_OVERRIDE_SECONDS = 0
+REDIRECT_UNAUTHENTICATED_USER_TO_LOGIN_ON_ENROLL = True
+LANGUAGE_CODE = 'ar'
+
+
+
+ALLOWED_AUTH_APPLICATIONS = ['discovery-sso', 'oauth_client', 'ecommerce-backend-service', 'ecommerce-backend-service', 'credentials-backend-service', 'credentials-sso' ]

@@ -1798,7 +1798,7 @@ MIDDLEWARE = [
 
     # Handles automatically storing user ids in django-simple-history tables when possible.
     'simple_history.middleware.HistoryRequestMiddleware',
-
+    'eox_tenant.middleware.CurrentSiteMiddleware',
     # This must be last
     'openedx.core.djangoapps.site_configuration.middleware.SessionCookieDomainOverrideMiddleware',
 ]

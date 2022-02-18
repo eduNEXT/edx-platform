@@ -7,7 +7,7 @@ from django.conf import settings
 from openedx.core.lib.cache_utils import request_cached
 
 
-@request_cached("site_config")
+#@request_cached("site_config")
 def get_current_site_configuration():
     """
     Return configuration for the current site.
