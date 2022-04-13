@@ -236,3 +236,16 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = corsheaders_default_headers + (
     'use-jwt-cookie',
 )
+
+from .common import _make_mako_template_dirs
+ENABLE_COMPREHENSIVE_THEMING = True
+COMPREHENSIVE_THEME_DIRS = [
+    "/edx/app/edx-themes/"
+]
+LOCALE_PATHS = [
+    "/edx/app/edx-themes/nelp-edx-theme/conf/locale",
+    "/edx/app/edxapp/edx-platform/conf/locale",
+]
+TEMPLATES[1]["DIRS"] = _make_mako_template_dirs
+derive_settings(__name__)
+DEFAULT_SITE_THEME = 'nelp-edx-theme'
