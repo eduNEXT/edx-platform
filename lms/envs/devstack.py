@@ -168,7 +168,7 @@ SEARCH_ENGINE = 'search.elastic.ElasticSearchEngine'
 
 
 ########################## Dashboard Search #######################
-FEATURES['ENABLE_DASHBOARD_SEARCH'] = False
+FEATURES['ENABLE_DASHBOARD_SEARCH'] = True
 
 
 ########################## Certificates Web/HTML View #######################
