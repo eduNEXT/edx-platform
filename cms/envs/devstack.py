@@ -249,3 +249,5 @@ LOCALE_PATHS = [
 TEMPLATES[1]["DIRS"] = _make_mako_template_dirs
 derive_settings(__name__)
 DEFAULT_SITE_THEME = 'nelp-edx-theme'
+
+ALLOWED_AUTH_APPLICATIONS = ['discovery-sso', 'discovery-backend-service, ''oauth_client', 'ecommerce-backend-service', 'ecommerce-backend-service', 'credentials-backend-service', 'credentials-sso' ]

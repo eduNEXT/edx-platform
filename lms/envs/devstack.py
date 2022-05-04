@@ -454,4 +454,4 @@ LANGUAGE_CODE = 'ar'
 
 
 
-ALLOWED_AUTH_APPLICATIONS = ['discovery-sso', 'oauth_client', 'ecommerce-backend-service', 'ecommerce-backend-service', 'credentials-backend-service', 'credentials-sso' ]
+ALLOWED_AUTH_APPLICATIONS = ['discovery-sso', 'discovery-backend-service, ''oauth_client', 'ecommerce-backend-service', 'ecommerce-backend-service', 'credentials-backend-service', 'credentials-sso' ]
