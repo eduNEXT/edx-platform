@@ -11580,7 +11580,7 @@ msgstr "سيتم استخدام هذا الاسم في أي شهادات تكت�
 #: themes/stanford-style/lms/templates/register-form.html
 #: themes/stanford-style/lms/templates/register-shib.html
 msgid "Public Username"
-msgstr "اسم المستخدم"
+msgstr "رقم الهوية"
 
 #. Translators: These instructions appear on the registration form,
 #. immediately
