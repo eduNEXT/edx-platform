@@ -213,7 +213,7 @@ class EligibleCertificateManager(models.Manager):
         Return a queryset for `GeneratedCertificate` models, filtering out
         ineligible certificates.
         """
-        return super(EligibleCertificateManager, self).get_queryset().exclude(
+        return super().get_queryset().exclude(
             status__in=(CertificateStatuses.audit_passing, CertificateStatuses.audit_notpassing)
         )
 
@@ -232,7 +232,7 @@ class EligibleAvailableCertificateManager(EligibleCertificateManager):
         Return a queryset for `GeneratedCertificate` models, filtering out
         ineligible certificates and any linked to nonexistent courses.
         """
-        return super(EligibleAvailableCertificateManager, self).get_queryset().extra(
+        return super().get_queryset().extra(
             tables=['course_overviews_courseoverview'],
             where=['course_id = course_overviews_courseoverview.id']
         )
@@ -409,7 +409,7 @@ class GeneratedCertificate(models.Model):
         signal iff we are saving a record of a learner passing the course.
         As well as the COURSE_CERT_CHANGED for any save event.
         """
-        super(GeneratedCertificate, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         COURSE_CERT_CHANGED.send_robust(
             sender=self.__class__,
             user=self.user,
@@ -1205,10 +1205,10 @@ class CertificateTemplateAsset(TimeStampedModel):
         if self.pk is None:
             asset_image = self.asset
             self.asset = None
-            super(CertificateTemplateAsset, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             self.asset = asset_image
 
-        super(CertificateTemplateAsset, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return u'%s' % (self.asset.url, )

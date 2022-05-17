@@ -39,7 +39,7 @@ class XQueueAddToQueueError(Exception):
     def __init__(self, error_code, error_msg):
         self.error_code = error_code
         self.error_msg = error_msg
-        super(XQueueAddToQueueError, self).__init__(six.text_type(self))
+        super().__init__(six.text_type(self))
 
     def __str__(self):
         return (
