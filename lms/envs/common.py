@@ -996,7 +996,7 @@ FEATURES = {
     # .. toggle_target_removal_date: None
     # .. toggle_warnings: None
     # .. toggle_tickets: None
-    'ENABLE_MFE_CONFIG_API' : os.environ.get("EDXAPP_ENABLE_MFE_CONFIG_API", False),
+    'ENABLE_MFE_CONFIG_API' : False,
 }
 
 # Specifies extra XBlock fields that should available when requested via the Course Blocks API
