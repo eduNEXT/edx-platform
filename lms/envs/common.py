@@ -4872,6 +4872,12 @@ HIBP_LOGIN_NUDGE_PASSWORD_FREQUENCY_THRESHOLD = 3
 ENABLE_AUTHN_LOGIN_BLOCK_HIBP_POLICY = False
 HIBP_LOGIN_BLOCK_PASSWORD_FREQUENCY_THRESHOLD = 5
 
+# .. setting_name: MFE_CONFIG_API_CACHE_TIMEOUT
+# .. setting_default: 60*5
+# .. setting_description: The MFE_CONFIG site configuration will be cached during the
+#   specified time
+MFE_CONFIG_API_CACHE_TIMEOUT = 60*5
+
 ############### Settings for the ace_common plugin #################
 ACE_ENABLED_CHANNELS = ['django_email']
 ACE_ENABLED_POLICIES = ['bulk_email_optout']
