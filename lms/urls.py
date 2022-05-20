@@ -1040,3 +1040,7 @@ if settings.ENABLE_SAVE_FOR_LATER:
 urlpatterns += [
     path('api/ora_staff_grader/', include('lms.djangoapps.ora_staff_grader.urls', 'ora-staff-grader')),
 ]
+
+urlpatterns +=[
+    path('api/mfe/', include('openedx.core.djangoapps.mfe_api.urls'))
+]

@@ -3228,6 +3228,9 @@ INSTALLED_APPS = [
 
     # Blockstore
     'blockstore.apps.bundles',
+
+    # MFE API
+    'openedx.core.djangoapps.mfe_api',
 ]
 
 ######################### CSRF #########################################
