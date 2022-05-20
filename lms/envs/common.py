@@ -985,6 +985,18 @@ FEATURES = {
     # .. toggle_warnings: For consistency in user-experience, keep the value in sync with the setting of the same name
     #   in the LMS and CMS.
     'MARK_LIBRARY_CONTENT_BLOCK_COMPLETE_ON_VIEW': False,
+
+    # .. toggle_name: FEATURES['ENABLE_MFE_CONFIG_API']
+    # .. toggle_implementation: DjangoSetting
+    # .. toggle_default: False
+    # .. toggle_description: Set to True to enable MFE Config REST API. This is disabled by
+    #   default.
+    # .. toggle_use_cases: open_edx
+    # .. toggle_creation_date: 2022-05-20
+    # .. toggle_target_removal_date: None
+    # .. toggle_warnings: None
+    # .. toggle_tickets: None
+    'ENABLE_MFE_CONFIG_API' : False,
 }
 
 # Specifies extra XBlock fields that should available when requested via the Course Blocks API

@@ -1041,6 +1041,7 @@ urlpatterns += [
     path('api/ora_staff_grader/', include('lms.djangoapps.ora_staff_grader.urls', 'ora-staff-grader')),
 ]
 
-urlpatterns +=[
-    path('api/mfe/', include('openedx.core.djangoapps.mfe_api.urls'))
-]
+if settings.FEATURES.get('ENABLE_MFE_CONFIG_API'):
+    urlpatterns +=[
+        path('api/mfe/', include('openedx.core.djangoapps.mfe_api.urls'))
+    ]
