@@ -6,7 +6,6 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.urls import reverse
-from rest_framework import status
 
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.lib.api.test_utils import ApiTestCase
