@@ -592,3 +592,19 @@ EXPLICIT_QUEUES = {
     'cms.djangoapps.contentstore.tasks.update_search_index': {
         'queue': UPDATE_SEARCH_INDEX_JOB_QUEUE},
 }
+
+from storages.backends.s3boto import S3BotoStorage
+def scorm_xblock_storage(xblock):
+    from django.conf import settings
+    return S3BotoStorage(
+        bucket=settings.AWS_STORAGE_BUCKET_NAME,
+        access_key=settings.AWS_ACCESS_KEY_ID,
+        secret_key=settings.AWS_SECRET_ACCESS_KEY,
+        host="s3.eu-west-1.amazonaws.com",
+        querystring_expire=86400,
+        custom_domain= settings.CMS_BASE + '/scorm-xblock'
+    )
+
+XBLOCK_SETTINGS["ScormXBlock"] = {
+    "STORAGE_FUNC": scorm_xblock_storage,
+}
