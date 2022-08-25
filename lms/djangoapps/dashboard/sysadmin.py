@@ -29,16 +29,35 @@ from six import StringIO, text_type
 
 import lms.djangoapps.dashboard.git_import as git_import
 from common.djangoapps.track import views as track_views
+from lms.djangoapps.branding import get_visible_courses
 from lms.djangoapps.dashboard.git_import import GitImportError
 from lms.djangoapps.dashboard.models import CourseImportLog
 from common.djangoapps.edxmako.shortcuts import render_to_response
 from lms.djangoapps.courseware.courses import get_course_by_id
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.djangolib.markup import HTML
 from common.djangoapps.student.models import CourseEnrollment, Registration, UserProfile
-from common.djangoapps.student.roles import CourseInstructorRole, CourseStaffRole
+from common.djangoapps.student.roles import CourseInstructorRole, CourseStaffRole, OrgStaffRole
 from xmodule.modulestore.django import modulestore
 
+
 log = logging.getLogger(__name__)
+
+
+def is_valid_user(user):
+    """This method will validate if the user can perform any action over the sysadmin panel.
+    In order to perform those actions the user must be a django staff or has the org staff role.
+
+    Returns:
+        boolean: True if the user has access otherwise False
+    """
+    orgs = configuration_helpers.get_current_site_orgs()
+
+    for org in orgs:
+        if OrgStaffRole(org=org).has_user(user):
+            return True
+
+    return user.is_staff
 
 
 class SysadminDashboardView(TemplateView):
@@ -63,12 +82,17 @@ class SysadminDashboardView(TemplateView):
                                     must_revalidate=True))
     @method_decorator(condition(etag_func=None))
     def dispatch(self, *args, **kwargs):
+
+        request = args[0]
+
+        if not is_valid_user(request.user):
+            raise Http404
+
         return super(SysadminDashboardView, self).dispatch(*args, **kwargs)
 
     def get_courses(self):
         """ Get an iterable list of courses."""
-
-        return self.def_ms.get_courses()
+        return get_visible_courses()
 
 
 class Users(SysadminDashboardView):
@@ -160,8 +184,6 @@ class Users(SysadminDashboardView):
         return datatable
 
     def get(self, request):
-        if not request.user.is_staff:
-            raise Http404
         context = {
             'datatable': self.make_datatable(),
             'msg': self.msg,
@@ -172,9 +194,6 @@ class Users(SysadminDashboardView):
 
     def post(self, request):
         """Handle various actions available on page"""
-
-        if not request.user.is_staff:
-            raise Http404
         action = request.POST.get('action', '')
         track_views.server_track(request, action, {}, page='user_sysdashboard')
 
@@ -314,9 +333,6 @@ class Courses(SysadminDashboardView):
     def get(self, request):
         """Displays forms and course information"""
 
-        if not request.user.is_staff:
-            raise Http404
-
         context = {
             'datatable': self.make_datatable(),
             'msg': self.msg,
@@ -327,9 +343,6 @@ class Courses(SysadminDashboardView):
 
     def post(self, request):
         """Handle all actions from courses view"""
-
-        if not request.user.is_staff:
-            raise Http404
 
         action = request.POST.get('action', '')
         track_views.server_track(request, action, {},
@@ -351,6 +364,11 @@ class Courses(SysadminDashboardView):
             else:
                 try:
                     course = get_course_by_id(course_key)
+                    orgs = configuration_helpers.get_current_site_orgs()
+
+                    if course.org not in orgs:
+                        raise Http404(f"Course not found: {course_key}.")
+
                     course_found = True
                 except Exception as err:   # pylint: disable=broad-except
                     self.msg += _(
@@ -386,8 +404,6 @@ class Staffing(SysadminDashboardView):
     def get(self, request):
         """Displays course Enrollment and staffing course statistics"""
 
-        if not request.user.is_staff:
-            raise Http404
         data = []
 
         for course in self.get_courses():
@@ -461,12 +477,12 @@ class GitLogs(TemplateView):
 
         if course_id is None:
             # Require staff if not going to specific course
-            if not request.user.is_staff:
+            if not is_valid_user(request.user):
                 raise Http404
             cilset = CourseImportLog.objects.order_by('-created')
         else:
             # Allow only course team, instructors, and staff
-            if not (request.user.is_staff or
+            if not (is_valid_user(request.user) or
                     CourseInstructorRole(course_id).has_user(request.user) or
                     CourseStaffRole(course_id).has_user(request.user)):
                 raise Http404
