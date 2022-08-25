@@ -165,7 +165,8 @@ FEATURES['LICENSING'] = True
 FEATURES['ENABLE_COURSEWARE_SEARCH'] = False
 FEATURES['ENABLE_COURSEWARE_SEARCH_FOR_COURSE_STAFF'] = True
 SEARCH_ENGINE = 'search.elastic.ElasticSearchEngine'
-
+########################## Sysadmin dashboard #######################
+FEATURES['ENABLE_SYSADMIN_DASHBOARD'] = True
 
 ########################## Dashboard Search #######################
 FEATURES['ENABLE_DASHBOARD_SEARCH'] = True
@@ -191,7 +192,7 @@ COURSE_DISCOVERY_MEANINGS = {
     'language': LANGUAGE_MAP,
 }
 
-FEATURES['ENABLE_COURSE_DISCOVERY'] = True
+FEATURES['ENABLE_COURSE_DISCOVERY'] = False
 # Setting for overriding default filtering facets for Course discovery
 # COURSE_DISCOVERY_FILTERS = ["org", "language", "modes"]
 FEATURES['COURSES_ARE_BROWSEABLE'] = True
@@ -455,6 +456,3 @@ LANGUAGE_CODE = 'ar'
 
 
 ALLOWED_AUTH_APPLICATIONS = ['discovery-sso', 'discovery-backend-service, ''oauth_client', 'ecommerce-backend-service', 'ecommerce-backend-service', 'credentials-backend-service', 'credentials-sso' ]
-
-
-FEATURES["ENABLE_INSTRUCTOR_EMAIL"] = True
