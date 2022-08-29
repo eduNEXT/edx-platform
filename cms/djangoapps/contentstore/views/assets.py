@@ -21,6 +21,7 @@ from six import text_type
 
 from common.djangoapps.edxmako.shortcuts import render_to_response
 from openedx.core.djangoapps.contentserver.caching import del_cached_content
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from common.djangoapps.student.auth import has_course_author_access
 from common.djangoapps.util.date_utils import get_default_time_display
 from common.djangoapps.util.json_request import JsonResponse
