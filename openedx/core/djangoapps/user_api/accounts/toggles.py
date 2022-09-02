@@ -25,7 +25,10 @@ def should_redirect_to_order_history_microfrontend():
         REDIRECT_TO_ORDER_HISTORY_MICROFRONTEND.is_enabled()
     )
 
-
+def should_show_linked_accounts_tab():
+    return (
+        configuration_helpers.get_value('SHOW_LINKED_ACCOUNTS', True)
+    )
 # .. toggle_name: account.redirect_to_microfrontend
 # .. toggle_implementation: WaffleFlag
 # .. toggle_default: False
