@@ -2067,6 +2067,9 @@ MIDDLEWARE = [
     # cookies, especially the session middleware
     'openedx.core.djangoapps.cookie_metadata.middleware.CookieNameChange',
 
+    # cProfiler
+    'django_cprofile_middleware.middleware.ProfilerMiddleware',
+
     # Monitoring and logging middleware
     'openedx.core.lib.request_utils.ExpectedErrorMiddleware',
     'edx_django_utils.monitoring.CachedCustomMonitoringMiddleware',
