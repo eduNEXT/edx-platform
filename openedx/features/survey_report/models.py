@@ -23,7 +23,7 @@ class SurveyReport(models.Model):
         default={},
         help_text="Extra information for instance data",
     )
-    request_details = models.CharField(max_length=255, default='', blank=True)
+    request_details = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
     publicated_at = models.DateTimeField(null=True, blank=True)
 
