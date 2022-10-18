@@ -6,7 +6,6 @@ from jsonfield import JSONField
 
 from django.db import models
 
-
 class SurveyReport(models.Model):
     """
     This model stores information to automate the way of gathering impact data from the openedx project.
