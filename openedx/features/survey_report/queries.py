@@ -4,6 +4,7 @@ Queries to get data from de database.
 
 from datetime import datetime, timedelta
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from lms.djangoapps.grades.models import PersistentCourseGrade
 from common.djangoapps.student.models import CourseEnrollment
 from django.contrib.auth.models import User
 
@@ -38,3 +39,9 @@ def learners_registered()-> int:
     Get count of learners registered.
     """
     return User.objects.filter(is_active=1).count()
+
+def genarated_certificates()-> int:
+    """
+    Get count of generated certificates.
+    """
+    return PersistentCourseGrade.objects.filter(passed_timestamp__isnull=False).count()

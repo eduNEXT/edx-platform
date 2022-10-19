@@ -2,14 +2,17 @@
 Contains the logic for manage a survey report.
 """
 
-from openedx.features.survey_report.queries import get_unique_courses_offered, currently_learners, learners_registered
+from openedx.features.survey_report.queries import get_unique_courses_offered, currently_learners, learners_registered, genarated_certificates
 
 def generate_report() -> None:
     """ Generate a report with relevant data."""
     courses_offered=get_unique_courses_offered()
     learners=currently_learners()
     registered=learners_registered()
+    certificates=genarated_certificates()
+
 
     print(f"Unique courses offered: {courses_offered}")
     print(f"Currently learners: {learners}")
     print(f"Learners registered: {registered}")
+    print(f"Generated certificates: {certificates}")
