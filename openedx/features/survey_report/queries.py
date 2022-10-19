@@ -32,3 +32,9 @@ def currently_learners()-> int:
     Get count of learners with last login in the last 3 weeks.
     """
     return User.objects.filter(last_login__gte=datetime.now() - timedelta(weeks=3)).count()
+
+def learners_registered()-> int:
+    """
+    Get count of learners registered.
+    """
+    return User.objects.filter(is_active=1).count()
