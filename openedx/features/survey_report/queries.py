@@ -11,7 +11,7 @@ from django.db.models import Q, Subquery, OuterRef, Count
 
 def get_unique_courses_offered()-> int:
     """
-    Get the unique courses offered.
+    Get total number of unique courses offered.
     """
     return CourseOverview.objects.annotate(
         count = Subquery(
