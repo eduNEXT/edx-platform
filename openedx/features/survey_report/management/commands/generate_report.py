@@ -7,10 +7,15 @@ from openedx.features.survey_report.application import generate_report
 
 class Command(BaseCommand):
     """
-    Command to generate survey report.
+    Management command to generate a new survey report with
+    non-sensitive data.
     """
 
-    help = 'This command will generate survey report.'
+    help = """
+        This command will create a new survey report using some
+        models to get the total number oof courses offered, currently active learners,
+        learners ever registered, and generated certificates.
+        """
 
     def handle(self, *args, **options):
         try:
