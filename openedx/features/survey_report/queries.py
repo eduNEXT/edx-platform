@@ -1,5 +1,5 @@
 """
-Queries to get data from de database.
+Queries to get data from database.
 """
 
 from datetime import datetime
