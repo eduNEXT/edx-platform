@@ -1,5 +1,5 @@
 """
-Contains the logic for manage a survey report.
+Contains the logic to manage survey report model.
 """
 
 from openedx.features.survey_report.queries import get_unique_courses_offered
