@@ -9,7 +9,7 @@ from common.djangoapps.student.models import CourseEnrollment
 
 from django.db.models import Q, Subquery, OuterRef, Count
 
-def get_unique_courses_offered()-> int:
+def get_unique_courses_offered() -> int:
     """
     Get total number of unique courses offered.
     """
