@@ -27,7 +27,7 @@ def generate_report() -> None:
     SurveyReport(
         courses_offered=courses_offered,
         learners=learners,
-        learners_registered=registered,
+        registered_learners=registered,
         generated_certificates=certificates,
         enrollments=enrollments,
         extra_data=extra_data,
