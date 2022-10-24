@@ -24,7 +24,7 @@ def generate_report() -> None:
     enrollments = get_course_enrollments()
     extra_data = settings.SURVEY_REPORT_EXTRA_DATA
 
-    SurveyReport(
+    survey_report = SurveyReport(
         courses_offered=courses_offered,
         learners=learners,
         registered_learners=registered,
@@ -32,3 +32,5 @@ def generate_report() -> None:
         enrollments=enrollments,
         extra_data=extra_data,
     )
+
+    survey_report.save()
