@@ -1,11 +1,7 @@
 name: Quality checks
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-      - open-release/lilac.master
+  - pull_request
 
 jobs:
   run_tests:

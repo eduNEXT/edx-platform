@@ -1,14 +1,10 @@
 name: verify unit tests count
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
+  - pull_request
 
 jobs:
   collect-and-verify:
-    if: github.repository == 'openedx/edx-platform' || github.repository == 'edx/edx-platform-private'
     runs-on: [ edx-platform-runner ]
     steps:
       - name: sync directory owner

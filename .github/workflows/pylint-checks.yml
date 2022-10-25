@@ -1,10 +1,7 @@
 name: Pylint Checks
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
+  - pull_request
 
 jobs:
   run-pylint:

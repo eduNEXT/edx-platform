@@ -1,11 +1,8 @@
 name: unit-tests-gh-hosted
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-      - open-release/lilac.master
+  - pull_request
+
 
 jobs:
   run-test:
@@ -17,21 +14,7 @@ jobs:
         python-version: [ '3.8' ]
         django-version: [ "3.2" ]
         shard_name: [
-            "lms-1",
-            "lms-2",
-            "lms-3",
-            "lms-4",
-            "lms-5",
-            "lms-6",
-            "openedx-1",
-            "openedx-2",
-            "openedx-3",
-            "openedx-4",
-            "cms-1",
-            "cms-2",
-            "common-1",
-            "common-2",
-            "common-3",
+            "openedx-1"
         ]
     name: gh-hosted-python-${{ matrix.python-version }},django-${{ matrix.django-version }},${{ matrix.shard_name }}
     steps:
