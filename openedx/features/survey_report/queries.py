@@ -11,6 +11,7 @@ from common.djangoapps.student.models import CourseEnrollment
 from lms.djangoapps.grades.models import PersistentCourseGrade
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 
+
 def get_unique_courses_offered() -> int:
     """
     Get total number of unique courses offered.
@@ -48,6 +49,7 @@ def get_generated_certificates() -> int:
     Get total number of generated certificates.
     """
     return PersistentCourseGrade.objects.filter(passed_timestamp__isnull=False).count()
+
 
 def get_course_enrollments() -> int:
     """
