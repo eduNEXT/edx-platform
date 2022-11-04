@@ -10,6 +10,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import View
 from common.djangoapps.util.views import ensure_valid_course_key
 from .tasks import generate_survey_report
+from .api import generate_report
 
 class SurveyReportView(View):
     """
@@ -25,5 +26,6 @@ class SurveyReportView(View):
         Arguments:
             request: HTTP request
         """
-        generate_survey_report.delay()
+        survey_report_id = generate_report(defaults=True)
+        generate_survey_report.delay(survey_report_id)
         return redirect("admin:survey_report_surveyreport_changelist")

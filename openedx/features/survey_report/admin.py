@@ -15,18 +15,12 @@ class SurveyReportAdmin(admin.ModelAdmin):
     readonly_fields = (
         'courses_offered', 'learners', 'registered_learners',
         'enrollments', 'generated_certificates', 'extra_data',
-        'request_details', 'created_at', 'sent_at'
+        'created_at', 'state',
     )
 
     list_display = (
-        'id', 'created_at', 'sent'
+        'id', 'created_at', 'state',
     )
-
-    def sent(self, obj) -> bool:
-        """
-        Method to display if a report had been sent according to sent_date.
-        """
-        return obj.sent_at is not None
 
     def has_add_permission(self, request):
         """
