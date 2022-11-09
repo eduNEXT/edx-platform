@@ -14,6 +14,7 @@ from openedx.features.survey_report.queries import (
 )
 
 def get_report_data() -> dict:
+    """ Get the data to generate a report."""
     courses_offered = get_unique_courses_offered()
     learners = get_recently_active_users(weeks=3)
     registered = get_registered_learners()
