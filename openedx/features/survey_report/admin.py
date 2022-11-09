@@ -19,8 +19,11 @@ class SurveyReportAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'id', 'created_at', 'state',
+        'id', 'summary', 'created_at', 'state'
     )
+
+    def summary(self, obj) -> str:
+        return f"Courses: {obj.courses_offered}, Learners: {obj.learners}, Enrollments: {obj.enrollments}"
 
     def has_add_permission(self, request):
         """
