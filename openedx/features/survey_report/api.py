@@ -26,6 +26,9 @@ def get_report_data() -> dict:
     enrollments = get_course_enrollments()
     extra_data = settings.SURVEY_REPORT_EXTRA_DATA
 
+    import time
+    time.sleep(5)
+
     return {
         "courses_offered": courses_offered,
         "learners": learners,
