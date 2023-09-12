@@ -12,11 +12,14 @@ from django.urls import reverse
 from cms.djangoapps.contentstore.management.commands.utils import get_course_versions
 from common.djangoapps.student.tests.factories import AdminFactory, UserFactory
 from openedx.features.announcements.models import Announcement
+from unittest.mock import patch, call
 from xmodule.modulestore.django import modulestore  # lint-amnesty, pylint: disable=wrong-import-order
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase  # lint-amnesty, pylint: disable=wrong-import-order
 from xmodule.modulestore.tests.factories import CourseFactory, BlockFactory  # lint-amnesty, pylint: disable=wrong-import-order
 
 from .views import COURSE_KEY_ERROR_MESSAGES, MAINTENANCE_VIEWS
+
+from common.djangoapps.student.models.user import USER_LOGGED_IN_EVENT_NAME, USER_LOGGED_OUT_EVENT_NAME
 
 # This list contains URLs of all maintenance app views.
 MAINTENANCE_URLS = [reverse(view['url']) for view in MAINTENANCE_VIEWS.values()]
@@ -56,6 +59,9 @@ class MaintenanceViewTestCase(ModuleStoreTestCase):
     def setUp(self):
         super().setUp()
         self.user = AdminFactory()
+        patcher = patch('common.djangoapps.student.models.user.tracker')
+        self.mock_tracker = patcher.start()
+        self.addCleanup(patcher.stop)
         login_success = self.client.login(username=self.user.username, password='test')
         self.assertTrue(login_success)
 
@@ -71,6 +77,18 @@ class MaintenanceViewTestCase(ModuleStoreTestCase):
         Reverse the setup.
         """
         self.client.logout()
+        self.mock_tracker.emit.assert_has_calls(
+            [
+                call(
+                    USER_LOGGED_OUT_EVENT_NAME,
+                    {
+                        'user_id': self.user.id,
+                        'username': self.user.username,
+                    }
+                )
+            ]
+        )
+        self.mock_tracker.reset_mock()
         super().tearDown()
 
 
