@@ -172,6 +172,12 @@ class LoncapaProblem(object):
         self.has_saved_answers = state.get('has_saved_answers', False)
         if 'correct_map' in state:
             self.correct_map.set_dict(state['correct_map'])
+            self.correct_map_history = []
+            for cmap in state.get('correct_map_history', []):
+                correct_map = CorrectMap()
+                correct_map.set_dict(cmap)
+                self.correct_map_history.append(correct_map)
+
         self.done = state.get('done', False)
         self.input_state = state.get('input_state', {})
 
@@ -299,8 +305,10 @@ class LoncapaProblem(object):
         Reset internal state to unfinished, with no answers
         """
         self.student_answers = {}
+        self.student_answers_history = []
         self.has_saved_answers = False
         self.correct_map = CorrectMap()
+        self.correct_map_history = []
         self.done = False
 
     def set_initial_display(self):
@@ -328,6 +336,7 @@ class LoncapaProblem(object):
                 'student_answers': self.student_answers,
                 'has_saved_answers': self.has_saved_answers,
                 'correct_map': self.correct_map.get_dict(),
+                'correct_map_history': [cmap.get_dict() for cmap in self.correct_map_history],
                 'input_state': self.input_state,
                 'done': self.done}
 
@@ -434,6 +443,7 @@ class LoncapaProblem(object):
         self.student_answers = convert_files_to_filenames(answers)
         new_cmap = self.get_grade_from_current_answers(answers)
         self.correct_map = new_cmap  # lint-amnesty, pylint: disable=attribute-defined-outside-init
+        self.correct_map_history.append(deepcopy(new_cmap))
         return self.correct_map
 
     def supports_rescoring(self):
@@ -491,6 +501,31 @@ class LoncapaProblem(object):
                 results = responder.evaluate_answers(student_answers, oldcmap)
             else:
                 results = responder.evaluate_answers(self.student_answers, oldcmap)
+            newcmap.update(results)
+
+        return newcmap
+
+    def get_grade_from_answers(
+        self, student_answers: dict, correct_map: dict
+    ) -> CorrectMap:
+        """
+        This method is based on `get_grade_from_current_answers` method but it
+        takes `student_answers` and `correct_map` as arguments instead of using
+        the ones stored in the problem.
+        """
+        newcmap = CorrectMap()
+        # Call each responsetype instance to do actual grading
+        for responder in self.responders.values():
+            # File objects are passed only if responsetype explicitly allows
+            # for file submissions.  But we have no way of knowing if
+            # student_answers contains a proper answer or the filename of
+            # an earlier submission, so for now skip these entirely.
+            # TODO: figure out where to get file submissions when rescoring.
+            if 'filesubmission' in responder.allowed_inputfields and student_answers is None:
+                _ = self.capa_system.i18n.gettext
+                raise Exception(_("Cannot rescore problems with possible file submissions"))
+
+            results = responder.evaluate_answers(student_answers, correct_map)
             newcmap.update(results)
 
         return newcmap
