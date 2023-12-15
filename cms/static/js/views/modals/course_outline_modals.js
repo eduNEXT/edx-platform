@@ -798,6 +798,10 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
             return this.model.get('ancestor_has_staff_lock');
         },
 
+        isModelHiddenFromTOC: function() {
+            return this.model.get('hide_from_toc');
+        },
+
         getContext: function() {
             return {
                 hasExplicitStaffLock: this.isModelLocked(),
@@ -812,6 +816,7 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
         afterRender: function() {
             AbstractVisibilityEditor.prototype.afterRender.call(this);
             this.setLock(this.isModelLocked());
+            this.setHideFromTOC(this.isModelHiddenFromTOC());
         },
 
         setLock: function(value) {
@@ -822,8 +827,16 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
             return this.$('#staff_lock').is(':checked');
         },
 
+        setHideFromTOC: function(value) {
+            this.$('#hide_from_toc').prop('checked', value);
+        },
+
+        isHiddenFromTOC: function() {
+            return this.$('#hide_from_toc').is(':checked');
+        },
+
         hasChanges: function() {
-            return this.isModelLocked() !== this.isLocked();
+            return this.isModelLocked() !== this.isLocked() || this.isModelHiddenFromTOC() !== this.isHiddenFromTOC();
         },
 
         getRequestData: function() {
@@ -831,7 +844,8 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
                 return {
                     publish: 'republish',
                     metadata: {
-                        visible_to_staff_only: this.isLocked() ? true : null
+                        visible_to_staff_only: this.isLocked() ? true : null,
+                        hide_from_toc: this.isHiddenFromTOC() ? true : null
                     }
                 };
             } else {
