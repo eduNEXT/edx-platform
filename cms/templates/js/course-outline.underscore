@@ -21,7 +21,10 @@ var addStatusMessage = function (statusType, message) {
         statusIconClass = 'fa-warning';
     } else if (statusType === 'staff-only' || statusType === 'gated') {
         statusIconClass = 'fa-lock';
-    } else if (statusType === 'partition-groups') {
+    } else if(statusType === 'hide-from-toc') {
+        statusIconClass = 'fa-eye-slash';
+    }
+    else if (statusType === 'partition-groups') {
         statusIconClass = 'fa-eye';
     }
 
@@ -47,6 +50,10 @@ if (prereq) {
 if (staffOnlyMessage) {
     messageType = 'staff-only';
     messageText = gettext('Contains staff only content');
+    addStatusMessage(messageType, messageText);
+} else if (hideFromTOCMessage){
+    messageType = 'hide-from-toc';
+    messageText = gettext('Hidden in the course outline, but subsections are accessible for your learners through their separate link.');
     addStatusMessage(messageType, messageText);
 } else {
     if (visibilityState === 'needs_attention' && xblockInfo.isVertical()) {
