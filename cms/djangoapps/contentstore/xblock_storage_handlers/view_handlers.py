@@ -1090,6 +1090,7 @@ def create_xblock_info(  # lint-amnesty, pylint: disable=too-many-statements
                 "group_access": xblock.group_access,
                 "user_partitions": user_partitions,
                 "show_correctness": xblock.show_correctness,
+                "hide_from_toc": xblock.hide_from_toc,
             }
         )
 
