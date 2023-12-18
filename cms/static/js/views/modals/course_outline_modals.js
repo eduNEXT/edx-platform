@@ -1064,12 +1064,20 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
                 if (this.currentVisibility() === 'staff_only') {
                     metadata.visible_to_staff_only = true;
                     metadata.hide_after_due = null;
+                    metadata.hide_from_toc = null;
                 } else if (this.currentVisibility() === 'hide_after_due') {
                     metadata.visible_to_staff_only = null;
                     metadata.hide_after_due = true;
-                } else {
+                    metadata.hide_from_toc = null;
+                } else if (this.currentVisibility() === 'hide_from_toc'){
                     metadata.visible_to_staff_only = null;
                     metadata.hide_after_due = null;
+                    metadata.hide_from_toc = true;
+                }
+                else {
+                    metadata.visible_to_staff_only = null;
+                    metadata.hide_after_due = null;
+                    metadata.hide_from_toc = null;
                 }
 
                 return {
