@@ -51,9 +51,13 @@ if (staffOnlyMessage) {
     messageType = 'staff-only';
     messageText = gettext('Contains staff only content');
     addStatusMessage(messageType, messageText);
-} else if (hideFromTOCMessage){
+} else if (hideFromTOCMessage && !xblockInfo.isVertical()){
+    if (xblockInfo.isChapter()) {
+        messageText = gettext('Hidden in the course outline, but sections are accessible for your learners through their separate link.');
+    } else {
+        messageText = gettext('Subsections are not navigable between each other, they can only be accessed through their link.');
+    }
     messageType = 'hide-from-toc';
-    messageText = gettext('Hidden in the course outline, but subsections are accessible for your learners through their separate link.');
     addStatusMessage(messageType, messageText);
 } else {
     if (visibilityState === 'needs_attention' && xblockInfo.isVertical()) {
