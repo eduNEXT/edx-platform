@@ -22,6 +22,7 @@
         </p>
     <% } %>
 </div>
+<% if (enableHideFromTOC) { %>
 <div class="modal-section-content hide-from-toc">
 <% if (!xblockInfo.isVertical()) { %>
   <label class="label">
@@ -33,4 +34,5 @@
   </label>
 <% } %>
 </div>
+<% } %>
 </form>
