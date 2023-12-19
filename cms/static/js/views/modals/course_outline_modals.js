@@ -314,7 +314,7 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
             var isProctoredExam = xblockInfo.get('is_proctored_exam');
             var isPracticeExam = xblockInfo.get('is_practice_exam');
             var isOnboardingExam = xblockInfo.get('is_onboarding_exam');
-            var enableHideFromTOC = xblockInfo.get('enable_hide_from_toc');
+            var enableHideFromTOCUI = xblockInfo.get('enable_hide_from_toc_ui');
             var html = this.template($.extend({}, {
                 xblockInfo: xblockInfo,
                 xblockType: this.options.xblockType,
@@ -324,7 +324,7 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
                 isProctoredExam: isProctoredExam,
                 isPracticeExam: isPracticeExam,
                 isOnboardingExam: isOnboardingExam,
-                enableHideFromTOC: enableHideFromTOC,
+                enableHideFromTOCUI: enableHideFromTOCUI,
                 isTimedExam: isTimeLimited && !(
                     isProctoredExam || isPracticeExam || isOnboardingExam
                 ),
