@@ -21,8 +21,11 @@ var addStatusMessage = function (statusType, message) {
         statusIconClass = 'fa-warning';
     } else if (statusType === 'staff-only' || statusType === 'gated') {
         statusIconClass = 'fa-lock';
-    } else if(statusType === 'hide-from-toc') {
+    } else if(statusType === 'hide-from-toc-chapter') {
         statusIconClass = 'fa-eye-slash';
+    }
+    else if(statusType === 'hide-from-toc-sequence') {
+        statusIconClass = 'fa-ban';
     }
     else if (statusType === 'partition-groups') {
         statusIconClass = 'fa-eye';
@@ -54,10 +57,11 @@ if (staffOnlyMessage) {
 } else if (hideFromTOCMessage && !xblockInfo.isVertical()){
     if (xblockInfo.isChapter()) {
         messageText = gettext('Hidden in the course outline, but sections are accessible for your learners through their separate link.');
+        messageType = 'hide-from-toc-chapter';
     } else {
         messageText = gettext('Subsections are not navigable between each other, they can only be accessed through their link.');
+        messageType = 'hide-from-toc-sequence';
     }
-    messageType = 'hide-from-toc';
     addStatusMessage(messageType, messageText);
 } else {
     if (visibilityState === 'needs_attention' && xblockInfo.isVertical()) {
