@@ -10345,15 +10345,15 @@ msgstr ""
 "problema. Si el valor no es definido, se permitirán intentos infinitos."
 
 #: xmodule/capa_block.py
-msgid "Grading Strategy"
-msgstr "Estrategia de calificación"
+msgid "Grading Method"
+msgstr "Método de calificación"
 
 #: xmodule/capa_block.py
 msgid ""
-"Define the grading strategy for this problem. By default, it's the score of"
+"Define the grading method for this problem. By default, it's the score of"
 " the last submission made by the student."
 msgstr ""
-"Defina la estrategia de calificación para este problema. Por defecto, es el "
+"Defina el método de calificación para este problema. Por defecto, es el "
 "puntaje del último envío realizado por el estudiante."
 
 #: xmodule/capa_block.py
@@ -15143,8 +15143,8 @@ msgstr[1] "Ha realizado {num_used} de {num_total} intentos"
 msgstr[2] "Ha realizado {num_used} de {num_total} intentos"
 
 #: lms/templates/problem.html
-msgid "Grading strategy: {grading_strategy}"
-msgstr "Estrategia de calificación: {grading_strategy}"
+msgid "Grading method: {grading_method}"
+msgstr "Método de calificación: {grading_method}"
 
 #: lms/templates/problem.html
 msgid ""

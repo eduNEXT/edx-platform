@@ -93,9 +93,9 @@ class SHOWANSWER:
     ATTEMPTED_NO_PAST_DUE = "attempted_no_past_due"
 
 
-class GRADING_STRATEGY:
+class GRADING_METHOD:
     """
-    Constants for grading strategy options.
+    Constants for grading method options.
     """
     LAST_SCORE = "last_score"
     FIRST_SCORE = "first_score"
@@ -192,19 +192,19 @@ class ProblemBlock(
                "If the value is not set, infinite attempts are allowed."),
         values={"min": 0}, scope=Scope.settings
     )
-    grading_strategy = String(
-        display_name=_("Grading Strategy"),
+    grading_method = String(
+        display_name=_("Grading Method"),
         help=_(
-            "Define the grading strategy for this problem. By default, "
+            "Define the grading method for this problem. By default, "
             "it's the score of the last submission made by the student."
         ),
         scope=Scope.settings,
-        default=GRADING_STRATEGY.LAST_SCORE,
+        default=GRADING_METHOD.LAST_SCORE,
         values=[
-            {"display_name": _("Last Score"), "value": GRADING_STRATEGY.LAST_SCORE},
-            {"display_name": _("First Score"), "value": GRADING_STRATEGY.FIRST_SCORE},
-            {"display_name": _("Highest Score"), "value": GRADING_STRATEGY.HIGHEST_SCORE},
-            {"display_name": _("Average Score"), "value": GRADING_STRATEGY.AVERAGE_SCORE},
+            {"display_name": _("Last Score"), "value": GRADING_METHOD.LAST_SCORE},
+            {"display_name": _("First Score"), "value": GRADING_METHOD.FIRST_SCORE},
+            {"display_name": _("Highest Score"), "value": GRADING_METHOD.HIGHEST_SCORE},
+            {"display_name": _("Average Score"), "value": GRADING_METHOD.AVERAGE_SCORE},
         ],
     )
     due = Date(help=_("Date that this problem is due by"), scope=Scope.settings)
@@ -1277,7 +1277,7 @@ class ProblemBlock(
             'reset_button': self.should_show_reset_button(),
             'save_button': self.should_show_save_button(),
             'answer_available': self.answer_available(),
-            'grading_strategy': _(" ".join(self.grading_strategy.split("_")).title()),
+            'grading_method': _(" ".join(self.grading_method.split("_")).title()),
             'attempts_used': self.attempts,
             'attempts_allowed': self.max_attempts,
             'demand_hint_possible': demand_hint_possible,
@@ -1867,23 +1867,23 @@ class ProblemBlock(
 
     def _set_score(self) -> None:
         """
-        Calculate and set the current score based on the grading strategy.
+        Calculate and set the current score based on the grading method.
 
         In this method:
             - The current score is obtained from the LON-CAPA problem.
             - The score history is updated adding the current score.
-            - The calculated score is obtained based on the grading strategy.
+            - The calculated score is obtained based on the grading method.
             - The calculated score is set as the current score.
         """
         new_score = self.score_from_lcp(self.lcp)
         self.score_history.append(new_score)
-        grading_strategy_handler = GradingStrategyHandler(
+        grading_method_handler = GradingMethodHandler(
             self.score,
-            self.grading_strategy,
+            self.grading_method,
             self.score_history,
             self.max_score(),
         )
-        calculated_score = grading_strategy_handler.get_score()
+        calculated_score = grading_method_handler.get_score()
         self.set_score(calculated_score)
 
     def publish_unmasked(self, title, event_info):
@@ -2238,25 +2238,25 @@ class ProblemBlock(
 
     def get_rescore(self) -> Score:
         """
-        Calculate and return the rescored score based on the grading strategy.
+        Calculate and return the rescored score based on the grading method.
 
         In this method:
             - The list with the correctness maps is updated.
             - The list with the score history is updated based on the correctness maps.
-            - The final score is calculated based on the grading strategy.
+            - The final score is calculated based on the grading method.
 
         Returns:
-            Score: The score calculated based on the grading strategy.
+            Score: The score calculated based on the grading method.
         """
         self.update_correctness_list()
         self.score_history = self.calculate_score_list()
-        grading_strategy_handler = GradingStrategyHandler(
+        grading_method_handler = GradingMethodHandler(
             self.score,
-            self.grading_strategy,
+            self.grading_method,
             self.score_history,
             self.max_score(),
         )
-        return grading_strategy_handler.get_score()
+        return grading_method_handler.get_score()
 
     def has_submitted_answer(self):
         return self.done
@@ -2329,55 +2329,56 @@ class ProblemBlock(
         return Score(raw_earned=lcp_score['score'], raw_possible=lcp_score['total'])
 
 
-class GradingStrategyHandler:
+class GradingMethodHandler:
     """
-    A class for handling grading strategies and calculating scores.
+    A class for handling grading method and calculating scores.
 
-    This class allows for flexible handling of grading strategies, including options
+    This class allows for flexible handling of grading methods, including options
     such as considering the last score, the first score, the highest score,
     or the average score.
 
     Attributes:
-    - grading_strategy (str): The chosen grading strategy.
-    - score_history (list[Score]): A list to store the history of scores.
-    - max_score (int): The maximum possible score.
-    - mapping_strategy (dict): A dictionary mapping the grading
-        strategy to the corresponding handler.
+        - score (Score): The current score.
+        - grading_method (str): The chosen grading method.
+        - score_history (list[Score]): A list to store the history of scores.
+        - max_score (int): The maximum possible score.
+        - mapping_method (dict): A dictionary mapping the grading
+            method to the corresponding handler.
 
     Methods:
-    - get_score(): Retrieves the updated score based on the grading strategy.
-    - handle_last_score(): Handles the last score strategy.
-    - handle_first_score(): Handles the first score strategy.
-    - handle_highest_score(): Handles the highest score strategy.
-    - handle_average_score(): Handles the average score strategy.
+        - get_score(): Retrieves the updated score based on the grading method.
+        - handle_last_score(): Handles the last score method.
+        - handle_first_score(): Handles the first score method.
+        - handle_highest_score(): Handles the highest score method.
+        - handle_average_score(): Handles the average score method.
     """
 
     def __init__(
         self,
         score: Score,
-        grading_strategy: str,
+        grading_method: str,
         score_history: list[Score],
         max_score: int,
     ):
         self.score = score
-        self.grading_strategy = grading_strategy
+        self.grading_method = grading_method
         self.score_history = score_history
         self.max_score = max_score
-        self.mapping_strategy = {
-            GRADING_STRATEGY.LAST_SCORE: self.handle_last_score,
-            GRADING_STRATEGY.FIRST_SCORE: self.handle_first_score,
-            GRADING_STRATEGY.HIGHEST_SCORE: self.handle_highest_score,
-            GRADING_STRATEGY.AVERAGE_SCORE: self.handle_average_score,
+        self.mapping_method = {
+            GRADING_METHOD.LAST_SCORE: self.handle_last_score,
+            GRADING_METHOD.FIRST_SCORE: self.handle_first_score,
+            GRADING_METHOD.HIGHEST_SCORE: self.handle_highest_score,
+            GRADING_METHOD.AVERAGE_SCORE: self.handle_average_score,
         }
 
     def get_score(self) -> Score:
         """
-        Retrieves the updated score based on the grading strategy.
+        Retrieves the updated score based on the grading method.
 
         Returns:
-            - Score: The updated score based on the chosen grading strategy.
+            - Score: The updated score based on the chosen grading method.
         """
-        return self.mapping_strategy[self.grading_strategy]()
+        return self.mapping_method[self.grading_method]()
 
     def handle_last_score(self) -> Score:
         """
