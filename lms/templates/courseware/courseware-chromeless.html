@@ -115,9 +115,10 @@ ${HTML(fragment.foot_html())}
   % endif
 % endif
 
-% if is_learning_mfe:
+% if True:
 <script type="text/javascript">
   (function() {
+    console.log("Executing script...");
     // If this view is rendered in an iframe within the learning microfrontend app
     // it will report the height of its contents to the parent window when the
     // document loads, window resizes, or DOM mutates.
@@ -132,6 +133,8 @@ ${HTML(fragment.foot_html())}
         var isLoadEvent = event.type === 'load';
         var newHeight = contentElement.offsetHeight;
         var newWidth = contentElement.offsetWidth;
+        console.log("newHeight", newHeight);
+        console.log("newWidth", newWidth);
         if (!isLoadEvent && newWidth === lastWidth && newHeight === lastHeight) {
             // Monitor when any anchor tag is clicked, it is checked to make sure
             // it is referencing an element's id or name (not an external website). If
@@ -200,6 +203,7 @@ ${HTML(fragment.foot_html())}
         // height. This window.scrollTo is an attempt to keep the content at the
         // top of the page. See TNL-7094
         window.scrollTo(0, 0);
+        console.log("Resizing iframe...")
       }
 
       // Create an observer instance linked to the callback function
