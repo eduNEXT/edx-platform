@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-23.10 ]
         python-version: [ '3.8', '3.11' ]
         node-version: [ 18 ]
         npm-version: [ 10.5.x ]
@@ -43,7 +43,7 @@ jobs:
     - name: Install system Packages
       run: |
         sudo apt-get update
-        sudo apt-get install libxmlsec1-dev pkg-config
+        sudo apt-get install libc6 libxmlsec1-dev pkg-config
 
     - name: Setup Node
       uses: actions/setup-node@v4
@@ -70,11 +70,12 @@ jobs:
       run: |
         make base-requirements
 
-    - name: Initiate Mongo DB Service
-      run: sudo systemctl start mongod
-
     - name: Add node_modules bin to $Path
       run: echo $GITHUB_WORKSPACE/node_modules/.bin >> $GITHUB_PATH
+
+    - name: Show glibc version
+      run: |
+        ldd --version
 
     - name: Run Static Assets Check
       env:
