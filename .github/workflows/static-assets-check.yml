@@ -43,7 +43,7 @@ jobs:
     - name: Install system Packages
       run: |
         sudo apt-get update
-        sudo apt-get install libxmlsec1-dev pkg-config
+        sudo apt-get install libxmlsec1-dev=1.2.28-2 pkg-config
 
     - name: Setup Node
       uses: actions/setup-node@v4
@@ -69,6 +69,10 @@ jobs:
     - name: Install Required Python Dependencies
       run: |
         make base-requirements
+
+    - name: Show glibc version
+      run: |
+        ldd --version
 
     - name: Initiate Mongo DB Service
       run: sudo systemctl start mongod
