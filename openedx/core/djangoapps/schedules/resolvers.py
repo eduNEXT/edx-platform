@@ -34,7 +34,8 @@ from openedx.features.course_experience import course_home_url
 
 LOG = logging.getLogger(__name__)
 
-DEFAULT_NUM_BINS = 24
+# Only for debugging purposes. Delete this before merging.
+DEFAULT_NUM_BINS = 1
 RECURRING_NUDGE_NUM_BINS = DEFAULT_NUM_BINS
 UPGRADE_REMINDER_NUM_BINS = DEFAULT_NUM_BINS
 COURSE_UPDATE_NUM_BINS = DEFAULT_NUM_BINS
@@ -155,12 +156,18 @@ class BinnedSchedulesBaseResolver(PrefixedDebugLoggerMixin, RecipientResolver):
 
         schedules = self.filter_by_org(schedules)
 
+        # Only for debugging purposes. Delete this before merging.
+        print(f"\n\nSchedules: {schedules}\n\n")
+
         try:
             # .. filter_implemented_name: ScheduleQuerySetRequested
             # .. filter_type: org.openedx.learning.schedule.queryset.requested.v1
             schedules = ScheduleQuerySetRequested.run_filter(schedules)
         except ScheduleQuerySetRequested.PreventScheduleQuerysetRequest as exc:
             schedules = exc.schedules
+
+        # Only for debugging purposes. Delete this before merging.
+        print(f"\n\nFiltered Schedules: {schedules}\n\n")
 
         if "read_replica" in settings.DATABASES:
             schedules = schedules.using("read_replica")
