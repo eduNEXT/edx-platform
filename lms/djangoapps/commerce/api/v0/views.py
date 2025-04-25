@@ -149,8 +149,13 @@ class BasketsView(APIView):
                     announcement=course_announcement
                 )
             log.info(msg)
-            self._enroll(course_key, user, default_enrollment_mode.slug)
-            mode = CourseMode.AUDIT if audit_mode else CourseMode.HONOR  # lint-amnesty, pylint: disable=unused-variable
+            try:
+                self._enroll(course_key, user, default_enrollment_mode.slug)
+            except Exception as e:
+                log.exception("Enrollment failed: %s", str(e))
+                error_msg = f"Failed to enroll user {user.username} in course {course_id}: {str(e)}"
+                return DetailResponse(error_msg, status=403)
+
             self._handle_marketing_opt_in(request, course_key, user)
             return DetailResponse(msg)
         else:
