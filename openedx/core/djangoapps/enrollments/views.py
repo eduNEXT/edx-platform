@@ -893,6 +893,15 @@ class EnrollmentListView(APIView, ApiKeyPermissionMixIn):
                     ).format(username=username, course_id=course_id)
                 }
             )
+        except EnrollmentNotAllowed as error:
+            log.warning("Enrollment not allowed for user [%s] in course run [%s]: %s",
+                        username, course_id, str(error))
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+                data={
+                    "message": str(error)
+                }
+            )
         except CourseUserGroup.DoesNotExist:
             log.exception('Missing cohort [%s] in course run [%s]', cohort_name, course_id)
             return Response(
