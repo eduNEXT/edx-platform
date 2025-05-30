@@ -13,7 +13,10 @@ from openedx_learning.api import authoring as authoring_api
 from opaque_keys.edx.locator import LibraryLocatorV2
 from rest_framework.exceptions import NotFound
 
-from openedx.core.djangoapps.content.search.models import SearchAccess
+try:
+    from openedx.core.djangoapps.content.search.models import SearchAccess
+except RuntimeError:
+    SearchAccess = {}
 from openedx.core.djangoapps.content_libraries import api as lib_api
 from openedx.core.djangoapps.content_tagging import api as tagging_api
 from openedx.core.djangoapps.xblock import api as xblock_api
