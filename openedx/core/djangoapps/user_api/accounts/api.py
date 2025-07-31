@@ -4,12 +4,16 @@ Programmatic integration point for User API Accounts sub-application
 """
 
 import datetime
+import logging
 import re
+from typing import Optional
 from zoneinfo import ZoneInfo
 
+from django import forms
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import ValidationError, validate_email
+from django.db import DatabaseError, IntegrityError, transaction
 from django.utils.translation import gettext as _
 from django.utils.translation import override as override_language
 from eventtracking import tracker
@@ -47,6 +51,8 @@ name_affirmation_installed = is_name_affirmation_installed()
 if name_affirmation_installed:
     # pylint: disable=import-error
     from edx_name_affirmation.name_change_validator import NameChangeValidator
+
+logger = logging.getLogger(__name__)
 
 # Public access point for this function.
 visible_fields = _visible_fields
@@ -107,7 +113,7 @@ def get_account_settings(request, usernames=None, configuration=None, view=None)
 
 
 @helpers.intercept_errors(errors.UserAPIInternalError, ignore_errors=[errors.UserAPIRequestError])
-def update_account_settings(requesting_user, update, username=None):
+def update_account_settings(requesting_user, update, username=None, extended_profile_form=None):
     """Update user account information.
 
     Note:
@@ -120,6 +126,7 @@ def update_account_settings(requesting_user, update, username=None):
         update (dict): The updated account field values.
         username (str): Optional username specifying which account should be updated. If not specified,
             `requesting_user.username` is assumed.
+        extended_profile_form (Optional[forms.Form]): Optional validated extended profile form instance.
 
     Raises:
         errors.UserNotFound: no user with username `username` exists (or `requesting_user.username` if
@@ -176,7 +183,7 @@ def update_account_settings(requesting_user, update, username=None):
         _update_preferences_if_needed(update, requesting_user, user)
         _notify_language_proficiencies_update_if_needed(update, user, user_profile, old_language_proficiencies)
         _store_old_name_if_needed(old_name, user_profile, requesting_user)
-        _update_extended_profile_if_needed(update, user_profile)
+        _update_extended_profile_if_needed(update, user_profile, extended_profile_form)
         _update_state_if_needed(update, user_profile)
 
     except PreferenceValidationError as err:
@@ -352,16 +359,83 @@ def _notify_language_proficiencies_update_if_needed(data, user, user_profile, ol
         )
 
 
-def _update_extended_profile_if_needed(data, user_profile):
-    if 'extended_profile' in data:
-        meta = user_profile.get_meta()
-        new_extended_profile = data['extended_profile']
-        for field in new_extended_profile:
-            field_name = field['field_name']
-            new_value = field['field_value']
-            meta[field_name] = new_value
-        user_profile.set_meta(meta)
-        user_profile.save()
+def _update_extended_profile_if_needed(
+    data: dict, user_profile: UserProfile, extended_profile_form: Optional[forms.Form]
+) -> None:
+    """
+    Update the extended profile information if present in the data.
+
+    This function handles two types of extended profile updates:
+    1. Updates the user profile meta fields with extended_profile data
+    2. Saves the extended profile form data to the extended profile model if a validated form is provided
+
+    Args:
+        data (dict): Dictionary containing the update data, may include 'extended_profile' key
+        user_profile (UserProfile): The UserProfile instance to update
+        extended_profile_form (Optional[forms.Form]): The validated extended profile form
+            containing extended profile data, or None if no extended profile form is provided
+
+    Note:
+        If `extended_profile` is present in data, the function will:
+        - Extract `field_name` and `field_value` pairs from extended_profile list
+        - Update the `user_profile.meta` dictionary with new values and save the profile
+
+        If `extended_profile_form` is provided and valid, the function will:
+        - Save the form data to the extended profile model
+        - Associate the model instance with the user if it's a new instance
+
+        Both the meta update and the extended profile model save (when present) are performed
+        within a single database transaction. If either operation fails, the transaction is
+        rolled back so that no partial updates are persisted. The error is logged and an
+        AccountUpdateError is raised to the caller.
+    """
+    has_extended_profile_data = "extended_profile" in data
+    has_extended_profile_form = extended_profile_form is not None
+
+    if not has_extended_profile_data and not has_extended_profile_form:
+        return
+
+    try:
+        with transaction.atomic():
+            if has_extended_profile_data:
+                meta = user_profile.get_meta()
+                new_extended_profile = data["extended_profile"]
+                for field in new_extended_profile:
+                    field_name = field["field_name"]
+                    new_value = field["field_value"]
+                    meta[field_name] = new_value
+                user_profile.set_meta(meta)
+                user_profile.save()
+
+            if has_extended_profile_form:
+                # Use commit=False to create the model instance in memory without saving to DB yet.
+                # This allows us to set the user field before persisting, which is necessary because:
+                # 1. The form validates and creates the instance with form data
+                # 2. For new profiles, the user field isn't in the form data
+                # 3. We need to assign the user programmatically before the database save
+                # 4. If we called save() directly, it would fail with integrity errors for new profiles
+                extended_profile = extended_profile_form.save(commit=False)
+                if not hasattr(extended_profile, "user") or extended_profile.user is None:
+                    extended_profile.user = user_profile.user
+                # Now persist the instance with the user field properly set
+                extended_profile.save()
+    except (ValidationError, IntegrityError, DatabaseError) as exc:
+        error_messages = {
+            ValidationError: (
+                "Extended profile validation failed",
+                _("The extended profile information could not be saved due to validation errors."),
+            ),
+            IntegrityError: (
+                "Extended profile integrity error",
+                _("The extended profile information could not be saved. Please check for duplicate values."),
+            ),
+            DatabaseError: (
+                "Database error saving extended profile",
+                _("The extended profile information could not be saved due to a system error."),
+            ),
+        }
+        dev_msg, user_msg = error_messages[type(exc)]
+        raise AccountUpdateError(developer_message=f"{dev_msg}: {str(exc)}", user_message=user_msg) from exc
 
 
 def _update_state_if_needed(data, user_profile):
