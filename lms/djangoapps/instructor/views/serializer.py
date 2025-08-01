@@ -390,6 +390,7 @@ class StudentsUpdateEnrollmentSerializer(serializers.Serializer):
     auto_enroll = serializers.BooleanField(default=False)
     email_students = serializers.BooleanField(default=False)
     reason = serializers.CharField(required=False, allow_blank=True)
+    async_processing = serializers.BooleanField(default=True)
 
 
 class OverrideProblemScoreSerializer(UniqueStudentIdentifierSerializer):
