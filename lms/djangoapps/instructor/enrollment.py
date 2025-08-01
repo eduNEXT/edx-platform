@@ -10,8 +10,10 @@ from contextlib import ExitStack, contextmanager
 from datetime import datetime
 
 import pytz
+from crum import get_current_request
 from django.conf import settings
-from django.contrib.auth.models import User  # pylint: disable=imported-auth-user
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import override as override_language
@@ -50,7 +52,9 @@ from lms.djangoapps.instructor.message_types import (
 )
 from openedx.core.djangoapps.lang_pref import LANGUAGE_KEY
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from openedx.core.djangoapps.theming.helpers import get_current_site
 from openedx.core.djangoapps.user_api.models import UserPreference
+from openedx.core.lib.celery.task_utils import emulate_http_request
 from xmodule.modulestore.django import modulestore  # pylint: disable=wrong-import-order
 from xmodule.modulestore.exceptions import ItemNotFoundError  # pylint: disable=wrong-import-order
 
@@ -591,7 +595,37 @@ def send_mail_to_student(student, param_dict, language=None):
         language=language,
         user_context=param_dict,
     )
-    ace.send(message)
+
+    current_request = get_current_request()
+
+    if current_request is None:
+        # We're in a Celery task context, need to emulate HTTP request
+        site = get_current_site()
+        if not site:
+            try:
+                site = Site.objects.get(id=settings.SITE_ID)
+            except Site.DoesNotExist:
+                try:
+                    site = Site.objects.first()
+                except Exception:  # pylint: disable=broad-except
+                    site = None
+
+        # Get the recipient user for tracking purposes
+        user = None
+        if lms_user_id and lms_user_id > 0:
+            try:
+                user = User.objects.get(id=lms_user_id)
+            except User.DoesNotExist:
+                pass
+
+        # Use emulate_http_request to provide the necessary context for template tags
+        # that require a request object, such as google_analytics_tracking_pixel
+        with emulate_http_request(site=site, user=user):
+            ace.send(message)
+    else:
+        # We're in a web context, just send the message directly
+        # The current request already provides the necessary context
+        ace.send(message)
 
 
 def render_message_to_string(subject_template, message_template, param_dict, language=None):
