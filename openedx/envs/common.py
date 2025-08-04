@@ -166,6 +166,9 @@ LANGUAGES_BIDI = ("he", "ar", "fa", "ur", "fa-ir", "rtl")
 LANGUAGE_COOKIE_NAME = "openedx-language-preference"
 
 LOCALE_PATHS = Derived(_make_locale_paths)
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+STATICI18N_OUTPUT_DIR = "js/i18n"
 
 # Sourced from http://www.localeplanet.com/icu/ and wikipedia
 LANGUAGES = [
@@ -2295,9 +2298,20 @@ ENTERPRISE_ENROLLMENT_API_URL = Derived(
     lambda settings: (settings.LMS_INTERNAL_ROOT_URL or '') + settings.LMS_ENROLLMENT_API_PATH
 )
 
+# This is the domain that is used to set shared cookies between various sub-domains.
+SHARED_COOKIE_DOMAIN = Derived(lambda settings: settings.SESSION_COOKIE_DOMAIN)
+
+SESSION_INACTIVITY_TIMEOUT_IN_SECONDS = None
+
+STATIC_ROOT_BASE = None
+
 VIDEO_CDN_URL = {
     # 'EXAMPLE_COUNTRY_CODE': "http://example.com/edx/video?s3_url="
 }
+
+# List of logout URIs for each IDA that the learner should be logged out of when they logout of the LMS
+# or CMS. Only applies to IDA for which the social auth flow uses DOT (Django OAuth Toolkit).
+IDA_LOGOUT_URI_LIST = []
 
 SOFTWARE_SECURE_VERIFICATION_ROUTING_KEY = Derived(lambda settings: settings.HIGH_PRIORITY_QUEUE)
 
@@ -2311,6 +2325,9 @@ POLICY_CHANGE_TASK_RATE_LIMIT = '900/h'
 SINGLE_LEARNER_COURSE_REGRADE_ROUTING_KEY = Derived(lambda settings: settings.DEFAULT_PRIORITY_QUEUE)
 
 STATIC_ROOT_BASE = None
+
+# Queue to use for individual learner course regrades
+SINGLE_LEARNER_COURSE_REGRADE_ROUTING_KEY = Derived(lambda settings: settings.DEFAULT_PRIORITY_QUEUE)
 
 # .. setting_name: STATIC_URL_BASE
 # .. setting_default: "None"
@@ -2419,3 +2436,8 @@ FEEDBACK_SUBMISSION_EMAIL = ''
 COURSE_LIVE_GLOBAL_CREDENTIALS = {}
 
 BEAMER_PRODUCT_ID = ""
+# API access management
+API_DOCUMENTATION_URL = 'https://course-catalog-api-guide.readthedocs.io/en/latest/'
+AUTH_DOCUMENTATION_URL = 'https://course-catalog-api-guide.readthedocs.io/en/latest/authentication/index.html'
+
+CSRF_TRUSTED_ORIGINS = []

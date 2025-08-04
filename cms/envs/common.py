@@ -297,6 +297,12 @@ GEOIP_PATH = REPO_ROOT / "common/static/data/geoip/GeoLite2-Country.mmdb"
 
 DATA_DIR = COURSES_ROOT
 
+DJFS = {
+    'type': 'osfs',
+    'directory_root': '/edx/var/edxapp/django-pyfs/static/django-pyfs',
+    'url_root': '/static/django-pyfs',
+}
+
 ######################## BRANCH.IO ###########################
 BRANCH_IO_KEY = ''
 
@@ -381,6 +387,8 @@ TEMPLATES = [
 DEFAULT_TEMPLATE_ENGINE = TEMPLATES[0]
 
 #################################### AWS #######################################
+AWS_ACCESS_KEY_ID = None
+AWS_SECRET_ACCESS_KEY = None
 AWS_SECURITY_TOKEN = None
 
 ##############################################################################
@@ -393,6 +401,12 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.AllowAllUsersModelBackend',
     'bridgekeeper.backends.RulePermissionBackend',
 ]
+
+# License for serving content in China
+ICP_LICENSE = None
+ICP_LICENSE_INFO = {}
+
+LOGGING_ENV = 'sandbox'
 
 LMS_BASE = None
 
@@ -408,16 +422,51 @@ FRONTEND_REGISTER_URL = Derived(lambda settings: settings.LMS_ROOT_URL + '/regis
 
 ENTERPRISE_API_URL = Derived(lambda settings: settings.LMS_INTERNAL_ROOT_URL + '/enterprise/api/v1/')
 ENTERPRISE_CONSENT_API_URL = Derived(lambda settings: settings.LMS_INTERNAL_ROOT_URL + '/consent/api/v1/')
+ENTERPRISE_MARKETING_FOOTER_QUERY_PARAMS = {}
 
 # Public domain name of Studio (should be resolvable from the end-user's browser)
 CMS_BASE = None
 CMS_ROOT_URL = None
+
+LOG_DIR = '/edx/var/log/edx'
+
+LOCAL_LOGLEVEL = "INFO"
 
 MAINTENANCE_BANNER_TEXT = 'Sample banner message'
 
 WIKI_ENABLED = True
 
 CERT_QUEUE = 'certificates'
+
+ELASTIC_SEARCH_CONFIG = [
+    {
+        'use_ssl': False,
+        'host': 'localhost',
+        'port': 9200
+    }
+]
+
+######################### CSRF #########################################
+
+# Forwards-compatibility with Django 1.7
+CSRF_COOKIE_AGE = 60 * 60 * 24 * 7 * 52
+# It is highly recommended that you override this in any environment accessed by
+# end users
+CSRF_COOKIE_SECURE = False
+
+CROSS_DOMAIN_CSRF_COOKIE_DOMAIN = ''
+CROSS_DOMAIN_CSRF_COOKIE_NAME = ''
+
+#################### CAPA External Code Evaluation #############################
+XQUEUE_WAITTIME_BETWEEN_REQUESTS = 5  # seconds
+XQUEUE_INTERFACE = {
+    'url': 'http://localhost:18040',
+    'basic_auth': ['edx', 'edx'],
+    'django_auth': {
+        'username': 'lms',
+        'password': 'password'
+    }
+}
 
 ################################# Middleware ###################################
 
@@ -645,13 +694,23 @@ CODE_JAIL = {
 }
 
 ############################ DJANGO_BUILTINS ################################
+# Change DEBUG in your environment settings files, not here
+SESSION_COOKIE_SECURE = False
+SESSION_SAVE_EVERY_REQUEST = False
+SESSION_SERIALIZER = 'openedx.core.lib.session_serializers.PickleSerializer'
+SESSION_COOKIE_NAME = 'sessionid'
 
+# Site info
+SITE_NAME = "localhost"
+HTTPS = 'on'
 ROOT_URLCONF = 'cms.urls'
 
 COURSE_IMPORT_EXPORT_BUCKET = ''
 COURSE_METADATA_EXPORT_BUCKET = ''
 
 ALTERNATE_WORKER_QUEUES = 'lms'
+
+X_FRAME_OPTIONS = 'DENY'
 
 # .. setting_name: GIT_REPO_EXPORT_DIR
 # .. setting_default: '/edx/var/edxapp/export_course_repos'
@@ -904,6 +963,10 @@ CELERY_QUEUES = {
 }
 
 # Queues configuration
+
+CLEAR_REQUEST_CACHE_ON_TASK_COMPLETION = True
+
+BROKER_USE_SSL = Derived(lambda settings: settings.CELERY_BROKER_USE_SSL)
 
 CLEAR_REQUEST_CACHE_ON_TASK_COMPLETION = True
 
@@ -1412,6 +1475,56 @@ ELASTIC_FIELD_MAPPINGS = {
 XBLOCK_FS_STORAGE_BUCKET = None
 XBLOCK_FS_STORAGE_PREFIX = None
 
+STUDIO_FRONTEND_CONTAINER_URL = None
+
+################################ Settings for Credit Course Requirements ################################
+# Initial delay used for retrying tasks.
+# Additional retries use longer delays.
+# Value is in seconds.
+CREDIT_TASK_DEFAULT_RETRY_DELAY = 30
+
+# Maximum number of retries per task for errors that are not related
+# to throttling.
+CREDIT_TASK_MAX_RETRIES = 5
+
+# Maximum age in seconds of timestamps we will accept
+# when a credit provider notifies us that a student has been approved
+# or denied for credit.
+CREDIT_PROVIDER_TIMESTAMP_EXPIRATION = 15 * 60
+
+CREDIT_PROVIDER_SECRET_KEYS = {}
+
+# .. setting_name: COMPREHENSIVE_THEME_DIRS
+# .. setting_default: []
+# .. setting_description: A list of paths to directories, each of which will
+#   be searched for comprehensive themes. Do not override this Django setting directly.
+#   Instead, set the COMPREHENSIVE_THEME_DIRS environment variable, using colons (:) to
+#   separate paths.
+COMPREHENSIVE_THEME_DIRS = os.environ.get("COMPREHENSIVE_THEME_DIRS", "").split(":")
+
+# .. setting_name: DEFAULT_SITE_THEME
+# .. setting_default: None
+# .. setting_description: See LMS annotation.
+DEFAULT_SITE_THEME = None
+
+# .. toggle_name: ENABLE_COMPREHENSIVE_THEMING
+# .. toggle_implementation: DjangoSetting
+# .. toggle_default: False
+# .. toggle_description: See LMS annotation.
+# .. toggle_use_cases: open_edx
+# .. toggle_creation_date: 2016-06-30
+ENABLE_COMPREHENSIVE_THEMING = False
+
+# .. setting_name: CUSTOM_RESOURCE_TEMPLATES_DIRECTORY
+# .. setting_default: None
+# .. setting_description: Path to an existing directory of YAML files containing
+#    html content to be used with the subclasses of xmodule.x_module.ResourceTemplates.
+#    Default example templates can be found in xmodule/templates/html.
+#    Note that the extension used is ".yaml" and not ".yml".
+#    See xmodule.x_module.ResourceTemplates for usage.
+#   "CUSTOM_RESOURCE_TEMPLATES_DIRECTORY" : null
+CUSTOM_RESOURCE_TEMPLATES_DIRECTORY = None
+
 ############################ Global Database Configuration #####################
 
 DATABASE_ROUTERS = [
@@ -1422,6 +1535,16 @@ DATABASE_ROUTERS = [
 
 # 5 minute expiration time for JWT id tokens issued for external API requests.
 OAUTH_ID_TOKEN_EXPIRATION = 5 * 60
+
+# Partner support link for CMS footer
+PARTNER_SUPPORT_EMAIL = ''
+
+# Affiliate cookie tracking
+AFFILIATE_COOKIE_NAME = 'dev_affiliate_id'
+
+# API access management
+API_ACCESS_FROM_EMAIL = 'api-requests@example.com'
+API_ACCESS_MANAGER_EMAIL = 'api-access@example.com'
 
 EDX_DRF_EXTENSIONS = {
     # Set this value to an empty dict in order to prevent automatically updating
@@ -1438,10 +1561,43 @@ HELP_TOKENS_INI_FILE = REPO_ROOT / "cms" / "envs" / "help_tokens.ini"
 # How long until database records about the outcome of a task and its artifacts get deleted?
 USER_TASKS_MAX_AGE = timedelta(days=7)
 
+############## Settings for the Enterprise App ######################
+
+ENTERPRISE_SERVICE_WORKER_USERNAME = 'enterprise_worker'
+ENTERPRISE_API_CACHE_TIMEOUT = 3600  # Value is in seconds
+# The default value of this needs to be a 16 character string
+ENTERPRISE_CUSTOMER_CATALOG_DEFAULT_CONTENT_FILTER = {}
+
+# The setting key maps to the channel code (e.g. 'SAP' for success factors), Channel code is defined as
+# part of django model of each integrated channel in edx-enterprise.
+# The absence of a key/value pair translates to NO LIMIT on the number of "chunks" transmitted per cycle.
+INTEGRATED_CHANNELS_API_CHUNK_TRANSMISSION_LIMIT = {}
+
+BASE_COOKIE_DOMAIN = 'localhost'
+
+############## Settings for the Discovery App ######################
+
+COURSE_CATALOG_URL_ROOT = 'http://localhost:8008'
+COURSE_CATALOG_API_URL = f'{COURSE_CATALOG_URL_ROOT}/api/v1'
+
+# which access.py permission name to check in order to determine if a course is visible in
+# the course catalog. We default this to the legacy permission 'see_exists'.
+COURSE_CATALOG_VISIBILITY_PERMISSION = 'see_exists'
+
+# which access.py permission name to check in order to determine if a course about page is
+# visible. We default this to the legacy permission 'see_exists'.
+COURSE_ABOUT_VISIBILITY_PERMISSION = 'see_exists'
+
+DEFAULT_COURSE_VISIBILITY_IN_CATALOG = "both"
+DEFAULT_MOBILE_AVAILABLE = False
+
 ############################# Persistent Grades ####################################
 
 # Queue to use for updating persistent grades
 RECALCULATE_GRADES_ROUTING_KEY = DEFAULT_PRIORITY_QUEUE
+
+# Rate limit for regrading tasks that a grading policy change can kick off
+POLICY_CHANGE_TASK_RATE_LIMIT = '900/h'
 
 # .. setting_name: DEFAULT_GRADE_DESIGNATIONS
 # .. setting_default: ['A', 'B', 'C', 'D']
@@ -1596,6 +1752,9 @@ REGISTRATION_EXTRA_FIELDS = {
 }
 EDXAPP_PARSE_KEYS = {}
 PARSE_KEYS = {}
+
+############################ AI_TRANSLATIONS ##################################
+AI_TRANSLATIONS_API_URL = 'http://localhost:18760/api/v1'
 
 ###################### DEPRECATED URLS ##########################
 
