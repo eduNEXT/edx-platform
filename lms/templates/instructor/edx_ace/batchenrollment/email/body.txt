@@ -1,0 +1,20 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans with user_name=user_name %}Hello {{ user_name }},{% endblocktrans %}
+
+{% blocktrans with task_name=task_name course_id=course_id task_status=task_status %}Your {{ task_name }} for course {{ course_id }} has {{ task_status }}.{% endblocktrans %}
+
+{% blocktrans %}Task Summary:{% endblocktrans %}
+- {% blocktrans with total_processed=total_processed %}Total students processed: {{ total_processed }}{% endblocktrans %}
+- {% blocktrans with successful=successful %}Successful operations: {{ successful }}{% endblocktrans %}
+- {% blocktrans with failed=failed %}Failed operations: {{ failed }}{% endblocktrans %}
+
+{% if failed > 0 %}
+{% blocktrans %}Please check the instructor dashboard for detailed information about any failed operations.{% endblocktrans %}
+{% endif %}
+
+{% blocktrans %}A detailed CSV report with the results has been generated and is available for download in the data download section of the instructor dashboard.{% endblocktrans %}
+
+{% blocktrans %}Best regards,{% endblocktrans %}
+{% blocktrans with platform_name=platform_name %}The {{ platform_name }} Team{% endblocktrans %}
+{% endautoescape %}

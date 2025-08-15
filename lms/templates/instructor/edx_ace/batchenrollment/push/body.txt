@@ -1,0 +1,4 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans with task_status=task_status successful=successful total_processed=total_processed course_id=course_id %}Batch {{ task_status }}: {{ successful }}/{{ total_processed }} students processed for {{ course_id }}. CSV report available.{% endblocktrans %}
+{% endautoescape %}

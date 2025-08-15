@@ -1,0 +1,2 @@
+{% load i18n %}
+{% blocktrans %}Batch {{ action_name }} task completed - CSV report available{% endblocktrans %}

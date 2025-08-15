@@ -2,12 +2,23 @@
 Instructor tasks related to enrollments.
 """
 
+import json
 import logging
 from datetime import datetime
 from time import time
 
+from django.conf import settings
+from django.contrib.sites.models import Site
 from opaque_keys.edx.keys import CourseKey
 from pytz import UTC
+from edx_ace import ace
+from edx_ace.recipient import Recipient
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from openedx.core.lib.celery.task_utils import emulate_http_request
+from openedx.core.djangoapps.ace_common.template_context import get_base_template_context
+from openedx.core.djangoapps.lang_pref import LANGUAGE_KEY
+from openedx.core.djangoapps.user_api.preferences.api import get_user_preference
+
 from lms.djangoapps.instructor_analytics.basic import (
     enrolled_students_features,
     list_inactive_enrolled_students,
@@ -17,6 +28,8 @@ from lms.djangoapps.instructor_analytics.basic import (
 from common.djangoapps.student.models import CourseEnrollment  # lint-amnesty, pylint: disable=unused-import
 from lms.djangoapps.instructor.utils.enrollment_utils import process_student_enrollment_batch as process_batch
 from lms.djangoapps.instructor_analytics.csvs import format_dictlist
+from lms.djangoapps.instructor_task.models import InstructorTask
+from lms.djangoapps.instructor.message_types import BatchEnrollment
 
 from .runner import TaskProgress
 from .utils import upload_csv_to_report_store  # lint-amnesty, pylint: disable=unused-import
@@ -200,12 +213,107 @@ def process_student_enrollment_batch(_xblock_instance_args, _entry_id, course_id
     CSV_FIELDS = ["identifier", "success", "state_transition", "error_type"]
     CSV_DEFAULTS = {"identifier": "", "success": False, "state_transition": "", "error_type": ""}
 
-    def extract_csv_row(result):
+    def extract_csv_row(result: dict) -> list[str]:
         """Extract CSV row data from result dictionary."""
         return [result.get(field, CSV_DEFAULTS[field]) for field in CSV_FIELDS]
 
     rows = [CSV_FIELDS] + [extract_csv_row(result) for result in batch_result["results"]]
 
     upload_csv_to_report_store(rows, "enrollment_batch_results", course_id, start_date)
+    send_enrollment_task_completion_email(_entry_id, action, final_step)
 
     return task_progress.update_task_state(extra_meta=final_step)
+
+
+def send_enrollment_task_completion_email(entry_id: int, action_name: str, task_result: dict) -> None:
+    """
+    Send a completion email to the user who initiated the enrollment batch task using ACE framework.
+
+    Args:
+        entry_id (int): The InstructorTask entry ID
+        action_name (str): The action name (e.g., 'enroll', 'unenroll')
+        task_result (dict): Dictionary containing task completion results
+    """
+    try:
+        instructor_task = InstructorTask.objects.get(pk=entry_id)
+        requester = instructor_task.requester
+        course_id = instructor_task.course_id
+
+        total_processed = task_result.get("total_processed", 0)
+        successful = task_result.get("successful", 0)
+        failed = task_result.get("failed", 0)
+
+        if failed == 0:
+            task_status = "successfully completed"
+        elif successful > 0:
+            task_status = "completed with some errors"
+        else:
+            task_status = "failed"
+
+        task_name = f"Student {action_name} batch operation"
+
+        user_context = {
+            "action_name": action_name,
+            "task_name": task_name,
+            "task_status": task_status,
+            "course_id": str(course_id),
+            "total_processed": total_processed,
+            "successful": successful,
+            "failed": failed,
+            "user_name": requester.get_full_name() or requester.username,
+            "platform_name": settings.PLATFORM_NAME,
+        }
+
+        user_language = get_user_preference(requester, LANGUAGE_KEY)
+
+        # Send email using ACE framework with proper context handling
+        # We're in a Celery task context, so we need to emulate HTTP request
+        site = Site.objects.get_current() if hasattr(Site.objects, "get_current") else None
+        if not site:
+            try:
+                site = Site.objects.get(id=settings.SITE_ID)
+            except Site.DoesNotExist:
+                try:
+                    site = Site.objects.first()
+                except Exception:  # pylint: disable=broad-except
+                    site = None
+
+        site_name = configuration_helpers.get_value("SITE_NAME", settings.SITE_NAME)
+
+        try:
+            task_input = json.loads(instructor_task.task_input)
+        except (json.JSONDecodeError, ValueError):
+            task_input = {}
+
+        secure = task_input.get("secure", True)
+        protocol = "https" if secure else "http"
+        course_url = f"{protocol}://{site_name}/courses/{course_id}/"
+        user_context.update({"course_url": course_url})
+
+        message = BatchEnrollment().personalize(
+            recipient=Recipient(lms_user_id=requester.id, email_address=requester.email),
+            language=user_language,
+            user_context=user_context,
+        )
+
+        # Use emulate_http_request to provide the necessary context for ACE
+        with emulate_http_request(site=site, user=requester):
+            ace.send(message)
+
+        TASK_LOG.info(
+            "Enrollment task completion email sent via ACE to user %s (%s) for course %s. "
+            "Task: %s, Status: %s, Results: %d successful, %d failed out of %d total",
+            requester.username,
+            requester.email,
+            course_id,
+            task_name,
+            task_status,
+            successful,
+            failed,
+            total_processed,
+        )
+
+    except InstructorTask.DoesNotExist:
+        TASK_LOG.error("Could not send enrollment task completion email: InstructorTask with ID %s not found", entry_id)
+    except Exception as exc:  # pylint: disable=broad-except
+        TASK_LOG.exception("Failed to send enrollment task completion email for entry_id %s: %s", entry_id, str(exc))

@@ -1,0 +1,69 @@
+{% extends 'ace_common/edx_ace/common/base_body.html' %}
+
+{% load i18n %}
+{% load static %}
+{% block content %}
+<table width="100%" align="left" border="0" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+        <td>
+            <h1>
+                {% autoescape off %}
+                {# xss-lint: disable=django-blocktrans-missing-escape-filter #}
+                {% blocktrans %}{{ task_name }} completed{% endblocktrans %}
+                {% endautoescape %}
+            </h1>
+
+            <p style="color: rgba(0,0,0,.75);">
+                {% autoescape off %}
+                {# xss-lint: disable=django-blocktrans-missing-escape-filter #}
+                {% blocktrans with tn=task_name|lower %}
+                    Your {{ tn }} for course {{ course_id }} has {{ task_status }}.
+                {% endblocktrans %}
+                {% endautoescape %}
+                <br />
+            </p>
+
+            <h3 style="color: rgba(0,0,0,.85); margin: 20px 0 10px 0;">
+                {% filter force_escape %}
+                {% blocktrans %}Task Summary:{% endblocktrans %}
+                {% endfilter %}
+            </h3>
+
+            <div style="background-color: #f8f9fa; border-left: 4px solid #007cba; padding: 15px; margin: 20px 0;">
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li style="margin: 8px 0;">
+                        {% filter force_escape %}
+                        {% blocktrans with total_processed=total_processed %}Total students processed: {{ total_processed }}{% endblocktrans %}
+                        {% endfilter %}
+                    </li>
+                    <li style="margin: 8px 0; color: #28a745; font-weight: bold;">
+                        {% filter force_escape %}
+                        {% blocktrans with successful=successful %}Successful operations: {{ successful }}{% endblocktrans %}
+                        {% endfilter %}
+                    </li>
+                    <li style="margin: 8px 0; {% if failed > 0 %}color: #dc3545; font-weight: bold;{% endif %}">
+                        {% filter force_escape %}
+                        {% blocktrans with failed=failed %}Failed operations: {{ failed }}{% endblocktrans %}
+                        {% endfilter %}
+                    </li>
+                </ul>
+            </div>
+
+            <p style="color: rgba(0,0,0,.75);">
+                {% filter force_escape %}
+                {% blocktrans %}A detailed CSV report with the results has been generated and is available for download in the{% endblocktrans %}
+                {% endfilter %}
+                <a href="{{ course_url }}instructor#view-data_download"
+                   style="color: #007cba; text-decoration: none; font-weight: bold;">
+                    {% filter force_escape %}
+                    {% blocktrans %}data download section{% endblocktrans %}
+                    {% endfilter %}
+                </a>
+                {% filter force_escape %}
+                {% blocktrans %}of the instructor dashboard.{% endblocktrans %}
+                {% endfilter %}
+            </p>
+        </td>
+    </tr>
+</table>
+{% endblock %}
