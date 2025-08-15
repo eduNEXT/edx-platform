@@ -143,6 +143,7 @@ def process_student_enrollment_batch(_xblock_instance_args, _entry_id, course_id
         Task progress with results of enrollment operations
     """
     start_time = time()
+    start_date = datetime.now(UTC)
 
     action = task_input.get("action")
     identifiers = task_input.get("identifiers", [])
@@ -195,5 +196,16 @@ def process_student_enrollment_batch(_xblock_instance_args, _entry_id, course_id
         "successful": batch_result["successful_operations"],
         "failed": batch_result["failed_operations"],
     }
+
+    CSV_FIELDS = ["identifier", "success", "state_transition", "error_type"]
+    CSV_DEFAULTS = {"identifier": "", "success": False, "state_transition": "", "error_type": ""}
+
+    def extract_csv_row(result):
+        """Extract CSV row data from result dictionary."""
+        return [result.get(field, CSV_DEFAULTS[field]) for field in CSV_FIELDS]
+
+    rows = [CSV_FIELDS] + [extract_csv_row(result) for result in batch_result["results"]]
+
+    upload_csv_to_report_store(rows, "enrollment_batch_results", course_id, start_date)
 
     return task_progress.update_task_state(extra_meta=final_step)
