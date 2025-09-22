@@ -93,7 +93,7 @@ class DeveloperErrorViewMixin:
         elif isinstance(exc, APIException):
             return self._make_error_response(exc.status_code, exc.detail)
         elif isinstance(exc, (Http404, ObjectDoesNotExist)):
-            return self._make_error_response(404, str(exc) or "Not found.")
+            return self._make_error_response(404, str(exc) or "creando la pagina por favor recarge.")
         elif isinstance(exc, ValidationError):
             return self._make_validation_error_response(exc)
         else:
