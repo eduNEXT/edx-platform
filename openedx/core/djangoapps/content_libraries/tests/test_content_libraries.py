@@ -16,6 +16,10 @@ import tomlkit
 from django.contrib.auth.models import Group
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import transaction
+from bridgekeeper import perms
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth.models import Group
+from django.db.models import Q
 from django.test import override_settings
 from django.test.client import Client
 from freezegun import freeze_time
@@ -38,6 +42,9 @@ from openedx.core.djangoapps.content_libraries.tests.base import (
 )
 from openedx.core.djangoapps.xblock import api as xblock_api
 from openedx.core.djangolib.testing.utils import skip_unless_cms
+
+from ..models import ContentLibrary
+from ..permissions import CAN_VIEW_THIS_CONTENT_LIBRARY, HasPermissionInContentLibraryScope
 
 
 @skip_unless_cms
