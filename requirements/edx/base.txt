@@ -69,14 +69,14 @@ bleach[css]==6.2.0
     #   xblock-poll
 boto==2.49.0
     # via -r requirements/edx/kernel.in
-boto3==1.40.57
+boto3==1.40.60
     # via
     #   -r requirements/edx/kernel.in
     #   django-ses
     #   fs-s3fs
     #   ora2
     #   snowflake-connector-python
-botocore==1.40.57
+botocore==1.40.60
     # via
     #   -r requirements/edx/kernel.in
     #   boto3
@@ -826,7 +826,7 @@ openedx-atlas==0.7.0
     #   enterprise-integrated-channels
     #   openedx-authz
     #   openedx-forum
-openedx-authz==0.11.0
+openedx-authz @ git+https://github.com/openedx/openedx-authz.git@MJG/get-filtered-libs-authz
     # via -r requirements/edx/kernel.in
 openedx-calc==4.0.2
     # via -r requirements/edx/kernel.in
