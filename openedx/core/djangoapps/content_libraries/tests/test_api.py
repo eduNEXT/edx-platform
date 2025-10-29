@@ -25,8 +25,10 @@ from openedx_events.content_authoring.signals import (
     LIBRARY_COLLECTION_UPDATED,
     LIBRARY_CONTAINER_UPDATED,
 )
+from openedx_authz.api.users import get_user_role_assignments_in_scope
 from openedx_learning.api import authoring as authoring_api
 
+from common.djangoapps.student.tests.factories import UserFactory
 from .. import api
 from ..models import ContentLibrary
 from .base import ContentLibrariesRestApiTest

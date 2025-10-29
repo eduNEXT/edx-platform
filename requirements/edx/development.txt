@@ -93,6 +93,7 @@ attrs==25.3.0
     #   edx-ace
     #   jsonschema
     #   lti-consumer-xblock
+    #   openedx-authz
     #   openedx-events
     #   openedx-learning
     #   referencing
@@ -155,6 +156,11 @@ botocore==1.37.38
     #   boto3
     #   s3transfer
     #   snowflake-connector-python
+bracex==2.6
+    # via
+    #   -r requirements/edx/doc.txt
+    #   -r requirements/edx/testing.txt
+    #   wcmatch
 bridgekeeper==0.9
     # via
     #   -r requirements/edx/doc.txt
@@ -340,6 +346,7 @@ django==4.2.20
     #   -c requirements/edx/../constraints.txt
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
+    #   casbin-django-orm-adapter
     #   django-appconf
     #   django-celery-results
     #   django-classy-tags
@@ -399,6 +406,7 @@ django==4.2.20
     #   help-tokens
     #   jsonfield
     #   lti-consumer-xblock
+    #   openedx-authz
     #   openedx-django-pyfs
     #   openedx-django-wiki
     #   openedx-events
@@ -617,6 +625,7 @@ djangorestframework==3.14.0
     #   edx-organizations
     #   edx-proctoring
     #   edx-submissions
+    #   openedx-authz
     #   openedx-forum
     #   openedx-learning
     #   ora2
@@ -781,6 +790,7 @@ edx-opaque-keys[django]==3.0.0
     #   edx-proctoring
     #   edx-when
     #   lti-consumer-xblock
+    #   openedx-authz
     #   openedx-events
     #   openedx-filters
     #   ora2
@@ -1527,6 +1537,12 @@ pyasn1-modules==0.4.2
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
     #   google-auth
+pycasbin==2.4.0
+    # via
+    #   -r requirements/edx/doc.txt
+    #   -r requirements/edx/testing.txt
+    #   casbin-django-orm-adapter
+    #   openedx-authz
 pycodestyle==2.8.0
     # via
     #   -c requirements/edx/../constraints.txt
