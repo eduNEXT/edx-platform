@@ -826,7 +826,7 @@ openedx-atlas==0.7.0
     #   enterprise-integrated-channels
     #   openedx-authz
     #   openedx-forum
-openedx-authz @ git+https://github.com/openedx/openedx-authz.git@MJG/get-filtered-libs-authz
+openedx-authz @ git+https://github.com/edunext/openedx-authz.git@bav/load-filtered-policy-in-roles-and-perm-views
     # via -r requirements/edx/kernel.in
 openedx-calc==4.0.2
     # via -r requirements/edx/kernel.in
