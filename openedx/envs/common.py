@@ -2285,7 +2285,7 @@ ONE_CLICK_UNSUBSCRIBE_RATE_LIMIT = '100/m'
 EMAIL_CHANGE_RATE_LIMIT = ''
 SECONDARY_EMAIL_RATE_LIMIT = ''
 
-LMS_ROOT_URL = None
+LMS_ROOT_URL = "https://example.com"
 LMS_INTERNAL_ROOT_URL = Derived(lambda settings: settings.LMS_ROOT_URL)
 
 LMS_ENROLLMENT_API_PATH = "/api/enrollment/v1/"
