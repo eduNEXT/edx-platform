@@ -727,6 +727,7 @@ edx-django-utils==7.4.0
     #   -r requirements/edx/testing.txt
     #   django-config-models
     #   edx-ace
+    #   edx-auth-backends
     #   edx-drf-extensions
     #   edx-enterprise
     #   edx-event-bus-kafka
@@ -751,7 +752,6 @@ edx-drf-extensions==10.6.0
     #   edx-rbac
     #   edx-when
     #   edxval
-    #   enterprise-integrated-channels
     #   openedx-authz
     #   openedx-learning
 edx-enterprise==5.12.7
@@ -845,6 +845,7 @@ edx-toggles==5.3.0
     # via
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
+    #   edx-auth-backends
     #   edx-completion
     #   edx-enterprise
     #   edx-event-bus-kafka
@@ -1356,8 +1357,9 @@ openedx-atlas==0.7.0
     # via
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
+    #   openedx-authz
     #   openedx-forum
-openedx-authz==0.11.2
+openedx-authz==0.12.0
     # via
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt

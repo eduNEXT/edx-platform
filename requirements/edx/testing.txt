@@ -525,7 +525,8 @@ edx-api-doc-tools==2.0.0
     # via
     #   -r requirements/edx/base.txt
     #   edx-name-affirmation
-edx-auth-backends==4.5.0
+    #   openedx-authz
+edx-auth-backends==4.6.2
     # via -r requirements/edx/base.txt
 edx-bulk-grades==1.1.0
     # via
@@ -557,6 +558,7 @@ edx-django-utils==7.4.0
     #   -r requirements/edx/base.txt
     #   django-config-models
     #   edx-ace
+    #   edx-auth-backends
     #   edx-drf-extensions
     #   edx-enterprise
     #   edx-event-bus-kafka
@@ -580,6 +582,7 @@ edx-drf-extensions==10.6.0
     #   edx-rbac
     #   edx-when
     #   edxval
+    #   openedx-authz
     #   openedx-learning
 edx-enterprise==5.12.7
     # via
@@ -650,6 +653,7 @@ edx-tincan-py35==2.0.0
 edx-toggles==5.3.0
     # via
     #   -r requirements/edx/base.txt
+    #   edx-auth-backends
     #   edx-completion
     #   edx-enterprise
     #   edx-event-bus-kafka
@@ -1030,8 +1034,9 @@ openai==0.28.1
 openedx-atlas==0.7.0
     # via
     #   -r requirements/edx/base.txt
+    #   openedx-authz
     #   openedx-forum
-openedx-authz==0.11.2
+openedx-authz==0.12.0
     # via -r requirements/edx/base.txt
 openedx-calc==4.0.2
     # via -r requirements/edx/base.txt
