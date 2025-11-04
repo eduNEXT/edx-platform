@@ -44,7 +44,7 @@ from openedx.core.djangoapps.xblock import api as xblock_api
 from openedx.core.djangolib.testing.utils import skip_unless_cms
 from openedx_authz.constants.permissions import VIEW_LIBRARY
 
-from ..models import ContentLibrary
+from ..models import ContentLibrary, ContentLibraryPermission
 from ..permissions import CAN_VIEW_THIS_CONTENT_LIBRARY, HasPermissionInContentLibraryScope
 
 
