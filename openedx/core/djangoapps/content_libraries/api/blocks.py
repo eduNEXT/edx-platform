@@ -4,6 +4,7 @@ Content libraries API methods related to XBlocks/Components.
 These methods don't enforce permissions (only the REST APIs do).
 """
 from __future__ import annotations
+
 import logging
 import mimetypes
 from datetime import datetime, timezone
@@ -20,7 +21,9 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from lxml import etree
 from opaque_keys.edx.locator import LibraryLocatorV2, LibraryUsageLocatorV2
+from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import LearningContextKey, UsageKeyV2
+from opaque_keys.edx.locator import LibraryContainerLocator, LibraryLocatorV2, LibraryUsageLocatorV2
 from openedx_events.content_authoring.data import (
     ContentObjectChangedData,
     LibraryBlockData,
@@ -37,6 +40,14 @@ from openedx_events.content_authoring.signals import (
 )
 from openedx_learning.api import authoring as authoring_api
 from openedx_learning.api.authoring_models import Component, ComponentVersion, LearningPackage, MediaType
+from openedx_learning.api.authoring_models import (
+    Collection,
+    Component,
+    ComponentVersion,
+    Container,
+    LearningPackage,
+    MediaType
+)
 from xblock.core import XBlock
 
 from openedx.core.djangoapps.xblock.api import (
@@ -46,13 +57,24 @@ from openedx.core.djangoapps.xblock.api import (
 )
 from openedx.core.types import User as UserType
 
+from .. import tasks
 from ..models import ContentLibrary
+from .block_metadata import LibraryXBlockMetadata, LibraryXBlockStaticFile
+from .collections import library_collection_locator
+from .containers import (
+    ContainerMetadata,
+    ContainerType,
+    create_container,
+    get_container,
+    get_containers_contains_item,
+    update_container_children
+)
 from .exceptions import (
     BlockLimitReachedError,
     ContentLibraryBlockNotFound,
     IncompatibleTypesError,
     InvalidNameError,
-    LibraryBlockAlreadyExists,
+    LibraryBlockAlreadyExists
 )
 from .block_metadata import LibraryXBlockMetadata, LibraryXBlockStaticFile
 from .containers import (
@@ -65,7 +87,6 @@ from .containers import (
 )
 from .collections import library_collection_locator
 from .libraries import PublishableItem
-from .. import tasks
 
 # This content_libraries API is sometimes imported in the LMS (should we prevent that?), but the content_staging app
 # cannot be. For now we only need this one type import at module scope, so only import it during type checks.

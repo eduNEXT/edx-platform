@@ -15,6 +15,14 @@ from openedx_learning.api import authoring as authoring_api
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from opaque_keys.edx.locator import LibraryContainerLocator, LibraryLocatorV2
+from openedx_authz.constants import permissions as authz_permissions
+from openedx_learning.api import authoring as authoring_api
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 
 from openedx.core.djangoapps.content_libraries import api, permissions
 from openedx.core.lib.api.view_utils import view_auth_classes
@@ -343,7 +351,7 @@ class LibraryContainerPublishView(GenericAPIView):
         api.require_permission_for_library_key(
             container_key.lib_key,
             request.user,
-            'publish_library_content'
+            authz_permissions.PUBLISH_LIBRARY_CONTENT.identifier
         )
         api.publish_container_changes(container_key, request.user.id)
         # If we need to in the future, we could return a list of all the child containers/components that were

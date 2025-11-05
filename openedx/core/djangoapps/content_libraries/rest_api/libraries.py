@@ -83,6 +83,7 @@ from pylti1p3.exception import LtiException, OIDCException
 
 import edx_api_doc_tools as apidocs
 from opaque_keys.edx.locator import LibraryLocatorV2, LibraryUsageLocatorV2
+from openedx_authz.constants import permissions as authz_permissions
 from organizations.api import ensure_organization
 from organizations.exceptions import InvalidOrganizationException
 from organizations.models import Organization
@@ -92,7 +93,10 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
+from user_tasks.models import UserTaskStatus
 
+import openedx.core.djangoapps.site_configuration.helpers as configuration_helpers
+from cms.djangoapps.contentstore.storage import course_import_export_storage
 from cms.djangoapps.contentstore.views.course import (
     get_allowed_organizations_for_libraries,
     user_can_create_organizations,
@@ -472,7 +476,7 @@ class LibraryCommitView(APIView):
         api.require_permission_for_library_key(
             key,
             request.user,
-            'publish_library_content'
+            authz_permissions.PUBLISH_LIBRARY_CONTENT.identifier
         )
         api.publish_changes(key, request.user.id)
         return Response({})
