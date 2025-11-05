@@ -804,7 +804,7 @@ openedx-atlas==0.7.0
     #   -r requirements/edx/kernel.in
     #   openedx-authz
     #   openedx-forum
-git+https://github.com/eduNEXT/openedx-authz.git@bav/attribute-checking#egg=openedx-authz
+git+https://github.com/eduNEXT/openedx-authz.git@MJG/sandbox
     # via -r requirements/edx/kernel.in
 openedx-calc==4.0.2
     # via -r requirements/edx/kernel.in
