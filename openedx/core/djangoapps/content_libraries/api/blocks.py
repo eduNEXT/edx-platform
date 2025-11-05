@@ -66,7 +66,6 @@ from .containers import (
     ContainerType,
     create_container,
     get_container,
-    get_containers_contains_item,
     update_container_children
 )
 from .exceptions import (
