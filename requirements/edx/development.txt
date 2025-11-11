@@ -1359,7 +1359,7 @@ openedx-atlas==0.7.0
     #   -r requirements/edx/testing.txt
     #   openedx-authz
     #   openedx-forum
-git+https://github.com/eduNEXT/openedx-authz.git@MJG/sandbox
+openedx-authz==0.14.0
     # via
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
