@@ -978,7 +978,7 @@ openedx-atlas==0.7.0
     #   -r requirements/edx/base.txt
     #   openedx-authz
     #   openedx-forum
-git+https://github.com/eduNEXT/openedx-authz.git@MJG/sandbox-11112025
+git+https://github.com/eduNEXT/openedx-authz.git@MJG/mngmt-migration
     # via -r requirements/edx/base.txt
 openedx-calc==4.0.2
     # via -r requirements/edx/base.txt
