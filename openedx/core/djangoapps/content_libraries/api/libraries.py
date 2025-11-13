@@ -56,6 +56,10 @@ from opaque_keys.edx.locator import LibraryLocatorV2, LibraryUsageLocatorV2
 from openedx_events.content_authoring.data import (
     ContentLibraryData,
 )
+from openedx_authz import api as authz_api
+from openedx_authz.api import assign_role_to_user_in_scope
+from openedx_authz.constants import permissions as authz_permissions
+from openedx_events.content_authoring.data import ContentLibraryData
 from openedx_events.content_authoring.signals import (
     CONTENT_LIBRARY_CREATED,
     CONTENT_LIBRARY_DELETED,
@@ -76,6 +80,8 @@ from .exceptions import (
     LibraryAlreadyExists,
     LibraryPermissionIntegrityError,
 )
+from .exceptions import LibraryAlreadyExists, LibraryPermissionIntegrityError
+from .permissions import LEGACY_LIB_PERMISSIONS
 
 log = logging.getLogger(__name__)
 
@@ -105,6 +111,8 @@ __all__ = [
     "get_allowed_block_types",
     "publish_changes",
     "revert_changes",
+    "assign_library_role_to_user",
+    "user_has_permission_across_lib_authz_systems",
 ]
 
 
@@ -235,7 +243,18 @@ def user_can_create_library(user: AbstractUser) -> bool:
     """
     Check if the user has permission to create a content library.
     """
-    return user.has_perm(permissions.CAN_CREATE_CONTENT_LIBRARY)
+    library_permission = permissions.CAN_CREATE_CONTENT_LIBRARY
+    lib_permission_in_authz = _transform_legacy_lib_permission_to_authz_permission(library_permission)
+    # The authz_api.is_user_allowed check only validates permissions within a specific library context. Since
+    # creating a library is not tied to an existing one, we use user.has_perm (via Bridgekeeper) to check if the user
+    # can create libraries, meaning they have the course creator role. In the future, this should rely on a global (*)
+    # role defined in the Authorization Framework for instance-level resource creation.
+    has_perms = user.has_perm(library_permission) or authz_api.is_user_allowed(
+        user,
+        lib_permission_in_authz,
+        authz_api.data.GLOBAL_SCOPE_WILDCARD,
+    )
+    return has_perms
 
 
 def get_libraries_for_user(user, org=None, text_search=None, order=None) -> QuerySet[ContentLibrary]:
@@ -320,8 +339,10 @@ def require_permission_for_library_key(library_key: LibraryLocatorV2, user: User
     Raises django.core.exceptions.PermissionDenied if the user doesn't have
     permission.
     """
-    library_obj = ContentLibrary.objects.get_by_key(library_key)  # type: ignore[attr-defined]
-    if not user.has_perm(permission, obj=library_obj):
+    library_obj = ContentLibrary.objects.get_by_key(library_key)
+    # obj should be able to read any valid model object but mypy thinks it can only be
+    # "User | AnonymousUser | None"
+    if not user_has_permission_across_lib_authz_systems(user, permission, library_obj):
         raise PermissionDenied
 
     return library_obj

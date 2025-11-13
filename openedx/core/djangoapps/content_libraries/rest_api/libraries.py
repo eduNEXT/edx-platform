@@ -83,6 +83,7 @@ from pylti1p3.exception import LtiException, OIDCException
 
 import edx_api_doc_tools as apidocs
 from opaque_keys.edx.locator import LibraryLocatorV2, LibraryUsageLocatorV2
+from openedx_authz.constants import permissions as authz_permissions
 from organizations.api import ensure_organization
 from organizations.exceptions import InvalidOrganizationException
 from organizations.models import Organization
@@ -209,7 +210,7 @@ class LibraryRootView(GenericAPIView):
         """
         Create a new content library.
         """
-        if not request.user.has_perm(permissions.CAN_CREATE_CONTENT_LIBRARY):
+        if not api.user_can_create_library(request.user):
             raise PermissionDenied
         serializer = ContentLibraryMetadataSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -463,7 +464,11 @@ class LibraryCommitView(APIView):
         descendants.
         """
         key = LibraryLocatorV2.from_string(lib_key_str)
-        api.require_permission_for_library_key(key, request.user, permissions.CAN_EDIT_THIS_CONTENT_LIBRARY)
+        api.require_permission_for_library_key(
+            key,
+            request.user,
+            authz_permissions.PUBLISH_LIBRARY_CONTENT
+        )
         api.publish_changes(key, request.user.id)
         return Response({})
 

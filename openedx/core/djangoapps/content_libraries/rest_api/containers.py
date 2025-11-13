@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 
 from opaque_keys.edx.locator import LibraryLocatorV2, LibraryContainerLocator
+from openedx_authz.constants import permissions as authz_permissions
 from openedx_learning.api import authoring as authoring_api
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -343,7 +344,7 @@ class LibraryContainerPublishView(GenericAPIView):
         api.require_permission_for_library_key(
             container_key.lib_key,
             request.user,
-            permissions.CAN_EDIT_THIS_CONTENT_LIBRARY,
+            authz_permissions.PUBLISH_LIBRARY_CONTENT
         )
         api.publish_container_changes(container_key, request.user.id)
         # If we need to in the future, we could return a list of all the child containers/components that were

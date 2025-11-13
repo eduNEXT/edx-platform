@@ -960,6 +960,8 @@ openedx-atlas==0.7.0
     # via
     #   -r requirements/edx/base.txt
     #   openedx-forum
+openedx-authz==0.15.0
+    # via -r requirements/edx/base.txt
 openedx-calc==4.0.2
     # via -r requirements/edx/base.txt
 openedx-django-pyfs==3.7.0

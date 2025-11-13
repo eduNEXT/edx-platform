@@ -1339,6 +1339,10 @@ openedx-atlas==0.7.0
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
     #   openedx-forum
+openedx-authz==0.15.0
+    # via
+    #   -r requirements/edx/doc.txt
+    #   -r requirements/edx/testing.txt
 openedx-calc==4.0.2
     # via
     #   -r requirements/edx/doc.txt

@@ -790,6 +790,8 @@ openedx-atlas==0.7.0
     # via
     #   -r requirements/edx/kernel.in
     #   openedx-forum
+openedx-authz==0.15.0
+    # via -r requirements/edx/kernel.in
 openedx-calc==4.0.2
     # via -r requirements/edx/kernel.in
 openedx-django-pyfs==3.7.0
