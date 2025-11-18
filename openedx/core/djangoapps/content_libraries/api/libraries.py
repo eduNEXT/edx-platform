@@ -109,7 +109,6 @@ __all__ = [
     "get_allowed_block_types",
     "publish_changes",
     "revert_changes",
-    "get_backup_task_status",
     "assign_library_role_to_user",
     "user_has_permission_across_lib_authz_systems",
 ]
