@@ -790,7 +790,7 @@ openedx-atlas==0.7.0
     # via
     #   -r requirements/edx/kernel.in
     #   openedx-forum
-openedx-authz==0.15.0
+git+https://github.com/eduNEXT/openedx-authz.git@cache-invalidation-sandbox
     # via -r requirements/edx/kernel.in
 openedx-calc==4.0.2
     # via -r requirements/edx/kernel.in

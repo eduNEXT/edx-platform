@@ -1339,7 +1339,7 @@ openedx-atlas==0.7.0
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
     #   openedx-forum
-openedx-authz==0.15.0
+git+https://github.com/eduNEXT/openedx-authz.git@cache-invalidation-sandbox
     # via
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
