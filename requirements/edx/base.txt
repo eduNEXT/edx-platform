@@ -172,6 +172,7 @@ defusedxml==0.7.1
     #   social-auth-core
 django==5.2.7
     # via
+    #   -c requirements/common_constraints.txt
     #   -c requirements/constraints.txt
     #   -r requirements/edx/kernel.in
     #   casbin-django-orm-adapter
@@ -464,6 +465,7 @@ edx-django-utils==8.0.1
     #   edx-when
     #   enterprise-integrated-channels
     #   event-tracking
+    #   openedx-authz
     #   openedx-events
     #   ora2
     #   super-csv
@@ -825,7 +827,7 @@ openedx-atlas==0.7.0
     #   enterprise-integrated-channels
     #   openedx-authz
     #   openedx-forum
-openedx-authz==0.11.2
+openedx-authz @ git+https://github.com/openedx/openedx-authz.git@bmtcril/cache_superuser_check
     # via -r requirements/edx/kernel.in
 openedx-calc==4.0.2
     # via -r requirements/edx/kernel.in
