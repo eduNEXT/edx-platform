@@ -1,6 +1,9 @@
 """
 Test cases for tasks.py
 """
+# This file uses Django unittest framework (ModuleStoreTestCase), not pytest.
+# pylint-pytest F6401 is a false positive since this is not a pytest test file.
+# pylint: disable=fixme  # F6401: pylint-pytest cannot enumerate fixtures in unittest files
 from unittest import mock
 
 import ddt
@@ -31,7 +34,7 @@ from openedx.core.djangoapps.notifications.config.waffle import ENABLE_NOTIFICAT
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
 
-from .test_views import DiscussionAPIViewTestMixin
+from .test_views_v2 import DiscussionAPIViewTestMixin
 
 
 def _get_mfe_url(course_id, post_id):
@@ -55,12 +58,6 @@ class TestNewThreadCreatedNotification(DiscussionAPIViewTestMixin, ModuleStoreTe
         Setup test case
         """
         super().setUp()
-        patcher = mock.patch(
-            'openedx.core.djangoapps.discussions.config.waffle.ENABLE_FORUM_V2.is_enabled',
-            return_value=False
-        )
-        patcher.start()
-        self.addCleanup(patcher.stop)
         # Creating a course
         self.course = CourseFactory.create()
 
@@ -191,25 +188,31 @@ class TestNewThreadCreatedNotification(DiscussionAPIViewTestMixin, ModuleStoreTe
         ('new_discussion_post',),
     )
     @ddt.unpack
-    def test_notification_is_send_to_all_enrollments(self, notification_type):
+    def test_notification_is_send_to_all_enrollments(
+        self, notification_type
+    ):
         """
         Tests notification is sent to all users if course is not cohorted
         """
         self._assign_enrollments()
         thread_type = (
-            "discussion"
-            if notification_type == "new_discussion_post"
-            else ("question" if notification_type == "new_question_post" else "")
+            "discussion" if notification_type == "new_discussion_post" else "question"
         )
+
         thread = self._create_thread(thread_type=thread_type)
         handler = mock.Mock()
         COURSE_NOTIFICATION_REQUESTED.connect(handler)
-        send_thread_created_notification(thread['id'], str(self.course.id), self.author.id)
+
+        send_thread_created_notification(
+            thread['id'],
+            str(self.course.id),
+            self.author.id
+        )
         self.assertEqual(handler.call_count, 1)
+
         course_notification_data = handler.call_args[1]['course_notification_data']
-        assert notification_type == course_notification_data.notification_type
-        notification_audience_filters = {}
-        assert notification_audience_filters == course_notification_data.audience_filters
+        self.assertEqual(course_notification_data.notification_type, notification_type)
+        self.assertEqual(course_notification_data.audience_filters, {})
 
     @ddt.data(
         ('cohort_1', 'new_question_post'),
@@ -263,12 +266,6 @@ class TestResponseEndorsedNotifications(DiscussionAPIViewTestMixin, ModuleStoreT
         super().setUp()
         httpretty.reset()
         httpretty.enable()
-        patcher = mock.patch(
-            'openedx.core.djangoapps.discussions.config.waffle.ENABLE_FORUM_V2.is_enabled',
-            return_value=False
-        )
-        patcher.start()
-        self.addCleanup(patcher.stop)
 
         self.course = CourseFactory.create()
         patcher = mock.patch(
