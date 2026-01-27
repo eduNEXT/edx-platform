@@ -82,7 +82,7 @@ edx-i18n-tools<1.6.0
 # This can be removed once https://github.com/openedx/edx-platform/issues/34586 is resolved
 # and the upstream constraint in edx-lint has been removed.
 # Issue for unpinning: https://github.com/openedx/edx-platform/issues/35273
-event-tracking==3.0.0
+event-tracking==3.3.0
 
 # Date: 2023-07-26
 # Our legacy Sass code is incompatible with anything except this ancient libsass version.

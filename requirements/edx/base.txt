@@ -547,7 +547,7 @@ enmerkar==0.7.1
     # via enmerkar-underscore
 enmerkar-underscore==2.3.1
     # via -r requirements/edx/kernel.in
-event-tracking==3.0.0
+event-tracking==3.3.0
     # via
     #   -c requirements/edx/../constraints.txt
     #   -r requirements/edx/kernel.in
