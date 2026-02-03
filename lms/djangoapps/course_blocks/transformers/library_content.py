@@ -25,22 +25,6 @@ from ..utils import get_student_module_as_dict
 
 logger = logging.getLogger(__name__)
 
-# Module-level cache to avoid repeated XBlock.load_class() calls
-_BLOCK_CLASS_CACHE = {}
-
-
-def _get_block_class(block_type: str):
-    """
-    Get the XBlock class from a block type.
-    """
-    if block_type not in _BLOCK_CLASS_CACHE:
-        try:
-            _BLOCK_CLASS_CACHE[block_type] = XBlock.load_class(block_type)
-        except Exception:  # lint-amnesty, pylint: disable=broad-except
-            logger.exception('Failed to load block class for type %s', block_type)
-            _BLOCK_CLASS_CACHE[block_type] = None
-    return _BLOCK_CLASS_CACHE[block_type]
-
 
 class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransformer):
     """
@@ -89,7 +73,7 @@ class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransfo
         for block_key in block_structure.topological_traversal(
                 yield_descendants_of_unyielded=True,
         ):
-            block_class = _get_block_class(block_key.block_type)
+            block_class = XBlock.load_class(block_key.block_type)
             is_item_bank = block_class and issubclass(block_class, ItemBankMixin)
 
             if is_item_bank:
@@ -107,7 +91,7 @@ class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransfo
             is_item_bank = block_structure.get_transformer_block_field(block_key, self, 'is_item_bank_block')
             # Fallback for old cache that doesn't have the 'is_item_bank_block' field
             if is_item_bank is None:
-                block_class = _get_block_class(block_key.block_type)
+                block_class = XBlock.load_class(block_key.block_type)
                 is_item_bank = block_class and issubclass(block_class, ItemBankMixin)
 
             if not is_item_bank:
@@ -133,7 +117,7 @@ class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransfo
                 # Update selected
                 previous_count = len(selected)
                 # Get the cached block class to call make_selection
-                block_class = _get_block_class(block_key.block_type)
+                block_class = XBlock.load_class(block_key.block_type)
                 if not block_class:
                     logger.error('Failed to load block class for %s', block_key)
                     continue
@@ -196,7 +180,7 @@ class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransfo
             return json_result
 
         # Get the cached block class to call publish_selected_children_events
-        block_class = _get_block_class(location.block_type)
+        block_class = XBlock.load_class(location.block_type)
         if not block_class:
             logger.error('Failed to load block class for publishing events: %s', location)
             return
@@ -274,7 +258,7 @@ class ContentLibraryOrderTransformer(BlockStructureTransformer):
 
             # Fallback for old cache that doesn't have the 'is_item_bank_block' field
             if is_item_bank is None:
-                block_class = _get_block_class(block_key.block_type)
+                block_class = XBlock.load_class(block_key.block_type)
                 is_item_bank = block_class and issubclass(block_class, ItemBankMixin)
 
             if not is_item_bank:
