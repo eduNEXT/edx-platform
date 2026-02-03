@@ -1347,15 +1347,6 @@ MARK_LIBRARY_CONTENT_BLOCK_COMPLETE_ON_VIEW = False
 # .. toggle_tickets: 'https://github.com/open-craft/edx-platform/pull/429'
 DISABLE_UNENROLLMENT = False
 
-# .. toggle_name: ENABLE_GRADING_METHOD_IN_PROBLEMS
-# .. toggle_implementation: DjangoSetting
-# .. toggle_default: False
-# .. toggle_description: Enables the grading method feature in capa problems.
-# .. toggle_use_cases: open_edx
-# .. toggle_creation_date: 2024-03-22
-# .. toggle_tickets: https://github.com/openedx/edx-platform/pull/33911
-ENABLE_GRADING_METHOD_IN_PROBLEMS = False
-
 # .. toggle_name: BADGES_ENABLED
 # .. toggle_implementation: DjangoSetting
 # .. toggle_default: False
@@ -2074,7 +2065,7 @@ USE_EXTRACTED_POLL_QUESTION_BLOCK = True
 # .. toggle_warning: Not production-ready until relevant subtask https://github.com/openedx/edx-platform/issues/34827 is done.
 # .. toggle_creation_date: 2024-11-10
 # .. toggle_target_removal_date: 2025-06-01
-USE_EXTRACTED_LTI_BLOCK = False
+USE_EXTRACTED_LTI_BLOCK = True
 
 # .. toggle_name: USE_EXTRACTED_HTML_BLOCK
 # .. toggle_default: False
