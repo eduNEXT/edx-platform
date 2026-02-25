@@ -65,6 +65,7 @@ the api module instead.
 import itertools
 import json
 import logging
+import warnings
 
 import edx_api_doc_tools as apidocs
 from django.conf import settings
@@ -134,6 +135,15 @@ from .utils import convert_exceptions
 
 User = get_user_model()
 log = logging.getLogger(__name__)
+
+
+warnings.warn(
+    (
+        "Content library team authorization REST APIs are deprecated. "
+        "See https://github.com/openedx/openedx-platform/issues/37409."
+    ),
+    DeprecationWarning
+)
 
 
 class LibraryApiPaginationDocs:
@@ -323,6 +333,8 @@ class LibraryTeamView(APIView):
 
     Note also the 'allow_public_' settings which can be edited by PATCHing the
     library itself (LibraryDetailsView.patch).
+
+    Deprecated https://github.com/openedx/openedx-platform/issues/37409
     """
     @convert_exceptions
     def post(self, request, lib_key_str):
@@ -369,6 +381,8 @@ class LibraryTeamUserView(APIView):
     """
     View to add/remove/edit an individual user's permissions for a content
     library.
+
+    Deprecated https://github.com/openedx/openedx-platform/issues/37409
     """
     @convert_exceptions
     def put(self, request, lib_key_str, username):
@@ -422,6 +436,8 @@ class LibraryTeamUserView(APIView):
 class LibraryTeamGroupView(APIView):
     """
     View to add/remove/edit a group's permissions for a content library.
+
+    Deprecated https://github.com/openedx/openedx-platform/issues/37409
     """
     @convert_exceptions
     def put(self, request, lib_key_str, group_name):
