@@ -344,7 +344,16 @@ function _restartUsingFlash(state) {
 // ***************************************************************
 
 function destroy() {
+    // Guard against re-entrant or double destroy calls.
+    // jQuery UI 1.14.1 patches $.cleanData to fire triggerHandler("remove") on
+    // elements with 'remove' event handlers. The player.on('remove', state.videoPlayer.destroy)
+    // binding can cause destroy() to be called again while already running.
+    if (!this.videoPlayer) { return; }
     let player = this.videoPlayer.player;
+    // Remove the 'remove' event handler immediately to prevent the patched
+    // $.cleanData (jQuery UI 1.14.1) from calling destroy() again when the
+    // video element is cleaned up later in this same destroy chain.
+    if (this.videoEl) { this.videoEl.off('remove', this.videoPlayer.destroy); }
     this.el.removeClass([
         'is-unstarted', 'is-playing', 'is-paused', 'is-buffered',
         'is-ended', 'is-cued'

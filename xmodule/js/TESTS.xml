@@ -1,0 +1,652 @@
+<?xml version="1.0"?>
+<testsuite name="Firefox 136.0.0 (Ubuntu 0.0.0)" package="javascript" timestamp="2026-02-27T22:48:27" id="0" hostname="jignaciopm-ZenBook-UX333FA-UX333FA" tests="619" errors="0" failures="0" time="51.83">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0"/>
+  </properties>
+  <testcase name="AsyncProcess: Array is processed successfully" time="0.06" classname="Javascript.Firefox"/>
+  <testcase name="AsyncProcess: If non-array is passed, error callback is called" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="AsyncProcess: If an empty array is passed, returns initial array" time="0.053" classname="Javascript.Firefox"/>
+  <testcase name="AsyncProcess: If no process function passed, returns initial array" time="0.053" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer completion: calls the completion api when marking an object complete" time="0.205" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer completion: calls the completion api on the LMS when the time updates" time="0.095" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer completion: does not call the completion api on the LMS when the video is loaded but not seen" time="0.077" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer completion: calls the completion api on the LMS when the video ends" time="0.073" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer completion: calls the completion api if the video is age restricted" time="0.098" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: initialize" time="0.168" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: ready" time="0.115" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: play" time="0.068" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: pause" time="0.059" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: volumechange" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: speedchange" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: seek" time="0.047" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: ended" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events: qualitychange" time="0.281" classname="Javascript.Firefox"/>
+  <testcase name="Video: check videoType" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="Video: set the elements" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="Video: parse the videos" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="Video: parse available video speeds" time="0.049" classname="Javascript.Firefox"/>
+  <testcase name="Video: set current video speed via cookie" time="0.044" classname="Javascript.Firefox"/>
+  <testcase name="Video: check videoType" time="0.042" classname="Javascript.Firefox"/>
+  <testcase name="Video: set the elements" time="0.045" classname="Javascript.Firefox"/>
+  <testcase name="Video: doesn't have `videos` dictionary" time="0.034" classname="Javascript.Firefox"/>
+  <testcase name="Video: parse available video speeds" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="Video: set current video speed via cookie" time="0.043" classname="Javascript.Firefox"/>
+  <testcase name="Video: create the Video Player" time="0.04" classname="Javascript.Firefox"/>
+  <testcase name="Video: callback, to be called after YouTube API loads, exists and is called" time="0.101" classname="Javascript.Firefox"/>
+  <testcase name="Video: both times are proper" time="0.041" classname="Javascript.Firefox"/>
+  <testcase name="Video: start time is invalid" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="Video: end time is invalid" time="0.043" classname="Javascript.Firefox"/>
+  <testcase name="Video: start time is less than 0" time="0.036" classname="Javascript.Firefox"/>
+  <testcase name="Video: start time is greater than end time" time="0.043" classname="Javascript.Firefox"/>
+  <testcase name="Video: check for YT availability is performed only once" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="Video HTML5Video: native play event was called" time="0.069" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.139" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: native event was called" time="0.095" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.19" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: callback was not called" time="0.21" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: native event was called" time="0.133" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.236" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: callback was called" time="0.254" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: native event was called" time="0.167" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.179" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: callback was called" time="0.182" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed, start/end was defined, onReady called" time="0.128" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.17" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: callback was called" time="0.444" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: pauseVideo" time="0.078" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set new correct value" time="0.226" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set new incorrect values" time="0.127" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set new correct value" time="0.117" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set new incorrect values" time="0.111" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getCurrentTime" time="0.136" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: playVideo" time="0.077" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getPlayerState" time="0.096" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getVolume" time="0.086" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getDuration" time="0.198" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set a slow value" time="0.077" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set a fast value" time="0.094" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set NaN value" time="0.083" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getAvailablePlaybackRates" time="0.102" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: _getLogs" time="0.258" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: has url in player config" time="0.084" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: native play event was called" time="0.121" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.624" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: native event was called" time="0.185" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.205" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: callback was not called" time="0.162" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: native event was called" time="0.1" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.16" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: callback was called" time="0.146" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: native event was called" time="0.119" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.198" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: callback was called" time="0.233" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed, start/end was defined, onReady called" time="0.128" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: player state was changed" time="0.134" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: callback was called" time="0.13" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: pauseVideo" time="0.075" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set new correct value" time="0.482" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set new incorrect values" time="0.084" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set new correct value" time="0.07" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set new incorrect values" time="0.077" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getCurrentTime" time="0.509" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: playVideo" time="0.072" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getPlayerState" time="0.065" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getVolume" time="0.069" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getDuration" time="0.48" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set a slow value" time="0.095" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set a fast value" time="0.153" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: set NaN value" time="0.301" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: getAvailablePlaybackRates" time="0.276" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: _getLogs" time="0.754" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: has url in player config" time="0.188" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: does not show poster for html5 video if url is not present" time="0.201" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: does not show poster for hls video if url is not present" time="0.262" classname="Javascript.Firefox"/>
+  <testcase name="Video HTML5Video: native controls are used on  iPhone" time="0.126" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns current language" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns `en`, if language isn't available for the video" time="0.007" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns any available language, if current and `en` languages aren't available for the video" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns `null`, if transcript unavailable" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns duration for the 1.0 speed if speed is not 1.0" time="0.002" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns duration for current video" time="0.004" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns duration for the 1.0 speed as a fall-back" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: return the video id for given speed" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: return the video id for current speed" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: return the video id for 1.0x speed" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: return the video id for 1.0x speed" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: check mapping" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: set new speed" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: set new speed" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: set speed to 1.0x" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: check mapping" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: updates player mode" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: sets default mode if passed is not supported" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns current player mode" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns `true` if player in `flash` mode" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns `false` if player is not in `flash` mode" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns `true` if player in `html5` mode" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Initialize: returns `false` if player is not in `html5` mode" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: size contains correct list length" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns next item in the list" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns first item if index equal last item" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns next item if index is not valid" time="0.002" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns next item in the list" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns first item if index equal last item" time="0.002" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns previous item in the list" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns last item if index equal first item" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns previous item if index is not valid" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns previous item in the list" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns last item if index equal first item" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns last item in the list" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: returns first item in the list" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Iterator: isEnd works correctly" time="0.011" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: When Initialize without required parameters, log message is shown" time="0.003" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: `alignByWidthOnly` works correctly" time="0.005" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: `alignByHeightOnly` works correctly" time="0.005" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: `align` works correctly" time="0.006" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: `setMode` works correctly" time="0.008" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: `setElement` works correctly" time="0.006" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: callbacks are called" time="0.003" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: callback called just once" time="0.008" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: all callbacks are removed" time="0.005" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: specific callback is removed" time="0.005" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: Error message is shown when wrong argument type is passed" time="0.005" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: adding delta align correctly by height" time="0.006" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: adding delta align correctly by width" time="0.003" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: substract delta align correctly by height" time="0.011" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: substract delta align correctly by width" time="0.005" classname="Javascript.Firefox"/>
+  <testcase name="Resizer: reset delta" time="0.009" classname="Javascript.Firefox"/>
+  <testcase name="Sjson: returns captions" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Sjson: returns start times" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Sjson: returns correct length" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Sjson: search returns a correct caption index" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Sjson: search returns the last entry for a value outside the bounds of the array" time="0.002" classname="Javascript.Firefox"/>
+  <testcase name="Sjson: search returns the first entry for a negative index in the array" time="0.004" classname="Javascript.Firefox"/>
+  <testcase name="Sjson: search only searches through a subrange of times if start / end times are specified" time="0.003" classname="Javascript.Firefox"/>
+  <testcase name="Sjson: filters results correctly given a start and end time" time="0.005" classname="Javascript.Firefox"/>
+  <testcase name="VideoSocialSharingHandler: twitter" time="0.142" classname="Javascript.Firefox"/>
+  <testcase name="VideoSocialSharingHandler: facebook" time="0.323" classname="Javascript.Firefox"/>
+  <testcase name="VideoSocialSharingHandler: linkedin" time="0.167" classname="Javascript.Firefox"/>
+  <testcase name="VideoAutoAdvance: no auto-advance button is shown" time="1.012" classname="Javascript.Firefox"/>
+  <testcase name="VideoAutoAdvance: when video ends, it will not auto-advance to next unit" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="VideoAutoAdvance: an active auto-advance button is shown" time="0.07" classname="Javascript.Firefox"/>
+  <testcase name="VideoAutoAdvance: when button is clicked, it will deactivate auto-advance" time="0.061" classname="Javascript.Firefox"/>
+  <testcase name="VideoAutoAdvance: when video ends, it will auto-advance to next unit" time="0.05" classname="Javascript.Firefox"/>
+  <testcase name="VideoAutoAdvance: an inactive auto-advance button is shown" time="0.064" classname="Javascript.Firefox"/>
+  <testcase name="VideoAutoAdvance: when the button is clicked, it will activate auto-advance" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoAutoAdvance: when video ends, it will not auto-advance to next unit" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can render the bumper video" time="0.065" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can show the main video on error" time="0.185" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can show the main video once bumper ends" time="0.216" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can show the main video on skip" time="0.188" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can stop the bumper video playing if it is too long" time="0.186" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can save appropriate states correctly on ended" time="0.08" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can save appropriate states correctly on skip" time="0.079" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can save appropriate states correctly on error" time="0.09" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can save appropriate states correctly on skip and do not show again" time="0.089" classname="Javascript.Firefox"/>
+  <testcase name="VideoBumper: can destroy itself" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: create the transcript element" time="0.076" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: has appropriate lang attributes" time="0.09" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: add transcript control to video player" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: add ARIA attributes to transcript control" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: adds the captioning control to the video player" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: add ARIA attributes to caption control" time="0.073" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: adds &quot;closed&quot; class to the main element if transcript setting is off" time="0.377" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: fetch the transcript in HTML5 mode" time="0.182" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: fetch the transcript in Flash mode" time="0.126" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: fetch the transcript in Youtube mode" time="0.103" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: bind the mouse movement" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: bind the scroll" time="0.047" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: can destroy itself" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: toggles the captions on control click" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: toggles the captions on keypress ENTER" time="0.067" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: toggles the captions on keypress SPACE" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: if languages more than 1" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: when clicking on link with new language" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: when clicking on link with current language" time="0.053" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: open the language toggle on hover" time="0.068" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: opens the language menu on arrow up" time="0.05" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: closes the language menu on ESC" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: if just 1 language" time="0.041" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: render the transcript" time="0.131" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: add a padding element to transcript" time="0.13" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: bind all the transcript link" time="0.205" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: set rendered to true" time="0.313" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: show explanation message" time="0.05" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: show transcript on play" time="0.124" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not set rendered to true" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: transcript panel is not shown" time="0.068" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not set freezing timeout" time="0.147" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: set the freezing timeout" time="0.145" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: reset the freezing timeout" time="0.158" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: reset the freezing timeout" time="0.142" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: reset the freezing timeout" time="0.129" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: unfreeze the transcript" time="0.122" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: scroll the transcript" time="0.132" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not scroll the transcript" time="0.145" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: show transcript on language change" time="0.064" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: use cookie to show/hide transcripts if they have not been loaded yet" time="0.056" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on success: on touch devices" time="0.067" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on success: change language on touch devices when transcripts have not been rendered yet" time="0.084" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on success: re-render on touch devices" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on success: rendered correct" time="0.162" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on success: re-rendered correct" time="0.158" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on error: transcripts are hidden if there are no transcripts" time="0.169" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on error: for Html5 player an attempt to fetch transcript with youtubeId if there are no additional transcripts" time="0.189" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on success: when fetchCaption called with fetch_with_youtubeId to get transcript with youtubeId for html5" time="0.121" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on error: fetch available translations if there are additional transcripts" time="0.061" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: request created with correct parameters" time="0.04" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on success: language menu is rendered if translations available" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on success: language menu isn't rendered if translations unavailable" time="0.037" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: on error: transcripts are hidden if there are no transcript" time="0.064" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: render the transcript" time="0.1" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: add a padding element to transcript" time="0.098" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: set rendered to true" time="0.099" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: set playing to true" time="0.103" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: set playing to false" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: search the caption based on time" time="0.095" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: search the transcript based on 1.0x speed" time="0.146" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: deactivate the previous transcript" time="0.119" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: activate new transcript" time="0.098" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: save new index" time="0.113" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: scroll transcript to new position" time="0.105" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not change current subtitle" time="0.112" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: when transcript button is enabled" time="0.113" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: when transcript button is disabled " time="0.12" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: set the height of transcript spacing" time="0.158" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: scroll transcript to new position" time="0.234" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not scroll the transcript" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoCaption: does not scroll the transcript" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoCaption: scroll to current transcript" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoCaption: trigger seek event with the correct time" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoCaption: trigger seek event with the correct time" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoCaption: trigger seek event with the correct time" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoCaption: hide the transcript" time="0.093" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: show the transcript" time="0.09" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: scroll the transcript" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoCaption: shows an outline around the transcript" time="0.147" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: has automatic scrolling disabled" time="0.131" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not show an outline around the transcript" time="0.133" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: has automatic scrolling enabled" time="0.127" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not show an outline around it" time="0.203" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: has automatic scrolling enabled" time="0.2" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not show an outline around the first" time="0.172" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: does not show an outline around the second" time="0.147" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: has automatic scrolling enabled" time="0.272" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: not shown when captions are not ai generated" time="0.074" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: not shown when captions are not generated by gcp" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: shown when captions are generated by gcp" time="0.056" classname="Javascript.Firefox"/>
+  <testcase name="VideoCaption: shown when captions have no provider" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: the structure should be created on first `contextmenu` call" time="0.104" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: add ARIA attributes to menu, menu items, submenu and submenu items" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: is not used by Youtube type of video player" time="0.053" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: menu can be destroyed successfully" time="0.064" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: can change label for the submenu" time="0.056" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: can change label for the menuitem" time="0.065" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: context menu opens" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouseover and mouseleave behave as expected" time="0.073" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouse left-clicking outside of the context menu will close it" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouse right-clicking outside of video will close it" time="0.076" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouse right-clicking inside video but outside of context menu will not close it" time="0.08" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouse right-clicking inside video but outside of context menu will close submenus" time="0.088" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouse left/right-clicking behaves as expected on play/pause menu item" time="0.083" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouse left/right-clicking behaves as expected on mute/unmute menu item" time="0.105" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouse left/right-clicking behaves as expected on go to Exit full browser menu item" time="0.093" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: mouse left/right-clicking behaves as expected on speed submenu item" time="0.099" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: focus the first item of the just opened menu on UP keydown" time="0.068" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: focus the last item of the just opened menu on DOWN keydown" time="0.061" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: open the submenu on ENTER keydown" time="0.063" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: open the submenu on SPACE keydown" time="0.067" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: open the submenu on RIGHT keydown" time="0.086" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: close the menu on ESCAPE keydown" time="0.047" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: close the submenu on ESCAPE keydown" time="0.047" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: close the submenu on LEFT keydown on submenu items" time="0.044" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: do nothing on RIGHT keydown on submenu item" time="0.047" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: do nothing on TAB keydown on menu item" time="0.043" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: UP and DOWN keydown function as expected on menu/submenu items" time="0.064" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: current item is still focused if all siblings are hidden" time="0.056" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: ENTER keydown on menu/submenu item selects its data and closes menu" time="0.071" classname="Javascript.Firefox"/>
+  <testcase name="Video Context Menu: SPACE keydown on menu/submenu item selects its data and closes menu" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: render the video controls" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is 0, timer slider and VCR set to start-time" time="0.121" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is after start-time, timer slider and VCR set to saved position" time="0.131" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is negative, timer slider and VCR set to start-time" time="0.202" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is not a number, timer slider and VCR set to start-time" time="0.289" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is greater than end-time, timer slider and VCR set to start-time" time="0.13" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: displays the correct time when startTime and endTime are specified" time="0.243" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is 0, timer slider and VCR set to 0:00 and ending at specified end-time" time="0.277" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is after start-time, timer slider and VCR set to saved position" time="0.415" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is negative, timer slider and VCR set to 0:00" time="0.624" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is not a number, timer slider and VCR set to 0:00" time="0.331" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is greater than end-time, timer slider and VCR set to 0:00" time="0.212" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is 0, timer slider and VCR set to appropriate start and end times" time="0.16" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is after start-time, timer slider and VCR set to saved position" time="0.44" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is negative, timer slider and VCR set to start-time" time="0.24" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is not a number, timer slider and VCR set to start-time" time="0.14" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: saved position is greater than end-time, timer slider and VCR set to start-time" time="0.204" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: show" time="0.107" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: can destroy itself" time="0.095" classname="Javascript.Firefox"/>
+  <testcase name="VideoControl: can focus the first control" time="0.146" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.loaded&quot; event" time="0.074" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.played&quot; event" time="0.1" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.stopped&quot; event" time="0.08" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.skipped&quot; event" time="0.096" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.dismissed&quot; event" time="0.073" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.transcript.menu.shown&quot; event" time="0.138" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.transcript.menu.hidden&quot; event" time="0.072" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.transcript.shown&quot; event" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can emit &quot;edx.video.bumper.transcript.hidden&quot; event" time="0.06" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events Bumper plugin: can destroy itself" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;load_video&quot; event" time="0.089" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: returns current time adjusted by startTime if video starts from a subsection" time="0.185" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: returns 0 if currentTime is undefined" time="0.087" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: returns unadjusted current time if startTime is not defined" time="0.076" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: logs event with adjusted duration when startTime and endTime are defined" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;play_video&quot; event when emitPlayVideoEvent is true" time="0.074" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can not emit &quot;play_video&quot; event when emitPlayVideoEvent is false" time="0.073" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;pause_video&quot; event" time="0.071" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;complete_video&quot; event when video is marked as complete" time="0.088" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;speed_change_video&quot; event" time="0.084" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;seek_video&quot; event" time="0.067" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;play_video&quot; event after &quot;seek_video&quot; event " time="0.059" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;stop_video&quot; event" time="0.069" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;skip_video&quot; event" time="0.075" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;do_not_show_again_video&quot; event" time="0.111" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;edx.video.language_menu.shown&quot; event" time="0.102" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;edx.video.language_menu.hidden&quot; event" time="0.088" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;show_transcript&quot; event" time="0.077" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;hide_transcript&quot; event" time="0.077" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;edx.video.closed_captions.shown&quot; event" time="0.059" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;edx.video.closed_captions.hidden&quot; event" time="0.055" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can destroy itself" time="0.056" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: logs event with full duration when startTime and endTime are not defined" time="0.088" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;load_video&quot; event" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: returns current time adjusted by startTime if video starts from a subsection" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: returns 0 if currentTime is undefined" time="0.068" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: returns unadjusted current time if startTime is not defined" time="0.117" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: logs event with adjusted duration when startTime and endTime are defined" time="0.122" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;play_video&quot; event when emitPlayVideoEvent is true" time="0.082" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can not emit &quot;play_video&quot; event when emitPlayVideoEvent is false" time="0.086" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;pause_video&quot; event" time="0.101" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;complete_video&quot; event when video is marked as complete" time="0.088" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;speed_change_video&quot; event" time="0.087" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;seek_video&quot; event" time="0.096" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;play_video&quot; event after &quot;seek_video&quot; event " time="0.133" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;stop_video&quot; event" time="0.08" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;skip_video&quot; event" time="0.106" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;do_not_show_again_video&quot; event" time="0.123" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;edx.video.language_menu.shown&quot; event" time="0.123" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;edx.video.language_menu.hidden&quot; event" time="0.115" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;show_transcript&quot; event" time="0.088" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;hide_transcript&quot; event" time="0.102" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;edx.video.closed_captions.shown&quot; event" time="0.114" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can emit &quot;edx.video.closed_captions.hidden&quot; event" time="0.116" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: can destroy itself" time="0.044" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Events plugin: logs event with full duration when startTime and endTime are not defined" time="0.055" classname="Javascript.Firefox"/>
+  <testcase name="Video FocusGrabber: check existence of focus grabber elements and their position" time="0.032" classname="Javascript.Firefox"/>
+  <testcase name="Video FocusGrabber: from the start, focus grabbers are disabled" time="0.04" classname="Javascript.Firefox"/>
+  <testcase name="Video FocusGrabber: when first focus grabber is focused &quot;mousemove&quot; event is triggered, grabbers are disabled" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="Video FocusGrabber: when last focus grabber is focused &quot;mousemove&quot; event is triggered, grabbers are disabled" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="Video FocusGrabber: after controls hide focus grabbers are enabled" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoFullScreen: renders the fullscreen control" time="0.05" classname="Javascript.Firefox"/>
+  <testcase name="VideoFullScreen: correctly adds ARIA attributes to fullscreen control" time="0.049" classname="Javascript.Firefox"/>
+  <testcase name="VideoFullScreen: correctly triggers the event handler to toggle fullscreen mode" time="0.061" classname="Javascript.Firefox"/>
+  <testcase name="VideoFullScreen: correctly updates ARIA on state change" time="0.07" classname="Javascript.Firefox"/>
+  <testcase name="VideoFullScreen: correctly can out of fullscreen by pressing esc" time="0.069" classname="Javascript.Firefox"/>
+  <testcase name="VideoFullScreen: can update video dimensions on state change" time="0.055" classname="Javascript.Firefox"/>
+  <testcase name="VideoFullScreen: can destroy itself" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoFullScreen: Controls height is actual on switch to fullscreen" time="0.07" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: instanticate current time to zero" time="0.045" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: set the element" time="0.055" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: create video control" time="0.067" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: create video caption" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: create video speed control" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: create video progress slider" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: create Youtube player" time="0.042" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: create Flash player" time="0.056" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: create video volume control oniPad" time="0.05" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: create video volume control onAndroid" time="0.041" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: controls are in paused state" time="0.034" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: autoplay the first video" time="0.044" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: invalid endTime is reset to null" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: multiple speeds and flash mode, change back to html5 mode" time="0.079" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: pause the video control" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: trigger pause and ended events" time="0.069" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: pause the video control" time="0.126" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: pause the video caption" time="0.069" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: set update interval" time="0.108" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: play the video control" time="0.118" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: play the video caption" time="0.172" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: clear update interval" time="0.053" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: pause the video control" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: pause the video caption" time="0.06" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: pause the video control" time="0.085" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: pause the video caption" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: Video has started playing" time="0.098" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: seek the player" time="0.049" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: call runTimer in seekTo on player" time="0.175" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: seek the player" time="0.084" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: call updatePlayTime on player" time="0.091" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: when the player is not playing: set the current time" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: video has a correct speed" time="0.09" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: set the volume on player" time="0.071" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: video has a correct volume" time="0.097" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: does not trigger updatePlayTime event" time="0.063" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: trigger updatePlayTime event" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: video is paused on first endTime, start &amp; end time are reset" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoPlayer: update the video playback time" time="0.097" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: update the playback time on caption" time="0.11" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: update the playback time on progress slider" time="0.108" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: when duration becomes available, updatePlayTime() is called" time="0" classname="Javascript.Firefox">
+    <skipped/>
+  </testcase>
+  <testcase name="VideoPlayer: add the video-fullscreen class" time="0.055" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: tell VideoCaption to resize" time="0.067" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: remove the video-fullscreen class" time="0.047" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: tell VideoCaption to resize" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: delegate to the player" time="0.037" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: getDuration is called as a fall-back" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: set the player volume" time="0.037" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: `is-touch` class name is added to container" time="0.088" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: modules are not initialized on iPhone" time="0.019" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: controls become visible after playing starts on iPad" time="0.265" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: controls become visible after playing starts on Android" time="0.263" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: convert the current time to the new speed" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: set video speed to the new speed" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: in Flash mode and video is playing" time="0.002" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: in Flash mode and video not started" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: in HTML5 mode" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: Youtube video in FF, with new speed equal 1.0" time="0.002" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: does not show error message if hls is supported" time="0.074" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: can extract hls video sources correctly" time="0.064" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: can use native hls playback support" time="0.109" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: shows error message if hls is not supported" time="0.039" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: overrides the duration if not set" time="0.149" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: shows the play button after player is ready" time="0.101" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: hides the play button on play" time="0.225" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: plays the video when overlay button is clicked" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: shows the play button on pause" time="0.097" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: loads youtube if flag is disabled" time="0.03" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer: does not load youtube if flag is enabled" time="0.032" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPauseControl: can render the control" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPauseControl: add ARIA attributes to play control" time="0.059" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPauseControl: can update ARIA state on play" time="0.043" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPauseControl: can update ARIA state on video ends" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPauseControl: can update state on pause" time="0.039" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPauseControl: can start video playing on click" time="0.041" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPauseControl: can destroy itself" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: works correctly on calling proper methods" time="0.069" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is not shown onPC" time="0.061" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is shown oniPad" time="0.072" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is shown onAndroid" time="0.085" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is not shown oniPhone" time="0.081" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is shown on paused video on iPad in HTML5 player" time="0.094" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is hidden on playing video on iPad in HTML5 player" time="0.082" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is hidden on paused video on iPad in YouTube player" time="0.108" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is shown on paused video on Android in HTML5 player" time="0.079" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is hidden on playing video on Android in HTML5 player" time="0.091" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: is hidden on paused video on Android in YouTube player" time="0.084" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: starts play the video on click" time="0.049" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayPlaceholder: can destroy itself" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlaySkipControl: can render the control" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlaySkipControl: can update state on play" time="0.081" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlaySkipControl: can start video playing on click" time="0.105" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlaySkipControl: can skip the video on click" time="0.06" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlaySkipControl: can destroy itself" time="0.049" classname="Javascript.Firefox"/>
+  <testcase name="VideoPoster: can render the poster" time="0.031" classname="Javascript.Firefox"/>
+  <testcase name="VideoPoster: can start playing the video on click" time="0.256" classname="Javascript.Firefox"/>
+  <testcase name="VideoPoster: destroy itself on &quot;play&quot; event" time="0.041" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: build the slider" time="0.072" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: build the seek handle" time="0.065" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: add ARIA attributes to time control" time="0.07" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: does not build the slider on iPhone" time="0.026" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: build the slider on iPad" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: build the slider on Android" time="0.039" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: does not build the slider" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: does not update the slider" time="0.04" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: update the max value of the slider" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: update current value of the slider" time="0.049" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: required aria values updated" time="0.038" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: freeze the slider" time="0.037" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: trigger seek event" time="0.061" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: freeze the slider" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: trigger seek event" time="0.058" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: set timeout to unfreeze the slider" time="0.09" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: getRangeParams" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: params.end = true" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: params.end = false" time="0.039" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: is called when video plays" time="0.163" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: getTimeDescription" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoProgressSlider: can destroy itself" time="0.061" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: contains the quality control and is initially hidden" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: add ARIA attributes to quality control" time="0.06" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: bind the quality control" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: calls fetchAvailableQualities only once" time="0.063" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: initializes with a quality equal to large" time="0.059" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: shows the quality control on play if HD is available" time="0.059" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: leaves quality control hidden on play if HD is not available" time="0.059" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: switch to HD if it is available" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: quality control is active if HD is available" time="0.068" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: can destroy itself" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoQualityControl: does not contain the quality control" time="0.087" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: data is not an object, async is true" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: data contains speed, async is false" time="0.039" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: data contains float position, async is true" time="0.049" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: data contains speed and rounded position, async is false" time="0.037" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: data contains empty object, async is true" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: data contains position 0, async is true" time="0.047" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: can save state on speed change" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: can save state on page unload" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: can save state on pause" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: can save state on language change" time="0.032" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: can save youtube availability" time="0.044" classname="Javascript.Firefox"/>
+  <testcase name="VideoPlayer Save State plugin: can destroy itself" time="0.036" classname="Javascript.Firefox"/>
+  <testcase name="VideoSkipControl: can render the control when video starts playing" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="VideoSkipControl: can skip the video on click" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="VideoSkipControl: can destroy itself" time="0.038" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: add the video speed control to player" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: is not rendered oniPad" time="0.033" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: is not rendered onAndroid" time="0.029" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: open/close the speed menu on mouseenter/mouseleave" time="0.037" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: do not close the speed menu on mouseleave if a speed entry has focus" time="0.043" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: close the speed menu on outside click" time="0.039" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: open the speed menu on ENTER keydown" time="0.036" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: open the speed menu on SPACE keydown" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: open the speed menu on UP keydown" time="0.038" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: close the speed menu on ESCAPE keydown" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: UP and DOWN keydown function as expected on speed entries" time="0.045" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: ESC keydown on speed entry closes menu" time="0.045" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: ENTER keydown on speed entry selects 2.0x speed and closes menu" time="0.05" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: SPACE keydown on speed entry selects 0.75x speed and closes menu" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: trigger speedChange event" time="0.038" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: set the new speed as active" time="0.038" classname="Javascript.Firefox"/>
+  <testcase name="VideoSpeedControl: can destroy itself" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoStorage: with namespace and id" time="0" classname="Javascript.Firefox"/>
+  <testcase name="VideoStorage: without namespace and id" time="0" classname="Javascript.Firefox"/>
+  <testcase name="VideoStorage: setItem" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="VideoStorage: getItem" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="VideoStorage: removeItem" time="0" classname="Javascript.Firefox"/>
+  <testcase name="VideoStorage: clear" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: instantiates widget and handlers along with necessary data" time="0.084" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: checks if transcript was AI generated" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: shows widget if transcript is AI generated" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: hides widget if transcript is not AI generated" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: hides widget if transcript is AI generated but is still in progress" time="0.042" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: hides widget if query for transcript AI generated fails" time="0.06" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: checks if feedback exists for AI generated transcript" time="0.055" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: marks thumbs up button if feedback exists and it is positive" time="0.069" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: marks thumbs down button if feedback exists and it is negative" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: marks thumbs up buttons as empty if feedback does not exist" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: marks thumbs up buttons as empty if query fails" time="0.042" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: calls loadAndSetVisibility if language changed" time="0.042" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: does not call loadAndSetVisibility if language did not change" time="0.039" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: sends positive feedback if there is no current feedback" time="0.043" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: sends empty feedback if there is a current positive feedback" time="0.035" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: sends negative feedback if there is no current feedback" time="0.047" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: sends empty feedback if there is a current negative feedback" time="0.045" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: sends proper request to ai translation service" time="0.042" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: marks thumbs up button as selected if response is positive" time="0.04" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: marks thumbs down button as selected if response is negative" time="0.045" classname="Javascript.Firefox"/>
+  <testcase name="VideoTranscriptFeedback: unselects thumbs buttons if response is empty" time="0.052" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: Volume level has correct value even if cookie is broken" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: initialize volume to 75%" time="0.043" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: render the volume control" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: create the slider" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: add ARIA attributes to live region" time="0.054" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: add ARIA attributes to volume control" time="0.036" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: bind the volume control" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: update is not called, if new volume equals current" time="0.046" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: volume is changed on sliding" time="0.061" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: set the player volume" time="0.05" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: remove muted class" time="0.063" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: remove muted class" time="0.045" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: set the player volume" time="0.05" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: add muted class" time="0.06" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: when the new volume is Muted" time="0.053" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: when the new volume is in ]0,20]" time="0.057" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: when the new volume is in ]20,40]" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: when the new volume is in ]40,60]" time="0.042" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: when the new volume is in ]60,80]" time="0.045" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: when the new volume is in ]80,100[" time="0.048" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: when the new volume is Maximum" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: volume is increased correctly" time="0.039" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: volume level is not changed if it is already max" time="0.053" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: volume is decreased correctly" time="0.041" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: volume level is not changed if it is already min" time="0.175" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: save the previous volume" time="0.049" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: set the player volume" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: set the player volume to previous volume" time="0.076" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: nothing happens if ALT+keyUp are pushed down" time="0.051" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: nothing happens if SHIFT+keyUp are pushed down" time="0.06" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: nothing happens if SHIFT+keyDown are pushed down" time="0.062" classname="Javascript.Firefox"/>
+  <testcase name="VideoVolumeControl: nothing happens if ALT+ENTER are pushed down" time="0.065" classname="Javascript.Firefox"/>
+  <testcase name="Time: return a correct time format" time="0" classname="Javascript.Firefox"/>
+  <testcase name="Time: return a correct time format" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Time: return a correct time format" time="0.001" classname="Javascript.Firefox"/>
+  <testcase name="Time: gives correct string for times" time="0.002" classname="Javascript.Firefox"/>
+  <testcase name="Time: return a correct time based on speed modifier" time="0.001" classname="Javascript.Firefox"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>
