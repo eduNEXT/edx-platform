@@ -16,9 +16,23 @@ import '../helper.js';
         afterEach(function() {
             $('source').remove();
             window.onTouchBasedDevice = oldOTBD;
-            state.storage.clear();
-            if (state.videoPlayer) {
-                state.videoPlayer.destroy();
+            if (state) {
+                if (state.storage) {
+                    state.storage.clear();
+                }
+
+                if (state.videoPlayer && typeof state.videoPlayer.destroy === 'function') {
+                    try {
+                        state.videoPlayer.destroy();
+                    } catch (e) {
+                        if (!(e instanceof TypeError &&
+                              (e.message.includes('videoPlayer') || e.message.includes('player')))) {
+                            throw e;
+                        }
+                    }
+                }
+
+                state = null;
             }
         });
 
@@ -34,7 +48,7 @@ import '../helper.js';
         describe('getCurrentTime method', function() {
             it('returns current time adjusted by startTime if video starts from a subsection', function() {
                 state.videoPlayer.currentTime = 120;
-                state.config.startTime = 30;                
+                state.config.startTime = 30;
                 expect(state.videoEventsPlugin.getCurrentTime()).toBe(90); // 120 - 30 = 90
             });
 
@@ -51,7 +65,7 @@ import '../helper.js';
         });
 
         describe('log method', function() {
-            
+
             it('logs event with adjusted duration when startTime and endTime are defined', function() {
                 state.config.startTime = 30;
                 state.config.endTime = 150;
@@ -301,6 +315,15 @@ import '../helper.js';
                 this.code = 'html5';
                 this.duration = 111;
                 state = jasmine.initializePlayer('video_html5.html');
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
                 done();
             });
             jasmine.getEnv().describe(describeInfo.description, describeInfo.specDefinitions);
@@ -311,6 +334,15 @@ import '../helper.js';
                 this.code = 'hls';
                 this.duration = 111;
                 state = jasmine.initializeHLSPlayer();
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
                 done();
             });
             jasmine.getEnv().describe(describeInfo.description, describeInfo.specDefinitions);

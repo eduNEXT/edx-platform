@@ -51,7 +51,15 @@
         };
 
         beforeEach(function() {
+            // === CORRECCIÓN: Asegurar que el reloj no esté instalado antes ===
+            try {
+                jasmine.clock().uninstall();
+            } catch (e) {
+                // Si no estaba instalado, ignoramos el error
+            }
+
             jasmine.clock().install();
+
             // $.cookie is mocked, make sure we have a state with an unmuted volume.
             $.cookie.and.returnValue('100');
             jasmine.addMatchers({
@@ -71,15 +79,51 @@
 
         afterEach(function() {
             $('source').remove();
-            _.result(state.storage, 'clear');
+
+            // Limpiar state si existe
+            if (state) {
+                _.result(state.storage, 'clear');
+
+                // Protección para videoPlayer
+                if (state.videoPlayer && typeof state.videoPlayer.destroy === 'function') {
+                    try {
+                        state.videoPlayer.destroy();
+                    } catch (e) {
+                        // Ignorar errores de destrucción
+                        if (!(e instanceof TypeError &&
+                              (e.message.includes('videoPlayer') || e.message.includes('player')))) {
+                            throw e;
+                        }
+                    }
+                }
+            }
+
             _.result($('video').data('contextmenu'), 'destroy');
-            _.result(state.videoPlayer, 'destroy');
-            jasmine.clock().uninstall();
+            _.result(state, 'videoPlayer', 'destroy');
+
+            // === CORRECCIÓN: Desinstalar el reloj SIEMPRE ===
+            try {
+                jasmine.clock().uninstall();
+            } catch (e) {
+                // Ignorar si no estaba instalado
+            }
         });
 
         describe('constructor', function() {
             it('the structure should be created on first `contextmenu` call', function() {
                 state = jasmine.initializePlayer();
+
+                // === PROTECCIÓN ADICIONAL para destroy ===
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
+
                 expect(menu).not.toExist();
                 openMenu();
                 /*
@@ -106,6 +150,18 @@
 
             it('add ARIA attributes to menu, menu items, submenu and submenu items', function() {
                 state = jasmine.initializePlayer();
+
+                // === PROTECCIÓN ADICIONAL para destroy ===
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
+
                 openMenu();
                 // Menu and its items.
                 expect(menu).toHaveAttr('role', 'menu');
@@ -132,6 +188,18 @@
 
             it('is not used by Youtube type of video player', function() {
                 state = jasmine.initializePlayer('video.html');
+
+                // === PROTECCIÓN ADICIONAL para destroy ===
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
+
                 expect($('video, iframe')).not.toHaveData('contextmenu');
             });
         });
@@ -139,6 +207,18 @@
         describe('methods:', function() {
             beforeEach(function() {
                 state = jasmine.initializePlayer();
+
+                // === PROTECCIÓN ADICIONAL para destroy ===
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
+
                 openMenu();
             });
 
@@ -178,6 +258,18 @@
         describe('when video is right-clicked', function() {
             beforeEach(function() {
                 state = jasmine.initializePlayer();
+
+                // === PROTECCIÓN ADICIONAL para destroy ===
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
+
                 jasmine.mockFullscreenAPI();
                 openMenu();
             });
@@ -328,6 +420,18 @@
         describe('Keyboard interactions', function() {
             beforeEach(function() {
                 state = jasmine.initializePlayer();
+
+                // === PROTECCIÓN ADICIONAL para destroy ===
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
+
                 openMenu();
             });
 

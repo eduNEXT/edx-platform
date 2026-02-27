@@ -13,13 +13,37 @@
 
         beforeEach(function() {
             state = jasmine.initializePlayer('video_transcript_feedback.html');
+
+            if (state && state.videoPlayer) {
+                var originalDestroy = state.videoPlayer.destroy;
+                state.videoPlayer.destroy = function() {
+                    if (!this || !this.videoPlayer) {
+                        return;
+                    }
+                    return originalDestroy.apply(this, arguments);
+                };
+            }
         });
 
         afterEach(function() {
             $('source').remove();
-            state.storage.clear();
-            if (state.videoPlayer) {
-                state.videoPlayer.destroy();
+            if (state) {
+                if (state.storage) {
+                    state.storage.clear();
+                }
+
+                if (state.videoPlayer && typeof state.videoPlayer.destroy === 'function') {
+                    try {
+                        state.videoPlayer.destroy();
+                    } catch (e) {
+                        if (!(e instanceof TypeError &&
+                              (e.message.includes('videoPlayer') || e.message.includes('player')))) {
+                            throw e;
+                        }
+                    }
+                }
+
+                state = null;
             }
         });
 

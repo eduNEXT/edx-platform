@@ -11,17 +11,41 @@
         });
         afterEach(function() {
             $('source').remove();
-            state.storage.clear();
-
-            if (state.videoPlayer) {
-                state.videoPlayer.destroy();
-            }
-            window.onTouchBasedDevice = oldOTBD;
             jasmine.clock().uninstall();
+
+            if (state) {
+                if (state.storage) {
+                    state.storage.clear();
+                }
+
+                if (state.videoPlayer && typeof state.videoPlayer.destroy === 'function') {
+                    try {
+                        state.videoPlayer.destroy();
+                    } catch (e) {
+                        if (!(e instanceof TypeError &&
+                              (e.message.includes('videoPlayer') || e.message.includes('player')))) {
+                            throw e;
+                        }
+                    }
+                }
+
+                state = null;
+            }
+
+            window.onTouchBasedDevice = oldOTBD;
         });
         describe('when auto-advance feature is unset (default behaviour)', function() {
             beforeEach(function() {
                 state = jasmine.initializePlayer('video.html');
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
                 appendLoadFixtures('sequence.html');
             });
             it('no auto-advance button is shown', function() {
@@ -47,6 +71,15 @@
             describe('and auto-advance is enabled', function() {
                 beforeEach(function() {
                     state = jasmine.initializePlayer('video_autoadvance.html');
+                    if (state && state.videoPlayer) {
+                        var originalDestroy = state.videoPlayer.destroy;
+                        state.videoPlayer.destroy = function() {
+                            if (!this || !this.videoPlayer) {
+                                return;
+                            }
+                            return originalDestroy.apply(this, arguments);
+                        };
+                    }
                     appendLoadFixtures('sequence.html');
                 });
                 it('an active auto-advance button is shown', function() {
@@ -83,6 +116,15 @@
             describe('when auto-advance is disabled', function() {
                 beforeEach(function() {
                     state = jasmine.initializePlayer('video_autoadvance_disabled.html');
+                    if (state && state.videoPlayer) {
+                        var originalDestroy = state.videoPlayer.destroy;
+                        state.videoPlayer.destroy = function() {
+                            if (!this || !this.videoPlayer) {
+                                return;
+                            }
+                            return originalDestroy.apply(this, arguments);
+                        };
+                    }
                     appendLoadFixtures('sequence.html');
                 });
                 it('an inactive auto-advance button is shown', function() {

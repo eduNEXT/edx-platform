@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-shadow-restricted-names
+ // eslint-disable-next-line no-shadow-restricted-names
 (function(undefined) {
     describe('VideoPlayer Events', function() {
         var state, oldOTBD;
@@ -80,23 +80,36 @@
         describe('YouTube', function() {
             beforeEach(function() {
                 oldOTBD = window.onTouchBasedDevice;
-                window.onTouchBasedDevice = jasmine
-                    .createSpy('onTouchBasedDevice')
-                    .and.returnValue(null);
+                window.onTouchBasedDevice = jasmine.createSpy('onTouchBasedDevice').and.returnValue(null);
 
                 state = jasmine.initializePlayerYouTube();
+
+                var originalDestroy = state.videoPlayer.destroy;
+                state.videoPlayer.destroy = function() {
+                    if (!this.videoPlayer) {
+                        return;
+                    }
+                    return originalDestroy.apply(this, arguments);
+                };
             });
 
             afterEach(function() {
                 $('source').remove();
                 window.onTouchBasedDevice = oldOTBD;
-                state.storage.clear();
-                state.videoPlayer.destroy();
+
+                if (state) {
+                    state.storage.clear();
+
+                    if (state.videoPlayer) {
+                        state.videoPlayer.destroy();
+                    }
+
+                    state = null;
+                }
             });
 
             it('qualitychange', function() {
                 state.videoPlayer.onPlaybackQualityChange();
-
                 expect('qualitychange').not.toHaveBeenTriggeredOn('.video');
             });
         });

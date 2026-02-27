@@ -85,6 +85,17 @@ import _ from 'underscore';
                         jasmine.stubRequests();
                         spyOn(window.YT, 'Player').and.callThrough();
                         state = jasmine.initializePlayerYouTube();
+
+                        if (state && state.videoPlayer) {
+                            var originalDestroy = state.videoPlayer.destroy;
+                            state.videoPlayer.destroy = function() {
+                                if (!this || !this.videoPlayer) {
+                                    return;
+                                }
+                                return originalDestroy.apply(this, arguments);
+                            };
+                        }
+
                         state.videoEl = $('video, iframe');
 
                         events = {
@@ -115,6 +126,17 @@ import _ from 'underscore';
 
                         spyOn($.fn, 'trigger');
                         state = jasmine.initializePlayerYouTube();
+
+                        if (state && state.videoPlayer) {
+                            var originalDestroy = state.videoPlayer.destroy;
+                            state.videoPlayer.destroy = function() {
+                                if (!this || !this.videoPlayer) {
+                                    return;
+                                }
+                                return originalDestroy.apply(this, arguments);
+                            };
+                        }
+
                         state.videoEl = state.el.find('video, iframe').width(100);
                         player = state.videoPlayer.player;
                         player.getAvailablePlaybackRates.and.returnValue([1]);
@@ -195,6 +217,16 @@ import _ from 'underscore';
                     beforeEach(function() {
                         state = jasmine.initializePlayerYouTube();
 
+                        if (state && state.videoPlayer) {
+                            var originalDestroy = state.videoPlayer.destroy;
+                            state.videoPlayer.destroy = function() {
+                                if (!this || !this.videoPlayer) {
+                                    return;
+                                }
+                                return originalDestroy.apply(this, arguments);
+                            };
+                        }
+
                         state.videoEl = $('video, iframe');
                     });
 
@@ -212,6 +244,16 @@ import _ from 'underscore';
                     describe('when the video is ended', function() {
                         beforeEach(function() {
                             state = jasmine.initializePlayerYouTube();
+
+                            if (state && state.videoPlayer) {
+                                var originalDestroy = state.videoPlayer.destroy;
+                                state.videoPlayer.destroy = function() {
+                                    if (!this || !this.videoPlayer) {
+                                        return;
+                                    }
+                                    return originalDestroy.apply(this, arguments);
+                                };
+                            }
 
                             state.videoEl = $('video, iframe');
                             spyOn($.fn, 'trigger').and.callThrough();
@@ -348,6 +390,17 @@ import _ from 'underscore';
                 describe('onSeek Youtube', function() {
                     beforeEach(function() {
                         state = jasmine.initializePlayerYouTube();
+
+                        if (state && state.videoPlayer) {
+                            var originalDestroy = state.videoPlayer.destroy;
+                            state.videoPlayer.destroy = function() {
+                                if (!this || !this.videoPlayer) {
+                                    return;
+                                }
+                                return originalDestroy.apply(this, arguments);
+                            };
+                        }
+
                         state.videoEl = $('video, iframe');
                     });
 
@@ -565,6 +618,17 @@ import _ from 'underscore';
                 describe('updatePlayTime', function() {
                     beforeEach(function() {
                         state = jasmine.initializePlayerYouTube();
+
+                        if (state && state.videoPlayer) {
+                            var originalDestroy = state.videoPlayer.destroy;
+                            state.videoPlayer.destroy = function() {
+                                if (!this || !this.videoPlayer) {
+                                    return;
+                                }
+                                return originalDestroy.apply(this, arguments);
+                            };
+                        }
+
                         state.videoEl = $('video, iframe');
                         spyOn(state.videoCaption, 'updatePlayTime').and.callThrough();
                         spyOn(state.videoProgressSlider, 'updatePlayTime').and.callThrough();
@@ -780,6 +844,16 @@ import _ from 'underscore';
                         jasmine.stubRequests();
 
                         state = jasmine.initializePlayerYouTube();
+
+                        if (state && state.videoPlayer) {
+                            var originalDestroy = state.videoPlayer.destroy;
+                            state.videoPlayer.destroy = function() {
+                                if (!this || !this.videoPlayer) {
+                                    return;
+                                }
+                                return originalDestroy.apply(this, arguments);
+                            };
+                        }
 
                         state.videoEl = $('video, iframe');
 

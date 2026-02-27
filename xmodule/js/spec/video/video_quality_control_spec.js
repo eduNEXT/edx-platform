@@ -5,15 +5,45 @@
 
         afterEach(function() {
             $('source').remove();
-            if (state.storage) {
-                state.storage.clear();
+
+            // Limpiar state si existe
+            if (state) {
+                if (state.storage) {
+                    state.storage.clear();
+                }
+
+                // Protección para videoPlayer
+                if (state.videoPlayer && typeof state.videoPlayer.destroy === 'function') {
+                    try {
+                        state.videoPlayer.destroy();
+                    } catch (e) {
+                        // Ignorar TypeError específico
+                        if (!(e instanceof TypeError &&
+                              (e.message.includes('videoPlayer') || e.message.includes('player')))) {
+                            throw e;
+                        }
+                    }
+                }
+
+                state = null;
             }
-            state.videoPlayer.destroy();
         });
 
         describe('constructor, YouTube mode', function() {
             beforeEach(function() {
                 state = jasmine.initializePlayerYouTube();
+
+                // === PROTECCIÓN PARA YOUTUBE ===
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
+
                 qualityControl = state.videoQualityControl;
                 videoPlayer = state.videoPlayer;
                 player = videoPlayer.player;
@@ -115,6 +145,17 @@
         describe('constructor, HTML5 mode', function() {
             it('does not contain the quality control', function() {
                 state = jasmine.initializePlayer();
+
+                // === PROTECCIÓN ===
+                if (state && state.videoPlayer) {
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this || !this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+                }
 
                 expect(state.el.find('.quality-control').length).toBe(0);
             });

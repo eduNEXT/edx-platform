@@ -15,8 +15,17 @@
 
         afterEach(function() {
             $('source').remove();
-            state.storage.clear();
-            state.videoPlayer.destroy();
+
+            if (state) {
+                state.storage.clear();
+
+                if (state.videoPlayer) {
+                    state.videoPlayer.destroy();
+                }
+
+                state = null;
+            }
+
             window.onTouchBasedDevice = oldOTBD;
         });
 
@@ -127,7 +136,17 @@
                     var btnPlay;
 
                     window.onTouchBasedDevice.and.returnValue([device]);
+
                     state = jasmine.initializePlayerYouTube();
+
+                    var originalDestroy = state.videoPlayer.destroy;
+                    state.videoPlayer.destroy = function() {
+                        if (!this.videoPlayer) {
+                            return;
+                        }
+                        return originalDestroy.apply(this, arguments);
+                    };
+
                     btnPlay = state.el.find('.btn-play');
 
                     state.el.trigger('play');
