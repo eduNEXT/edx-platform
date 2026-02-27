@@ -496,7 +496,9 @@ def get_library_team(library_key: LibraryLocatorV2) -> list[ContentLibraryPermis
     Get the list of users/groups granted permission to use this library.
     """
     warnings.warn(
-        "get_library_team is deprecated. See https://github.com/openedx/openedx-platform/issues/37409.",
+        "get_library_team is deprecated. "
+        "Use get_all_user_role_assignments_in_scope from the openedx-authz API instead. "
+        "See https://github.com/openedx/openedx-platform/issues/37409.",
         DeprecationWarning,
         stacklevel=2,
     )
@@ -514,7 +516,9 @@ def get_library_user_permissions(library_key: LibraryLocatorV2, user: UserType) 
     permissions have been granted.
     """
     warnings.warn(
-        "get_library_user_permissions is deprecated. See https://github.com/openedx/openedx-platform/issues/37409.",
+        "get_library_user_permissions is deprecated. "
+        "Use get_user_role_assignments_in_scope from the openedx-authz API instead. "
+        "See https://github.com/openedx/openedx-platform/issues/37409.",
         DeprecationWarning,
         stacklevel=2,
     )
@@ -539,7 +543,9 @@ def set_library_user_permissions(library_key: LibraryLocatorV2, user: UserType, 
     access_level should be one of the AccessLevel values defined above.
     """
     warnings.warn(
-        "set_library_user_permissions is deprecated. See https://github.com/openedx/openedx-platform/issues/37409.",
+        "set_library_user_permissions is deprecated. "
+        "Use assign_library_role_to_user instead. "
+        "See https://github.com/openedx/openedx-platform/issues/37409.",
         DeprecationWarning,
         stacklevel=2,
     )
@@ -593,7 +599,9 @@ def set_library_group_permissions(library_key: LibraryLocatorV2, group, access_l
     access_level should be one of the AccessLevel values defined above.
     """
     warnings.warn(
-        "set_library_group_permissions is deprecated. See https://github.com/openedx/openedx-platform/issues/37409.",
+        "set_library_group_permissions is deprecated. "
+        "Use assign_library_role_to_user instead. "
+        "See https://github.com/openedx/openedx-platform/issues/37409.",
         DeprecationWarning,
         stacklevel=2,
     )

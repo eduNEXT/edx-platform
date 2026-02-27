@@ -342,6 +342,12 @@ class LibraryTeamView(APIView):
         Add a user to this content library via email, with permissions specified in the
         request body.
         """
+        warnings.warn(
+            "LibraryTeamView is deprecated. Use RoleUserAPIView from openedx-authz instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         key = LibraryLocatorV2.from_string(lib_key_str)
         api.require_permission_for_library_key(key, request.user, permissions.CAN_EDIT_THIS_CONTENT_LIBRARY_TEAM)
         serializer = ContentLibraryAddPermissionByEmailSerializer(data=request.data)
@@ -369,6 +375,12 @@ class LibraryTeamView(APIView):
         Get the list of users and groups who have permissions to view and edit
         this library.
         """
+        warnings.warn(
+            "LibraryTeamView is deprecated. Use RoleUserAPIView from openedx-authz instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         key = LibraryLocatorV2.from_string(lib_key_str)
         api.require_permission_for_library_key(key, request.user, permissions.CAN_VIEW_THIS_CONTENT_LIBRARY_TEAM)
         team = api.get_library_team(key)
@@ -390,6 +402,12 @@ class LibraryTeamUserView(APIView):
         Add a user to this content library, with permissions specified in the
         request body.
         """
+        warnings.warn(
+            "LibraryTeamUserView is deprecated. Use RoleUserAPIView from openedx-authz instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         key = LibraryLocatorV2.from_string(lib_key_str)
         api.require_permission_for_library_key(key, request.user, permissions.CAN_EDIT_THIS_CONTENT_LIBRARY_TEAM)
         serializer = ContentLibraryPermissionLevelSerializer(data=request.data)
@@ -407,6 +425,12 @@ class LibraryTeamUserView(APIView):
         """
         Gets the current permissions settings for a particular user.
         """
+        warnings.warn(
+            "LibraryTeamUserView is deprecated. Use RoleUserAPIView from openedx-authz instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         key = LibraryLocatorV2.from_string(lib_key_str)
         api.require_permission_for_library_key(key, request.user, permissions.CAN_VIEW_THIS_CONTENT_LIBRARY_TEAM)
         user = get_object_or_404(User, username=username)
@@ -421,6 +445,12 @@ class LibraryTeamUserView(APIView):
         Remove the specified user's permission to access or edit this content
         library.
         """
+        warnings.warn(
+            "LibraryTeamUserView is deprecated. Use RoleUserAPIView from openedx-authz instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         key = LibraryLocatorV2.from_string(lib_key_str)
         api.require_permission_for_library_key(key, request.user, permissions.CAN_EDIT_THIS_CONTENT_LIBRARY_TEAM)
         user = get_object_or_404(User, username=username)
@@ -445,6 +475,12 @@ class LibraryTeamGroupView(APIView):
         Add a group to this content library, with permissions specified in the
         request body.
         """
+        warnings.warn(
+            "LibraryTeamGroupView is deprecated. Use RoleUserAPIView from openedx-authz instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         key = LibraryLocatorV2.from_string(lib_key_str)
         api.require_permission_for_library_key(key, request.user, permissions.CAN_EDIT_THIS_CONTENT_LIBRARY_TEAM)
         serializer = ContentLibraryPermissionLevelSerializer(data=request.data)
@@ -459,6 +495,12 @@ class LibraryTeamGroupView(APIView):
         Remove the specified user's permission to access or edit this content
         library.
         """
+        warnings.warn(
+            "LibraryTeamGroupView is deprecated. Use RoleUserAPIView from openedx-authz instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         key = LibraryLocatorV2.from_string(lib_key_str)
         api.require_permission_for_library_key(key, request.user, permissions.CAN_EDIT_THIS_CONTENT_LIBRARY_TEAM)
         group = get_object_or_404(Group, username=username)
