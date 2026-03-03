@@ -132,7 +132,7 @@
                 };
 
                 var addCallback = function(func) {
-                    if ($.isFunction(func)) {
+                    if (typeof func === 'function') {
                         callbacksList.push(func);
                     } else {
                         console.error('[Video info]: TypeError: Argument is not a function.');
@@ -142,7 +142,7 @@
                 };
 
                 var addOnceCallback = function(func) {
-                    if ($.isFunction(func)) {
+                    if (typeof func === 'function') {
                         var decorator = function() {
                             func();
                             removeCallback(func);

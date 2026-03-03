@@ -134,7 +134,6 @@
             'draggabilly': 'js/vendor/draggabilly',
             'hls': 'common/js/vendor/hls',
             'lang_edx': 'js/src/lang_edx',
-            'jquery_extend_patch': 'js/src/jquery_extend_patch',
 
             // externally hosted files
             mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_SVG&delayStartupUntil=configured', // eslint-disable-line max-len
@@ -349,10 +348,6 @@
             },
             // end of annotation tool files
 
-            // patch for jquery's extend
-            'jquery_extend_patch': {
-                deps: ['jquery']
-            }
         },
         config: {
             text: {

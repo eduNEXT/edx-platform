@@ -58,7 +58,7 @@ var StaffDebug = (function() {
                     {user: user}
                 );
                 try {
-                    responseJSON = $.parseJSON(request.responseText).error;
+                    responseJSON = JSON.parse(request.responseText).error;
                 } catch (e) {
                     responseJSON = 'Unknown Error Occurred.';
                 }

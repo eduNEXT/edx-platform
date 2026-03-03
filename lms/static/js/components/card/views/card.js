@@ -57,7 +57,7 @@
             },
 
             callIfFunction: function(value) {
-                if ($.isFunction(value)) {
+                if (typeof value === 'function') {
                     return value.call(this);
                 } else {
                     return value;

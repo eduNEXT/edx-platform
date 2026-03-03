@@ -24,7 +24,7 @@ define(['jquery', 'underscore'],
         };
 
         installTemplates = function(templateNames, isFirst) {
-            if (!$.isArray(templateNames)) {
+            if (!Array.isArray(templateNames)) {
                 templateNames = [templateNames];
             }
 

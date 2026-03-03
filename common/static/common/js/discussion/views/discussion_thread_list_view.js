@@ -409,7 +409,7 @@
                     this.retrieveFollowed();
                     return this.$('.forum-nav-filter-cohort').hide();
                 } else {
-                    allItems = $item.find('.forum-nav-browse-menu-item').andSelf();
+                    allItems = $item.find('.forum-nav-browse-menu-item').addBack();
                     discussionIds = allItems.filter('[data-discussion-id]').map(function(i, elem) {
                         return $(elem).data('discussion-id');
                     }).get();

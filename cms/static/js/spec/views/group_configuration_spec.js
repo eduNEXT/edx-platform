@@ -159,7 +159,7 @@ define([
                         var trimmedText = $.trim(actual.text()),
                             passed;
 
-                        if (text && $.isFunction(text.test)) {
+                        if (text && typeof text.test === 'function') {
                             passed = text.test(trimmedText);
                         } else {
                             passed = trimmedText.indexOf(text) !== -1;

@@ -38,7 +38,7 @@
      * @return {jquery Promise}
      */
             var Component = function() {
-                if ($.isFunction(this.initialize)) {
+                if (typeof this.initialize === 'function') {
                     // eslint-disable-next-line prefer-spread
                     return this.initialize.apply(this, arguments);
                 }
@@ -54,7 +54,7 @@
             Component.extend = function(protoProps, staticProps) {
                 var Parent = this,
                     Child = function() {
-                        if ($.isFunction(this.initialize)) {
+                        if (typeof this.initialize === 'function') {
                             // eslint-disable-next-line prefer-spread
                             return this.initialize.apply(this, arguments);
                         }

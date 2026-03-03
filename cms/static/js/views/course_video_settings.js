@@ -512,7 +512,7 @@ function($, Backbone, _, gettext, moment, ViewUtils, HtmlUtils, StringUtils, Tra
             // Enclose inside try-catch so that if we get erroneous data, we could still
             // show some error to user
             try {
-                errorMessage = $.parseJSON(data).error;
+                errorMessage = JSON.parse(data).error;
             } catch (e) {} // eslint-disable-line no-empty
             this.renderResponseStatus(errorMessage || INTERNAL_SERVER_ERROR_MESSAGE, 'error');
         },
