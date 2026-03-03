@@ -1950,18 +1950,18 @@ class TestObjectTagViewSet(TestObjectTagMixin, APITestCase):
 
     @ddt.data(
         ('staff', 'courseA', 8),
-        ('staff', 'libraryA', 8),
-        ('staff', 'collection_key', 8),
-        ("content_creatorA", 'courseA', 18, False),
-        ("content_creatorA", 'libraryA', 18, False),
-        ("content_creatorA", 'collection_key', 18, False),
-        ("library_staffA", 'libraryA', 18, False),  # Library users can only view objecttags, not change them?
-        ("library_staffA", 'collection_key', 18, False),
-        ("library_userA", 'libraryA', 18, False),
-        ("library_userA", 'collection_key', 18, False),
-        ("instructorA", 'courseA', 18),
-        ("course_instructorA", 'courseA', 18),
-        ("course_staffA", 'courseA', 18),
+        ('staff', 'libraryA', 23),
+        ('staff', 'collection_key', 23),
+        ("content_creatorA", 'courseA', 17, False),
+        ("content_creatorA", 'libraryA', 28, False),
+        ("content_creatorA", 'collection_key', 28, False),
+        ("library_staffA", 'libraryA', 28, False),  # Library users can only view objecttags, not change them?
+        ("library_staffA", 'collection_key', 28, False),
+        ("library_userA", 'libraryA', 28, False),
+        ("library_userA", 'collection_key', 28, False),
+        ("instructorA", 'courseA', 17),
+        ("course_instructorA", 'courseA', 17),
+        ("course_staffA", 'courseA', 17),
     )
     @ddt.unpack
     def test_object_tags_query_count(

@@ -9,8 +9,9 @@ to decide whether to check course creator role, and other such functions.
 from ccx_keys.locator import CCXBlockUsageLocator, CCXLocator
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from opaque_keys.edx.locator import LibraryLocator
+from opaque_keys.edx.locator import LibraryLocator, LibraryLocatorV2
 from openedx_authz import api as authz_api
+from openedx_authz.constants import permissions as authz_permissions
 from openedx_authz.constants.permissions import COURSES_MANAGE_ADVANCED_SETTINGS
 
 from common.djangoapps.student.roles import (
@@ -178,6 +179,32 @@ def has_studio_read_access(user, course_key):
     there is read-only access to content libraries.
     """
     return bool(STUDIO_VIEW_CONTENT & get_user_permissions(user, course_key))
+
+
+def has_library_tagging_access(user, library_key: LibraryLocatorV2) -> bool:
+    """
+    Check if user has permission to tag content in the specified library.
+
+    Note: `MANAGE_LIBRARY_TAGS` implies `EDIT_LIBRARY_CONTENT` via authz policies (g2),
+    so users with tagging permission also have edit permission automatically.
+
+    Args:
+        user (User): Django user object
+        library_key (LibraryLocatorV2): Key for the library
+
+    Returns:
+        bool: True if user has permission to tag content in the library, False otherwise
+    """
+    # Import here to avoid circular import
+    from openedx.core.djangoapps.content_libraries.api import libraries as lib_api
+
+    try:
+        library_obj = lib_api.ContentLibrary.objects.get_by_key(library_key)
+        return lib_api.user_has_permission_across_lib_authz_systems(
+            user, authz_permissions.MANAGE_LIBRARY_TAGS, library_obj
+        )
+    except lib_api.ContentLibrary.DoesNotExist:
+        return False
 
 
 def check_course_advanced_settings_access(user, course_key, access_type='read'):
