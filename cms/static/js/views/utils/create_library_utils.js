@@ -23,7 +23,7 @@ define(['jquery', 'gettext', 'common/js/components/utils/view_utils', 'js/views/
                     var reason = errorThrown;
                     if (jqXHR.responseText) {
                         try {
-                            var detailedReason = $.parseJSON(jqXHR.responseText).ErrMsg;
+                            var detailedReason = JSON.parse(jqXHR.responseText).ErrMsg;
                             if (detailedReason) {
                                 reason = detailedReason;
                             }

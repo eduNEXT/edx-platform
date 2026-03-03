@@ -194,7 +194,7 @@
                 var key = event.which,
                     $focused = $(event.currentTarget),
                     index = $($focused).parent().find('.tab').index($focused),
-                    total = $($focused).parent().find('.tab').size() - 1,
+                    total = $($focused).parent().find('.tab').length - 1,
                     $tab = $($focused).data('index');
 
                 switch (key) {

@@ -126,7 +126,7 @@
             $taskError = this.$section.find('#' + id + ' .request-response-error');
             $taskResponse = this.$section.find('#' + id + ' .request-response');
             this.clear_display();
-            data = $.parseJSON(xhr.responseText);
+            data = JSON.parse(xhr.responseText);
             message += ': ' + data.error;
             $taskResponse.empty();
             $taskError.empty();

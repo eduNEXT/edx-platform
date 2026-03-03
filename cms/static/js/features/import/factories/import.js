@@ -100,7 +100,7 @@ define([
                                 var serverMsg, errMsg, stage;
                                 if (xhr.status !== 200) {
                                     try {
-                                        serverMsg = $.parseJSON(result.responseText) || {};
+                                        serverMsg = JSON.parse(result.responseText) || {};
                                     } catch (err) {
                                         return;
                                     }

@@ -439,7 +439,7 @@
 				if (!previewWindow || previewWindow.closed) {
 					if (options.previewInWindow) {
 						previewWindow = window.open('', 'preview', options.previewInWindow);
-						$(window).unload(function() {
+						$(window).on('unload', function() {
 							previewWindow.close();
 						});
 					} else {

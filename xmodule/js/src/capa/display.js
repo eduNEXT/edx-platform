@@ -731,7 +731,7 @@
                     var safeKey = key.replace(':', '\\:'); // fix for courses which use url_names with colons, e.g. problem:question1
                     safeKey = safeKey.replace(/\./g, '\\.'); // fix for courses which use url_names with periods. e.g. question1.1
                     var answer;
-                    if (!$.isArray(value)) {
+                    if (!Array.isArray(value)) {
                         answer = that.$('#answer_' + safeKey + ', #solution_' + safeKey);
                         edx.HtmlUtils.setHtml(answer, edx.HtmlUtils.HTML(value));
                         Collapsible.setCollapsibles(answer);

@@ -1,7 +1,7 @@
 describe('Tab', function() {
   beforeEach(function() {
     loadFixtures('coffee/fixtures/tab.html');
-    this.items = $.parseJSON(readFixtures('coffee/fixtures/items.json'));
+    this.items = JSON.parse(readFixtures('coffee/fixtures/items.json'));
   });
 
   describe('constructor', function() {

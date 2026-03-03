@@ -95,7 +95,7 @@
         if (type === 'string') {
             value = result;
             data = {};
-        } else if ($.isArray(result)) {
+        } else if (Array.isArray(result)) {
             value = result[0];
             data = result.slice(1);
         } else if (type === 'object') {
@@ -489,7 +489,7 @@
      */
     $.Autocompleter.prototype.callHook = function(hook, data) {
         var f = this.options[hook];
-        if (f && $.isFunction(f)) {
+        if (f && typeof f === 'function') {
             return f(data, this);
         }
         return false;
@@ -570,7 +570,7 @@
                 url: this.makeUrl(filter),
                 success: ajaxCallback,
                 error: function(jqXHR, textStatus, errorThrown) {
-                    if($.isFunction(self.options.onError)) {
+                    if(typeof self.options.onError === 'function') {
                         self.options.onError(jqXHR, textStatus, errorThrown);
                     } else {
                       ajaxCallback(false);
@@ -635,7 +635,7 @@
                     data = remoteData;
                     break;
                 case 'string':
-                    data = $.parseJSON(remoteData);
+                    data = JSON.parse(remoteData);
                     break;
                 default:
                     throw new Error("Unexpected remote data type: " + remoteDataType);
@@ -705,7 +705,7 @@
     $.Autocompleter.prototype.sortResults = function(results, filter) {
         var self = this;
         var sortFunction = this.options.sortFunction;
-        if (!$.isFunction(sortFunction)) {
+        if (typeof sortFunction !== 'function') {
             sortFunction = function(a, b, f) {
                 return sortValueAlpha(a, b, self.options.matchCase);
             };
@@ -724,7 +724,7 @@
      */
     $.Autocompleter.prototype.matchStringConverter = function(s, a, b) {
         var converter = this.options.matchStringConverter;
-        if ($.isFunction(converter)) {
+        if (typeof converter === 'function') {
             s = converter(s, a, b);
         }
         return s;
@@ -739,7 +739,7 @@
     $.Autocompleter.prototype.beforeUseConverter = function(s, a, b) {
         s = this.getValue();
         var converter = this.options.beforeUseConverter;
-        if ($.isFunction(converter)) {
+        if (typeof converter === 'function') {
             s = converter(s, a, b);
         }
         return s;
@@ -834,7 +834,7 @@
     };
 
     $.Autocompleter.prototype.showResult = function(value, data) {
-        if ($.isFunction(this.options.showResult)) {
+        if (typeof this.options.showResult === 'function') {
             return this.options.showResult(value, data);
         } else {
             return value;
@@ -944,7 +944,7 @@
     };
 
     $.Autocompleter.prototype.displayValue = function(value, data) {
-        if ($.isFunction(this.options.displayValue)) {
+        if (typeof this.options.displayValue === 'function') {
             return this.options.displayValue(value, data);
         }
         return value;

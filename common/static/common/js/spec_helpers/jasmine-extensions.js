@@ -192,7 +192,7 @@
         });
 
         jasmine.addCustomEqualityTester(function(a, b) {
-            if (a instanceof $ && b instanceof $ && a.size() == b.size())
+            if (a instanceof $ && b instanceof $ && a.length == b.length)
                 return a.is(b);
         });
 
