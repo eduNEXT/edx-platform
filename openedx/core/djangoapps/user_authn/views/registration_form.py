@@ -321,17 +321,47 @@ class AccountCreationForm(forms.Form):
         return self.cleaned_data.get("country")
 
 
-def get_registration_extension_form(*args, **kwargs):
+def get_registration_extension_form(*args, **kwargs) -> Optional[forms.Form]:
     """
-    Convenience function for getting the custom form set in settings.REGISTRATION_EXTENSION_FORM.
+    Convenience function for getting the custom form set in settings.PROFILE_EXTENSION_FORM
+    or settings.REGISTRATION_EXTENSION_FORM (deprecated).
+
+    Returns an instance of the configured profile extension form.
+
+    The function first checks for PROFILE_EXTENSION_FORM (recommended), then falls back to
+    REGISTRATION_EXTENSION_FORM for backwards compatibility. When REGISTRATION_EXTENSION_FORM
+    is used, a deprecation warning is logged.
 
     An example form app for this can be found at http://github.com/open-craft/custom-form-app
+
+    Returns:
+        Form instance or None if no form is configured
     """
-    if not getattr(settings, 'REGISTRATION_EXTENSION_FORM', None):
+    # Check for the new setting first
+    setting_value = getattr(settings, "PROFILE_EXTENSION_FORM", None)
+    setting_name = "PROFILE_EXTENSION_FORM"
+
+    # Fall back to the deprecated setting
+    if not setting_value:
+        setting_value = getattr(settings, "REGISTRATION_EXTENSION_FORM", None)
+        if setting_value:
+            setting_name = "REGISTRATION_EXTENSION_FORM"
+            logger.warning(
+                "REGISTRATION_EXTENSION_FORM is deprecated and will be removed in a future release. "
+                "Please use PROFILE_EXTENSION_FORM instead. Current value: %s",
+                setting_value,
+            )
+
+    if not setting_value:
         return None
-    module, klass = settings.REGISTRATION_EXTENSION_FORM.rsplit('.', 1)
-    module = import_module(module)
-    return getattr(module, klass)(*args, **kwargs)
+
+    try:
+        module, klass = setting_value.rsplit(".", 1)
+        module = import_module(module)
+        return getattr(module, klass)(*args, **kwargs)
+    except (ValueError, ImportError, AttributeError) as e:
+        logger.error("Could not load form from %s='%s': %s", setting_name, setting_value, str(e))
+        return None
 
 
 def get_extended_profile_model() -> Optional[Type[Model]]:
@@ -339,16 +369,37 @@ def get_extended_profile_model() -> Optional[Type[Model]]:
     Get the model class for the extended profile form.
 
     Returns the Django model class associated with the form specified in
-    the `REGISTRATION_EXTENSION_FORM` setting.
+    the `PROFILE_EXTENSION_FORM` setting.
+
+    IMPORTANT: This function only works with PROFILE_EXTENSION_FORM. If you're using
+    the deprecated REGISTRATION_EXTENSION_FORM, this will return None to maintain
+    backward compatibility. The new profile extension capabilities (loading/saving
+    to a custom model) are only available when using PROFILE_EXTENSION_FORM.
+
+    Migration path:
+    - Old behavior (REGISTRATION_EXTENSION_FORM): Custom fields only for registration,
+      data stored in UserProfile.meta field
+    - New behavior (PROFILE_EXTENSION_FORM): Custom fields for registration and profile,
+      data stored in dedicated model with ability to load/update via account settings API
 
     Returns:
-        Optional[Type[Model]]: The model class if found and valid, None otherwise.
+        Optional[Type[Model]]: The model class if PROFILE_EXTENSION_FORM is configured
+            and valid, None otherwise (including when using the deprecated
+            REGISTRATION_EXTENSION_FORM).
 
-    Example:
+    Examples:
+        # New setting with model support:
+        # In settings.py: PROFILE_EXTENSION_FORM = 'myapp.forms.ExtendedProfileForm'
+        model_class = get_extended_profile_model()  # Returns the model
+
+        # Deprecated setting - maintains old behavior:
         # In settings.py: REGISTRATION_EXTENSION_FORM = 'myapp.forms.ExtendedForm'
-        model_class = get_extended_profile_model()
+        model_class = get_extended_profile_model()  # Returns None (no model support)
     """
-    setting_value = getattr(settings, "REGISTRATION_EXTENSION_FORM", None)
+    # Only check for the new setting - do NOT fall back to REGISTRATION_EXTENSION_FORM
+    # This ensures backward compatibility: users of the old setting keep the old behavior
+    setting_value = getattr(settings, "PROFILE_EXTENSION_FORM", None)
+
     if not setting_value:
         return None
 
@@ -358,7 +409,7 @@ def get_extended_profile_model() -> Optional[Type[Model]]:
         form_class = getattr(module, klass_name)
         return getattr(form_class.Meta, "model", None)
     except (ValueError, ImportError, ModuleNotFoundError, AttributeError) as e:
-        logger.warning("Could not load extended profile model from '%s': %s", setting_value, e)
+        logger.warning("Could not load extended profile model from PROFILE_EXTENSION_FORM='%s': %s", setting_value, e)
         return None
 
 
@@ -536,7 +587,8 @@ class RegistrationFormFactory:
         form_desc = FormDescription("post", self._get_registration_submit_url(request))
         self._apply_third_party_auth_overrides(request, form_desc)
 
-        # Custom form fields can be added via the form set in settings.REGISTRATION_EXTENSION_FORM
+        # Custom form fields can be added via the form set in settings.PROFILE_EXTENSION_FORM
+        # (or deprecated settings.REGISTRATION_EXTENSION_FORM)
         custom_form = get_registration_extension_form()
         if custom_form:
             custom_form_field_names = [field_name for field_name, field in custom_form.fields.items()]

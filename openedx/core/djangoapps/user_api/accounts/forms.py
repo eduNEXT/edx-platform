@@ -139,7 +139,7 @@ def get_extended_profile_form(extended_profile_fields_data: dict, user: User) ->
         for field_name, field_errors_list in extended_profile_form.errors.items():
             first_error = field_errors_list[0] if field_errors_list else "Unknown error"
             field_errors[field_name] = {
-                "developer_message": f"Error in extended profile field {field_name}: {first_error}",
+                "developer_message": f"Error in extended profile field [{field_name}]: {first_error}",
                 "user_message": str(first_error),
             }
 

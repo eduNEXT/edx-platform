@@ -10,7 +10,10 @@ from django.db.models import Model
 from django.test import TestCase
 from django.test.utils import override_settings
 
-from openedx.core.djangoapps.user_authn.views.registration_form import get_extended_profile_model
+from openedx.core.djangoapps.user_authn.views.registration_form import (
+    get_extended_profile_model,
+    get_registration_extension_form,
+)
 from openedx.core.djangoapps.user_authn.views.utils import _get_username_prefix, get_auto_generated_username
 
 
@@ -210,3 +213,168 @@ class TestGetExtendedProfileModel(TestCase):
 
         self.assertIsNone(result)
         mock_logger.warning.assert_called_once()
+
+    @override_settings(PROFILE_EXTENSION_FORM="myapp.forms.CustomProfileForm")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
+    def test_get_extended_profile_model_with_new_setting(self, mock_import_module: Mock):
+        """
+        Test loading model from PROFILE_EXTENSION_FORM (new setting)
+        """
+        mock_model = Mock(spec=Model)
+        mock_form_class = Mock()
+        mock_form_class.Meta = Mock()
+        mock_form_class.Meta.model = mock_model
+        mock_module = Mock()
+        mock_module.CustomProfileForm = mock_form_class
+        mock_import_module.return_value = mock_module
+
+        result = get_extended_profile_model()
+
+        self.assertEqual(result, mock_model)
+        mock_import_module.assert_called_once_with("myapp.forms")
+
+    @override_settings(
+        PROFILE_EXTENSION_FORM="myapp.forms.NewProfileForm",
+        REGISTRATION_EXTENSION_FORM="myapp.forms.OldRegistrationForm",
+    )
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
+    def test_get_extended_profile_model_new_setting_takes_precedence(self, mock_import_module: Mock):
+        """
+        Test that PROFILE_EXTENSION_FORM takes precedence over REGISTRATION_EXTENSION_FORM
+        """
+        mock_model = Mock(spec=Model)
+        mock_form_class = Mock()
+        mock_form_class.Meta = Mock()
+        mock_form_class.Meta.model = mock_model
+        mock_module = Mock()
+        mock_module.NewProfileForm = mock_form_class
+        mock_import_module.return_value = mock_module
+
+        result = get_extended_profile_model()
+
+        self.assertEqual(result, mock_model)
+        mock_import_module.assert_called_once_with("myapp.forms")
+
+    @override_settings(PROFILE_EXTENSION_FORM=None, REGISTRATION_EXTENSION_FORM="myapp.forms.LegacyForm")
+    def test_get_extended_profile_model_with_deprecated_setting_returns_none(self):
+        """
+        Test that using REGISTRATION_EXTENSION_FORM returns None (maintains old behavior).
+
+        This ensures backward compatibility: sites using REGISTRATION_EXTENSION_FORM
+        will NOT get the new model-based profile capabilities. They continue using
+        the old UserProfile.meta field approach.
+        """
+        result = get_extended_profile_model()
+
+        self.assertIsNone(result)
+
+
+@ddt.ddt
+class TestGetRegistrationExtensionForm(TestCase):
+    """
+    Tests for get_registration_extension_form function
+    """
+
+    @ddt.data(None, "")
+    def test_get_registration_extension_form_no_setting(self, setting_value: Optional[str]):
+        """
+        Test when neither PROFILE_EXTENSION_FORM nor REGISTRATION_EXTENSION_FORM is configured
+        """
+        with override_settings(
+            PROFILE_EXTENSION_FORM=setting_value,
+            REGISTRATION_EXTENSION_FORM=setting_value
+        ):
+            result = get_registration_extension_form()
+
+        self.assertIsNone(result)
+
+    @override_settings(PROFILE_EXTENSION_FORM="myapp.forms.CustomProfileForm")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
+    def test_get_registration_extension_form_with_new_setting(self, mock_import_module: Mock):
+        """
+        Test loading form from PROFILE_EXTENSION_FORM (new setting)
+        """
+        mock_form_instance = Mock()
+        mock_form_class = Mock(return_value=mock_form_instance)
+        mock_module = Mock()
+        mock_module.CustomProfileForm = mock_form_class
+        mock_import_module.return_value = mock_module
+
+        result = get_registration_extension_form(data={'field': 'value'})
+
+        self.assertEqual(result, mock_form_instance)
+        mock_import_module.assert_called_once_with("myapp.forms")
+        mock_form_class.assert_called_once_with(data={'field': 'value'})
+
+    @override_settings(
+        PROFILE_EXTENSION_FORM="myapp.forms.NewForm",
+        REGISTRATION_EXTENSION_FORM="myapp.forms.OldForm"
+    )
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
+    def test_get_registration_extension_form_new_setting_precedence(self, mock_import_module: Mock):
+        """
+        Test that PROFILE_EXTENSION_FORM takes precedence over REGISTRATION_EXTENSION_FORM
+        """
+        mock_form_instance = Mock()
+        mock_form_class = Mock(return_value=mock_form_instance)
+        mock_module = Mock()
+        mock_module.NewForm = mock_form_class
+        mock_import_module.return_value = mock_module
+
+        result = get_registration_extension_form()
+
+        self.assertEqual(result, mock_form_instance)
+        mock_import_module.assert_called_once_with("myapp.forms")
+
+    @override_settings(
+        PROFILE_EXTENSION_FORM=None,
+        REGISTRATION_EXTENSION_FORM="myapp.forms.LegacyForm"
+    )
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    def test_get_registration_extension_form_deprecation_warning(self, mock_logger: Mock, mock_import_module: Mock):
+        """
+        Test that using REGISTRATION_EXTENSION_FORM logs a deprecation warning
+        """
+        mock_form_instance = Mock()
+        mock_form_class = Mock(return_value=mock_form_instance)
+        mock_module = Mock()
+        mock_module.LegacyForm = mock_form_class
+        mock_import_module.return_value = mock_module
+
+        result = get_registration_extension_form()
+
+        self.assertEqual(result, mock_form_instance)
+        deprecation_calls = [call for call in mock_logger.warning.call_args_list if "deprecated" in str(call).lower()]
+        self.assertGreater(len(deprecation_calls), 0, "Expected a deprecation warning to be logged")
+        warning_message = str(deprecation_calls[0])
+        self.assertIn("REGISTRATION_EXTENSION_FORM", warning_message)
+        self.assertIn("PROFILE_EXTENSION_FORM", warning_message)
+
+    @override_settings(PROFILE_EXTENSION_FORM="invalid.path")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    def test_get_registration_extension_form_import_error(self, mock_logger: Mock, mock_import_module: Mock):
+        """
+        Test when form import fails
+        """
+        mock_import_module.side_effect = ImportError("Module not found")
+
+        result = get_registration_extension_form()
+
+        self.assertIsNone(result)
+        error_calls = mock_logger.error.call_args_list
+        self.assertGreater(len(error_calls), 0, "Expected an error to be logged")
+
+    @override_settings(PROFILE_EXTENSION_FORM="invalid_path_without_dot")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    def test_get_registration_extension_form_malformed_path(self, mock_logger: Mock):
+        """
+        Test when setting value doesn't have proper format (no dot separator)
+        """
+        result = get_registration_extension_form()
+
+        self.assertIsNone(result)
+
+        error_calls = mock_logger.error.call_args_list
+        self.assertGreater(len(error_calls), 0, "Expected an error to be logged")

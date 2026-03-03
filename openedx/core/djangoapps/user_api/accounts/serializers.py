@@ -587,8 +587,8 @@ def get_extended_profile(user_profile: UserProfile) -> list[dict[str, str]]:
     `extended_profile_fields` site configuration.
 
     The function supports two data sources:
-    1. Custom model: If `REGISTRATION_EXTENSION_FORM` setting points to a form with
-       a `Meta.model`, data is retrieved from that model using `model_to_dict()`
+    1. Custom model: If `PROFILE_EXTENSION_FORM` setting points to a form with a
+        `Meta.model`, data is retrieved from that model using `model_to_dict()`
     2. Fallback: JSON data stored in `UserProfile.meta` field
 
     Args:
