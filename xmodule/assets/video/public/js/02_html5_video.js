@@ -123,7 +123,7 @@ HTML5Video.Player = (function() {
     };
 
     Player.prototype.callStateChangeCallback = function() {
-        if ($.isFunction(this.config.events.onStateChange)) {
+        if (typeof this.config.events.onStateChange === 'function') {
             this.config.events.onStateChange({
                 data: this.playerState
             });
@@ -211,7 +211,7 @@ HTML5Video.Player = (function() {
     };
 
     Player.prototype.onError = function() {
-        if ($.isFunction(this.config.events.onError)) {
+        if (typeof this.config.events.onError === 'function') {
             this.config.events.onError();
         }
     };
@@ -243,7 +243,7 @@ HTML5Video.Player = (function() {
 
     Player.prototype.onLoadedMetadata = function() {
         this.playerState = HTML5Video.PlayerState.PAUSED;
-        if ($.isFunction(this.config.events.onReady)) {
+        if (typeof this.config.events.onReady === 'function') {
             this.onReady();
         }
     };

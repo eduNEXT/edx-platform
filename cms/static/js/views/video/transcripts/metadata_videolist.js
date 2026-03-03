@@ -177,7 +177,7 @@ define(
                             label = placeholders[type];
                             delete placeholders[type];
                         } else {
-                            if (!($.isArray(placeholders))) {
+                            if (!(Array.isArray(placeholders))) {
                                 placeholders = _.values(placeholders);
                             }
 

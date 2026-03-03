@@ -256,7 +256,7 @@
                                 if (query.split(' ').every(function(term) {
                                     return pathText.search(term.toLowerCase()) !== -1;
                                 })) {
-                                    path = $item.parents('.forum-nav-browse-menu-item').andSelf();
+                                    path = $item.parents('.forum-nav-browse-menu-item').addBack();
                                     path.add($item.find('.forum-nav-browse-menu-item')).show();
                                 }
                             }
@@ -268,7 +268,7 @@
 
             getPathText: function(item) {
                 var path, pathTitles;
-                path = item.parents('.forum-nav-browse-menu-item').andSelf();
+                path = item.parents('.forum-nav-browse-menu-item').addBack();
                 pathTitles = path.children('.forum-nav-browse-title').map(function(i, elem) {
                     return $(elem).text();
                 }).get();

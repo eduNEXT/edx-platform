@@ -38,7 +38,7 @@ let inherit = Object.create || (function() {
  * @return {jquery Promise}
  */
 let Component = function() {
-    if ($.isFunction(this.initialize)) {
+    if (typeof this.initialize === 'function') {
         // eslint-disable-next-line prefer-spread
         return this.initialize.apply(this, arguments);
     }
@@ -54,7 +54,7 @@ let Component = function() {
 Component.extend = function(protoProps, staticProps) {
     let Parent = this;
     let Child = function() {
-        if ($.isFunction(this.initialize)) {
+        if (typeof this.initialize === 'function') {
             // eslint-disable-next-line prefer-spread
             return this.initialize.apply(this, arguments);
         }

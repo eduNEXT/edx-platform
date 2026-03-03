@@ -231,7 +231,7 @@ define(['jquery', 'underscore', 'jquery.ajaxQueue'], function($) {
      *     ]
      */
         var _getVideoList = function(links) {
-            if ($.isArray(links)) {
+            if (Array.isArray(links)) {
                 var arr = [],
                     data;
 

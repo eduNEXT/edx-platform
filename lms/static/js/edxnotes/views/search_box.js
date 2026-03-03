@@ -124,7 +124,7 @@
 
                 if (jXHR.responseText) {
                     try {
-                        message = $.parseJSON(jXHR.responseText).error;
+                        message = JSON.parse(jXHR.responseText).error;
                     // eslint-disable-next-line no-empty
                     } catch (error) { }
                 }

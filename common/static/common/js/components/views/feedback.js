@@ -122,7 +122,7 @@
                 this.options.shown = true;
                 this.shownAt = new Date();
                 this.render();
-                if ($.isNumeric(this.options.maxShown)) {
+                if (!isNaN(parseFloat(this.options.maxShown)) && isFinite(this.options.maxShown)) {
                     this.hideTimeout = setTimeout(_.bind(this.hide, this),
                         this.options.maxShown);
                 }
@@ -130,7 +130,7 @@
             },
 
             hide: function() {
-                if (this.shownAt && $.isNumeric(this.options.minShown)
+                if (this.shownAt && !isNaN(parseFloat(this.options.minShown)) && isFinite(this.options.minShown)
                             && this.options.minShown > new Date() - this.shownAt) {
                     clearTimeout(this.hideTimeout);
                     this.hideTimeout = setTimeout(_.bind(this.hide, this),

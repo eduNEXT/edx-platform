@@ -51,7 +51,7 @@ jasmine.stubYoutubePlayer = () =>
 jasmine.stubVideoPlayer = function(context, enableParts, createPlayer) {
   let currentPartName;
   if (createPlayer == null) { createPlayer = true; }
-  if (!$.isArray(enableParts)) { enableParts = [enableParts]; }
+  if (!Array.isArray(enableParts)) { enableParts = [enableParts]; }
 
   let { suite } = context;
   while ((suite = suite.parentSuite)) { currentPartName = suite.description; }

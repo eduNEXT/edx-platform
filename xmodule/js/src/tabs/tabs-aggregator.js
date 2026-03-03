@@ -60,7 +60,7 @@
 
         // call onswitch
         onSwitchFunction = TabsEditingDescriptor.Model.modules[this.html_id].tabSwitch[$currentTarget.data('tab_name')];
-        if ($.isFunction(onSwitchFunction)) {
+        if (typeof onSwitchFunction === 'function') {
           onSwitchFunction();
         }
         this.$tabs.attr('aria-current', 'false').removeClass('current');
@@ -127,7 +127,7 @@
         var modelUpdateFunction;
         this.initialize(id);
         modelUpdateFunction = this.modules[id]['modelUpdate'][tabName];
-        if ($.isFunction(modelUpdateFunction)) {
+        if (typeof modelUpdateFunction === 'function') {
           return this.modules[id]['value'] = modelUpdateFunction();
         }
       },
@@ -143,7 +143,7 @@
         if (!this.modules[id]) {
           return null;
         }
-        if ($.isFunction(this.modules[id]['modelUpdate'][tabName])) {
+        if (typeof this.modules[id]['modelUpdate'][tabName] === 'function') {
           return this.modules[id]['modelUpdate'][tabName]();
         } else {
           if (typeof this.modules[id]['value'] === 'undefined') {

@@ -132,7 +132,7 @@ let Resizer = function(params) {
     };
 
     let addCallback = function(func) {
-        if ($.isFunction(func)) {
+        if (typeof func === 'function') {
             callbacksList.push(func);
         } else {
             console.error('[Video info]: TypeError: Argument is not a function.');
@@ -142,7 +142,7 @@ let Resizer = function(params) {
     };
 
     let addOnceCallback = function(func) {
-        if ($.isFunction(func)) {
+        if (typeof func === 'function') {
             let decorator = function() {
                 func();
                 removeCallback(func);

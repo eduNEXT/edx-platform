@@ -4,7 +4,7 @@
     describe('XBlockToXModuleShim', function() {
         describe('definition', function() {
             it('XBlockToXModuleShim is defined, and is a function', function() {
-                expect($.isFunction(XBlockToXModuleShim)).toBe(true);
+                expect(typeof XBlockToXModuleShim === 'function').toBe(true);
             });
         });
 
@@ -146,13 +146,13 @@
             });
 
             it('XModule.Descriptor is defined, and is a function', function() {
-                expect($.isFunction(XModule.Descriptor)).toBe(true);
+                expect(typeof XModule.Descriptor === 'function').toBe(true);
             });
 
             it('XModule.Descriptor has a complete prototype', function() {
-                expect($.isFunction(XModule.Descriptor.prototype.onUpdate)).toBe(true);
-                expect($.isFunction(XModule.Descriptor.prototype.update)).toBe(true);
-                expect($.isFunction(XModule.Descriptor.prototype.save)).toBe(true);
+                expect(typeof XModule.Descriptor.prototype.onUpdate === 'function').toBe(true);
+                expect(typeof XModule.Descriptor.prototype.update === 'function').toBe(true);
+                expect(typeof XModule.Descriptor.prototype.save === 'function').toBe(true);
             });
         });
 
@@ -191,7 +191,7 @@
                 expect(obj.hasOwnProperty('callbacks')).toBe(false);
                 obj.onUpdate(callback);
                 expect(obj.hasOwnProperty('callbacks')).toBe(true);
-                expect($.isArray(obj.callbacks)).toBe(true);
+                expect(Array.isArray(obj.callbacks)).toBe(true);
 
                 length = obj.callbacks.length;
                 expect(length).toBe(1);

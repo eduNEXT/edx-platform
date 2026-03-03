@@ -237,7 +237,7 @@ VideoCaption.prototype = {
             event.preventDefault();
             focused = $(':focus').parent();
             index = this.languageChooserEl.find('li').index(focused);
-            total = this.languageChooserEl.find('li').size() - 1;
+            total = this.languageChooserEl.find('li').length - 1;
 
             this.previousLanguageMenuItem(event, index);
             break;
@@ -246,7 +246,7 @@ VideoCaption.prototype = {
             event.preventDefault();
             focused = $(':focus').parent();
             index = this.languageChooserEl.find('li').index(focused);
-            total = this.languageChooserEl.find('li').size() - 1;
+            total = this.languageChooserEl.find('li').length - 1;
 
             this.nextLanguageMenuItem(event, index, total);
             break;

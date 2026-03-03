@@ -781,7 +781,7 @@
         $.each(answers, function (key, value) {
           var safeKey = key.replace(/\\/g, "\\\\").replace(/:/g, "\\:").replace(/\./g, "\\."); // fix for courses which use url_names with colons & periods, e.g. problem:question1, question1.1
           var answer;
-          if (!$.isArray(value)) {
+          if (!Array.isArray(value)) {
             answer = that.$("#answer_" + safeKey + ", #solution_" + safeKey);
             edx.HtmlUtils.setHtml(answer, edx.HtmlUtils.HTML(value));
             Collapsible.setCollapsibles(answer);

@@ -187,7 +187,7 @@
                     index = $sequenceList.find('li')
                         .index($focused.parent()),
                     total = $sequenceList.find('li')
-                        .size() - 1;
+                        .length - 1;
                 switch (key) {
                 case self.arrowKeys.LEFT:
                     event.preventDefault();

@@ -161,7 +161,7 @@ var edx = edx || {};
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    var data = $.parseJSON(jqXHR.responseText);
+                    var data = JSON.parse(jqXHR.responseText);
                     $lookup_button.removeAttr('disabled');
                     $registration_code_status_form_error.text(gettext(data.message));
                     $registration_code_status_form_error.show();
@@ -192,7 +192,7 @@ var edx = edx || {};
                     $registration_code_status_form_success.fadeOut(3000);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    var data = $.parseJSON(jqXHR.responseText);
+                    var data = JSON.parse(jqXHR.responseText);
                     $registration_code_status_form_error.hide();
                     $lookup_button.removeAttr('disabled');
                     $registration_code_status_form_error.show();
