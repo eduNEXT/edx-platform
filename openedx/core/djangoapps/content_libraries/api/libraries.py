@@ -336,15 +336,24 @@ def get_metadata(queryset: QuerySet[ContentLibrary], text_search: str | None = N
     return libraries
 
 
-def require_permission_for_library_key(library_key: LibraryLocatorV2, user: UserType, permission) -> ContentLibrary:
+def require_permission_for_library_key(
+    library_key: LibraryLocatorV2, user: UserType, permission: str | authz_api.data.PermissionData
+) -> ContentLibrary:
     """
-    Given any of the content library permission strings defined in
-    openedx.core.djangoapps.content_libraries.permissions,
-    check if the given user has that permission for the library with the
-    specified library ID.
+    Check if the user has the specified permission for a content library.
 
-    Raises django.core.exceptions.PermissionDenied if the user doesn't have
-    permission.
+    Args:
+        library_key: The library key identifying the content library
+        user: The user whose permissions are being checked
+        permission: Either a permission string from content_libraries.permissions
+                   or a PermissionData instance from the authz API
+
+    Returns:
+        ContentLibrary: The library object if permission check passes
+
+    Raises:
+        ContentLibraryNotFound: If the library with the given key doesn't exist
+        PermissionDenied: If the user doesn't have the required permission
     """
     library_obj = ContentLibrary.objects.get_by_key(library_key)
     # obj should be able to read any valid model object but mypy thinks it can only be

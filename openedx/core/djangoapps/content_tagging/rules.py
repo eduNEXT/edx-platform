@@ -7,9 +7,10 @@ from typing import Union
 import django.contrib.auth.models
 import openedx_tagging.rules as oel_tagging
 import rules
+from opaque_keys.edx.locator import LibraryLocatorV2
 from organizations.models import Organization
 
-from common.djangoapps.student.auth import has_studio_read_access, has_studio_write_access
+from common.djangoapps.student.auth import has_library_tagging_access, has_studio_read_access, has_studio_write_access
 from common.djangoapps.student.role_helpers import get_course_roles, get_role_cache
 from common.djangoapps.student.roles import (
     CourseInstructorRole,
@@ -218,7 +219,10 @@ def can_change_taxonomy(user: UserType, taxonomy: oel_tagging.Taxonomy) -> bool:
 @rules.predicate
 def can_change_object_tag_objectid(user: UserType, object_id: str) -> bool:
     """
-    Everyone that has permission to edit the object should be able to tag it.
+    Check if user has permission to tag the object.
+
+    For Content Libraries V2: requires MANAGE_LIBRARY_TAGS permission.
+    For other contexts (courses, etc.): requires edit/write access.
     """
     if not object_id:
         return True
@@ -229,6 +233,11 @@ def can_change_object_tag_objectid(user: UserType, object_id: str) -> bool:
     except (ValueError, AssertionError):
         return False
 
+    # For Content Libraries V2, check specific tagging permission
+    if isinstance(context_key, LibraryLocatorV2) and has_library_tagging_access(user, context_key):
+        return True
+
+    # For other contexts (courses, xblocks, etc.), use general write access
     if has_studio_write_access(user, context_key):
         return True
 
