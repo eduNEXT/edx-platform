@@ -6,7 +6,6 @@ import copy
 import logging
 import re
 from importlib import import_module
-import logging
 
 from django import forms
 from django.conf import settings
@@ -40,7 +39,6 @@ from openedx.core.djangoapps.user_authn.views.utils import remove_disabled_count
 from openedx.core.djangolib.markup import HTML, Text
 from openedx.features.enterprise_support.api import enterprise_customer_for_request
 
-logger = logging.getLogger(__name__)
 
 log = logging.getLogger(__name__)
 
@@ -346,7 +344,7 @@ def get_registration_extension_form(*args, **kwargs) -> Optional[forms.Form]:
         setting_value = getattr(settings, "REGISTRATION_EXTENSION_FORM", None)
         if setting_value:
             setting_name = "REGISTRATION_EXTENSION_FORM"
-            logger.warning(
+            log.warning(
                 "REGISTRATION_EXTENSION_FORM is deprecated and will be removed in a future release. "
                 "Please use PROFILE_EXTENSION_FORM instead. Current value: %s",
                 setting_value,
@@ -360,7 +358,7 @@ def get_registration_extension_form(*args, **kwargs) -> Optional[forms.Form]:
         module = import_module(module)
         return getattr(module, klass)(*args, **kwargs)
     except (ValueError, ImportError, AttributeError) as e:
-        logger.error("Could not load form from %s='%s': %s", setting_name, setting_value, str(e))
+        log.error("Could not load form from %s='%s': %s", setting_name, setting_value, str(e))
         return None
 
 
@@ -409,7 +407,7 @@ def get_extended_profile_model() -> Optional[Type[Model]]:
         form_class = getattr(module, klass_name)
         return getattr(form_class.Meta, "model", None)
     except (ValueError, ImportError, ModuleNotFoundError, AttributeError) as e:
-        logger.warning("Could not load extended profile model from PROFILE_EXTENSION_FORM='%s': %s", setting_value, e)
+        log.warning("Could not load extended profile model from PROFILE_EXTENSION_FORM='%s': %s", setting_value, e)
         return None
 
 
