@@ -91,21 +91,21 @@ class TestGenerateUsername(TestCase):
 @ddt.ddt
 class TestGetExtendedProfileModel(TestCase):
     """
-    Tests for get_extended_profile_model function
+    Tests for `get_extended_profile_model function
     """
 
     @ddt.data(None, "")
     def test_get_extended_profile_model_no_setting_or_empty_string(self, setting_value: Optional[str]):
         """
-        Test when REGISTRATION_EXTENSION_FORM setting is not configured
+        Test when `PROFILE_EXTENSION_FORM` setting is not configured
         """
-        with override_settings(REGISTRATION_EXTENSION_FORM=setting_value):
+        with override_settings(PROFILE_EXTENSION_FORM=setting_value):
             result = get_extended_profile_model()
 
         self.assertIsNone(result)
 
-    @override_settings(REGISTRATION_EXTENSION_FORM="invalid.module.path")
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    @override_settings(PROFILE_EXTENSION_FORM="invalid.module.path")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.log")
     def test_get_extended_profile_model_invalid_module(self, mock_logger: Mock):
         """
         Test when the module path is invalid
@@ -116,18 +116,17 @@ class TestGetExtendedProfileModel(TestCase):
         mock_logger.warning.assert_called_once()
         self.assertIn("Could not load extended profile model", str(mock_logger.warning.call_args))
 
-    @override_settings(REGISTRATION_EXTENSION_FORM="django.forms.Form")
+    @override_settings(PROFILE_EXTENSION_FORM="django.forms.Form")
     def test_get_extended_profile_model_no_meta_class(self):
         """
         Test when the form class doesn't have a Meta class
         """
         result = get_extended_profile_model()
 
-        # Form doesn't have Meta.model, should return None
         self.assertIsNone(result)
 
-    @override_settings(REGISTRATION_EXTENSION_FORM="invalid_module_path")
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    @override_settings(PROFILE_EXTENSION_FORM="invalid_module_path")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.log")
     def test_get_extended_profile_model_malformed_path(self, mock_logger: Mock):
         """
         Test when the setting value doesn't have a dot separator
@@ -136,20 +135,18 @@ class TestGetExtendedProfileModel(TestCase):
 
         self.assertIsNone(result)
         mock_logger.warning.assert_called_once()
+        self.assertIn("Could not load extended profile model", str(mock_logger.warning.call_args))
 
-    @override_settings(REGISTRATION_EXTENSION_FORM="myapp.forms.CustomExtendedProfileForm")
+    @override_settings(PROFILE_EXTENSION_FORM="myapp.forms.CustomExtendedProfileForm")
     @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
     def test_get_extended_profile_model_custom_form(self, mock_import_module: Mock):
         """
         Test loading model from a custom extended profile form
         """
-        # Create a mock model
         mock_model = Mock(spec=Model)
-        # Create a mock form class with Meta.model
         mock_form_class = Mock()
         mock_form_class.Meta = Mock()
         mock_form_class.Meta.model = mock_model
-        # Create a mock module with the custom form class
         mock_module = Mock()
         mock_module.CustomExtendedProfileForm = mock_form_class
         mock_import_module.return_value = mock_module
@@ -159,7 +156,7 @@ class TestGetExtendedProfileModel(TestCase):
         self.assertEqual(result, mock_model)
         mock_import_module.assert_called_once_with("myapp.forms")
 
-    @override_settings(REGISTRATION_EXTENSION_FORM="myapp.forms.FormWithoutModel")
+    @override_settings(PROFILE_EXTENSION_FORM="myapp.forms.FormWithoutModel")
     @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
     def test_get_extended_profile_model_form_without_model(self, mock_import_module: Mock):
         """
@@ -182,9 +179,9 @@ class TestGetExtendedProfileModel(TestCase):
         (ModuleNotFoundError, "No module named 'myapp'"),
     )
     @ddt.unpack
-    @override_settings(REGISTRATION_EXTENSION_FORM="myapp.forms.ExtendedProfileForm")
+    @override_settings(PROFILE_EXTENSION_FORM="myapp.forms.ExtendedProfileForm")
     @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.log")
     def test_get_extended_profile_model_import_errors(
         self, exception_class: type, error_message: str, mock_logger: Mock, mock_import_module: Mock
     ):
@@ -199,9 +196,9 @@ class TestGetExtendedProfileModel(TestCase):
         mock_logger.warning.assert_called_once()
         self.assertIn("Could not load extended profile model", str(mock_logger.warning.call_args))
 
-    @override_settings(REGISTRATION_EXTENSION_FORM="myapp.forms.NonExistentForm")
+    @override_settings(PROFILE_EXTENSION_FORM="myapp.forms.NonExistentForm")
     @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.log")
     def test_get_extended_profile_model_attribute_error(self, mock_logger: Mock, mock_import_module: Mock):
         """
         Test when the form class doesn't exist in the module
@@ -213,47 +210,7 @@ class TestGetExtendedProfileModel(TestCase):
 
         self.assertIsNone(result)
         mock_logger.warning.assert_called_once()
-
-    @override_settings(PROFILE_EXTENSION_FORM="myapp.forms.CustomProfileForm")
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
-    def test_get_extended_profile_model_with_new_setting(self, mock_import_module: Mock):
-        """
-        Test loading model from PROFILE_EXTENSION_FORM (new setting)
-        """
-        mock_model = Mock(spec=Model)
-        mock_form_class = Mock()
-        mock_form_class.Meta = Mock()
-        mock_form_class.Meta.model = mock_model
-        mock_module = Mock()
-        mock_module.CustomProfileForm = mock_form_class
-        mock_import_module.return_value = mock_module
-
-        result = get_extended_profile_model()
-
-        self.assertEqual(result, mock_model)
-        mock_import_module.assert_called_once_with("myapp.forms")
-
-    @override_settings(
-        PROFILE_EXTENSION_FORM="myapp.forms.NewProfileForm",
-        REGISTRATION_EXTENSION_FORM="myapp.forms.OldRegistrationForm",
-    )
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
-    def test_get_extended_profile_model_new_setting_takes_precedence(self, mock_import_module: Mock):
-        """
-        Test that PROFILE_EXTENSION_FORM takes precedence over REGISTRATION_EXTENSION_FORM
-        """
-        mock_model = Mock(spec=Model)
-        mock_form_class = Mock()
-        mock_form_class.Meta = Mock()
-        mock_form_class.Meta.model = mock_model
-        mock_module = Mock()
-        mock_module.NewProfileForm = mock_form_class
-        mock_import_module.return_value = mock_module
-
-        result = get_extended_profile_model()
-
-        self.assertEqual(result, mock_model)
-        mock_import_module.assert_called_once_with("myapp.forms")
+        self.assertIn("Could not load extended profile model", str(mock_logger.warning.call_args))
 
     @override_settings(PROFILE_EXTENSION_FORM=None, REGISTRATION_EXTENSION_FORM="myapp.forms.LegacyForm")
     def test_get_extended_profile_model_with_deprecated_setting_returns_none(self):
@@ -331,7 +288,7 @@ class TestGetRegistrationExtensionForm(TestCase):
         REGISTRATION_EXTENSION_FORM="myapp.forms.LegacyForm"
     )
     @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.log")
     def test_get_registration_extension_form_deprecation_warning(self, mock_logger: Mock, mock_import_module: Mock):
         """
         Test that using REGISTRATION_EXTENSION_FORM logs a deprecation warning
@@ -353,7 +310,7 @@ class TestGetRegistrationExtensionForm(TestCase):
 
     @override_settings(PROFILE_EXTENSION_FORM="invalid.path")
     @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.log")
     def test_get_registration_extension_form_import_error(self, mock_logger: Mock, mock_import_module: Mock):
         """
         Test when form import fails
@@ -367,7 +324,7 @@ class TestGetRegistrationExtensionForm(TestCase):
         self.assertGreater(len(error_calls), 0, "Expected an error to be logged")
 
     @override_settings(PROFILE_EXTENSION_FORM="invalid_path_without_dot")
-    @patch("openedx.core.djangoapps.user_authn.views.registration_form.logger")
+    @patch("openedx.core.djangoapps.user_authn.views.registration_form.log")
     def test_get_registration_extension_form_malformed_path(self, mock_logger: Mock):
         """
         Test when setting value doesn't have proper format (no dot separator)
