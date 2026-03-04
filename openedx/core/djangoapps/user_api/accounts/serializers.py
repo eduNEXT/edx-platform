@@ -611,7 +611,7 @@ def get_extended_profile(user_profile: UserProfile) -> list[dict[str, str]]:
             try:
                 profile_obj = extended_profile_model.objects.get(user=user_profile.user)
                 return model_to_dict(profile_obj)
-            except (AttributeError, extended_profile_model.DoesNotExist):
+            except extended_profile_model.DoesNotExist:
                 return {}
 
         try:
