@@ -88,18 +88,23 @@ def extract_extended_profile_fields_data(extended_profile: Optional[list[dict]])
     return extended_profile_fields_data, field_errors
 
 
-def get_extended_profile_form(extended_profile_fields_data: dict, user: User) -> Tuple[Optional[forms.Form], dict]:
+def get_extended_profile_form(
+    extended_profile_fields_data: dict,
+    user: User,
+) -> Tuple[Optional[forms.Form], dict]:
     """
     Get and validate an extended profile form instance.
 
     Args:
-        extended_profile_fields_data (dict): Extended profile field data to populate the form
-        user (User): User instance to associate with the extended profile
+        extended_profile_fields_data (dict): Extended profile field data to
+        populate the form user (User): User instance to associate with the
+        extended profile
 
     Returns:
         tuple: A tuple containing (extended_profile_form, field_errors)
-            - extended_profile_form (Optional[forms.Form]): The validated form instance, or None if
-              no extended profile form is configured or creation fails
+            - extended_profile_form (Optional[forms.Form]): The form instance.
+              This may be invalid if `field_errors` is non-empty, or None if
+              no extended profile form is configured or creation fails.
             - field_errors (dict): Dictionary of validation errors, if any
     """
     field_errors = {}
