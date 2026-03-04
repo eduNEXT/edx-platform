@@ -47,13 +47,13 @@ class RetirementQueueDeletionForm(forms.Form):
         handle_retirement_cancellation(retirement)
 
 
-def extract_extended_profile_fields_data(extended_profile: Optional[list]) -> Tuple[dict, dict]:
+def extract_extended_profile_fields_data(extended_profile: Optional[list[dict]]) -> Tuple[dict, dict]:
     """
     Extract extended profile fields data from extended_profile structure.
 
     Args:
-        extended_profile (Optional[list]): List of field data dictionaries with keys
-            'field_name' and 'field_value'
+        extended_profile (Optional[list[dict]]): List of field data dictionaries with keys
+            `field_name` and `field_value`
 
     Returns:
         tuple: A tuple containing (extended_profile_fields_data, field_errors)
@@ -83,8 +83,7 @@ def extract_extended_profile_fields_data(extended_profile: Optional[list]) -> Tu
             logger.warning("Missing field_name in extended_profile field_data: %s", field_data)
             continue
 
-        if field_value is not None:
-            extended_profile_fields_data[field_name] = field_value
+        extended_profile_fields_data[field_name] = field_value
 
     return extended_profile_fields_data, field_errors
 
