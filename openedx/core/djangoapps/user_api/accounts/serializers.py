@@ -581,15 +581,19 @@ def get_extended_profile(user_profile: UserProfile) -> list[dict[str, str]]:
     Retrieve extended user profile fields for API serialization.
 
     This function extracts custom profile fields that extend beyond the standard
-    UserProfile model. It first attempts to get data from a custom extended profile
-    model (if configured), then falls back to the `user_profile.meta` JSON field.
-    The returned data is filtered to include only fields specified in the
-    `extended_profile_fields` site configuration.
+    UserProfile model. It prefers data from a custom extended profile model
+    (when configured), and only uses the `user_profile.meta` JSON field when
+    no such model is configured. The returned data is filtered to include only
+    fields specified in the `extended_profile_fields` site configuration.
 
     The function supports two data sources:
-    1. Custom model: If `PROFILE_EXTENSION_FORM` setting points to a form with a
-        `Meta.model`, data is retrieved from that model using `model_to_dict()`
-    2. Fallback: JSON data stored in `UserProfile.meta` field
+    1. Custom model: If the `PROFILE_EXTENSION_FORM` setting points to a form with a
+        `Meta.model`, data is retrieved from that model using `model_to_dict()`. If a
+        model is configured but the user does not yet have a corresponding record,
+        this function returns an empty mapping for extended profile fields (it does
+        not fall back to `user_profile.meta` in that case).
+    2. Fallback: JSON data stored in `UserProfile.meta` field, used only when no
+        custom extended profile model is configured.
 
     Args:
         user_profile (UserProfile): The user profile instance to get extended fields from.
