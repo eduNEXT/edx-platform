@@ -372,27 +372,36 @@ def _update_extended_profile_if_needed(
     Note:
         If `extended_profile` is present in data, the function will:
         - Extract `field_name` and `field_value` pairs from extended_profile list
-        - Update the `user_profile.meta` dictionary with new values
-        - Save the updated user_profile
+        - Update the `user_profile.meta` dictionary with new values and save the profile
 
         If `extended_profile_form` is provided and valid, the function will:
         - Save the form data to the extended profile model
         - Associate the model instance with the user if it's a new instance
-        - Log any errors that occur during the save process
-    """
-    if "extended_profile" in data:
-        meta = user_profile.get_meta()
-        new_extended_profile = data["extended_profile"]
-        for field in new_extended_profile:
-            field_name = field["field_name"]
-            new_value = field["field_value"]
-            meta[field_name] = new_value
-        user_profile.set_meta(meta)
-        user_profile.save()
 
-    if extended_profile_form:
-        try:
-            with transaction.atomic():
+        Both the meta update and the extended profile model save (when present) are performed
+        within a single database transaction. If either operation fails, the transaction is
+        rolled back so that no partial updates are persisted. The error is logged and an
+        AccountUpdateError is raised to the caller.
+    """
+    has_extended_profile_data = "extended_profile" in data
+    has_extended_profile_form = extended_profile_form is not None
+
+    if not has_extended_profile_data and not has_extended_profile_form:
+        return
+
+    try:
+        with transaction.atomic():
+            if has_extended_profile_data:
+                meta = user_profile.get_meta()
+                new_extended_profile = data["extended_profile"]
+                for field in new_extended_profile:
+                    field_name = field["field_name"]
+                    new_value = field["field_value"]
+                    meta[field_name] = new_value
+                user_profile.set_meta(meta)
+                user_profile.save()
+
+            if has_extended_profile_form:
                 # Use commit=False to create the model instance in memory without saving to DB yet.
                 # This allows us to set the user field before persisting, which is necessary because:
                 # 1. The form validates and creates the instance with form data
@@ -404,8 +413,9 @@ def _update_extended_profile_if_needed(
                     extended_profile.user = user_profile.user
                 # Now persist the instance with the user field properly set
                 extended_profile.save()
-        except Exception as e:  # pylint: disable=broad-exception-caught
-            logger.error("Error saving extended profile model: %s", e)
+    except Exception:  # pylint: disable=broad-exception-caught
+        logger.error("Error saving extended profile model", exc_info=True)
+        raise AccountUpdateError("Error saving extended profile model")
 
 
 def _update_state_if_needed(data, user_profile):

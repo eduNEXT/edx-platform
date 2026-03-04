@@ -654,19 +654,22 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
     @patch("openedx.core.djangoapps.user_api.accounts.api.logger")
     def test_update_extended_profile_form_save_error(self, mock_logger):
         """
-        Test that errors during form save are logged but don't crash
+        Test that errors during form save are logged, cause an AccountUpdateError, and do not leave partial updates
         """
         mock_form = Mock()
         mock_form.save.side_effect = Exception("Database error")
         update_data = {"extended_profile": [{"field_name": "department", "field_value": "Engineering"}]}
 
-        update_account_settings(self.user, update_data, extended_profile_form=mock_form)
+        with pytest.raises(AccountUpdateError) as context_manager:
+            update_account_settings(self.user, update_data, extended_profile_form=mock_form)
 
         mock_logger.error.assert_called_once()
         self.assertIn("Error saving extended profile model", str(mock_logger.error.call_args))
+        self.assertIn("Error saving extended profile model", context_manager.value.developer_message)
         user_profile = UserProfile.objects.get(user=self.user)
         meta = user_profile.get_meta()
-        self.assertEqual(meta["department"], "Engineering")
+        # The meta update should also be rolled back, so no extended profile data is persisted.
+        self.assertNotIn("department", meta)
 
     def test_update_extended_profile_without_extended_profile_data(self):
         """
