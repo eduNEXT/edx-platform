@@ -102,9 +102,9 @@ def get_extended_profile_form(
 
     Returns:
         tuple: A tuple containing (extended_profile_form, field_errors)
-            - extended_profile_form (Optional[forms.Form]): The form instance.
-              This may be invalid if `field_errors` is non-empty, or None if
-              no extended profile form is configured or creation fails.
+            - extended_profile_form (Optional[forms.Form]): The validated form instance,
+              or None if no extended profile form is configured, creation fails,
+              or form validation fails.
             - field_errors (dict): Dictionary of validation errors, if any
     """
     field_errors, kwargs = {}, {}
@@ -139,6 +139,8 @@ def get_extended_profile_form(
                 "developer_message": f"Error in extended profile field [{field_name}]: {first_error}",
                 "user_message": str(first_error),
             }
+
+        return None, field_errors
 
     return extended_profile_form, field_errors
 

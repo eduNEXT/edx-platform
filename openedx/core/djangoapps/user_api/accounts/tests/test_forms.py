@@ -130,7 +130,7 @@ class TestGetExtendedProfileForm(TestCase):
         """
         Test when no extended profile model is configured
         """
-        mock_get_model.side_effect = ImportError("No model configured")
+        mock_get_model.return_value = None
         extended_profile_fields_data = {"department": "Engineering"}
 
         form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
@@ -209,7 +209,7 @@ class TestGetExtendedProfileForm(TestCase):
 
         form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
-        self.assertEqual(form, mock_form_instance)
+        self.assertIsNone(form)
         self.assertIn("department", errors)
         self.assertIn("title", errors)
         self.assertEqual(errors["department"]["user_message"], "This field is required")
