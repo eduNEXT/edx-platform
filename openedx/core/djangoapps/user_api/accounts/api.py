@@ -413,9 +413,9 @@ def _update_extended_profile_if_needed(
                     extended_profile.user = user_profile.user
                 # Now persist the instance with the user field properly set
                 extended_profile.save()
-    except Exception:  # pylint: disable=broad-exception-caught
+    except Exception as exc:  # pylint: disable=broad-exception-caught
         logger.error("Error saving extended profile model", exc_info=True)
-        raise AccountUpdateError("Error saving extended profile model")
+        raise AccountUpdateError("Error saving extended profile model") from exc
 
 
 def _update_state_if_needed(data, user_profile):
