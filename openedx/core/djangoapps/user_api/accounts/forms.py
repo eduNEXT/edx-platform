@@ -107,15 +107,8 @@ def get_extended_profile_form(
               no extended profile form is configured or creation fails.
             - field_errors (dict): Dictionary of validation errors, if any
     """
-    field_errors = {}
-
-    try:
-        extended_profile_model = get_extended_profile_model()
-    except ImportError as e:
-        logger.warning("Extended profile model not available: %s", str(e))
-        return None, field_errors
-
-    kwargs = {}
+    field_errors, kwargs = {}, {}
+    extended_profile_model = get_extended_profile_model()
 
     try:
         kwargs["instance"] = extended_profile_model.objects.get(user=user)
