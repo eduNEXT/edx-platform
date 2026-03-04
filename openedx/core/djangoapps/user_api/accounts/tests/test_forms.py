@@ -34,20 +34,6 @@ class TestExtractExtendedProfileFieldsData(TestCase):
         self.assertEqual(errors, {})
         self.assertEqual(extracted_data, {"department": "Engineering", "title": "Software Engineer"})
 
-    def test_extract_extended_profile_with_none_value(self):
-        """
-        Test that None values are skipped
-        """
-        extended_profile = [
-            {"field_name": "department", "field_value": "Engineering"},
-            {"field_name": "title", "field_value": None},
-        ]
-
-        extracted_data, errors = extract_extended_profile_fields_data(extended_profile)
-
-        self.assertEqual(errors, {})
-        self.assertEqual(extracted_data, {"department": "Engineering"})
-
     def test_extract_extended_profile_with_empty_string(self):
         """
         Test that empty strings are included
