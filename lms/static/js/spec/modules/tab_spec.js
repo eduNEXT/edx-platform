@@ -25,23 +25,22 @@ describe('Tab', function() {
   });
 
     it('bind the tabs', function() {
-      expect($.fn.tabs).toHaveBeenCalledWith({show: this.tab.onShow});
+      expect($.fn.tabs).toHaveBeenCalledWith({activate: this.tab.onShow});
     });
   });
 
-  // As of jQuery 1.9, the onShow callback is deprecated
+  // jQuery UI 1.10+ renamed the show event to activate.
   // http://jqueryui.com/upgrade-guide/1.9/#deprecated-show-event-renamed-to-activate
-  // The code below tests that onShow does what is expected,
-  // but note that onShow will NOT be called when the user
-  // clicks on the tab if we're using jQuery version >= 1.9
+  // The ui object for activate provides ui.newPanel (the activated panel element)
+  // and ui.newTab (the activated tab anchor element).
   describe('onShow', function() {
     beforeEach(function() {
       this.tab = new Tab(1, this.items);
-      this.tab.onShow($('#tab-1-0'), {'index': 1});
+      this.tab.onShow(null, {newPanel: $('#tab-1-0')});
     });
 
     it('replace content in the container', function() {
-      this.tab.onShow($('#tab-1-1'), {'index': 1});
+      this.tab.onShow(null, {newPanel: $('#tab-1-1')});
       expect($('#tab-1-0').html()).toEqual('');
       expect($('#tab-1-1').html()).toEqual('Video 2');
       expect($('#tab-1-2').html()).toEqual('');
@@ -49,7 +48,7 @@ describe('Tab', function() {
 
     it('trigger contentChanged event on the element', function() {
       spyOnEvent(this.tab.el, 'contentChanged');
-      this.tab.onShow($('#tab-1-1'), {'index': 1});
+      this.tab.onShow(null, {newPanel: $('#tab-1-1')});
       expect('contentChanged').toHaveBeenTriggeredOn(this.tab.el);
     });
   });

@@ -31,13 +31,16 @@
         };
       })(this));
       return this.el.tabs({
-        show: this.onShow
+        activate: this.onShow
       });
     };
 
     Tab.prototype.onShow = function(element, ui) {
-      this.$('section.ui-tabs-hide').html('');
-      this.$("#" + (this.tabId(ui.index))).html(this.items[ui.index]['content']); // xss-lint: disable=javascript-jquery-html
+      var newPanel = ui.newPanel;
+      var panelId = newPanel.attr('id');
+      var index = parseInt(panelId.split('-').pop(), 10);
+      this.$('section').not(newPanel).html('');
+      newPanel.html(this.items[index]['content']); // xss-lint: disable=javascript-jquery-html
       return this.el.trigger('contentChanged');
     };
 
