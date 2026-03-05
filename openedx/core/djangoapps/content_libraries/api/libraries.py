@@ -837,6 +837,7 @@ def _transform_authz_permission_to_legacy_lib_permission(permission: str) -> str
         authz_permissions.CREATE_LIBRARY_COLLECTION.identifier: permissions.CAN_EDIT_THIS_CONTENT_LIBRARY,
         authz_permissions.EDIT_LIBRARY_COLLECTION.identifier: permissions.CAN_EDIT_THIS_CONTENT_LIBRARY,
         authz_permissions.DELETE_LIBRARY_COLLECTION.identifier: permissions.CAN_EDIT_THIS_CONTENT_LIBRARY,
+        authz_permissions.MANAGE_LIBRARY_TAGS.identifier: permissions.CAN_EDIT_THIS_CONTENT_LIBRARY,
         authz_permissions.REUSE_LIBRARY_CONTENT.identifier: permissions.CAN_VIEW_THIS_CONTENT_LIBRARY,
     }.get(permission, permission)
 
