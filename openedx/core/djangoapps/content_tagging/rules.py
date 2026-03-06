@@ -299,6 +299,11 @@ def can_remove_object_tag_objectid(user: UserType, object_id: str) -> bool:
     except (ValueError, AssertionError):
         return False
 
+    # For Content Libraries V2, check specific tagging permission
+    if isinstance(context_key, LibraryLocatorV2) and has_library_tagging_access(user, context_key):
+        return True
+
+    # For other contexts (courses, xblocks, etc.), use general write access
     if has_studio_write_access(user, context_key):
         return True
 
