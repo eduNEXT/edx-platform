@@ -219,10 +219,13 @@ def can_change_taxonomy(user: UserType, taxonomy: oel_tagging.Taxonomy) -> bool:
 @rules.predicate
 def can_change_object_tag_objectid(user: UserType, object_id: str) -> bool:
     """
-    Check if user has permission to tag the object.
+    Return True if the user may add or modify tags on the given object.
 
-    For Content Libraries V2: requires MANAGE_LIBRARY_TAGS permission.
-    For other contexts (courses, etc.): requires edit/write access.
+    For Content Libraries V2, this requires either explicit library tagging permission
+    (MANAGE_LIBRARY_TAGS) or org-level admin access for the library's org.
+
+    For other contexts (courses, xblocks, etc.), this requires studio write access or
+    org-level admin access for the object's org.
     """
     if not object_id:
         return True
@@ -286,7 +289,13 @@ def can_view_object_tag_objectid(user: UserType, object_id: str) -> bool:
 @rules.predicate
 def can_remove_object_tag_objectid(user: UserType, object_id: str) -> bool:
     """
-    Everyone that has permission to edit the object should be able remove tags from it.
+    Return True if the user may remove tags from the given object.
+
+    For Content Libraries V2, this requires either explicit library tagging permission
+    (MANAGE_LIBRARY_TAGS) or org-level admin access for the library's org.
+
+    For other contexts (courses, xblocks, etc.), this requires studio write access or
+    org-level admin access for the object's org.
     """
     if not object_id:
         raise ValueError("object_id must be provided")
