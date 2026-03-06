@@ -233,11 +233,12 @@ def can_change_object_tag_objectid(user: UserType, object_id: str) -> bool:
     except (ValueError, AssertionError):
         return False
 
-    # For Content Libraries V2, check specific tagging permission
+    # For Content Libraries V2, prefer explicit library tagging permission,
+    # but fall back to org-level admin access for backwards compatibility.
     if isinstance(context_key, LibraryLocatorV2) and has_library_tagging_access(user, context_key):
         return True
 
-    # For other contexts (courses, xblocks, etc.), use general write access
+    # For other contexts (courses, xblocks, etc.), use general write or org-admin access
     if has_studio_write_access(user, context_key):
         return True
 
@@ -299,11 +300,12 @@ def can_remove_object_tag_objectid(user: UserType, object_id: str) -> bool:
     except (ValueError, AssertionError):
         return False
 
-    # For Content Libraries V2, check specific tagging permission
+    # For Content Libraries V2, prefer explicit library tagging permission,
+    # but fall back to org-level admin access for backwards compatibility.
     if isinstance(context_key, LibraryLocatorV2) and has_library_tagging_access(user, context_key):
         return True
 
-    # For other contexts (courses, xblocks, etc.), use general write access
+    # For other contexts (courses, xblocks, etc.), use general write or org-admin access
     if has_studio_write_access(user, context_key):
         return True
 
