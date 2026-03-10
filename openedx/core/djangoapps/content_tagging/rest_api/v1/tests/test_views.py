@@ -1950,15 +1950,15 @@ class TestObjectTagViewSet(TestObjectTagMixin, APITestCase):
 
     @ddt.data(
         ('staff', 'courseA', 8),
-        ('staff', 'libraryA', 11),
-        ('staff', 'collection_key', 11),
+        ('staff', 'libraryA', 17),
+        ('staff', 'collection_key', 17),
         ("content_creatorA", 'courseA', 18, False),
-        ("content_creatorA", 'libraryA', 32, False),
-        ("content_creatorA", 'collection_key', 32, False),
-        ("library_staffA", 'libraryA', 32, False),  # Library users can only view objecttags, not change them?
-        ("library_staffA", 'collection_key', 32, False),
-        ("library_userA", 'libraryA', 32, False),
-        ("library_userA", 'collection_key', 32, False),
+        ("content_creatorA", 'libraryA', 23, False),
+        ("content_creatorA", 'collection_key', 23, False),
+        ("library_staffA", 'libraryA', 23, False),  # Library users can only view objecttags, not change them?
+        ("library_staffA", 'collection_key', 23, False),
+        ("library_userA", 'libraryA', 23, False),
+        ("library_userA", 'collection_key', 23, False),
         ("instructorA", 'courseA', 18),
         ("course_instructorA", 'courseA', 18),
         ("course_staffA", 'courseA', 18),

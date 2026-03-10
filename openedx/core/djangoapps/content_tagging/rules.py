@@ -8,9 +8,11 @@ import django.contrib.auth.models
 import openedx_tagging.rules as oel_tagging
 import rules
 from opaque_keys.edx.locator import LibraryLocatorV2
+from openedx_authz import api as authz_api
+from openedx_authz.constants import permissions as authz_permissions
 from organizations.models import Organization
 
-from common.djangoapps.student.auth import has_library_tagging_access, has_studio_read_access, has_studio_write_access
+from common.djangoapps.student.auth import has_studio_read_access, has_studio_write_access
 from common.djangoapps.student.role_helpers import get_course_roles, get_role_cache
 from common.djangoapps.student.roles import (
     CourseInstructorRole,
@@ -237,7 +239,11 @@ def can_change_object_tag_objectid(user: UserType, object_id: str) -> bool:
 
     # For Content Libraries V2, prefer explicit library tagging permission,
     # but fall back to org-level admin access for backwards compatibility.
-    if isinstance(context_key, LibraryLocatorV2) and has_library_tagging_access(user, context_key):
+    if isinstance(context_key, LibraryLocatorV2) and authz_api.is_user_allowed(
+        user.username,
+        authz_permissions.MANAGE_LIBRARY_TAGS.identifier,
+        str(context_key),
+    ):
         return True
 
     # For other contexts (courses, xblocks, etc.), use general write or org-admin access
@@ -310,7 +316,11 @@ def can_remove_object_tag_objectid(user: UserType, object_id: str) -> bool:
 
     # For Content Libraries V2, prefer explicit library tagging permission,
     # but fall back to org-level admin access for backwards compatibility.
-    if isinstance(context_key, LibraryLocatorV2) and has_library_tagging_access(user, context_key):
+    if isinstance(context_key, LibraryLocatorV2) and authz_api.is_user_allowed(
+        user.username,
+        authz_permissions.MANAGE_LIBRARY_TAGS.identifier,
+        str(context_key),
+    ):
         return True
 
     # For other contexts (courses, xblocks, etc.), use general write or org-admin access
