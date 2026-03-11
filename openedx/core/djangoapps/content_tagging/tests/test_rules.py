@@ -5,17 +5,9 @@ from unittest.mock import patch
 import ddt
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-<<<<<<< HEAD
-from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator
-from openedx_tagging.models import Tag, UserSystemDefinedTaxonomy
-=======
 from opaque_keys.edx.locator import BlockUsageLocator, CourseLocator, LibraryLocatorV2
 from openedx_authz.constants import permissions as authz_permissions
-from openedx_tagging.models import (
-    Tag,
-    UserSystemDefinedTaxonomy,
-)
->>>>>>> 473bf5f071 (test: add unit tests for MANAGE_LIBRARY_TAGS permission)
+from openedx_tagging.models import Tag, UserSystemDefinedTaxonomy
 from openedx_tagging.rules import ObjectTagPermissionItem
 
 from common.djangoapps.student.auth import add_users, update_org_role

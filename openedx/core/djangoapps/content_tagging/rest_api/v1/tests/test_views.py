@@ -1633,7 +1633,12 @@ class TestObjectTagViewSet(TestObjectTagMixin, APITestCase):
     @ddt.data("libraryA", "collection_key", "container_key")
     @patch("openedx_authz.api.is_user_allowed")
     @patch("openedx.core.djangoapps.content_tagging.rules.has_studio_write_access")
-    def test_tag_library_objects_with_manage_library_tags_permission(self, object_attr, mock_has_studio_write_access, mock_is_user_allowed):
+    def test_tag_library_objects_with_manage_library_tags_permission(
+        self,
+        object_attr,
+        mock_has_studio_write_access,
+        mock_is_user_allowed,
+    ):
         """
         Users with MANAGE_LIBRARY_TAGS permission should be able to tag:
         - the library itself
