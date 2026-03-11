@@ -238,7 +238,7 @@ def can_change_object_tag_objectid(user: UserType, object_id: str) -> bool:
         return False
 
     # For Content Libraries V2, prefer explicit library tagging permission,
-    # but fall back to org-level admin access for backwards compatibility.
+    # however, org-level admins are also allowed to perform these operations.
     if isinstance(context_key, LibraryLocatorV2) and authz_api.is_user_allowed(
         user.username,
         authz_permissions.MANAGE_LIBRARY_TAGS.identifier,
@@ -315,7 +315,7 @@ def can_remove_object_tag_objectid(user: UserType, object_id: str) -> bool:
         return False
 
     # For Content Libraries V2, prefer explicit library tagging permission,
-    # but fall back to org-level admin access for backwards compatibility.
+    # however, org-level admins are also allowed to perform these operations.
     if isinstance(context_key, LibraryLocatorV2) and authz_api.is_user_allowed(
         user.username,
         authz_permissions.MANAGE_LIBRARY_TAGS.identifier,
