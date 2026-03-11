@@ -7,7 +7,7 @@ from __future__ import annotations
 import abc
 import json
 from io import BytesIO
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from urllib.parse import parse_qs, urlparse
 
 import ddt
@@ -36,6 +36,7 @@ from openedx.core.djangoapps.content_libraries.api import AccessLevel, create_li
 from openedx.core.djangoapps.content_tagging import api as tagging_api
 from openedx.core.djangoapps.content_tagging.models import TaxonomyOrg
 from openedx.core.djangolib.testing.utils import skip_unless_cms
+from openedx_authz.constants import permissions as authz_permissions
 
 from ....tests.test_objecttag_export_helpers import TaggedCourseMixin
 
@@ -1623,6 +1624,30 @@ class TestObjectTagViewSet(TestObjectTagMixin, APITestCase):
             new_response = self.client.get(url, format="json")
             assert status.is_success(new_response.status_code)
             assert new_response.data == response.data
+
+    @ddt.data("libraryA", "collection_key", "container_key")
+    @patch("openedx_authz.api.is_user_allowed")
+    @patch("openedx.core.djangoapps.content_tagging.rules.has_studio_write_access")
+    def test_tag_library_objects_with_manage_library_tags_permission(self, object_attr, mock_has_studio_write_access, mock_is_user_allowed):
+        """
+        Users with MANAGE_LIBRARY_TAGS permission should be able to tag:
+        - the library itself
+        - collections in the library
+        - containers in the library
+        """
+        mock_is_user_allowed.return_value = True
+        object_id = getattr(self, object_attr)
+
+        self.client.force_authenticate(user=self.library_userA)
+        response = self._call_put_request(object_id, self.tA1.pk, ["Tag 1"])
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        mock_is_user_allowed.assert_called_with(
+            self.library_userA.username,
+            authz_permissions.MANAGE_LIBRARY_TAGS.identifier,
+            self.libraryA,
+        )
+        mock_has_studio_write_access.assert_not_called()
 
     @ddt.data(
         "staffA",
