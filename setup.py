@@ -189,6 +189,9 @@ setup(
         ],
         'xblock.v1': XBLOCKS,
         'xblock_asides.v1': XBLOCKS_ASIDES,
+        # Plugin-provided XBlock runtime services.
+        # See docs/decisions/0024-plugin-xblock-service-registration.rst
+        'openedx.xblock_service': [],
         'console_scripts': [
             'xmodule_assets = xmodule.static_content:main',
         ],

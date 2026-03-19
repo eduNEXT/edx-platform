@@ -225,6 +225,16 @@ def _prepare_runtime_for_preview(request, block):
     block.runtime.wrappers_asides = wrappers_asides
     block.runtime._services.update(services)  # pylint: disable=protected-access
 
+    # Merge plugin-registered services (via ``openedx.xblock_service`` entry points).
+    # Plugin services cannot override core services to prevent accidental breakage.
+    # We bind the runtime via ``partial`` because the legacy ``DescriptorSystem.service()``
+    # calls callable services as ``service(block)`` — i.e. with only one argument.
+    from functools import partial as _partial  # pylint: disable=import-outside-toplevel
+    from openedx.core.djangoapps.xblock.runtime.plugin_services import _discover_service_factories  # pylint: disable=import-outside-toplevel
+    for name, factory in _discover_service_factories().items():
+        if name not in block.runtime._services:  # pylint: disable=protected-access
+            block.runtime._services[name] = _partial(factory, block.runtime)  # pylint: disable=protected-access
+
     # xmodules can check for this attribute during rendering to determine if
     # they are being rendered for preview (i.e. in Studio)
     block.runtime.is_author_mode = True

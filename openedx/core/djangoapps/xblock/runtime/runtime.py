@@ -342,6 +342,13 @@ class XBlockRuntime(RuntimeShim, Runtime):
         elif service_name == 'error_tracker':
             return make_error_tracker()
 
+        # Try plugin-registered services (via ``openedx.xblock_service`` entry points)
+        # before falling back to the base implementation.
+        from openedx.core.djangoapps.xblock.runtime.plugin_services import get_plugin_service  # pylint: disable=import-outside-toplevel
+        plugin_svc = get_plugin_service(service_name, self, block)
+        if plugin_svc is not None:
+            return plugin_svc
+
         # Otherwise, fall back to the base implementation which loads services
         # defined in the constructor:
         return super().service(block, service_name)

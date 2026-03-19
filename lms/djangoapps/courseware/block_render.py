@@ -641,6 +641,17 @@ def prepare_runtime_for_user(
 
     runtime.wrappers = block_wrappers
     runtime._services.update(services)  # lint-amnesty, pylint: disable=protected-access
+
+    # Merge plugin-registered services (via ``openedx.xblock_service`` entry points).
+    # Plugin services cannot override core services to prevent accidental breakage.
+    # We bind the runtime via ``partial`` because the legacy ``DescriptorSystem.service()``
+    # calls callable services as ``service(block)`` — i.e. with only one argument.
+    from functools import partial as _partial  # pylint: disable=import-outside-toplevel
+    from openedx.core.djangoapps.xblock.runtime.plugin_services import _discover_service_factories  # pylint: disable=import-outside-toplevel
+    for name, factory in _discover_service_factories().items():
+        if name not in runtime._services:  # pylint: disable=protected-access
+            runtime._services[name] = _partial(factory, runtime)  # pylint: disable=protected-access
+
     runtime.request_token = request_token
     runtime.wrap_asides_override = lms_wrappers_aside
     runtime.applicable_aside_types_override = lms_applicable_aside_types
