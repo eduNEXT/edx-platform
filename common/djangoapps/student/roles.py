@@ -532,9 +532,10 @@ class RoleBase(AccessRole):
         Returns a list of org short names for the user with given role.
         AuthZ compatibility layer
         """
-        # TODO: This will be implemented on Milestone 1
-        # of the Authz for Course Authoring project
-        return []
+        role = get_authz_role_from_legacy_role(self._role_name)
+        assignments = authz_api.get_user_role_assignments_for_role(user.username, role)
+        orgs = {assignment.scope.org for assignment in assignments if assignment.scope.org is not None}
+        return list(orgs)
 
     def _legacy_get_orgs_for_user(self, user) -> list[str]:
         """
