@@ -534,7 +534,10 @@ class RoleBase(AccessRole):
         AuthZ compatibility layer
         """
         role = get_authz_role_from_legacy_role(self._role_name)
-        assignments = authz_api.get_user_role_assignments_for_role(user.username, role)
+        assignments = authz_api.get_user_role_assignments_filtered(
+            user_external_key=user.username,
+            role_external_key=role,
+        )
         orgs = {assignment.scope.org for assignment in assignments if assignment.scope.org is not None}
         return list(orgs)
 
