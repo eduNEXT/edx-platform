@@ -2,7 +2,6 @@
 Tests of student.roles
 """
 
-
 from unittest.mock import patch
 
 import ddt
@@ -11,7 +10,8 @@ from django.test import TestCase
 from edx_toggles.toggles.testutils import override_waffle_flag
 from opaque_keys.edx.keys import CourseKey
 from opaque_keys.edx.locator import LibraryLocator
-from openedx_authz.api.data import ContentLibraryData, RoleAssignmentData, RoleData, UserData
+from openedx_authz.api.data import ContentLibraryData, CourseOverviewData, RoleAssignmentData, RoleData, UserData
+from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_STAFF
 from openedx_authz.engine.enforcer import AuthzEnforcer
 
 from common.djangoapps.student.admin import CourseAccessRoleHistoryAdmin
@@ -239,9 +239,51 @@ class RolesTestCase(TestCase):
         role_second_org.add_users(self.student)
         assert len(role.get_orgs_for_user(self.student)) == 2
 
+    @override_waffle_flag(AUTHZ_COURSE_AUTHORING_FLAG, active=True)
+    def test_get_orgs_for_user_authz(self):
+        """
+        Test get_orgs_for_user using AuthZ compatibility layer
+        """
+        role = CourseStaffRole(self.course_key)
+
+        other_org = "MIT"
+        other_course_key = CourseKey.from_string(f"course-v1:{other_org}+Javascript+2026_T1")
+        another_course_key = CourseKey.from_string(f"course-v1:{other_org}+Python+2026_T1")
+
+        staff_authz_role = RoleData(external_key=COURSE_STAFF)
+        instructor_authz_role = RoleData(external_key=COURSE_ADMIN)
+
+        assignments = [
+            RoleAssignmentData(
+                subject=UserData(external_key=self.student.username),
+                roles=[staff_authz_role],
+                scope=CourseOverviewData(external_key=str(self.course_key)),
+            ),
+            RoleAssignmentData(
+                subject=UserData(external_key=self.student.username),
+                roles=[staff_authz_role],
+                scope=CourseOverviewData(external_key=str(other_course_key)),
+            ),
+            RoleAssignmentData(
+                subject=UserData(external_key=self.student.username),
+                roles=[staff_authz_role],
+                scope=CourseOverviewData(external_key=str(another_course_key)),
+            ),
+            # Non-matching role should be ignored
+            RoleAssignmentData(
+                subject=UserData(external_key=self.student.username),
+                roles=[instructor_authz_role],
+                scope=CourseOverviewData(external_key=str(self.course_key)),
+            ),
+        ]
+
+        with patch("openedx_authz.api.users.get_user_role_assignments_filtered", return_value=assignments):
+            result = role.get_orgs_for_user(self.student)
+            self.assertEqual(result, [self.course_key.org, other_org])
+
     def test_get_authz_compat_course_access_roles_for_user(self):
         """
-        Thest that get_authz_compat_course_access_roles_for_user doesn't crash when the user
+        Test that get_authz_compat_course_access_roles_for_user doesn't crash when the user
         has Libraries V2 or other non-course roles in their assignments.
         """
         lib_assignment = RoleAssignmentData(
