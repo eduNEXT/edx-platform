@@ -806,6 +806,7 @@ edx-organizations==7.3.0
     # via
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt
+    #   openedx-authz
     #   openedx-core
 edx-proctoring==5.2.0
     # via
@@ -1373,7 +1374,7 @@ openedx-atlas==0.7.0
     #   enterprise-integrated-channels
     #   openedx-authz
     #   openedx-forum
-openedx-authz==1.0.0
+openedx-authz==1.2.0
     # via
     #   -r requirements/edx/doc.txt
     #   -r requirements/edx/testing.txt

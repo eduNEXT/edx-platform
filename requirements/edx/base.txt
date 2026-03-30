@@ -514,6 +514,7 @@ edx-opaque-keys[django]==3.1.0
 edx-organizations==7.3.0
     # via
     #   -r requirements/edx/kernel.in
+    #   openedx-authz
     #   openedx-core
 edx-proctoring==5.2.0
     # via -r requirements/edx/kernel.in
@@ -823,7 +824,7 @@ openedx-atlas==0.7.0
     #   enterprise-integrated-channels
     #   openedx-authz
     #   openedx-forum
-openedx-authz==1.0.0
+openedx-authz==1.2.0
     # via -r requirements/edx/kernel.in
 openedx-calc==5.0.0
     # via
