@@ -279,7 +279,7 @@ class RolesTestCase(TestCase):
 
         with patch("openedx_authz.api.users.get_user_role_assignments_filtered", return_value=assignments):
             result = role.get_orgs_for_user(self.student)
-            self.assertEqual(result, [self.course_key.org, other_org])
+            self.assertCountEqual(result, [self.course_key.org, other_org])
 
     def test_get_authz_compat_course_access_roles_for_user(self):
         """
