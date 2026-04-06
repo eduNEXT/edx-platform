@@ -32,6 +32,7 @@ from common.djangoapps.student.views.management import activate_secondary_email
 from lms.djangoapps.certificates.data import CertificateStatuses
 from openedx.core.djangoapps.ace_common.tests.mixins import EmailTemplateTagMixin
 from openedx.core.djangoapps.embargo.models import Country, GlobalRestrictedCountry
+from openedx.core.djangoapps.site_configuration.tests.test_util import with_site_configuration
 from openedx.core.djangoapps.user_api.accounts import PRIVATE_VISIBILITY
 from openedx.core.djangoapps.user_api.accounts.api import (
     get_account_settings,
@@ -165,6 +166,30 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
 
         with pytest.raises(UserNotAuthorized):
             update_account_settings(self.different_user, {"name": "Pluto"}, username=self.user.username)
+
+    @with_site_configuration(configuration={"extended_profile_fields": ["department"]})
+    def test_update_username_provided_with_extended_profile(self):
+        """Test that extended profile is saved when username is provided to update_account_settings."""
+        extended_profile_data = [{"field_name": "department", "field_value": "Engineering"}]
+
+        update_account_settings(self.user, {"extended_profile": extended_profile_data, "name": "Donald Duck"})
+        account_settings = get_account_settings(self.default_request)[0]
+        self.assertEqual(extended_profile_data, account_settings["extended_profile"])
+        self.assertEqual("Donald Duck", account_settings["name"])
+
+        update_account_settings(
+            self.user, {"extended_profile": extended_profile_data, "name": "Mickey Mouse"}, username=self.user.username
+        )
+        account_settings = get_account_settings(self.default_request)[0]
+        self.assertEqual(extended_profile_data, account_settings["extended_profile"])
+        self.assertEqual("Mickey Mouse", account_settings["name"])
+
+        with pytest.raises(UserNotAuthorized):
+            update_account_settings(
+                self.different_user,
+                {"extended_profile": extended_profile_data, "name": "Pluto"},
+                username=self.user.username,
+            )
 
     def test_update_non_existent_user(self):
         with pytest.raises(UserNotAuthorized):
@@ -565,64 +590,68 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         self.assertEqual(meta["title"], "Software Engineer")
         self.assertEqual(user_profile.bio, "Updated bio")
 
-    def test_update_extended_profile_with_form(self):
+    @patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
+    def test_update_extended_profile_with_form(self, mock_validate_and_get_form):
         """
         Test updating extended profile with a validated form
         """
-        mock_form = Mock()
-        mock_instance = Mock()
-        mock_instance.user = self.user
-        mock_form.save.return_value = mock_instance
-        update_data = {"extended_profile": [{"field_name": "department", "field_value": "Engineering"}]}
+        extended_profile_data = [{"field_name": "department", "field_value": "Engineering"}]
+        mock_form = Mock(save=Mock(return_value=Mock(user=self.user)))
+        mock_validate_and_get_form.return_value = (mock_form, {})
 
-        update_account_settings(self.user, update_data)
+        update_account_settings(self.user, {"extended_profile": extended_profile_data})
 
+        mock_validate_and_get_form.assert_called_once_with(extended_profile_data, self.user)
         mock_form.save.assert_called_once_with(commit=False)
-        mock_instance.save.assert_called_once()
-        user_profile = UserProfile.objects.get(user=self.user)
-        meta = user_profile.get_meta()
+        mock_form.save.return_value.save.assert_called_once()
+        meta = UserProfile.objects.get(user=self.user).get_meta()
         self.assertEqual(meta["department"], "Engineering")
 
-    def test_update_extended_profile_with_form_new_instance(self):
+    @patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
+    def test_update_extended_profile_with_form_new_instance(self, mock_validate_and_get_form):
         """
         Test updating extended profile with a form for a new instance
         """
-        mock_form = Mock()
-        mock_instance = Mock()
-        mock_instance.user = None
-        mock_form.save.return_value = mock_instance
-        update_data = {"extended_profile": [{"field_name": "department", "field_value": "Engineering"}]}
+        extended_profile_data = [{"field_name": "department", "field_value": "Engineering"}]
+        mock_instance = Mock(user=None)
+        mock_form = Mock(save=Mock(return_value=mock_instance))
+        mock_validate_and_get_form.return_value = (mock_form, {})
 
-        update_account_settings(self.user, update_data)
+        update_account_settings(self.user, {"extended_profile": extended_profile_data})
 
-        self.assertEqual(mock_instance.user, self.user)
+        mock_validate_and_get_form.assert_called_once_with(extended_profile_data, self.user)
         mock_form.save.assert_called_once_with(commit=False)
+        self.assertEqual(mock_instance.user, self.user)
         mock_instance.save.assert_called_once()
 
+    @patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     @ddt.data(
         (ValidationError("Invalid field value"), "Extended profile validation failed"),
         (IntegrityError("Duplicate entry"), "Extended profile integrity error"),
         (DatabaseError("Connection lost"), "Database error saving extended profile"),
     )
     @ddt.unpack
-    def test_update_extended_profile_form_save_error(self, exception, expected_dev_msg):
+    def test_update_extended_profile_form_save_error(self, exception, expected_dev_msg, mock_validate_and_get_form):
         """
-        Test that errors during form save are logged, cause an AccountUpdateError with appropriate messages,
-        and do not leave partial updates
+        Test that errors during form save cause an AccountUpdateError with appropriate messages,
+        and do not leave partial updates.
         """
+        extended_profile_data = [{"field_name": "department", "field_value": "Engineering"}]
         mock_form = Mock()
         mock_form.save.side_effect = exception
-        update_data = {"extended_profile": [{"field_name": "department", "field_value": "Engineering"}]}
+        mock_validate_and_get_form.return_value = (mock_form, {})
 
         with pytest.raises(AccountUpdateError) as context_manager:
-            update_account_settings(self.user, update_data)
+            update_account_settings(self.user, {"extended_profile": extended_profile_data})
 
         self.assertIn(expected_dev_msg, context_manager.value.developer_message)
         self.assertIsNotNone(context_manager.value.user_message)
 
-        user_profile = UserProfile.objects.get(user=self.user)
-        meta = user_profile.get_meta()
-        # The meta update should also be rolled back, so no extended profile data is persisted.
+        mock_validate_and_get_form.assert_called_once_with(extended_profile_data, self.user)
+        mock_form.save.assert_called_once_with(commit=False)
+
+        # The meta update is in the same transaction, it should be rolled back.
+        meta = UserProfile.objects.get(user=self.user).get_meta()
         self.assertNotIn("department", meta)
 
     def test_update_extended_profile_without_extended_profile_data(self):
@@ -633,23 +662,6 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
 
         update_account_settings(self.user, update_data)
 
-        user_profile = UserProfile.objects.get(user=self.user)
-        self.assertEqual(user_profile.bio, "Updated bio")
-
-    def test_update_extended_profile_form_without_data_in_update(self):
-        """
-        Test that form is saved even if extended_profile is not in update data
-        """
-        mock_form = Mock()
-        mock_instance = Mock()
-        mock_instance.user = self.user
-        mock_form.save.return_value = mock_instance
-        update_data = {"bio": "Updated bio"}
-
-        update_account_settings(self.user, update_data)
-
-        mock_form.save.assert_called_once_with(commit=False)
-        mock_instance.save.assert_called_once()
         user_profile = UserProfile.objects.get(user=self.user)
         self.assertEqual(user_profile.bio, "Updated bio")
 
