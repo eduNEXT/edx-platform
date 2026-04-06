@@ -1383,7 +1383,7 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
         self.url = reverse("accounts_api", kwargs={"username": self.user.username})
         self.client.login(username=self.user.username, password=TEST_PASSWORD)
 
-    @mock.patch("openedx.core.djangoapps.user_api.accounts.views.validate_and_get_extended_profile_form")
+    @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_patch_account_with_valid_extended_profile(self, mock_validate_form: mock.Mock):
         """
         Test that PATCH with valid extended_profile data succeeds
@@ -1401,7 +1401,7 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
         self.assertEqual(response.status_code, 200)
         mock_validate_form.assert_called_once_with(extended_profile_data, self.user)
 
-    @mock.patch("openedx.core.djangoapps.user_api.accounts.views.validate_and_get_extended_profile_form")
+    @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_patch_account_with_invalid_extended_profile(self, mock_validate_form: mock.Mock):
         """
         Test that PATCH with invalid extended_profile data returns 400
@@ -1431,7 +1431,7 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["bio"], "Test bio without extended profile")
 
-    @mock.patch("openedx.core.djangoapps.user_api.accounts.views.validate_and_get_extended_profile_form")
+    @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_patch_account_extended_profile_with_empty_list(self, mock_validate_form: mock.Mock):
         """
         Test that PATCH with empty extended_profile list works
@@ -1444,7 +1444,7 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
         self.assertEqual(response.status_code, 200)
         mock_validate_form.assert_called_once_with([], self.user)
 
-    @mock.patch("openedx.core.djangoapps.user_api.accounts.views.validate_and_get_extended_profile_form")
+    @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_patch_account_extended_profile_form_exception(self, mock_validate_form: mock.Mock):
         """
         Test that exceptions in form validation return appropriate errors
@@ -1461,7 +1461,7 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn("field_errors", response.data)
 
-    @mock.patch("openedx.core.djangoapps.user_api.accounts.views.validate_and_get_extended_profile_form")
+    @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_patch_account_extended_profile_multiple_fields(self, mock_validate_form: mock.Mock):
         """
         Test PATCH with multiple extended_profile fields

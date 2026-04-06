@@ -45,6 +45,7 @@ from openedx.core.djangoapps.user_authn.views.registration_form import validate_
 from openedx.core.lib.api.view_utils import add_serializer_errors
 from openedx.features.name_affirmation_api.utils import is_name_affirmation_installed
 
+from .forms import validate_and_get_extended_profile_form
 from .serializers import AccountLegacyProfileSerializer, AccountUserSerializer, UserReadOnlySerializer, _visible_fields
 
 name_affirmation_installed = is_name_affirmation_installed()
@@ -113,7 +114,7 @@ def get_account_settings(request, usernames=None, configuration=None, view=None)
 
 
 @helpers.intercept_errors(errors.UserAPIInternalError, ignore_errors=[errors.UserAPIRequestError])
-def update_account_settings(requesting_user, update, username=None, extended_profile_form=None):
+def update_account_settings(requesting_user, update, username=None):
     """Update user account information.
 
     Note:
@@ -126,7 +127,6 @@ def update_account_settings(requesting_user, update, username=None, extended_pro
         update (dict): The updated account field values.
         username (str): Optional username specifying which account should be updated. If not specified,
             `requesting_user.username` is assumed.
-        extended_profile_form (Optional[forms.Form]): Optional validated extended profile form instance.
 
     Raises:
         errors.UserNotFound: no user with username `username` exists (or `requesting_user.username` if
@@ -171,6 +171,12 @@ def update_account_settings(requesting_user, update, username=None, extended_pro
 
     old_name = _validate_name_change(user_profile, update, field_errors)
     old_language_proficiencies = _get_old_language_proficiencies_if_updating(user_profile, update)
+
+    extended_profile_data = update.get("extended_profile") if "extended_profile" in update else None
+    extended_profile_form = None
+    if extended_profile_data is not None:
+        extended_profile_form, ext_profile_errors = validate_and_get_extended_profile_form(extended_profile_data, user)
+        field_errors.update(ext_profile_errors)
 
     if field_errors:
         raise errors.AccountValidationError(field_errors)

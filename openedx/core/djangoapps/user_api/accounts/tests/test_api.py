@@ -575,7 +575,7 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         mock_form.save.return_value = mock_instance
         update_data = {"extended_profile": [{"field_name": "department", "field_value": "Engineering"}]}
 
-        update_account_settings(self.user, update_data, extended_profile_form=mock_form)
+        update_account_settings(self.user, update_data)
 
         mock_form.save.assert_called_once_with(commit=False)
         mock_instance.save.assert_called_once()
@@ -593,7 +593,7 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         mock_form.save.return_value = mock_instance
         update_data = {"extended_profile": [{"field_name": "department", "field_value": "Engineering"}]}
 
-        update_account_settings(self.user, update_data, extended_profile_form=mock_form)
+        update_account_settings(self.user, update_data)
 
         self.assertEqual(mock_instance.user, self.user)
         mock_form.save.assert_called_once_with(commit=False)
@@ -615,7 +615,7 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         update_data = {"extended_profile": [{"field_name": "department", "field_value": "Engineering"}]}
 
         with pytest.raises(AccountUpdateError) as context_manager:
-            update_account_settings(self.user, update_data, extended_profile_form=mock_form)
+            update_account_settings(self.user, update_data)
 
         self.assertIn(expected_dev_msg, context_manager.value.developer_message)
         self.assertIsNotNone(context_manager.value.user_message)
@@ -646,7 +646,7 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         mock_form.save.return_value = mock_instance
         update_data = {"bio": "Updated bio"}
 
-        update_account_settings(self.user, update_data, extended_profile_form=mock_form)
+        update_account_settings(self.user, update_data)
 
         mock_form.save.assert_called_once_with(commit=False)
         mock_instance.save.assert_called_once()
