@@ -37,7 +37,7 @@ class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransfo
 
     Staff users are not to be exempted from item bank pathways.
     """
-    WRITE_VERSION = 2
+    WRITE_VERSION = 1
     READ_VERSION = 1
 
     @classmethod
@@ -69,32 +69,23 @@ class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransfo
             }
 
         # For each block check if block uses ItemBankMixin (e.g., library_content, itembank).
-        # Mark these blocks and collect analytics data for their children.
+        # If so add block analytics summary for each of its children.
         for block_key in block_structure.topological_traversal(
+                filter_func=lambda block_key: issubclass(XBlock.load_class(block_key.block_type), ItemBankMixin),
                 yield_descendants_of_unyielded=True,
         ):
-            block_class = XBlock.load_class(block_key.block_type)
-            is_item_bank = block_class and issubclass(block_class, ItemBankMixin)
-
-            if is_item_bank:
-                block_structure.set_transformer_block_field(block_key, cls, 'is_item_bank_block', True)
-                xblock = block_structure.get_xblock(block_key)
-                for child_key in xblock.children:
-                    summary = summarize_block(child_key)
-                    block_structure.set_transformer_block_field(child_key, cls, 'block_analytics_summary', summary)
+            xblock = block_structure.get_xblock(block_key)
+            for child_key in xblock.children:
+                summary = summarize_block(child_key)
+                block_structure.set_transformer_block_field(child_key, cls, 'block_analytics_summary', summary)
 
     def transform_block_filters(self, usage_info, block_structure):
         all_library_children = set()
         all_selected_children = set()
         for block_key in block_structure:
-            # Check if this block was marked as an ItemBankMixin block during collect
-            is_item_bank = block_structure.get_transformer_block_field(block_key, self, 'is_item_bank_block')
-            # Fallback for old cache that doesn't have the 'is_item_bank_block' field
-            if is_item_bank is None:
-                block_class = XBlock.load_class(block_key.block_type)
-                is_item_bank = block_class and issubclass(block_class, ItemBankMixin)
+            block_class = XBlock.load_class(block_key.block_type)
 
-            if not is_item_bank:
+            if block_class is None or not issubclass(block_class, ItemBankMixin):
                 continue
             library_children = block_structure.get_children(block_key)
             if library_children:
@@ -118,7 +109,7 @@ class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransfo
                 previous_count = len(selected)
                 # Get the cached block class to call make_selection
                 block_class = XBlock.load_class(block_key.block_type)
-                if not block_class:
+                if block_class is None:
                     logger.error('Failed to load block class for %s', block_key)
                     continue
                 block_keys = block_class.make_selection(selected, library_children, max_count)
@@ -181,7 +172,7 @@ class ContentLibraryTransformer(FilteringTransformerMixin, BlockStructureTransfo
 
         # Get the cached block class to call publish_selected_children_events
         block_class = XBlock.load_class(location.block_type)
-        if not block_class:
+        if block_class is None:
             logger.error('Failed to load block class for publishing events: %s', location)
             return
 
@@ -249,19 +240,8 @@ class ContentLibraryOrderTransformer(BlockStructureTransformer):
         to match the order of the selections made and stored in the XBlock 'selected' field.
         """
         for block_key in block_structure:
-            # Try to read from cache (collected by ContentLibraryTransformer)
-            is_item_bank = block_structure.get_transformer_block_field(
-                block_key,
-                ContentLibraryTransformer,
-                'is_item_bank_block'
-            )
-
-            # Fallback for old cache that doesn't have the 'is_item_bank_block' field
-            if is_item_bank is None:
-                block_class = XBlock.load_class(block_key.block_type)
-                is_item_bank = block_class and issubclass(block_class, ItemBankMixin)
-
-            if not is_item_bank:
+            block_class = XBlock.load_class(block_key.block_type)
+            if block_class is None or not issubclass(block_class, ItemBankMixin):
                 continue
 
             library_children = block_structure.get_children(block_key)
