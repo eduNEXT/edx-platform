@@ -816,11 +816,11 @@ def _transform_legacy_lib_permission_to_authz_permission(permission: str) -> str
 
     Notes:
     - There is no dedicated permission or role for can_create_content_library in openedx-authz yet,
-      so we reuse the same permission to rely on user.has_perm via Bridgekeeper.
+        so we reuse the same permission to rely on user.has_perm via Bridgekeeper.
     - There is no dedicated can_learn_from_this_content_library permission
-    in the new authz system,
-    but we are mapping it to view_library in the new system. So the user who can view library content can
-    learn from it.
+        in the new authz system,
+        but we are mapping it to view_library in the new system. So the user who can view
+        library content can learn from it.
     """
     return {
         permissions.CAN_CREATE_CONTENT_LIBRARY: permissions.CAN_CREATE_CONTENT_LIBRARY,
