@@ -424,24 +424,21 @@ def _update_extended_profile_if_needed(
                     extended_profile.user = user_profile.user
                 # Now persist the instance with the user field properly set
                 extended_profile.save()
-    except (ValidationError, IntegrityError, DatabaseError) as exc:
-        error_messages = {
-            ValidationError: (
-                "Extended profile validation failed",
-                _("The extended profile information could not be saved due to validation errors."),
-            ),
-            IntegrityError: (
-                "Extended profile integrity error",
-                _("The extended profile information could not be saved. Please check for duplicate values."),
-            ),
-            DatabaseError: (
-                "Database error saving extended profile",
-                _("The extended profile information could not be saved due to a system error."),
-            ),
-        }
-        dev_msg, user_msg = error_messages[type(exc)]
-        raise AccountUpdateError(developer_message=f"{dev_msg}: {str(exc)}", user_message=user_msg) from exc
-
+    except ValidationError as exc:
+        raise AccountUpdateError(
+            developer_message=f"Extended profile validation failed: {str(exc)}",
+            user_message=_("The extended profile information could not be saved due to validation errors."),
+        ) from exc
+    except IntegrityError as exc:
+        raise AccountUpdateError(
+            developer_message=f"Extended profile integrity error: {str(exc)}",
+            user_message=_("The extended profile information could not be saved. Please check for duplicate values."),
+        ) from exc
+    except DatabaseError as exc:
+        raise AccountUpdateError(
+            developer_message=f"Database error saving extended profile: {str(exc)}",
+            user_message=_("The extended profile information could not be saved due to a system error."),
+        ) from exc
 
 def _update_state_if_needed(data, user_profile):
     # If the country was changed to something other than US, remove the state.
