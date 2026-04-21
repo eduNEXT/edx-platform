@@ -91,10 +91,10 @@ class GetExtendedProfileTest(TestCase):
 
             result = get_extended_profile(self.user_profile)
 
-        self.assertEqual(len(result), 3)
-        self.assertIn({"field_name": "department", "field_value": "Engineering"}, result)
-        self.assertIn({"field_name": "title", "field_value": "Software Engineer"}, result)
-        self.assertIn({"field_name": "company", "field_value": "EdX"}, result)
+        self.assertEqual(len(result), 3)  # noqa: PT009
+        self.assertIn({"field_name": "department", "field_value": "Engineering"}, result)  # noqa: PT009
+        self.assertIn({"field_name": "title", "field_value": "Software Engineer"}, result)  # noqa: PT009
+        self.assertIn({"field_name": "company", "field_value": "EdX"}, result)  # noqa: PT009
 
     @override_settings(REGISTRATION_EXTENSION_FORM=None)
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.configuration_helpers")
@@ -108,9 +108,9 @@ class GetExtendedProfileTest(TestCase):
 
         result = get_extended_profile(self.user_profile)
 
-        self.assertEqual(len(result), 2)
-        self.assertIn({"field_name": "department", "field_value": "Sales"}, result)
-        self.assertIn({"field_name": "title", "field_value": "Manager"}, result)
+        self.assertEqual(len(result), 2)  # noqa: PT009
+        self.assertIn({"field_name": "department", "field_value": "Sales"}, result)  # noqa: PT009
+        self.assertIn({"field_name": "title", "field_value": "Manager"}, result)  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.configuration_helpers")
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.get_extended_profile_model")
@@ -126,9 +126,9 @@ class GetExtendedProfileTest(TestCase):
 
         result = get_extended_profile(self.user_profile)
 
-        self.assertEqual(len(result), 2)
-        self.assertIn({"field_name": "department", "field_value": "Marketing"}, result)
-        self.assertIn({"field_name": "title", "field_value": "Director"}, result)
+        self.assertEqual(len(result), 2)  # noqa: PT009
+        self.assertIn({"field_name": "department", "field_value": "Marketing"}, result)  # noqa: PT009
+        self.assertIn({"field_name": "title", "field_value": "Director"}, result)  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.configuration_helpers")
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.get_extended_profile_model")
@@ -143,9 +143,9 @@ class GetExtendedProfileTest(TestCase):
 
         result = get_extended_profile(self.user_profile)
 
-        self.assertEqual(len(result), 2)
-        self.assertIn({"field_name": "department", "field_value": ""}, result)
-        self.assertIn({"field_name": "title", "field_value": ""}, result)
+        self.assertEqual(len(result), 2)  # noqa: PT009
+        self.assertIn({"field_name": "department", "field_value": ""}, result)  # noqa: PT009
+        self.assertIn({"field_name": "title", "field_value": ""}, result)  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.configuration_helpers")
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.get_extended_profile_model")
@@ -160,9 +160,9 @@ class GetExtendedProfileTest(TestCase):
 
         result = get_extended_profile(self.user_profile)
 
-        self.assertEqual(len(result), 2)
-        self.assertIn({"field_name": "department", "field_value": ""}, result)
-        self.assertIn({"field_name": "title", "field_value": ""}, result)
+        self.assertEqual(len(result), 2)  # noqa: PT009
+        self.assertIn({"field_name": "department", "field_value": ""}, result)  # noqa: PT009
+        self.assertIn({"field_name": "title", "field_value": ""}, result)  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.configuration_helpers")
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.get_extended_profile_model")
@@ -178,10 +178,10 @@ class GetExtendedProfileTest(TestCase):
 
         result = get_extended_profile(self.user_profile)
 
-        self.assertEqual(len(result), 3)
-        self.assertIn({"field_name": "department", "field_value": "HR"}, result)
-        self.assertIn({"field_name": "title", "field_value": "Recruiter"}, result)
-        self.assertIn({"field_name": "location", "field_value": ""}, result)
+        self.assertEqual(len(result), 3)  # noqa: PT009
+        self.assertIn({"field_name": "department", "field_value": "HR"}, result)  # noqa: PT009
+        self.assertIn({"field_name": "title", "field_value": "Recruiter"}, result)  # noqa: PT009
+        self.assertIn({"field_name": "location", "field_value": ""}, result)  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.configuration_helpers")
     @patch("openedx.core.djangoapps.user_api.accounts.serializers.get_extended_profile_model")
@@ -197,4 +197,4 @@ class GetExtendedProfileTest(TestCase):
 
         result = get_extended_profile(self.user_profile)
 
-        self.assertEqual(len(result), 0)
+        self.assertEqual(len(result), 0)  # noqa: PT009

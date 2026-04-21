@@ -3,7 +3,6 @@ Django forms for accounts
 """
 
 import logging
-from typing import Optional, Tuple
 
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -47,12 +46,12 @@ class RetirementQueueDeletionForm(forms.Form):
         handle_retirement_cancellation(retirement)
 
 
-def extract_extended_profile_fields_data(extended_profile: Optional[list[dict]]) -> Tuple[dict, dict]:
+def extract_extended_profile_fields_data(extended_profile: list[dict] | None) -> tuple[dict, dict]:
     """
     Extract extended profile fields data from extended_profile structure.
 
     Args:
-        extended_profile (Optional[list[dict]]): List of field data dictionaries with keys
+        extended_profile (list[dict] | None): List of field data dictionaries with keys
             `field_name` and `field_value`
 
     Returns:
@@ -91,7 +90,7 @@ def extract_extended_profile_fields_data(extended_profile: Optional[list[dict]])
 def get_extended_profile_form(
     extended_profile_fields_data: dict,
     user: User,
-) -> Tuple[Optional[forms.Form], dict]:
+) -> tuple[forms.Form | None, dict]:
     """
     Get and validate an extended profile form instance.
 
@@ -103,7 +102,7 @@ def get_extended_profile_form(
 
     Returns:
         tuple: A tuple containing (extended_profile_form, field_errors)
-            - extended_profile_form (Optional[forms.Form]): The validated form instance,
+            - extended_profile_form (forms.Form | None): The validated form instance,
               or None if no extended profile form is configured, creation fails,
               or form validation fails.
             - field_errors (dict): Dictionary of validation errors, if any
@@ -148,7 +147,7 @@ def get_extended_profile_form(
 
 def validate_and_get_extended_profile_form(
     extended_profile_data: list, user: User
-) -> Tuple[Optional[forms.Form], dict]:
+) -> tuple[forms.Form | None, dict]:
     """
     Validate and return an extended profile form instance.
 
@@ -160,7 +159,7 @@ def validate_and_get_extended_profile_form(
 
     Returns:
         tuple: A tuple containing (validated_form, field_errors)
-            - validated_form (Optional[forms.Form]): The validated form instance, or None if
+            - validated_form (forms.Form | None): The validated form instance, or None if
               validation fails or no extended profile is configured
             - field_errors (dict): Dictionary of validation errors, if any
     """
