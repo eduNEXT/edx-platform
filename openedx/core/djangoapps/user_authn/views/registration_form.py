@@ -6,7 +6,6 @@ import copy
 import logging
 import re
 from importlib import import_module
-from typing import Optional, Type
 
 from django import forms
 from django.conf import settings
@@ -318,7 +317,7 @@ class AccountCreationForm(forms.Form):
         return self.cleaned_data.get("country")
 
 
-def get_registration_extension_form(*args, **kwargs) -> Optional[forms.Form]:
+def get_registration_extension_form(*args, **kwargs) -> forms.Form | None:
     """
     Convenience function for getting the custom form set in settings.PROFILE_EXTENSION_FORM
     or settings.REGISTRATION_EXTENSION_FORM (deprecated).
@@ -361,7 +360,7 @@ def get_registration_extension_form(*args, **kwargs) -> Optional[forms.Form]:
         return None
 
 
-def get_extended_profile_model() -> Optional[Type[Model]]:
+def get_extended_profile_model() -> type[Model] | None:
     """
     Get the model class for the extended profile form.
 
@@ -380,7 +379,7 @@ def get_extended_profile_model() -> Optional[Type[Model]]:
       data stored in dedicated model with ability to load/update via account settings API
 
     Returns:
-        Optional[Type[Model]]: The model class if PROFILE_EXTENSION_FORM is configured
+        type[Model] | None: The model class if PROFILE_EXTENSION_FORM is configured
             and valid, None otherwise (including when using the deprecated
             REGISTRATION_EXTENSION_FORM).
 

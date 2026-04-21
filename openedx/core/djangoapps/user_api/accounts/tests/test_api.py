@@ -174,15 +174,15 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
 
         update_account_settings(self.user, {"extended_profile": extended_profile_data, "name": "Donald Duck"})
         account_settings = get_account_settings(self.default_request)[0]
-        self.assertEqual(extended_profile_data, account_settings["extended_profile"])
-        self.assertEqual("Donald Duck", account_settings["name"])
+        self.assertEqual(extended_profile_data, account_settings["extended_profile"])  # noqa: PT009
+        self.assertEqual("Donald Duck", account_settings["name"])  # noqa: PT009
 
         update_account_settings(
             self.user, {"extended_profile": extended_profile_data, "name": "Mickey Mouse"}, username=self.user.username
         )
         account_settings = get_account_settings(self.default_request)[0]
-        self.assertEqual(extended_profile_data, account_settings["extended_profile"])
-        self.assertEqual("Mickey Mouse", account_settings["name"])
+        self.assertEqual(extended_profile_data, account_settings["extended_profile"])  # noqa: PT009
+        self.assertEqual("Mickey Mouse", account_settings["name"])  # noqa: PT009
 
         with pytest.raises(UserNotAuthorized):
             update_account_settings(
@@ -531,10 +531,10 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         assert account_recovery.secondary_email == test_email
 
     def test_change_country_removes_state(self):
-        '''
+        """
         Test that changing the country (to something other than a country with
         states) removes the state
-        '''
+        """
         # First set the country and state
         update_account_settings(self.user, {"country": UserProfile.COUNTRY_WITH_STATES, "state": "MA"})
         account_settings = get_account_settings(self.default_request)[0]
@@ -586,9 +586,9 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
 
         user_profile = UserProfile.objects.get(user=self.user)
         meta = user_profile.get_meta()
-        self.assertEqual(meta["department"], "Engineering")
-        self.assertEqual(meta["title"], "Software Engineer")
-        self.assertEqual(user_profile.bio, "Updated bio")
+        self.assertEqual(meta["department"], "Engineering")  # noqa: PT009
+        self.assertEqual(meta["title"], "Software Engineer")  # noqa: PT009
+        self.assertEqual(user_profile.bio, "Updated bio")  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_update_extended_profile_with_form(self, mock_validate_and_get_form):
@@ -605,7 +605,7 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         mock_form.save.assert_called_once_with(commit=False)
         mock_form.save.return_value.save.assert_called_once()
         meta = UserProfile.objects.get(user=self.user).get_meta()
-        self.assertEqual(meta["department"], "Engineering")
+        self.assertEqual(meta["department"], "Engineering")  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_update_extended_profile_with_form_new_instance(self, mock_validate_and_get_form):
@@ -621,7 +621,7 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
 
         mock_validate_and_get_form.assert_called_once_with(extended_profile_data, self.user)
         mock_form.save.assert_called_once_with(commit=False)
-        self.assertEqual(mock_instance.user, self.user)
+        self.assertEqual(mock_instance.user, self.user)  # noqa: PT009
         mock_instance.save.assert_called_once()
 
     @patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
@@ -644,15 +644,15 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         with pytest.raises(AccountUpdateError) as context_manager:
             update_account_settings(self.user, {"extended_profile": extended_profile_data})
 
-        self.assertIn(expected_dev_msg, context_manager.value.developer_message)
-        self.assertIsNotNone(context_manager.value.user_message)
+        self.assertIn(expected_dev_msg, context_manager.value.developer_message)  # noqa: PT009
+        self.assertIsNotNone(context_manager.value.user_message)  # noqa: PT009
 
         mock_validate_and_get_form.assert_called_once_with(extended_profile_data, self.user)
         mock_form.save.assert_called_once_with(commit=False)
 
         # The meta update is in the same transaction, it should be rolled back.
         meta = UserProfile.objects.get(user=self.user).get_meta()
-        self.assertNotIn("department", meta)
+        self.assertNotIn("department", meta)  # noqa: PT009
 
     def test_update_extended_profile_without_extended_profile_data(self):
         """
@@ -663,7 +663,7 @@ class TestAccountApi(UserSettingsEventTestMixin, EmailTemplateTagMixin, CreateAc
         update_account_settings(self.user, update_data)
 
         user_profile = UserProfile.objects.get(user=self.user)
-        self.assertEqual(user_profile.bio, "Updated bio")
+        self.assertEqual(user_profile.bio, "Updated bio")  # noqa: PT009
 
 
 @patch('openedx.core.djangoapps.user_api.accounts.image_helpers._PROFILE_IMAGE_SIZES', [50, 10])

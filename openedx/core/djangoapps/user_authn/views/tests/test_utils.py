@@ -3,7 +3,6 @@ Tests for user utils functionality.
 """
 
 from datetime import datetime
-from typing import Optional
 from unittest.mock import Mock, patch
 
 import ddt
@@ -96,7 +95,7 @@ class TestGetExtendedProfileModel(TestCase):
     """
 
     @ddt.data(None, "")
-    def test_get_extended_profile_model_no_setting_or_empty_string(self, setting_value: Optional[str]):
+    def test_get_extended_profile_model_no_setting_or_empty_string(self, setting_value: str | None):
         """
         Test when `PROFILE_EXTENSION_FORM` setting is not configured
         """
@@ -192,7 +191,7 @@ class TestGetExtendedProfileModel(TestCase):
 
         self.assertIsNone(result)  # noqa: PT009
         mock_logger.warning.assert_called_once()
-        self.assertIn("Could not load extended profile model", str(mock_logger.warning.call_args))
+        self.assertIn("Could not load extended profile model", str(mock_logger.warning.call_args))  # noqa: PT009
 
     @override_settings(PROFILE_EXTENSION_FORM="myapp.forms.NonExistentForm")
     @patch("openedx.core.djangoapps.user_authn.views.registration_form.import_module")
@@ -231,7 +230,7 @@ class TestGetRegistrationExtensionForm(TestCase):
     """
 
     @ddt.data(None, "")
-    def test_get_registration_extension_form_no_setting(self, setting_value: Optional[str]):
+    def test_get_registration_extension_form_no_setting(self, setting_value: str | None):
         """
         Test when neither PROFILE_EXTENSION_FORM nor REGISTRATION_EXTENSION_FORM is configured
         """

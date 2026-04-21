@@ -6,7 +6,6 @@ Programmatic integration point for User API Accounts sub-application
 import datetime
 import logging
 import re
-from typing import Optional
 from zoneinfo import ZoneInfo
 
 from django import forms
@@ -366,7 +365,7 @@ def _notify_language_proficiencies_update_if_needed(data, user, user_profile, ol
 
 
 def _update_extended_profile_if_needed(
-    data: dict, user_profile: UserProfile, extended_profile_form: Optional[forms.Form]
+    data: dict, user_profile: UserProfile, extended_profile_form: forms.Form | None
 ) -> None:
     """
     Update the extended profile information if present in the data.
@@ -378,7 +377,7 @@ def _update_extended_profile_if_needed(
     Args:
         data (dict): Dictionary containing the update data, may include 'extended_profile' key
         user_profile (UserProfile): The UserProfile instance to update
-        extended_profile_form (Optional[forms.Form]): The validated extended profile form
+        extended_profile_form (forms.Form | None): The validated extended profile form
             containing extended profile data, or None if no extended profile form is provided
 
     Note:
