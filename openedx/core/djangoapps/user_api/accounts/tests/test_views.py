@@ -1398,7 +1398,7 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
 
         response = self.client.patch(self.url, data=json.dumps(json_data), content_type="application/merge-patch+json")
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)  # noqa: PT009
         mock_validate_form.assert_called_once_with(extended_profile_data, self.user)
 
     @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
@@ -1415,9 +1415,9 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
 
         response = self.client.patch(self.url, data=json.dumps(json_data), content_type="application/merge-patch+json")
 
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("field_errors", response.data)
-        self.assertIn("department", response.data["field_errors"])
+        self.assertEqual(response.status_code, 400)  # noqa: PT009
+        self.assertIn("field_errors", response.data)  # noqa: PT009
+        self.assertIn("department", response.data["field_errors"])  # noqa: PT009
         mock_validate_form.assert_called_once_with(extended_profile_data, self.user)
 
     def test_patch_account_without_extended_profile(self: UserAPITestCase):
@@ -1428,8 +1428,8 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
 
         response = self.client.patch(self.url, data=json.dumps(json_data), content_type="application/merge-patch+json")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["bio"], "Test bio without extended profile")
+        self.assertEqual(response.status_code, 200)  # noqa: PT009
+        self.assertEqual(response.data["bio"], "Test bio without extended profile")  # noqa: PT009
 
     @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_patch_account_extended_profile_with_empty_list(self, mock_validate_form: mock.Mock):
@@ -1441,8 +1441,8 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
 
         response = self.client.patch(self.url, data=json.dumps(json_data), content_type="application/merge-patch+json")
 
-        self.assertEqual(response.status_code, 200)
-        mock_validate_form.assert_called_once_with([], self.user)
+        self.assertEqual(response.status_code, 200)  # noqa: PT009
+        mock_validate_form.assert_called_once_with([], self.user)  # noqa: PT009
 
     @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_patch_account_extended_profile_form_exception(self, mock_validate_form: mock.Mock):
@@ -1458,8 +1458,8 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
 
         response = self.client.patch(self.url, data=json.dumps(json_data), content_type="application/merge-patch+json")
 
-        self.assertEqual(response.status_code, 400)
-        self.assertIn("field_errors", response.data)
+        self.assertEqual(response.status_code, 400)  # noqa: PT009
+        self.assertIn("field_errors", response.data)  # noqa: PT009
 
     @mock.patch("openedx.core.djangoapps.user_api.accounts.api.validate_and_get_extended_profile_form")
     def test_patch_account_extended_profile_multiple_fields(self, mock_validate_form: mock.Mock):
@@ -1478,7 +1478,7 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
 
         response = self.client.patch(self.url, data=json.dumps(json_data), content_type="application/merge-patch+json")
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)  # noqa: PT009
         mock_validate_form.assert_called_once_with(extended_profile_data, self.user)
 
     def test_patch_account_extended_profile_unauthorized(self):
@@ -1493,7 +1493,7 @@ class TestAccountsAPIExtendedProfile(UserAPITestCase):
             self.url, data=json.dumps(json_data), content_type="application/merge-patch+json"
         )
 
-        self.assertIn(response.status_code, [403, 404])
+        self.assertIn(response.status_code, [403, 404])  # noqa: PT009
 
 
 @ddt.ddt

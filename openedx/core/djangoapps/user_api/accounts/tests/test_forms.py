@@ -31,8 +31,8 @@ class TestExtractExtendedProfileFieldsData(TestCase):
 
         extracted_data, errors = extract_extended_profile_fields_data(extended_profile)
 
-        self.assertEqual(errors, {})
-        self.assertEqual(extracted_data, {"department": "Engineering", "title": "Software Engineer"})
+        self.assertEqual(errors, {})  # noqa: PT009
+        self.assertEqual(extracted_data, {"department": "Engineering", "title": "Software Engineer"})  # noqa: PT009
 
     def test_extract_extended_profile_with_empty_string(self):
         """
@@ -45,8 +45,8 @@ class TestExtractExtendedProfileFieldsData(TestCase):
 
         extracted_data, errors = extract_extended_profile_fields_data(extended_profile)
 
-        self.assertEqual(errors, {})
-        self.assertEqual(extracted_data, {"department": "", "title": "Engineer"})
+        self.assertEqual(errors, {})  # noqa: PT009
+        self.assertEqual(extracted_data, {"department": "", "title": "Engineer"})  # noqa: PT009
 
     def test_extract_extended_profile_not_a_list(self):
         """
@@ -56,9 +56,11 @@ class TestExtractExtendedProfileFieldsData(TestCase):
 
         extracted_data, errors = extract_extended_profile_fields_data(extended_profile)
 
-        self.assertEqual(extracted_data, {})
-        self.assertIn("extended_profile", errors)
-        self.assertEqual(errors["extended_profile"]["developer_message"], "extended_profile must be a list")
+        self.assertEqual(extracted_data, {})  # noqa: PT009
+        self.assertIn("extended_profile", errors)  # noqa: PT009
+        self.assertEqual(  # noqa: PT009
+            errors["extended_profile"]["developer_message"], "extended_profile must be a list"
+        )
 
     def test_extract_extended_profile_with_invalid_field_data(self):
         """
@@ -73,8 +75,8 @@ class TestExtractExtendedProfileFieldsData(TestCase):
         extracted_data, errors = extract_extended_profile_fields_data(extended_profile)
 
         # Invalid entry should be skipped, but valid ones should be extracted
-        self.assertEqual(errors, {})
-        self.assertEqual(extracted_data, {"department": "Engineering", "title": "Engineer"})
+        self.assertEqual(errors, {})  # noqa: PT009
+        self.assertEqual(extracted_data, {"department": "Engineering", "title": "Engineer"})  # noqa: PT009
 
     def test_extract_extended_profile_missing_field_name(self):
         """
@@ -87,8 +89,8 @@ class TestExtractExtendedProfileFieldsData(TestCase):
 
         extracted_data, errors = extract_extended_profile_fields_data(extended_profile)
 
-        self.assertEqual(errors, {})
-        self.assertEqual(extracted_data, {"department": "Engineering"})
+        self.assertEqual(errors, {})  # noqa: PT009
+        self.assertEqual(extracted_data, {"department": "Engineering"})  # noqa: PT009
 
     def test_extract_extended_profile_empty_list(self):
         """
@@ -98,8 +100,8 @@ class TestExtractExtendedProfileFieldsData(TestCase):
 
         extracted_data, errors = extract_extended_profile_fields_data(extended_profile)
 
-        self.assertEqual(errors, {})
-        self.assertEqual(extracted_data, {})
+        self.assertEqual(errors, {})  # noqa: PT009
+        self.assertEqual(extracted_data, {})  # noqa: PT009
 
 
 class TestGetExtendedProfileForm(TestCase):
@@ -121,8 +123,8 @@ class TestGetExtendedProfileForm(TestCase):
 
         form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
-        self.assertIsNone(form)
-        self.assertEqual(errors, {})
+        self.assertIsNone(form)  # noqa: PT009
+        self.assertEqual(errors, {})  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model")
     def test_get_extended_profile_form_model_has_no_objects(self, mock_get_model: Mock):
@@ -135,8 +137,8 @@ class TestGetExtendedProfileForm(TestCase):
 
         form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
-        self.assertIsNone(form)
-        self.assertEqual(errors, {})
+        self.assertIsNone(form)  # noqa: PT009
+        self.assertEqual(errors, {})  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_registration_extension_form")
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model")
@@ -155,8 +157,8 @@ class TestGetExtendedProfileForm(TestCase):
 
         form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
-        self.assertEqual(form, mock_form_instance)
-        self.assertEqual(errors, {})
+        self.assertEqual(form, mock_form_instance)  # noqa: PT009
+        self.assertEqual(errors, {})  # noqa: PT009
         mock_model.objects.get.assert_called_once_with(user=self.user)
         mock_get_form.assert_called_once_with(data=extended_profile_fields_data, instance=mock_instance)
 
@@ -177,14 +179,14 @@ class TestGetExtendedProfileForm(TestCase):
 
         form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
-        self.assertEqual(form, mock_form_instance)
-        self.assertEqual(errors, {})
+        self.assertEqual(form, mock_form_instance)  # noqa: PT009
+        self.assertEqual(errors, {})  # noqa: PT009
         mock_model.objects.get.assert_called_once_with(user=self.user)
         mock_get_form.assert_called_once_with(data=extended_profile_fields_data)
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_registration_extension_form")
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model")
-    def test_get_extended_profile_form_validation_errors(self, _: Mock, mock_get_form: Mock):
+    def test_get_extended_profile_form_validation_errors(self, mock_get_model: Mock, mock_get_form: Mock):
         """
         Test when form validation fails
         """
@@ -196,11 +198,12 @@ class TestGetExtendedProfileForm(TestCase):
 
         form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
-        self.assertIsNone(form)
-        self.assertIn("department", errors)
-        self.assertIn("title", errors)
-        self.assertEqual(errors["department"]["user_message"], "This field is required")
-        self.assertEqual(errors["title"]["user_message"], "Invalid value")
+        mock_get_model.assert_called_once()
+        self.assertIsNone(form)  # noqa: PT009
+        self.assertIn("department", errors)  # noqa: PT009
+        self.assertIn("title", errors)  # noqa: PT009
+        self.assertEqual(errors["department"]["user_message"], "This field is required")  # noqa: PT009
+        self.assertEqual(errors["title"]["user_message"], "Invalid value")  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_registration_extension_form")
     def test_get_extended_profile_form_returns_none(self, mock_get_form: Mock):
@@ -213,8 +216,8 @@ class TestGetExtendedProfileForm(TestCase):
         with patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model"):
             form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
-        self.assertIsNone(form)
-        self.assertEqual(errors, {})
+        self.assertIsNone(form)  # noqa: PT009
+        self.assertEqual(errors, {})  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_registration_extension_form")
     def test_get_extended_profile_form_exception_during_creation(self, mock_get_form: Mock):
@@ -227,9 +230,9 @@ class TestGetExtendedProfileForm(TestCase):
         with patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model"):
             form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
-        self.assertIsNone(form)
-        self.assertIn("extended_profile", errors)
-        self.assertIn("Error creating custom form", errors["extended_profile"]["developer_message"])
+        self.assertIsNone(form)  # noqa: PT009
+        self.assertIn("extended_profile", errors)  # noqa: PT009
+        self.assertIn("Error creating custom form", errors["extended_profile"]["developer_message"])  # noqa: PT009
 
 
 class TestValidateAndGetExtendedProfileForm(TestCase):
@@ -254,8 +257,8 @@ class TestValidateAndGetExtendedProfileForm(TestCase):
 
         form, errors = validate_and_get_extended_profile_form(extended_profile_data, self.user)
 
-        self.assertEqual(form, mock_form)
-        self.assertEqual(errors, {})
+        self.assertEqual(form, mock_form)  # noqa: PT009
+        self.assertEqual(errors, {})  # noqa: PT009
         mock_extract.assert_called_once_with(extended_profile_data)
         mock_get_form.assert_called_once_with({"department": "Engineering"}, self.user)
 
@@ -269,8 +272,8 @@ class TestValidateAndGetExtendedProfileForm(TestCase):
 
         form, errors = validate_and_get_extended_profile_form(extended_profile_data, self.user)
 
-        self.assertIsNone(form)
-        self.assertIn("extended_profile", errors)
+        self.assertIsNone(form)  # noqa: PT009
+        self.assertIn("extended_profile", errors)  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.extract_extended_profile_fields_data")
     def test_validate_with_empty_data(self, mock_extract: Mock):
@@ -282,8 +285,8 @@ class TestValidateAndGetExtendedProfileForm(TestCase):
 
         form, errors = validate_and_get_extended_profile_form(extended_profile_data, self.user)
 
-        self.assertIsNone(form)
-        self.assertEqual(errors, {})
+        self.assertIsNone(form)  # noqa: PT009
+        self.assertEqual(errors, {})  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_form")
     @patch("openedx.core.djangoapps.user_api.accounts.forms.extract_extended_profile_fields_data")
@@ -299,8 +302,8 @@ class TestValidateAndGetExtendedProfileForm(TestCase):
 
         form, errors = validate_and_get_extended_profile_form(extended_profile_data, self.user)
 
-        self.assertEqual(form, mock_form)
-        self.assertIn("department", errors)
+        self.assertEqual(form, mock_form)  # noqa: PT009
+        self.assertIn("department", errors)  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_form")
     @patch("openedx.core.djangoapps.user_api.accounts.forms.extract_extended_profile_fields_data")
@@ -316,5 +319,5 @@ class TestValidateAndGetExtendedProfileForm(TestCase):
 
         form, errors = validate_and_get_extended_profile_form(extended_profile_data, self.user)
 
-        self.assertEqual(form, mock_form)
-        self.assertIn("title", errors)
+        self.assertEqual(form, mock_form)  # noqa: PT009
+        self.assertIn("title", errors)  # noqa: PT009
