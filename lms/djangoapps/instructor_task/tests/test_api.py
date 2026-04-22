@@ -622,8 +622,10 @@ class SubmitStudentEnrollmentBatchTests(InstructorTaskCourseTestCase):
         )
         key_b = mock_submit_task.call_args[0][5]
 
-        expected_a = hashlib.md5(f"{self.course_key}_unenroll_{json.dumps(batch_a)}".encode()).hexdigest()
-        expected_b = hashlib.md5(f"{self.course_key}_unenroll_{json.dumps(batch_b)}".encode()).hexdigest()
+        key_stub_a = f"{self.course_key}_unenroll_{json.dumps(sorted(batch_a))}"
+        key_stub_b = f"{self.course_key}_unenroll_{json.dumps(sorted(batch_b))}"
+        expected_a = hashlib.md5(key_stub_a.encode("utf-8")).hexdigest()
+        expected_b = hashlib.md5(key_stub_b.encode("utf-8")).hexdigest()
         self.assertEqual(key_a, expected_a)  # noqa: PT009
         self.assertEqual(key_b, expected_b)  # noqa: PT009
         self.assertNotEqual(key_a, key_b)  # noqa: PT009
