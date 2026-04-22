@@ -576,7 +576,7 @@ class SubmitStudentEnrollmentBatchTests(InstructorTaskCourseTestCase):
             secure=True,
         )
 
-        self.assertEqual(result, "task-result")
+        self.assertEqual(result, "task-result")  # noqa: PT009
         key_stub = f"{self.course_key}_{action}_{'_'.join(identifiers)}"
         expected_key = hashlib.md5(key_stub.encode("utf-8")).hexdigest()
         mock_submit_task.assert_called_once_with(
@@ -611,7 +611,7 @@ class SubmitStudentEnrollmentBatchTests(InstructorTaskCourseTestCase):
         expected_key = hashlib.md5(key_stub.encode("utf-8")).hexdigest()
         call_args = mock_submit_task.call_args[0]
         received_key = call_args[5]
-        self.assertEqual(received_key, expected_key)
+        self.assertEqual(received_key, expected_key)  # noqa: PT009
 
     @mock.patch("lms.djangoapps.instructor_task.api.submit_task")
     def test_already_running_error_is_propagated(self, mock_submit_task):
@@ -620,7 +620,7 @@ class SubmitStudentEnrollmentBatchTests(InstructorTaskCourseTestCase):
         """
         mock_submit_task.side_effect = AlreadyRunningError("Task already running")
 
-        with self.assertRaises(AlreadyRunningError):
+        with pytest.raises(AlreadyRunningError):
             submit_student_enrollment_batch(
                 request=self.request,
                 course_key=self.course_key,

@@ -10,6 +10,7 @@ from contextlib import ExitStack, contextmanager
 from datetime import datetime
 
 import pytz
+from crum import get_current_request
 from django.conf import settings
 from django.contrib.auth.models import User  # lint-amnesty, pylint: disable=imported-auth-user
 from django.contrib.sites.models import Site
@@ -19,7 +20,6 @@ from django.utils.translation import override as override_language
 from edx_ace import ace
 from edx_ace.recipient import Recipient
 from eventtracking import tracker
-from openedx.core.lib.celery.task_utils import emulate_http_request
 from submissions import api as sub_api  # installed from the edx-submissions repository
 from submissions.models import score_reset, score_set
 
@@ -53,8 +53,8 @@ from lms.djangoapps.instructor.message_types import (
 from openedx.core.djangoapps.lang_pref import LANGUAGE_KEY
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.djangoapps.theming.helpers import get_current_site
-from crum import get_current_request
 from openedx.core.djangoapps.user_api.models import UserPreference
+from openedx.core.lib.celery.task_utils import emulate_http_request
 from xmodule.modulestore.django import modulestore  # lint-amnesty, pylint: disable=wrong-import-order
 from xmodule.modulestore.exceptions import ItemNotFoundError  # lint-amnesty, pylint: disable=wrong-import-order
 
