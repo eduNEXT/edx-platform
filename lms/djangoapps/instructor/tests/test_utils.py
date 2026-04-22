@@ -82,7 +82,7 @@ class TestDetermineEnrollStateTransition(TestCase):
         """Test state transition determination for enrollment."""
         result = _determine_enroll_state_transition(before_state, after_state)
 
-        self.assertEqual(result, expected_transition)
+        self.assertEqual(result, expected_transition)  # noqa: PT009
 
 
 @ddt.ddt
@@ -113,7 +113,7 @@ class TestDetermineUnenrollStateTransition(TestCase):
         """Test state transition determination for unenrollment."""
         result = _determine_unenroll_state_transition(before_state)
 
-        self.assertEqual(result, expected_transition)
+        self.assertEqual(result, expected_transition)  # noqa: PT009
 
 
 class TestProcessSingleStudentEnrollment(TestCase):
@@ -152,11 +152,11 @@ class TestProcessSingleStudentEnrollment(TestCase):
             email_params=self.email_params,
         )
 
-        self.assertTrue(result["success"])
-        self.assertEqual(result["identifier"], self.user.email)
-        self.assertEqual(result["state_transition"], UNENROLLED_TO_ENROLLED)
-        self.assertIn("before", result)
-        self.assertIn("after", result)
+        self.assertTrue(result["success"])  # noqa: PT009
+        self.assertEqual(result["identifier"], self.user.email)  # noqa: PT009
+        self.assertEqual(result["state_transition"], UNENROLLED_TO_ENROLLED)  # noqa: PT009
+        self.assertIn("before", result)  # noqa: PT009
+        self.assertIn("after", result)  # noqa: PT009
 
     @patch("lms.djangoapps.instructor.utils.unenroll_email")
     def test_process_single_student_unenrollment_success(self, mock_unenroll_email: Mock):
@@ -182,9 +182,9 @@ class TestProcessSingleStudentEnrollment(TestCase):
             email_params=self.email_params,
         )
 
-        self.assertTrue(result["success"])
-        self.assertEqual(result["identifier"], self.user.email)
-        self.assertEqual(result["state_transition"], ENROLLED_TO_UNENROLLED)
+        self.assertTrue(result["success"])  # noqa: PT009
+        self.assertEqual(result["identifier"], self.user.email)  # noqa: PT009
+        self.assertEqual(result["state_transition"], ENROLLED_TO_UNENROLLED)  # noqa: PT009
 
     @patch("lms.djangoapps.instructor.utils.validate_email")
     def test_process_single_student_enrollment_invalid_email(self, mock_validate_email: Mock):
@@ -202,11 +202,11 @@ class TestProcessSingleStudentEnrollment(TestCase):
             email_params=self.email_params,
         )
 
-        self.assertFalse(result["success"])
-        self.assertEqual(result["identifier"], "invalid-email")
-        self.assertTrue(result["invalidIdentifier"])
-        self.assertEqual(result["error_type"], "invalid_identifier")
-        self.assertEqual(result["error_message"], "Invalid email address")
+        self.assertFalse(result["success"])  # noqa: PT009
+        self.assertEqual(result["identifier"], "invalid-email")  # noqa: PT009
+        self.assertTrue(result["invalidIdentifier"])  # noqa: PT009
+        self.assertEqual(result["error_type"], "invalid_identifier")  # noqa: PT009
+        self.assertEqual(result["error_message"], "Invalid email address")  # noqa: PT009
 
     @patch("lms.djangoapps.instructor.utils.enroll_email")
     def test_process_single_student_enrollment_general_error(
@@ -227,11 +227,11 @@ class TestProcessSingleStudentEnrollment(TestCase):
             email_params=self.email_params,
         )
 
-        self.assertFalse(result["success"])
-        self.assertEqual(result["identifier"], self.user.email)
-        self.assertTrue(result["error"])
-        self.assertEqual(result["error_type"], "general_error")
-        self.assertEqual(result["error_message"], "Database error")
+        self.assertFalse(result["success"])  # noqa: PT009
+        self.assertEqual(result["identifier"], self.user.email)  # noqa: PT009
+        self.assertTrue(result["error"])  # noqa: PT009
+        self.assertEqual(result["error_type"], "general_error")  # noqa: PT009
+        self.assertEqual(result["error_message"], "Database error")  # noqa: PT009
 
 
 class TestProcessStudentEnrollmentBatch(TestCase):
@@ -284,13 +284,13 @@ class TestProcessStudentEnrollmentBatch(TestCase):
             secure=True,
         )
 
-        self.assertEqual(result["action"], EnrollStatusChange.enroll)
-        self.assertFalse(result["auto_enroll"])
-        self.assertEqual(result["total_students"], 2)
-        self.assertEqual(result["successful_operations"], 2)
-        self.assertEqual(result["failed_operations"], 0)
-        self.assertEqual(len(result["results"]), 2)
-        self.assertEqual(mock_process_single.call_count, 2)
+        self.assertEqual(result["action"], EnrollStatusChange.enroll)  # noqa: PT009
+        self.assertFalse(result["auto_enroll"])  # noqa: PT009
+        self.assertEqual(result["total_students"], 2)  # noqa: PT009
+        self.assertEqual(result["successful_operations"], 2)  # noqa: PT009
+        self.assertEqual(result["failed_operations"], 0)  # noqa: PT009
+        self.assertEqual(len(result["results"]), 2)  # noqa: PT009
+        self.assertEqual(mock_process_single.call_count, 2)  # noqa: PT009
 
     @patch("lms.djangoapps.instructor.utils.get_course_by_id")
     @patch("lms.djangoapps.instructor.utils.get_email_params")
@@ -333,10 +333,10 @@ class TestProcessStudentEnrollmentBatch(TestCase):
             secure=True,
         )
 
-        self.assertEqual(result["total_students"], 2)
-        self.assertEqual(result["successful_operations"], 1)
-        self.assertEqual(result["failed_operations"], 1)
-        self.assertEqual(len(result["results"]), 2)
+        self.assertEqual(result["total_students"], 2)  # noqa: PT009
+        self.assertEqual(result["successful_operations"], 1)  # noqa: PT009
+        self.assertEqual(result["failed_operations"], 1)  # noqa: PT009
+        self.assertEqual(len(result["results"]), 2)  # noqa: PT009
 
     @patch("lms.djangoapps.instructor.utils.get_course_by_id")
     @patch("lms.djangoapps.instructor.utils.get_email_params")
@@ -375,10 +375,10 @@ class TestProcessStudentEnrollmentBatch(TestCase):
             progress_callback=progress_callback,
         )
 
-        self.assertEqual(len(progress_calls), 2)
-        self.assertEqual(progress_calls[0], (1, 2, 1))
-        self.assertEqual(progress_calls[1], (2, 2, 2))
-        self.assertEqual(result["successful_operations"], 2)
+        self.assertEqual(len(progress_calls), 2)  # noqa: PT009
+        self.assertEqual(progress_calls[0], (1, 2, 1))  # noqa: PT009
+        self.assertEqual(progress_calls[1], (2, 2, 2))  # noqa: PT009
+        self.assertEqual(result["successful_operations"], 2)  # noqa: PT009
 
     @patch("lms.djangoapps.instructor.utils.process_single_student_enrollment")
     def test_process_student_enrollment_batch_no_email(self, mock_process_single: Mock):
@@ -403,14 +403,12 @@ class TestProcessStudentEnrollmentBatch(TestCase):
             secure=True,
         )
 
-        self.assertEqual(result["successful_operations"], 1)
+        self.assertEqual(result["successful_operations"], 1)  # noqa: PT009
         call_kwargs = mock_process_single.call_args[1]
-        self.assertEqual(call_kwargs["email_params"], {})
+        self.assertEqual(call_kwargs["email_params"], {})  # noqa: PT009
 
-    @patch("lms.djangoapps.instructor.utils.get_course_by_id")
-    @patch("lms.djangoapps.instructor.utils.get_email_params")
     @patch("lms.djangoapps.instructor.utils.process_single_student_enrollment")
-    def test_process_student_enrollment_batch_empty_list(self, mock_process_single: Mock, _: Mock, __: Mock):
+    def test_process_student_enrollment_batch_empty_list(self, mock_process_single: Mock):
         """Test batch processing with empty identifier list."""
         result = process_student_enrollment_batch(
             request_user=self.request_user,
@@ -423,8 +421,8 @@ class TestProcessStudentEnrollmentBatch(TestCase):
             secure=True,
         )
 
-        self.assertEqual(result["total_students"], 0)
-        self.assertEqual(result["successful_operations"], 0)
-        self.assertEqual(result["failed_operations"], 0)
-        self.assertEqual(len(result["results"]), 0)
+        self.assertEqual(result["total_students"], 0)  # noqa: PT009
+        self.assertEqual(result["successful_operations"], 0)  # noqa: PT009
+        self.assertEqual(result["failed_operations"], 0)  # noqa: PT009
+        self.assertEqual(len(result["results"]), 0)  # noqa: PT009
         mock_process_single.assert_not_called()

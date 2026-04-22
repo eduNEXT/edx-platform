@@ -6,7 +6,7 @@ that can be used in both synchronous and asynchronous contexts.
 """
 
 import logging
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -25,6 +25,7 @@ from common.djangoapps.student.models import (
     CourseEnrollment,
     EnrollStatusChange,
     ManualEnrollmentAudit,
+    get_user_by_username_or_email,
 )
 from lms.djangoapps.instructor.enrollment import (
     enroll_email,
@@ -32,7 +33,6 @@ from lms.djangoapps.instructor.enrollment import (
     get_user_email_language,
     unenroll_email,
 )
-from common.djangoapps.student.models import get_user_by_username_or_email
 from openedx.core.lib.courses import get_course_by_id
 
 log = logging.getLogger(__name__)
@@ -193,7 +193,7 @@ def process_student_enrollment_batch(
     email_students: bool,
     reason: str | None,
     secure: bool,
-    progress_callback: Optional[Callable] = None,
+    progress_callback: Callable[..., None] | None = None,
 ):
     """
     Process a batch of student enrollment/unenrollment operations.
