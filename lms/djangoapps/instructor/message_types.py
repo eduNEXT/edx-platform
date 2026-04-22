@@ -87,7 +87,7 @@ class RemoveBetaTester(BaseMessageType):
 
 class BatchEnrollment(BaseMessageType):
     """
-    A message for instructors when finish the batch enrollment async process.
+    A message for instructors when they finish the batch enrollment async process.
     """
 
     APP_LABEL = "instructor"
