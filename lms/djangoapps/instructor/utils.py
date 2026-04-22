@@ -171,10 +171,10 @@ def process_single_student_enrollment(
             "invalidIdentifier": True,
             "success": False,
             "error_type": "invalid_identifier",
-            "error_message": "Invalid email address",
+            "error_message": _("Invalid email address"),
         }
     except Exception as exc:  # pylint: disable=broad-exception-caught
-        log.exception("Error while processing student: %s", exc)
+        log.exception("Error while processing student %s: %s", identifier, exc)
         return {
             "identifier": identifier,
             "error": True,
