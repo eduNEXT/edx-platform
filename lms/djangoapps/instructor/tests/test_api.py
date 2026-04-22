@@ -1543,7 +1543,7 @@ class TestInstructorAPIEnrollment(SharedModuleStoreTestCase, LoginEnrollmentTest
                         "allowed": False,
                     },
                     "success": True,
-                    "state_transition": ALLOWEDTOENROLL_TO_ENROLLED,
+                    "state_transition": ALLOWEDTOENROLL_TO_UNENROLLED,
                 }
             ]
         }
