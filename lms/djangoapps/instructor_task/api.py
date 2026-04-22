@@ -8,6 +8,7 @@ arguments.
 """
 import datetime
 import hashlib
+import json
 import logging
 from collections import Counter
 
@@ -656,10 +657,7 @@ def submit_student_enrollment_batch(
         "secure": secure,
     }
 
-    # Create task key based on course, action and first few identifiers for uniqueness
-    # Limit identifiers in key to avoid exceeding max length
-    key_identifiers = identifiers[:5] if len(identifiers) > 5 else identifiers
-    task_key_stub = f'{course_key}_{action}_{"_".join(key_identifiers)}'
+    task_key_stub = f"{course_key}_{action}_{json.dumps(identifiers)}"
     task_key = hashlib.md5(task_key_stub.encode("utf-8")).hexdigest()
 
     return submit_task(request, task_type, task_class, course_key, task_input, task_key)

@@ -214,7 +214,7 @@ class TestProcessSingleStudentEnrollment(TestCase):
         mock_enroll_email: Mock,
     ):
         """Test enrollment with general exception."""
-        mock_enroll_email.side_effect = Exception("Database error")
+        mock_enroll_email.side_effect = Exception()
 
         result = process_single_student_enrollment(
             request_user=self.request_user,
@@ -231,7 +231,10 @@ class TestProcessSingleStudentEnrollment(TestCase):
         self.assertEqual(result["identifier"], self.user.email)  # noqa: PT009
         self.assertTrue(result["error"])  # noqa: PT009
         self.assertEqual(result["error_type"], "general_error")  # noqa: PT009
-        self.assertEqual(result["error_message"], "Database error")  # noqa: PT009
+        self.assertEqual(  # noqa: PT009
+            result["error_message"],
+            "Something went wrong while processing this learner. Please try again or contact support.",
+        )
 
 
 class TestProcessStudentEnrollmentBatch(TestCase):

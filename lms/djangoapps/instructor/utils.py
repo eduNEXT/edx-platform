@@ -11,6 +11,7 @@ from collections.abc import Callable
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.utils.translation import gettext as _
 from opaque_keys.edx.keys import CourseKey
 
 from common.djangoapps.student.models import (
@@ -179,7 +180,9 @@ def process_single_student_enrollment(
             "error": True,
             "success": False,
             "error_type": "general_error",
-            "error_message": str(exc),
+            "error_message": _(
+                "Something went wrong while processing this learner. Please try again or contact support."
+            ),
         }
 
 

@@ -577,7 +577,7 @@ class SubmitStudentEnrollmentBatchTests(InstructorTaskCourseTestCase):
         )
 
         self.assertEqual(result, "task-result")  # noqa: PT009
-        key_stub = f"{self.course_key}_{action}_{'_'.join(identifiers)}"
+        key_stub = f'{self.course_key}_{action}_{json.dumps(identifiers)}'
         expected_key = hashlib.md5(key_stub.encode("utf-8")).hexdigest()
         mock_submit_task.assert_called_once_with(
             self.request,
@@ -589,29 +589,44 @@ class SubmitStudentEnrollmentBatchTests(InstructorTaskCourseTestCase):
         )
 
     @mock.patch("lms.djangoapps.instructor_task.api.submit_task")
-    def test_identifiers_are_truncated_to_5_for_key(self, mock_submit_task):
+    def test_task_key_differs_when_tail_identifiers_differ(self, mock_submit_task):
         """
-        When identifiers > 5, only first 5 go into the task_key.
+        Task key must incorporate the full list so batches that share the same first IDs
+        are not incorrectly treated as duplicates of different work.
         """
-        identifiers = ["u1", "u2", "u3", "u4", "u5", "u6", "u7"]
+        prefix = ["u1", "u2", "u3", "u4", "u5"]
+        batch_a = prefix + ["tail-a"]
+        batch_b = prefix + ["tail-b"]
 
         submit_student_enrollment_batch(
             request=self.request,
             course_key=self.course_key,
             action="unenroll",
-            identifiers=identifiers,
+            identifiers=batch_a,
             auto_enroll=False,
             email_students=True,
             reason=None,
             secure=False,
         )
+        key_a = mock_submit_task.call_args[0][5]
 
-        truncated = identifiers[:5]
-        key_stub = f"{self.course_key}_unenroll_{'_'.join(truncated)}"
-        expected_key = hashlib.md5(key_stub.encode("utf-8")).hexdigest()
-        call_args = mock_submit_task.call_args[0]
-        received_key = call_args[5]
-        self.assertEqual(received_key, expected_key)  # noqa: PT009
+        submit_student_enrollment_batch(
+            request=self.request,
+            course_key=self.course_key,
+            action="unenroll",
+            identifiers=batch_b,
+            auto_enroll=False,
+            email_students=True,
+            reason=None,
+            secure=False,
+        )
+        key_b = mock_submit_task.call_args[0][5]
+
+        expected_a = hashlib.md5(f"{self.course_key}_unenroll_{json.dumps(batch_a)}".encode()).hexdigest()
+        expected_b = hashlib.md5(f"{self.course_key}_unenroll_{json.dumps(batch_b)}".encode()).hexdigest()
+        self.assertEqual(key_a, expected_a)  # noqa: PT009
+        self.assertEqual(key_b, expected_b)  # noqa: PT009
+        self.assertNotEqual(key_a, key_b)  # noqa: PT009
 
     @mock.patch("lms.djangoapps.instructor_task.api.submit_task")
     def test_already_running_error_is_propagated(self, mock_submit_task):
