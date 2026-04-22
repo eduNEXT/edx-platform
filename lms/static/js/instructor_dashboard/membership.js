@@ -713,6 +713,9 @@ such that the value can be defined later than this assignment (file load order).
             notunenrolled = [];
             ref = dataFromServer.results;
             if (!ref) {
+                if (dataFromServer.error) {
+                    return this.fail_with_error(dataFromServer.error);
+                }
                 return this.show_async_processing_message(dataFromServer);
             }
             for (i = 0, len = ref.length; i < len; i++) {
