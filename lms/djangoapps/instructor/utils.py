@@ -87,7 +87,7 @@ def _determine_unenroll_state_transition(before_state: dict) -> str:
 
 
 def process_single_student_enrollment(
-    request_user,
+    request_user: User,
     course_key: CourseKey,
     action: str,
     identifier: str,
@@ -173,8 +173,7 @@ def process_single_student_enrollment(
             "error_message": "Invalid email address",
         }
     except Exception as exc:  # pylint: disable=broad-exception-caught
-        log.exception("Error while processing student")
-        log.exception(exc)
+        log.exception("Error while processing student: %s", exc)
         return {
             "identifier": identifier,
             "error": True,
@@ -185,7 +184,7 @@ def process_single_student_enrollment(
 
 
 def process_student_enrollment_batch(
-    request_user,
+    request_user: User,
     course_key: CourseKey,
     action: str,
     identifiers: list[str],
