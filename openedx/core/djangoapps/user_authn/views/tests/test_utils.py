@@ -11,8 +11,8 @@ from django.test import TestCase
 from django.test.utils import override_settings
 
 from openedx.core.djangoapps.user_authn.views.registration_form import (
-    get_extended_profile_model,
-    get_registration_extension_form,
+    get_profile_extension_model,
+    get_profile_extension_form,
 )
 from openedx.core.djangoapps.user_authn.views.utils import _get_username_prefix, get_auto_generated_username
 
@@ -100,7 +100,7 @@ class TestGetExtendedProfileModel(TestCase):
         Test when `PROFILE_EXTENSION_FORM` setting is not configured
         """
         with override_settings(PROFILE_EXTENSION_FORM=setting_value):
-            result = get_extended_profile_model()
+            result = get_profile_extension_model()
 
         self.assertIsNone(result)  # noqa: PT009
 
@@ -110,7 +110,7 @@ class TestGetExtendedProfileModel(TestCase):
         """
         Test when the module path is invalid
         """
-        result = get_extended_profile_model()
+        result = get_profile_extension_model()
 
         self.assertIsNone(result)  # noqa: PT009
         mock_logger.warning.assert_called_once()
@@ -121,7 +121,7 @@ class TestGetExtendedProfileModel(TestCase):
         """
         Test when the form class doesn't have a Meta class
         """
-        result = get_extended_profile_model()
+        result = get_profile_extension_model()
 
         self.assertIsNone(result)  # noqa: PT009
 
@@ -131,7 +131,7 @@ class TestGetExtendedProfileModel(TestCase):
         """
         Test when the setting value doesn't have a dot separator
         """
-        result = get_extended_profile_model()
+        result = get_profile_extension_model()
 
         self.assertIsNone(result)  # noqa: PT009
         mock_logger.warning.assert_called_once()
@@ -151,7 +151,7 @@ class TestGetExtendedProfileModel(TestCase):
         mock_module.CustomExtendedProfileForm = mock_form_class
         mock_import_module.return_value = mock_module
 
-        result = get_extended_profile_model()
+        result = get_profile_extension_model()
 
         self.assertEqual(result, mock_model)  # noqa: PT009
         mock_import_module.assert_called_once_with("myapp.forms")
@@ -170,7 +170,7 @@ class TestGetExtendedProfileModel(TestCase):
         mock_module.FormWithoutModel = mock_form_class
         mock_import_module.return_value = mock_module
 
-        result = get_extended_profile_model()
+        result = get_profile_extension_model()
 
         self.assertIsNone(result)  # noqa: PT009
 
@@ -187,7 +187,7 @@ class TestGetExtendedProfileModel(TestCase):
         """
         mock_import_module.side_effect = exception_class(error_message)
 
-        result = get_extended_profile_model()
+        result = get_profile_extension_model()
 
         self.assertIsNone(result)  # noqa: PT009
         mock_logger.warning.assert_called_once()
@@ -203,7 +203,7 @@ class TestGetExtendedProfileModel(TestCase):
         mock_module = Mock(spec=[])
         mock_import_module.return_value = mock_module
 
-        result = get_extended_profile_model()
+        result = get_profile_extension_model()
 
         self.assertIsNone(result)  # noqa: PT009
         mock_logger.warning.assert_called_once()
@@ -218,7 +218,7 @@ class TestGetExtendedProfileModel(TestCase):
         will NOT get the new model-based profile capabilities. They continue using
         the old UserProfile.meta field approach.
         """
-        result = get_extended_profile_model()
+        result = get_profile_extension_model()
 
         self.assertIsNone(result)  # noqa: PT009
 
@@ -235,7 +235,7 @@ class TestGetRegistrationExtensionForm(TestCase):
         Test when neither PROFILE_EXTENSION_FORM nor REGISTRATION_EXTENSION_FORM is configured
         """
         with override_settings(PROFILE_EXTENSION_FORM=setting_value, REGISTRATION_EXTENSION_FORM=setting_value):
-            result = get_registration_extension_form()
+            result = get_profile_extension_form()
 
         self.assertIsNone(result)  # noqa: PT009
 
@@ -251,7 +251,7 @@ class TestGetRegistrationExtensionForm(TestCase):
         mock_module.CustomProfileForm = mock_form_class
         mock_import_module.return_value = mock_module
 
-        result = get_registration_extension_form(data={"field": "value"})
+        result = get_profile_extension_form(data={"field": "value"})
 
         self.assertEqual(result, mock_form_instance)  # noqa: PT009
         mock_import_module.assert_called_once_with("myapp.forms")
@@ -269,7 +269,7 @@ class TestGetRegistrationExtensionForm(TestCase):
         mock_module.NewForm = mock_form_class
         mock_import_module.return_value = mock_module
 
-        result = get_registration_extension_form()
+        result = get_profile_extension_form()
 
         self.assertEqual(result, mock_form_instance)  # noqa: PT009
         mock_import_module.assert_called_once_with("myapp.forms")
@@ -287,7 +287,7 @@ class TestGetRegistrationExtensionForm(TestCase):
         mock_module.LegacyForm = mock_form_class
         mock_import_module.return_value = mock_module
 
-        result = get_registration_extension_form()
+        result = get_profile_extension_form()
 
         self.assertEqual(result, mock_form_instance)  # noqa: PT009
         deprecation_calls = [call for call in mock_logger.warning.call_args_list if "deprecated" in str(call).lower()]
@@ -305,7 +305,7 @@ class TestGetRegistrationExtensionForm(TestCase):
         """
         mock_import_module.side_effect = ImportError("Module not found")
 
-        result = get_registration_extension_form()
+        result = get_profile_extension_form()
 
         self.assertIsNone(result)  # noqa: PT009
         error_calls = mock_logger.error.call_args_list
@@ -317,7 +317,7 @@ class TestGetRegistrationExtensionForm(TestCase):
         """
         Test when setting value doesn't have proper format (no dot separator)
         """
-        result = get_registration_extension_form()
+        result = get_profile_extension_form()
 
         self.assertIsNone(result)  # noqa: PT009
 

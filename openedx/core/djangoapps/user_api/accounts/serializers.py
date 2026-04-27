@@ -29,7 +29,7 @@ from openedx.core.djangoapps.user_api.serializers import ReadOnlyFieldsSerialize
 from openedx.core.djangoapps.user_authn.views.registration_form import (
     contains_html,
     contains_url,
-    get_extended_profile_model,
+    get_profile_extension_model,
 )
 from openedx.features.name_affirmation_api.utils import get_name_affirmation_service
 
@@ -600,7 +600,7 @@ def get_extended_profile(user_profile: UserProfile) -> list[dict[str, str]]:
     """
 
     def get_extended_profile_data():
-        extended_profile_model = get_extended_profile_model()
+        extended_profile_model = get_profile_extension_model()
 
         if extended_profile_model:
             try:

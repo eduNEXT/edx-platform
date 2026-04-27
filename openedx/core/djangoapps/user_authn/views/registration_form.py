@@ -317,15 +317,23 @@ class AccountCreationForm(forms.Form):
         return self.cleaned_data.get("country")
 
 
-def get_registration_extension_form(*args, **kwargs) -> forms.Form | None:
+def get_profile_extension_form(*args, **kwargs) -> forms.Form | None:
     """
-    Convenience function for getting the custom form set in settings.PROFILE_EXTENSION_FORM.
+    Get an instance of the custom profile extension form.
 
-    Returns an instance of the configured profile extension form. An example form app
-    for this can be found at http://github.com/open-craft/custom-form-app
+    This form is configured via the `PROFILE_EXTENSION_FORM` Django setting
+
+    Args:
+        *args: Variable length argument list passed to the form's __init__ method.
+        **kwargs: Arbitrary keyword arguments passed to the form's __init__ method.
 
     Returns:
-        Form instance or None if no form is configured
+        forms.Form | None: An initialized form instance, or None if the setting
+        is not configured or the form fails to load.
+
+    References:
+        An example form app for this can be found at:
+        http://github.com/open-craft/custom-form-app
     """
     setting_value = getattr(settings, "PROFILE_EXTENSION_FORM", None)
 
@@ -341,20 +349,20 @@ def get_registration_extension_form(*args, **kwargs) -> forms.Form | None:
         return None
 
 
-def get_extended_profile_model() -> type[Model] | None:
+def get_profile_extension_model() -> type[Model] | None:
     """
-    Get the model class for the extended profile form.
+    Get the model class associated with the custom profile extension form.
 
-    Returns the Django model class associated with the form specified in
-    the `PROFILE_EXTENSION_FORM` setting.
+    This extracts the model from the Meta class of the form specified in
+    the `PROFILE_EXTENSION_FORM` Django setting.
 
     Returns:
-        type[Model] | None: The model class if PROFILE_EXTENSION_FORM is configured
-            and valid, None otherwise.
+        type[Model] | None: The Django model class if the setting is configured
+        and valid, None otherwise.
 
     Examples:
-        # In settings.py: PROFILE_EXTENSION_FORM = 'myapp.forms.ExtendedProfileForm'
-        model_class = get_extended_profile_model()  # Returns the model
+        # In settings.py: PROFILE_EXTENSION_FORM = 'myapp.forms.ExtensionForm'
+        model_class = get_profile_extension_model()
     """
     setting_value = getattr(settings, "PROFILE_EXTENSION_FORM", None)
 
@@ -453,7 +461,7 @@ class RegistrationFormFactory:
             handler = getattr(self, f"_add_{field_name}_field")
             self.field_handlers[field_name] = handler
 
-        custom_form = get_registration_extension_form()
+        custom_form = get_profile_extension_form()
         if custom_form:
             custom_form_field_names = [field_name for field_name, field in custom_form.fields.items()]
             valid_fields.extend(custom_form_field_names)
@@ -546,7 +554,7 @@ class RegistrationFormFactory:
         self._apply_third_party_auth_overrides(request, form_desc)
 
         # Custom form fields can be added via the form set in settings.PROFILE_EXTENSION_FORM
-        custom_form = get_registration_extension_form()
+        custom_form = get_profile_extension_form()
         if custom_form:
             custom_form_field_names = [field_name for field_name, field in custom_form.fields.items()]
         else:
