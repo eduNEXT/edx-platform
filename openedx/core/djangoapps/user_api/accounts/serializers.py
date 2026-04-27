@@ -613,7 +613,7 @@ def get_extended_profile(user_profile: UserProfile) -> list[dict[str, str]]:
                 model_data = model_to_dict(profile_obj)
                 # Model fields take precedence. Meta fills in any field absent from the model.
                 return {**meta_data, **model_data}
-            except extended_profile_model.DoesNotExist:
+            except ObjectDoesNotExist:
                 pass
 
         return meta_data
