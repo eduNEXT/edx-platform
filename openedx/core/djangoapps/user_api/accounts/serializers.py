@@ -577,18 +577,19 @@ def get_extended_profile(user_profile: UserProfile) -> list[dict[str, str]]:
 
     This function extracts custom profile fields that extend beyond the standard
     UserProfile model. It prefers data from a custom extended profile model
-    (when configured), and only uses the `user_profile.meta` JSON field when
-    no such model is configured. The returned data is filtered to include only
-    fields specified in the `extended_profile_fields` site configuration.
+    (when configured), falling back to the `user_profile.meta` JSON field for
+    any field not present in the model (or when the user has no model record yet).
 
-    The function supports two data sources:
+    The returned data is filtered to include only fields specified in the
+    `extended_profile_fields` site configuration.
+
+    The function supports two data sources (applied per field):
     1. Custom model: If the `PROFILE_EXTENSION_FORM` setting points to a form with a
-        `Meta.model`, data is retrieved from that model using `model_to_dict()`. If a
-        model is configured but the user does not yet have a corresponding record,
-        this function returns an empty mapping for extended profile fields (it does
-        not fall back to `user_profile.meta` in that case).
-    2. Fallback: JSON data stored in `UserProfile.meta` field, used only when no
-        custom extended profile model is configured.
+        `Meta.model`, data is retrieved from that model using `model_to_dict()`.
+        Fields not present in the model, or fields when the user has no model record,
+        fall back to `user_profile.meta`.
+    2. Fallback: JSON data stored in `UserProfile.meta` field, used when no custom
+        extended profile model is configured or when the model lacks a given field.
 
     Args:
         user_profile (UserProfile): The user profile instance to get extended fields from.
@@ -596,23 +597,26 @@ def get_extended_profile(user_profile: UserProfile) -> list[dict[str, str]]:
     Returns:
         list[dict[str, str]]: A list of dictionaries, each containing:
             - field_name: The name of the extended profile field
-            - field_value: The value of the field (converted to string)
+            - field_value: The value of the field
     """
 
     def get_extended_profile_data():
-        extended_profile_model = get_profile_extension_model()
+        try:
+            meta_data = json.loads(user_profile.meta or "{}")
+        except (ValueError, TypeError, AttributeError):
+            meta_data = {}
 
+        extended_profile_model = get_profile_extension_model()
         if extended_profile_model:
             try:
                 profile_obj = extended_profile_model.objects.get(user=user_profile.user)
-                return model_to_dict(profile_obj)
+                model_data = model_to_dict(profile_obj)
+                # Model fields take precedence. Meta fills in any field absent from the model.
+                return {**meta_data, **model_data}
             except extended_profile_model.DoesNotExist:
-                return {}
+                pass
 
-        try:
-            return json.loads(user_profile.meta or "{}")
-        except (ValueError, TypeError, AttributeError):
-            return {}
+        return meta_data
 
     data = get_extended_profile_data()
     field_names = configuration_helpers.get_value("extended_profile_fields", [])
