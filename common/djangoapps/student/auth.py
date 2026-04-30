@@ -11,7 +11,11 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from opaque_keys.edx.locator import LibraryLocator
 from openedx_authz import api as authz_api
-from openedx_authz.constants.permissions import COURSES_CREATE_COURSE, COURSES_MANAGE_ADVANCED_SETTINGS, COURSES_VIEW_ADVANCED_SETTINGS
+from openedx_authz.constants.permissions import (
+    COURSES_CREATE_COURSE,
+    COURSES_MANAGE_ADVANCED_SETTINGS,
+    COURSES_VIEW_ADVANCED_SETTINGS,
+)
 
 from common.djangoapps.student.roles import (
     CourseBetaTesterRole,
@@ -197,12 +201,11 @@ def check_course_advanced_settings_access(user, course_key, access_type='read'):
             - 'read': granted to users with MANAGE or VIEW permission (auditors get read-only);
               in legacy mode delegates to has_studio_read_access
             - 'write': requires MANAGE permission; in legacy mode delegates to has_studio_write_access
-            - 'feature_restricted': requires MANAGE permission (or staff/superuser when 
+            - 'feature_restricted': requires MANAGE permission (or staff/superuser when
               DISABLE_ADVANCED_SETTINGS is set); in legacy mode delegates to
               has_studio_advanced_settings_access
     Returns:
         bool: True if user has permission, False otherwise
-    
     Raises
         ValueError: If access_type is not one of 'read', 'write', or 'feature_restricted'.
     """
