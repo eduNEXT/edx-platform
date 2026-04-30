@@ -121,14 +121,22 @@ class CourseMetadataViewTest(SharedModuleStoreTestCase, MasqueradeMixin):
             course_id = str(self.course_key)
         return reverse('instructor_api_v2:course_metadata', kwargs={'course_id': course_id})
 
-    @override_settings(COURSE_AUTHORING_MICROFRONTEND_URL='http://localhost:2001/authoring')
-    @override_settings(ADMIN_CONSOLE_MICROFRONTEND_URL='http://localhost:2025/admin-console')
+    @override_settings(
+        COURSE_AUTHORING_MICROFRONTEND_URL='http://localhost:2001/authoring',
+        ADMIN_CONSOLE_MICROFRONTEND_URL='http://localhost:2025/admin-console',
+        # intentionally include trailing slash to test URL joining logic
+        WRITABLE_GRADEBOOK_URL='http://localhost:1994/gradebook/',
+    )
     def test_get_course_metadata_as_instructor(self):
         """
         Test that an instructor can retrieve comprehensive course metadata.
         """
-        self.client.force_authenticate(user=self.instructor)
-        response = self.client.get(self._get_url())
+        with patch(
+            'lms.djangoapps.instructor.views.serializers_v2.is_writable_gradebook_enabled',
+            return_value=True,
+        ):
+            self.client.force_authenticate(user=self.instructor)
+            response = self.client.get(self._get_url())
 
         assert response.status_code == status.HTTP_200_OK
         data = response.data
@@ -178,12 +186,14 @@ class CourseMetadataViewTest(SharedModuleStoreTestCase, MasqueradeMixin):
         assert 'analytics_dashboard_message' in data
         assert 'studio_grading_url' in data
         assert 'admin_console_url' in data
+        assert 'gradebook_url' in data
 
         # Verify current user's username is returned
         assert data['username'] == self.instructor.username
 
         assert data['studio_grading_url'] == f'http://localhost:2001/authoring/course/{self.course.id}/settings/grading'
         assert data['admin_console_url'] == 'http://localhost:2025/admin-console/authz'
+        assert data['gradebook_url'] == f'http://localhost:1994/gradebook/{self.course.id}'
 
     @override_settings(ADMIN_CONSOLE_MICROFRONTEND_URL='http://localhost:2025/admin-console')
     def test_admin_console_url_requires_instructor_access(self):
