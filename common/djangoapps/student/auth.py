@@ -11,7 +11,7 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from opaque_keys.edx.locator import LibraryLocator
 from openedx_authz import api as authz_api
-from openedx_authz.constants.permissions import COURSES_CREATE_COURSE, COURSES_MANAGE_ADVANCED_SETTINGS
+from openedx_authz.constants.permissions import COURSES_CREATE_COURSE, COURSES_MANAGE_ADVANCED_SETTINGS, COURSES_VIEW_ADVANCED_SETTINGS
 
 from common.djangoapps.student.roles import (
     CourseBetaTesterRole,
@@ -187,40 +187,57 @@ def check_course_advanced_settings_access(user, course_key, access_type='read'):
     Uses openedx-authz when AUTHZ_COURSE_AUTHORING_FLAG is enabled,
     otherwise falls back to legacy permission checks.
 
-    If the DISABLE_ADVANCED_SETTINGS feature flag is on, then authz will not be used for the
-    permission check.
+    When DISABLE_ADVANCED_SETTINGS is enabled, only the 'feature_restricted' access type
+    bypasses authz (staff/superuser only); 'read' and 'write' still go through authz normally.
 
     Args:
         user: Django user object
         course_key: CourseKey for the course
         access_type: Type of access to check. Options:
-            - 'read': Check studio read access (default)
-            - 'write': Check studio write access
-            - 'feature_restricted': Check access based on the DISABLE_ADVANCED_SETTINGS feature
-
+            - 'read': granted to users with MANAGE or VIEW permission (auditors get read-only);
+              in legacy mode delegates to has_studio_read_access
+            - 'write': requires MANAGE permission; in legacy mode delegates to has_studio_write_access
+            - 'feature_restricted': requires MANAGE permission (or staff/superuser when 
+              DISABLE_ADVANCED_SETTINGS is set); in legacy mode delegates to
+              has_studio_advanced_settings_access
     Returns:
         bool: True if user has permission, False otherwise
+    
+    Raises
+        ValueError: If access_type is not one of 'read', 'write', or 'feature_restricted'.
     """
-    if core_toggles.AUTHZ_COURSE_AUTHORING_FLAG.is_enabled(course_key):
-        # For feature_restricted access type, check DISABLE_ADVANCED_SETTINGS feature
-        if (
-            access_type == 'feature_restricted'
-            and settings.FEATURES.get('DISABLE_ADVANCED_SETTINGS', False)
-        ):
-            # When feature is disabled, only staff/superuser can access (bypass authz)
-            return user.is_staff or user.is_superuser
-        # Otherwise check authz permission
-        return authz_api.is_user_allowed(user.username, COURSES_MANAGE_ADVANCED_SETTINGS.identifier, str(course_key))
+    if access_type not in ('read', 'write', 'feature_restricted'):
+        raise ValueError(f"Invalid access_type: {access_type!r}")
 
-    # Legacy permission checks
-    if access_type == 'read':
-        return has_studio_read_access(user, course_key)
-    if access_type == 'feature_restricted':
-        return has_studio_advanced_settings_access(user)
-    if access_type == 'write':
+    if not core_toggles.AUTHZ_COURSE_AUTHORING_FLAG.is_enabled(course_key):
+        if access_type == 'read':
+            return has_studio_read_access(user, course_key)
+        if access_type == 'feature_restricted':
+            return has_studio_advanced_settings_access(user)
         return has_studio_write_access(user, course_key)
 
-    raise ValueError(f"Invalid access_type: {access_type}")
+    # Feature flag override: when DISABLE_ADVANCED_SETTINGS is enabled,
+    # only staff/superuser can access regardless of authz permissions
+    if access_type == 'feature_restricted' and settings.FEATURES.get('DISABLE_ADVANCED_SETTINGS', False):
+        return user.is_staff or user.is_superuser
+
+    # MANAGE satisfies all access types. Check it first for all three cases.
+    if authz_api.is_user_allowed(
+        user.username,
+        COURSES_MANAGE_ADVANCED_SETTINGS.identifier,
+        str(course_key),
+    ):
+        return True
+
+    # Only 'read' falls back to VIEW (auditor access); 'write' and 'feature_restricted' require MANAGE.
+    if access_type == 'read':
+        return authz_api.is_user_allowed(
+            user.username,
+            COURSES_VIEW_ADVANCED_SETTINGS.identifier,
+            str(course_key),
+        )
+
+    return False
 
 
 def is_content_creator(user, org):
@@ -231,19 +248,9 @@ def is_content_creator(user, org):
     state of the AuthZ feature flag, it delegates the evaluation to either the AuthZ-based
     RBAC system or the legacy role-based permission system.
 
-    Args:
-        user (User): The user whose permissions are being evaluated.
-        org (str): The organization identifier used as the permission scope.
-
-    Returns:
-        bool: True if the user has permission to create course content in the given
-        organization, False otherwise.
-
-    Notes:
-        - When AuthZ is enabled, this checks permissions via RBAC policies.
-        - When AuthZ is disabled, this falls back to legacy Django role checks.
-        - Course creation may still be blocked by global feature flags (e.g.,
-          DISABLE_COURSE_CREATION), which are enforced downstream.
+    :param user: The user whose permissions are being evaluated.
+    :param org: The organization identifier used as the permission scope.
+    :returns: True if the user has permission to create course content in the given org.
     """
     if core_toggles.AUTHZ_COURSE_AUTHORING_FLAG.is_enabled():
         return _has_content_creator_access(user, org)
@@ -268,11 +275,7 @@ def _has_content_creator_access(user, org):
 
 def _has_legacy_content_creator_access(user, org):
     """
-    Check if the user has the role to create content.
-
-    This function checks if the User has role to create content
-    or if the org is supplied, it checks for Org level course content
-    creator.
+    Check legacy role-based content creator access for the given user and org.
     """
     return (user_has_role(user, CourseCreatorRole()) or
             user_has_role(user, OrgContentCreatorRole(org=org)))
