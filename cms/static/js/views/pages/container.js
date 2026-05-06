@@ -191,7 +191,9 @@ function($, _, Backbone, gettext, BasePage,
                         xblockWrapper.addClass('is-selected');
                         break;
                     default:
-                        console.warn('Unhandled message type:', data.type);
+                        if (data.type) {
+                            console.warn('Unhandled message type:', data.type);
+                        }
                     }
                 });
             }

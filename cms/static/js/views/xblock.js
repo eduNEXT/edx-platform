@@ -58,7 +58,7 @@ function($, _, ViewUtils, BaseView, XBlock, HtmlUtils) {
                 aside;
 
             fragmentsRendered = this.renderXBlockFragment(fragment, wrapper);
-            fragmentsRendered.always(function() {
+            fragmentsRendered.done(function() {
                 xblockElement = self.$('.xblock').first();
                 try {
                     xblock = XBlock.initializeBlock(xblockElement);
@@ -180,13 +180,16 @@ function($, _, ViewUtils, BaseView, XBlock, HtmlUtils) {
             var self = this,
                 applyResource,
                 numResources,
-                deferred;
+                deferred,
+                failedJs = false;
             numResources = resources.length;
             deferred = $.Deferred();
             applyResource = function(index) {
                 var hash, resource, value, promise;
                 if (index >= numResources) {
-                    deferred.resolve();
+                    deferred.resolve({
+                        failedJs: failedJs
+                    });
                     return;
                 }
                 value = resources[index];
@@ -194,6 +197,19 @@ function($, _, ViewUtils, BaseView, XBlock, HtmlUtils) {
                 if (!window.loadedXBlockResources) {
                     window.loadedXBlockResources = [];
                 }
+                if (!window.failedXBlockResources) {
+                    window.failedXBlockResources = [];
+                }
+                // A JS resource that previously failed (e.g., blocked by an extension):
+                // mark failedJs so the specific XBlock that needs it gets skipped,
+                // but continue loading the rest of the fragment's resources so that
+                // other XBlocks in the same fragment are not affected.
+                if (_.indexOf(window.failedXBlockResources, hash) >= 0) {
+                    failedJs = true;
+                    applyResource(index + 1);
+                    return;
+                }
+
                 if (_.indexOf(window.loadedXBlockResources, hash) < 0) {
                     resource = value[1];
                     promise = self.loadResource(resource);
@@ -201,8 +217,24 @@ function($, _, ViewUtils, BaseView, XBlock, HtmlUtils) {
                     promise.done(function() {
                         applyResource(index + 1);
                     }).fail(function() {
-                        deferred.reject();
+                        console.warn(
+                            'Failed to load XBlock resource:',
+                            resource.data || resource.kind
+                        );
+
+                        if (resource.mimetype === 'application/javascript') {
+                            failedJs = true;
+
+                            // Remember this hash so subsequent fragments that reference
+                            // the same resource skip it without a network round-trip.
+                            window.failedXBlockResources.push(hash);
+                        }
+
+                        // Always continue — other resources in this fragment may belong
+                        // to unrelated XBlocks and must still be loaded.
+                        applyResource(index + 1);
                     });
+
                 } else {
                     applyResource(index + 1);
                 }
@@ -235,7 +267,20 @@ function($, _, ViewUtils, BaseView, XBlock, HtmlUtils) {
                     // xss-lint: disable=javascript-jquery-append,javascript-concat-html
                     $head.append('<script>' + data + '</script>');
                 } else if (kind === 'url') {
-                    return ViewUtils.loadJavaScript(data);
+                    // Use a raw <script> tag instead of ViewUtils.loadJavaScript because
+                    // the underlying $script (scriptjs) library invokes its callback on
+                    // both onload AND onerror, making it impossible to detect blocked
+                    // resources (e.g. from browser extensions). A raw tag fires onerror
+                    // only on genuine network failure, letting addXBlockFragmentResources
+                    // track failedJs correctly.
+                    var scriptDeferred = $.Deferred();
+                    var scriptEl = document.createElement('script');
+                    scriptEl.type = 'text/javascript';
+                    scriptEl.src = data;
+                    scriptEl.onload = function() { scriptDeferred.resolve(); };
+                    scriptEl.onerror = function() { scriptDeferred.reject(); };
+                    $head[0].appendChild(scriptEl);
+                    return scriptDeferred.promise();
                 }
             } else if (mimetype === 'text/html') {
                 if (placement === 'head') {

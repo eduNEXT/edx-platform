@@ -61,6 +61,13 @@
             block = (function() {
                 var initFn = window[$element.data('init')];
 
+                // initFn can be undefined when its JS was blocked (e.g. by an ad-blocker).
+                // Return null so the caller can fall back gracefully instead of crashing.
+                if (!initFn) {
+                    console.warn('XBlock init function not found:', $element.data('init'));
+                    return null;
+                }
+
                 // This create a new constructor that can then apply() the block_args
                 // to the initFn.
                 function Block() {
@@ -70,6 +77,14 @@
 
                 return new Block();
             }());
+
+            if (!block) {
+                $element.trigger('xblock-initialized');
+                $element.data('initialized', true);
+                $element.addClass('xblock-initialized xblock-initialization-failed');
+                return {element: element, name: $element.data('name'), type: $element.data('block-type')};
+            }
+
             block.runtime = runtime;
         } else {
             block = {};
