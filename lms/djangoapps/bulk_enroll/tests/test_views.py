@@ -549,7 +549,7 @@ class BulkEnrollmentTest(ModuleStoreTestCase, LoginEnrollmentTestCase, APITestCa
                                 "cohort": 'cohort2',
                             },
                             "success": True,
-                            "state_transition": ENROLLED_TO_ENROLLED,
+                            "state_transition": ENROLLED_TO_UNENROLLED,
                         }
                     ]
                 }
@@ -649,7 +649,7 @@ class BulkEnrollmentTest(ModuleStoreTestCase, LoginEnrollmentTestCase, APITestCa
                                 "cohort": 'cohort1',
                             },
                             "success": True,
-                            "state_transition": ENROLLED_TO_ENROLLED,
+                            "state_transition": ENROLLED_TO_UNENROLLED,
                         }
                     ]
                 }
