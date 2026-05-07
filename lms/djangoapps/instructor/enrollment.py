@@ -12,7 +12,7 @@ from datetime import datetime
 import pytz
 from crum import get_current_request
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User  # pylint: disable=imported-auth-user
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.urls import reverse
