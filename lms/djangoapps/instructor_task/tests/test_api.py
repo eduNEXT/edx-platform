@@ -563,6 +563,7 @@ class SubmitStudentEnrollmentBatchTests(InstructorTaskCourseTestCase):
             "email_students": False,
             "reason": "test",
             "secure": True,
+            "site_id": None,
         }
 
         result = submit_student_enrollment_batch(
