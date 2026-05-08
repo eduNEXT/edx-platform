@@ -622,6 +622,7 @@ def submit_student_enrollment_batch(
     email_students: bool,
     reason: str | None,
     secure: bool,
+    site_id: int | None = None,
 ):
     """
     Request to have student enrollment operations processed as a background task.
@@ -638,6 +639,7 @@ def submit_student_enrollment_batch(
         email_students (bool): Whether to send enrollment emails
         reason (str | None): Optional reason for enrollment change
         secure (bool): Whether the request is secure (HTTPS)
+        site_id (int | None): Optional site ID for notification emails
 
     Returns:
         InstructorTask object representing the submitted background task
@@ -655,6 +657,7 @@ def submit_student_enrollment_batch(
         "email_students": email_students,
         "reason": reason,
         "secure": secure,
+        "site_id": site_id,
     }
 
     task_key_stub = f"{course_key}_{action}_{json.dumps(sorted(identifiers))}"

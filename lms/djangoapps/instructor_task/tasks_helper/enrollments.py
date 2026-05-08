@@ -148,6 +148,7 @@ def process_student_enrollment_batch(
             - email_students: boolean to send enrollment emails
             - reason: optional reason for enrollment change
             - secure: boolean indicating if request was secure (HTTPS)
+            - site_id: optional site ID for notification emails
         action_name: Name of the action being performed
 
     Returns:

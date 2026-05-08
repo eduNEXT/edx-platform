@@ -27,13 +27,23 @@ from openedx.core.lib.courses import get_course_by_id
 TASK_LOG = logging.getLogger("edx.celery.task")
 
 
-def _get_current_site() -> Site | None:
+def _get_current_site(site_id: int | None = None) -> Site | None:
     """
     Get the current Django Site instance with fallback logic.
+
+    Args:
+        site_id (int | None): Optional site ID to retrieve. If provided, attempts
+            to get this specific site first before falling back.
 
     Returns:
         Site | None: The current Site object or None if unavailable
     """
+    if site_id:
+        try:
+            return Site.objects.get(id=site_id)
+        except Site.DoesNotExist:
+            pass
+
     # Try to get current site if method exists
     if hasattr(Site.objects, "get_current"):
         site = Site.objects.get_current()
@@ -46,7 +56,6 @@ def _get_current_site() -> Site | None:
     except Site.DoesNotExist:
         pass
 
-    # Last resort: get first site
     try:
         return Site.objects.first()
     except Exception:  # pylint: disable=broad-except
@@ -144,11 +153,12 @@ def send_enrollment_task_completion_email(
             - failed: Number of failed operations
     """
     requester = instructor_task.requester
-    site = _get_current_site()
     task_input = _parse_task_input(instructor_task)
+
+    site_id = task_input.get("site_id")
+    site = _get_current_site(site_id)
     user_language = get_user_preference(requester, LANGUAGE_KEY)
 
-    # Build email context
     user_context = _build_enrollment_email_context(
         course_key=course_key,
         requester=requester,
@@ -158,7 +168,6 @@ def send_enrollment_task_completion_email(
         task_input=task_input,
     )
 
-    # Create and send message
     message = BatchEnrollment().personalize(
         recipient=Recipient(lms_user_id=requester.id, email_address=requester.email),
         language=user_language,

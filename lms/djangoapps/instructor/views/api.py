@@ -123,6 +123,7 @@ from openedx.core.djangoapps.course_groups.cohorts import add_user_to_cohort, ge
 from openedx.core.djangoapps.course_groups.models import CourseUserGroup
 from openedx.core.djangoapps.django_comment_common.models import CourseDiscussionSettings, Role
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from openedx.core.djangoapps.theming.helpers import get_current_site
 from openedx.core.djangoapps.user_api.preferences.api import get_user_preference
 from openedx.core.djangolib.markup import HTML, Text
 from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiveUser
@@ -779,6 +780,9 @@ class StudentsUpdateEnrollmentView(DeveloperErrorViewMixin, APIView):
 
         course_key = CourseKey.from_string(course_id)
 
+        site = get_current_site()
+        site_id = site.id if site else None
+
         if async_processing:
 
             try:
@@ -791,6 +795,7 @@ class StudentsUpdateEnrollmentView(DeveloperErrorViewMixin, APIView):
                     email_students=email_students,
                     reason=reason,
                     secure=secure,
+                    site_id=site_id,
                 )
 
                 return {
