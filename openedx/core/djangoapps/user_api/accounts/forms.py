@@ -11,8 +11,8 @@ from django.utils.translation import gettext as _
 from common.djangoapps.student.models import User
 from openedx.core.djangoapps.user_api.accounts.utils import handle_retirement_cancellation
 from openedx.core.djangoapps.user_authn.views.registration_form import (
-    get_profile_extension_model,
     get_profile_extension_form,
+    get_profile_extension_model,
 )
 
 logger = logging.getLogger(__name__)

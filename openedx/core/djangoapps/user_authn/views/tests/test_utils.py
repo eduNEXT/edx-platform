@@ -11,8 +11,8 @@ from django.test import TestCase
 from django.test.utils import override_settings
 
 from openedx.core.djangoapps.user_authn.views.registration_form import (
-    get_profile_extension_model,
     get_profile_extension_form,
+    get_profile_extension_model,
 )
 from openedx.core.djangoapps.user_authn.views.utils import _get_username_prefix, get_auto_generated_username
 
