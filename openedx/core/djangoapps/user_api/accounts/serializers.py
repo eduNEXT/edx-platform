@@ -606,10 +606,10 @@ def get_extended_profile(user_profile: UserProfile) -> list[dict[str, str]]:
         except (ValueError, TypeError, AttributeError):
             meta_data = {}
 
-        extended_profile_model = get_profile_extension_model()
-        if extended_profile_model:
+        profile_extension_model = get_profile_extension_model()
+        if profile_extension_model:
             try:
-                profile_obj = extended_profile_model.objects.get(user=user_profile.user)
+                profile_obj = profile_extension_model.objects.get(user=user_profile.user)
                 model_data = model_to_dict(profile_obj)
                 # Model fields take precedence. Meta fills in any field absent from the model.
                 return {**meta_data, **model_data}
