@@ -113,7 +113,7 @@ class TestGetExtendedProfileForm(TestCase):
         super().setUp()
         self.user = UserFactory.create()
 
-    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model")
+    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_model")
     def test_get_extended_profile_form_no_model_configured(self, mock_get_model: Mock):
         """
         Test when no extended profile model is configured
@@ -126,7 +126,7 @@ class TestGetExtendedProfileForm(TestCase):
         self.assertIsNone(form)  # noqa: PT009
         self.assertEqual(errors, {})  # noqa: PT009
 
-    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model")
+    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_model")
     def test_get_extended_profile_form_model_has_no_objects(self, mock_get_model: Mock):
         """
         Test when model doesn't have objects attribute (AttributeError)
@@ -141,7 +141,7 @@ class TestGetExtendedProfileForm(TestCase):
         self.assertEqual(errors, {})  # noqa: PT009
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_form")
-    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model")
+    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_model")
     def test_get_extended_profile_form_with_existing_instance(self, mock_get_model: Mock, mock_get_form: Mock):
         """
         Test form creation with an existing profile instance
@@ -163,7 +163,7 @@ class TestGetExtendedProfileForm(TestCase):
         mock_get_form.assert_called_once_with(data=extended_profile_fields_data, instance=mock_instance)
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_form")
-    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model")
+    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_model")
     def test_get_extended_profile_form_without_existing_instance(self, mock_get_model: Mock, mock_get_form: Mock):
         """
         Test form creation for a new profile (no existing instance)
@@ -185,7 +185,7 @@ class TestGetExtendedProfileForm(TestCase):
         mock_get_form.assert_called_once_with(data=extended_profile_fields_data)
 
     @patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_form")
-    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model")
+    @patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_model")
     def test_get_extended_profile_form_validation_errors(self, mock_get_model: Mock, mock_get_form: Mock):
         """
         Test when form validation fails
@@ -213,7 +213,7 @@ class TestGetExtendedProfileForm(TestCase):
         mock_get_form.return_value = None
         extended_profile_fields_data = {"department": "Engineering"}
 
-        with patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model"):
+        with patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_model"):
             form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
         self.assertIsNone(form)  # noqa: PT009
@@ -227,7 +227,7 @@ class TestGetExtendedProfileForm(TestCase):
         mock_get_form.side_effect = Exception("Unexpected error")
         extended_profile_fields_data = {"department": "Engineering"}
 
-        with patch("openedx.core.djangoapps.user_api.accounts.forms.get_extended_profile_model"):
+        with patch("openedx.core.djangoapps.user_api.accounts.forms.get_profile_extension_model"):
             form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
         self.assertIsNone(form)  # noqa: PT009
