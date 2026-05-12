@@ -11,6 +11,7 @@ from collections.abc import Callable
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.db import transaction
 from django.utils.translation import gettext as _
 from opaque_keys.edx.keys import CourseKey
 
@@ -136,27 +137,32 @@ def process_single_student_enrollment(
     try:
         validate_email(email)  # Raises ValidationError if invalid
 
-        if action == EnrollStatusChange.enroll:
-            before, after, enrollment_obj = enroll_email(
-                course_key, email, auto_enroll, email_students, {**email_params}, language=language
-            )
-            before_state = before.to_dict()
-            after_state = after.to_dict()
-            state_transition = _determine_enroll_state_transition(before_state, after_state)
+        # Wrap enrollment and audit operations in an atomic transaction
+        # to ensure both succeed or both are rolled back
+        with transaction.atomic():
+            if action == EnrollStatusChange.enroll:
+                before, after, enrollment_obj = enroll_email(
+                    course_key, email, auto_enroll, email_students, {**email_params}, language=language
+                )
+                before_state = before.to_dict()
+                after_state = after.to_dict()
+                state_transition = _determine_enroll_state_transition(before_state, after_state)
 
-        elif action == EnrollStatusChange.unenroll:
-            before, after = unenroll_email(
-                course_key, email, email_students, {**email_params}, language=language
-            )
-            before_state = before.to_dict()
-            after_state = after.to_dict()
-            state_transition = _determine_unenroll_state_transition(before_state)
-            enrollment_obj = CourseEnrollment.get_enrollment(identified_user, course_key) if identified_user else None
+            elif action == EnrollStatusChange.unenroll:
+                before, after = unenroll_email(
+                    course_key, email, email_students, {**email_params}, language=language
+                )
+                before_state = before.to_dict()
+                after_state = after.to_dict()
+                state_transition = _determine_unenroll_state_transition(before_state)
+                enrollment_obj = (
+                    CourseEnrollment.get_enrollment(identified_user, course_key) if identified_user else None
+                )
 
-        # Create audit record
-        ManualEnrollmentAudit.create_manual_enrollment_audit(
-            request_user, email, state_transition, reason, enrollment_obj
-        )
+            # Create audit record
+            ManualEnrollmentAudit.create_manual_enrollment_audit(
+                request_user, email, state_transition, reason, enrollment_obj
+            )
 
         return {
             "identifier": identifier,

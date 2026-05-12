@@ -817,10 +817,9 @@ class StudentsUpdateEnrollmentView(DeveloperErrorViewMixin, APIView):
                     "total_students": len(identifiers),
                 }
 
-        with transaction.atomic():
-            return self._process_enrollment_sync(
-                request.user, course_key, action, identifiers, auto_enroll, email_students, reason, secure
-            )
+        return self._process_enrollment_sync(
+            request.user, course_key, action, identifiers, auto_enroll, email_students, reason, secure
+        )
 
     def _process_enrollment_sync(
         self,
