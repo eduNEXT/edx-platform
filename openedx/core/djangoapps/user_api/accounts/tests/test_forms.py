@@ -231,8 +231,8 @@ class TestGetExtendedProfileForm(TestCase):
             form, errors = get_extended_profile_form(extended_profile_fields_data, self.user)
 
         self.assertIsNone(form)  # noqa: PT009
-        self.assertIn("extended_profile", errors)  # noqa: PT009
-        self.assertIn("Error creating custom form", errors["extended_profile"]["developer_message"])  # noqa: PT009
+        self.assertIn("profile_extension", errors)  # noqa: PT009
+        self.assertIn("Error creating custom form", errors["profile_extension"]["developer_message"])  # noqa: PT009
 
 
 class TestValidateAndGetExtendedProfileForm(TestCase):
