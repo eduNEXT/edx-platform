@@ -206,7 +206,7 @@ def check_course_advanced_settings_access(user, course_key, access_type='read'):
               has_studio_advanced_settings_access
     Returns:
         bool: True if user has permission, False otherwise
-    Raises
+    Raises:
         ValueError: If access_type is not one of 'read', 'write', or 'feature_restricted'.
     """
     if access_type not in ('read', 'write', 'feature_restricted'):
@@ -251,9 +251,19 @@ def is_content_creator(user, org):
     state of the AuthZ feature flag, it delegates the evaluation to either the AuthZ-based
     RBAC system or the legacy role-based permission system.
 
-    :param user: The user whose permissions are being evaluated.
-    :param org: The organization identifier used as the permission scope.
-    :returns: True if the user has permission to create course content in the given org.
+    Args:
+        user (User): The user whose permissions are being evaluated.
+        org (str): The organization identifier used as the permission scope.
+
+    Returns:
+        bool: True if the user has permission to create course content in the given
+        organization, False otherwise.
+
+    Notes:
+        - When AuthZ is enabled, this checks permissions via RBAC policies.
+        - When AuthZ is disabled, this falls back to legacy Django role checks.
+        - Course creation may still be blocked by global feature flags (e.g.,
+          DISABLE_COURSE_CREATION), which are enforced downstream.
     """
     if core_toggles.AUTHZ_COURSE_AUTHORING_FLAG.is_enabled():
         return _has_content_creator_access(user, org)
@@ -278,7 +288,11 @@ def _has_content_creator_access(user, org):
 
 def _has_legacy_content_creator_access(user, org):
     """
-    Check legacy role-based content creator access for the given user and org.
+    Check if the user has the role to create content.
+
+    This function checks if the User has role to create content
+    or if the org is supplied, it checks for Org level course content
+    creator.
     """
     return (user_has_role(user, CourseCreatorRole()) or
             user_has_role(user, OrgContentCreatorRole(org=org)))
