@@ -29,7 +29,12 @@ from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 from opaque_keys.edx.locator import BlockUsageLocator
 from openedx_authz.api import get_scopes_for_user_and_permission
-from openedx_authz.api.data import CourseOverviewData, OrgCourseOverviewGlobData, ScopeData
+from openedx_authz.api.data import (
+    CourseOverviewData,
+    OrgCourseOverviewGlobData,
+    PlatformCourseOverviewGlobData,
+    ScopeData,
+)
 from openedx_authz.constants.permissions import (
     COURSES_MANAGE_COURSE_UPDATES,
     COURSES_MANAGE_GROUP_CONFIGURATIONS,
@@ -823,24 +828,60 @@ def _get_course_keys_for_org_scope(org_keys: set[str]):
 
     return CourseOverview.get_all_courses(orgs=org_keys).values_list('id', flat=True)
 
-def _get_course_keys_from_scopes(authz_scopes: list[ScopeData]):
+
+def _get_course_keys_from_platform_scope() -> set[CourseKey]:
     """
-    Convert a set of Authz scopes into specific course keys.
+    Resolve course keys for a platform-wide Authz scope.
+
+    Returns:
+        set[CourseKey]: Course keys on the platform where the AuthZ course
+            authoring feature flag is enabled.
     """
+    return {
+        course_key
+        for course_key in CourseOverview.get_all_courses().values_list("id", flat=True)
+        if core_toggles.enable_authz_course_authoring(course_key)
+    }
+
+
+def _get_course_keys_from_scopes(authz_scopes: list[ScopeData]) -> set[CourseKey]:
+    """
+    Convert authorization scopes into a set of accessible course keys.
+
+    This function processes authorization scopes with the following precedence:
+    1. Platform-wide access (PlatformCourseOverviewGlobData): Returns all courses
+    2. Course-specific access (CourseOverviewData): Returns individual course keys
+    3. Organization-wide access (OrgCourseOverviewGlobData): Returns all courses in specified orgs
+
+    Only courses with the authz course authoring toggle enabled are included.
+
+    Args:
+        authz_scopes: List of authorization scope data objects from the authz system.
+
+    Returns:
+        set[CourseKey]: Set of course keys the user has access to based on their scopes.
+    """
+    if any(isinstance(access, PlatformCourseOverviewGlobData) for access in authz_scopes):
+        return _get_course_keys_from_platform_scope()
+
     course_keys = set()
     org_keys = set()
+
     for access in authz_scopes:
         if isinstance(access, CourseOverviewData) and access.course_key:
             if core_toggles.enable_authz_course_authoring(access.course_key):
                 course_keys.add(access.course_key)
         elif isinstance(access, OrgCourseOverviewGlobData) and access.org:
             org_keys.add(access.org)
+
     if org_keys:
         course_keys.update(
             key for key in _get_course_keys_for_org_scope(org_keys)
             if core_toggles.enable_authz_course_authoring(key)
         )
+
     return course_keys
+
 
 def _get_authz_accessible_courses_list(request):
     """
