@@ -1,10 +1,16 @@
 # pylint: disable=missing-docstring,protected-access
 """ User model wrapper for comment service"""
 
+import logging
+
+from django.db import IntegrityError
+
 from . import models, settings, utils
 from forum import api as forum_api
 from forum.utils import ForumV2RequestError, str_to_bool
 from openedx.core.djangoapps.discussions.config.waffle import is_forum_v2_enabled
+
+log = logging.getLogger(__name__)
 
 
 class User(models.Model):
@@ -286,7 +292,14 @@ class User(models.Model):
     def retire(self, retired_username):
         course_key = utils.get_course_key(self.attributes.get("course_id"))
         if is_forum_v2_enabled(course_key):
-            forum_api.retire_user(user_id=self.id, retired_username=retired_username, course_id=str(course_key))
+            try:
+                forum_api.retire_user(user_id=self.id, retired_username=retired_username, course_id=str(course_key))
+            except ForumV2RequestError:
+                # User has no forum account (never posted), so there is nothing to retire.
+                pass
+            except IntegrityError:
+                # Blank email already exists from a previously retired user. Log and continue.
+                log.warning("Forum retirement for user %s skipped due to duplicate email constraint.", self.id)
         else:
             url = _url_for_retire(self.id)
             params = {'retired_username': retired_username}
