@@ -151,7 +151,7 @@ def is_api(auth_entry):
 AUTH_DISPATCH_URLS = {
     AUTH_ENTRY_LOGIN: '/login',
     AUTH_ENTRY_REGISTER: '/register',
-    AUTH_ENTRY_ACCOUNT_SETTINGS: '/account/settings',
+    AUTH_ENTRY_ACCOUNT_SETTINGS: '/auth/account_settings_error',
 }
 
 _AUTH_ENTRY_CHOICES = frozenset([

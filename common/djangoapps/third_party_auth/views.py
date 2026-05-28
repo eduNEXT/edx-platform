@@ -3,9 +3,11 @@ Extra views required for SSO
 """
 
 import logging
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages import get_messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import DatabaseError
 from django.http import (
@@ -273,3 +275,26 @@ def disconnect_json_view(request, backend, association_id=None):
             'backend': backend,
             'association_id': association_id
         }, status=500)
+
+def account_settings_error_view(request):
+    """
+    Intermediate view that reads Django messages left by the social auth
+    exception middleware and redirects to the Account MFE with the
+    duplicate_provider query parameter so the frontend can render the error.
+    """
+    account_mfe_url = getattr(settings, 'ACCOUNT_MICROFRONTEND_URL', '/account/').rstrip('/')
+    all_messages = list(get_messages(request))
+    duplicate_backend = pipeline.get_duplicate_provider(all_messages)
+
+    if duplicate_backend:
+        # Try to get the human-readable name from the first enabled provider
+        # that uses this backend on the current site.
+        provider_name = duplicate_backend
+        enabled_providers = list(provider.Registry.get_enabled_by_backend_name(duplicate_backend))
+        if enabled_providers:
+            provider_name = enabled_providers[0].name
+
+        params = f"duplicate_provider={quote(provider_name)}"
+        return redirect(f'{account_mfe_url}/?{params}')
+
+    return redirect(f'{account_mfe_url}/?{params}')

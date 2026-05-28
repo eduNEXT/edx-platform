@@ -4,6 +4,7 @@ from django.urls import include, path, re_path
 
 from .views import (
     IdPRedirectView,
+    account_settings_error_view,
     disconnect_json_view,
     inactive_user_view,
     lti_login_and_complete_view,
@@ -24,6 +25,7 @@ urlpatterns = [
         disconnect_json_view,
         name='custom_disconnect_json_individual'
     ),
+    path('auth/account_settings_error', account_settings_error_view, name='tpa_account_settings_error'),
     path('auth/', include('social_django.urls', namespace='social')),
     path('auth/saml/v0/', include('common.djangoapps.third_party_auth.saml_configuration.urls')),
     # NOTE: The following routes under auth/saml/v0/ are registered by the

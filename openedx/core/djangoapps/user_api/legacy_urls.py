@@ -23,7 +23,7 @@ urlpatterns = [
         url=configuration_helpers.get_value(
             'ACCOUNT_MICROFRONTEND_URL',
             settings.ACCOUNT_MICROFRONTEND_URL,
-        )),
+        ), query_string=True,),
     ),
     path('user_api/v1/', include(USER_API_ROUTER.urls)),
     re_path(
