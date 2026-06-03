@@ -9,7 +9,6 @@ from bridgekeeper.rules import Attribute, ManyRelation, Relation, Rule, blanket_
 from django.conf import settings
 from django.db.models import Q
 from openedx_authz import api as authz_api
-from openedx_authz.constants.permissions import VIEW_LIBRARY
 
 from openedx.core.djangoapps.content_libraries.models import ContentLibraryPermission
 
@@ -241,9 +240,7 @@ perms[CAN_VIEW_THIS_CONTENT_LIBRARY] = is_user_active & (
     is_global_staff |
     # Libraries with "public read" permissions can be accessed only by course creators
     (Attribute('allow_public_read', True) & is_course_creator) |
-    # Users can access libraries within their authorized scope (via Casbin/role-based permissions)
-    HasPermissionInContentLibraryScope(VIEW_LIBRARY) |
-    # Fallback to: the user must be part of the library's team (legacy permission system)
+    # User must be part of the library's team (ContentLibraryPermission grants)
     has_explicit_read_permission_for_library
 )
 
