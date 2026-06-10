@@ -297,4 +297,4 @@ def account_settings_error_view(request):
         params = f"duplicate_provider={quote(provider_name)}"
         return redirect(f'{account_mfe_url}/?{params}')
 
-    return redirect(f'{account_mfe_url}/?{params}')
+    return redirect(account_mfe_url)
