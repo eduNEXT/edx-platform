@@ -253,7 +253,7 @@ perms[CAN_VIEW_THIS_CONTENT_LIBRARY] = is_user_active & (
     # Libraries with "public read" permissions can be accessed only by course creators
     (Attribute('allow_public_read', True) & is_course_creator) |
     # Users can access libraries within their authorized scope (via Casbin/role-based permissions)
-    HasPermissionInContentLibraryScope(VIEW_LIBRARY) |
+    # HasPermissionInContentLibraryScope(VIEW_LIBRARY) |
     # Fallback to: the user must be part of the library's team (legacy permission system)
     has_explicit_read_permission_for_library
 )
