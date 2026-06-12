@@ -319,20 +319,24 @@ class RolesTestCase(TestCase):
         with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
             result = get_authz_compat_course_access_roles_for_user(self.student)
 
-        assert result == {
-            AuthzCompatCourseAccessRole(
-                user_id=self.student.id,
-                username=self.student.username,
-                org="OpenedX",
-                course_id=None,
-                role="instructor",
-            )
-        }
+        self.assertCountEqual(  # noqa: PT009
+            result,
+            {
+                AuthzCompatCourseAccessRole(
+                    user_id=self.student.id,
+                    username=self.student.username,
+                    org="OpenedX",
+                    course_id=None,
+                    role="instructor",
+                )
+            },
+        )
 
     def test_org_scope_authz_role_grants_instructor_dashboard_permissions(self):
         """
         Org-wide AuthZ course_admin should grant legacy org instructor access used by the instructor dashboard.
         """
+        # pylint: disable=protected-access
         course_key = CourseKey.from_string("course-v1:OpenedX+DemoX+DemoCourse")
         org_scope = OrgCourseOverviewGlobData(external_key="course-v1:OpenedX+*")
         assignment = RoleAssignmentData(
@@ -343,12 +347,12 @@ class RolesTestCase(TestCase):
         with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
             if hasattr(self.student, "_roles"):
                 del self.student._roles
-            cache = RoleCache(self.student)
+            self.student._roles = RoleCache(self.student)
 
-        assert cache.has_role("instructor", None, "OpenedX")
-        assert OrgInstructorRole("OpenedX").has_user(self.student)
-        assert self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, course_key)
-        assert self.student.has_perm(instructor_permissions.SHOW_TASKS, course_key)
+        self.assertTrue(self.student._roles.has_role("instructor", None, "OpenedX"))  # noqa: PT009
+        self.assertTrue(OrgInstructorRole("OpenedX").has_user(self.student)) # noqa: PT009
+        self.assertTrue(self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, course_key)) # noqa: PT009
+        self.assertTrue(self.student.has_perm(instructor_permissions.SHOW_TASKS, course_key)) # noqa: PT009
 
 
 @ddt.ddt
