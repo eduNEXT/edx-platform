@@ -310,7 +310,7 @@ class RolesTestCase(TestCase):
         """
         Org-wide AuthZ assignments should map to legacy org-level course access roles.
         """
-        org_scope = OrgCourseOverviewGlobData(external_key="course-v1:OpenedX+*")
+        org_scope = OrgCourseOverviewGlobData.build_external_key("OpenedX")
         assignment = RoleAssignmentData(
             subject=UserData(external_key=self.student.username),
             roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
@@ -338,7 +338,7 @@ class RolesTestCase(TestCase):
         """
         # pylint: disable=protected-access
         course_key = CourseKey.from_string("course-v1:OpenedX+DemoX+DemoCourse")
-        org_scope = OrgCourseOverviewGlobData(external_key="course-v1:OpenedX+*")
+        org_scope = OrgCourseOverviewGlobData.build_external_key("OpenedX")
         assignment = RoleAssignmentData(
             subject=UserData(external_key=self.student.username),
             roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
