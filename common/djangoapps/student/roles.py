@@ -141,6 +141,27 @@ class AuthzCompatCourseAccessRole:
     role: str
 
 
+def _get_org_and_course_id_from_authz_scope(
+    scope: CourseOverviewData | OrgCourseOverviewGlobData,
+) -> tuple[str, str | None] | None:
+    """
+    Extract the org and course key from an AuthZ course assignment scope.
+
+    Course-scoped assignments return ``(org, course_external_key)``.
+    Org-wide assignments return ``(org, None)``.
+
+    Returns ``None`` when the org cannot be determined. For org-wide scopes,
+    ``OrgGlobData.org`` is typed as ``str | None`` because it is parsed from
+    ``external_key`` and returns ``None`` for malformed glob patterns.
+    """
+    if isinstance(scope, CourseOverviewData):
+        course_id = scope.external_key
+        return get_org_from_key(course_id), course_id
+    if isinstance(scope, OrgCourseOverviewGlobData):
+        return scope.org, None
+    return None
+
+
 def authz_get_all_course_assignments_for_user(user: User) -> list[RoleAssignmentData]:
     """
     Return AuthZ role assignments for a user that apply to courses.
@@ -182,20 +203,13 @@ def _compat_roles_from_authz_assignment(
 
     Returns:
         set[AuthzCompatCourseAccessRole]: Legacy-compatible role records for the
-            assignment. Returns an empty set if the scope is unsupported, the org
-            is missing for an org-wide assignment, or no roles could be mapped.
+            assignment. Returns an empty set if the org cannot be determined from
+            the scope or no roles could be mapped.
     """
-    scope = assignment.scope
-    if isinstance(scope, CourseOverviewData):
-        course_id = scope.external_key
-        org = get_org_from_key(course_id)
-    elif isinstance(scope, OrgCourseOverviewGlobData):
-        org = scope.org
-        if not org:
-            return set()
-        course_id = None
-    else:
+    org_and_course_id = _get_org_and_course_id_from_authz_scope(assignment.scope)
+    if org_and_course_id is None:
         return set()
+    org, course_id = org_and_course_id
 
     compat_roles = set()
     for role in assignment.roles:
