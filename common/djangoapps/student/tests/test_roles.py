@@ -16,6 +16,7 @@ from openedx_authz.api.data import (
     OrgCourseOverviewGlobData,
     RoleAssignmentData,
     RoleData,
+    ScopeData,
     UserData,
 )
 from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_STAFF
@@ -310,11 +311,12 @@ class RolesTestCase(TestCase):
         """
         Org-wide AuthZ assignments should map to legacy org-level course access roles.
         """
-        org_scope = OrgCourseOverviewGlobData.build_external_key("OpenedX")
         assignment = RoleAssignmentData(
             subject=UserData(external_key=self.student.username),
             roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
-            scope=org_scope,
+            scope=ScopeData(
+                external_key=OrgCourseOverviewGlobData.build_external_key("OpenedX"),
+            ),
         )
         with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
             result = get_authz_compat_course_access_roles_for_user(self.student)
@@ -338,11 +340,12 @@ class RolesTestCase(TestCase):
         """
         # pylint: disable=protected-access
         course_key = CourseKey.from_string("course-v1:OpenedX+DemoX+DemoCourse")
-        org_scope = OrgCourseOverviewGlobData.build_external_key("OpenedX")
         assignment = RoleAssignmentData(
             subject=UserData(external_key=self.student.username),
             roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
-            scope=org_scope,
+            scope=ScopeData(
+                external_key=OrgCourseOverviewGlobData.build_external_key("OpenedX"),
+            ),
         )
         with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
             if hasattr(self.student, "_roles"):
@@ -350,9 +353,9 @@ class RolesTestCase(TestCase):
             self.student._roles = RoleCache(self.student)
 
         self.assertTrue(self.student._roles.has_role("instructor", None, "OpenedX"))  # noqa: PT009
-        self.assertTrue(OrgInstructorRole("OpenedX").has_user(self.student)) # noqa: PT009
-        self.assertTrue(self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, course_key)) # noqa: PT009
-        self.assertTrue(self.student.has_perm(instructor_permissions.SHOW_TASKS, course_key)) # noqa: PT009
+        self.assertTrue(OrgInstructorRole("OpenedX").has_user(self.student))  # noqa: PT009
+        self.assertTrue(self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, course_key))  # noqa: PT009
+        self.assertTrue(self.student.has_perm(instructor_permissions.SHOW_TASKS, course_key))  # noqa: PT009
 
 
 @ddt.ddt
