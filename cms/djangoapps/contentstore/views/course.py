@@ -930,6 +930,10 @@ def _get_legacy_accessible_courses_list(request: HttpRequest) -> set[CourseKey]:
             an organization
     """
     user = request.user
+    # Query CourseAccessRole directly instead of UserBasedRole.courses_with_role(),
+    # which merges legacy DB records with AuthZ assignments. AuthZ access is resolved
+    # separately in _get_authz_accessible_courses_list(). Exact role names (not
+    # RoleCache inheritance) exclude limited_staff, matching strict_role_checking().
     legacy_accesses = CourseAccessRole.objects.filter(
         user=user,
         role__in=[CourseInstructorRole.ROLE, CourseStaffRole.ROLE],
