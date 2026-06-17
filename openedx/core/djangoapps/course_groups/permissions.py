@@ -6,7 +6,7 @@ from opaque_keys.edx.keys import CourseKey
 from rest_framework import permissions
 
 from common.djangoapps.student.roles import GlobalStaff
-from lms.djangoapps.courseware.access import has_access
+from lms.djangoapps.courseware.access import administrative_accesses_to_course_for_user
 from lms.djangoapps.discussion.django_comment_client.utils import get_user_role_names
 from openedx.core.djangoapps.django_comment_common.models import (
     FORUM_ROLE_ADMINISTRATOR,
@@ -34,5 +34,5 @@ class IsStaffOrAdmin(permissions.BasePermission):
                 FORUM_ROLE_COMMUNITY_TA,
             }
         )
-        has_course_team_access = has_access(request.user, "staff", course_key).has_access
-        return has_course_team_access or has_discussion_privileges and request.method == "GET"
+        _, staff_access, instructor_access = administrative_accesses_to_course_for_user(request.user, course_key)
+        return staff_access or instructor_access or (has_discussion_privileges and request.method == "GET")
