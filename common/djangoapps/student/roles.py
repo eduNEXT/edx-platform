@@ -176,12 +176,10 @@ def authz_get_all_course_assignments_for_user(user: User) -> list[RoleAssignment
     Returns:
         list[RoleAssignmentData]: Role assignments whose scope is course-level or org-wide
     """
-    assignments = authz_api.get_user_role_assignments(user_external_key=user.username)
-    return [
-        assignment
-        for assignment in assignments
-        if isinstance(assignment.scope, CourseOverviewData | OrgCourseOverviewGlobData)
-    ]
+    return authz_api.get_user_role_assignments_per_scope_type(
+        user_external_key=user.username,
+        scope_types=(CourseOverviewData, OrgCourseOverviewGlobData),
+    )
 
 
 def _compat_roles_from_authz_assignment(
