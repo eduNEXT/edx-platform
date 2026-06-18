@@ -2084,7 +2084,7 @@ class ContentLibrariesAuthZTestCase(ContentLibrariesRestApiTest):
             all_libs = ContentLibrary.objects.filter(slug__in=["glob-lib1", "glob-lib2"])
             filtered = perms[CAN_VIEW_THIS_CONTENT_LIBRARY].filter(user, all_libs).distinct()
 
-            self.assertEqual(filtered.count(), 2)  # noqa: PT009
+            assert filtered.count() == 2
 
     def test_authz_scope_org_glob_filters_by_org(self):
         """
@@ -2111,9 +2111,9 @@ class ContentLibrariesAuthZTestCase(ContentLibrariesRestApiTest):
             )
             filtered = perms[CAN_VIEW_THIS_CONTENT_LIBRARY].filter(user, all_libs).distinct()
 
-            self.assertEqual(filtered.count(), 2)  # noqa: PT009
+            assert filtered.count() == 2
             slugs = set(filtered.values_list("slug", flat=True))
-            self.assertEqual(slugs, {"org-glob-lib1", "org-glob-lib2"})  # noqa: PT009
+            assert slugs == {"org-glob-lib1", "org-glob-lib2"}
 
     def test_authz_scope_q_object_has_correct_structure(self):
         """
