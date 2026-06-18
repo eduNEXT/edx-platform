@@ -436,6 +436,7 @@ class TestCourseListingAuthz(CourseAuthoringAuthzTestMixin, ModuleStoreTestCase)
         return CourseOverviewFactory.create(id=course.id, org=course_key.org)
 
     def _mock_authz_toggle(self, enabled_keys, global_enabled=False):
+        """Return a mock is_enabled side effect for AUTHZ_COURSE_AUTHORING_FLAG."""
         def _is_enabled(course_key=None, **_):
             if course_key is None:
                 return global_enabled
