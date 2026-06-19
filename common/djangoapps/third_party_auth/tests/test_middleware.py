@@ -51,6 +51,7 @@ class ThirdPartyAuthMiddlewareTestCase(TestCase):
         assert response.status_code == 302
         assert target_url.endswith(login_url)
 
+
 @ddt.ddt
 class TPAErrorSessionTestCase(TestCase):
     """
@@ -60,12 +61,16 @@ class TPAErrorSessionTestCase(TestCase):
     """
 
     def _build_request(self, exception, auth_entry=pipeline.AUTH_ENTRY_ACCOUNT_SETTINGS):
+        """
+        Build a fake request with session and backend for testing TPA error handling.
+        """
         request = RequestFactory().get('/auth/login/tpa-saml/')
         request.session = {}
         request.session[pipeline.AUTH_ENTRY_KEY] = auth_entry
 
         class FakeBackend:
             name = 'tpa-saml'
+
         request.backend = FakeBackend()
         request.social_strategy = mock.MagicMock()
         request.social_strategy.setting.return_value = None
@@ -85,12 +90,14 @@ class TPAErrorSessionTestCase(TestCase):
     )
     @ddt.unpack
     def test_recognized_exception_saves_error_code_in_session(self, exception_class, expected_code):
+        """Verify known exceptions store correct error codes in session."""
         request = self._build_request(exception_class('tpa-saml'))
 
         assert request.session.get(TPA_ERROR_CODE_SESSION_KEY) == expected_code
         assert request.session.get(TPA_ERROR_BACKEND_SESSION_KEY) == 'tpa-saml'
 
     def test_unrecognized_exception_does_not_touch_session(self):
+        """Verify unknown exceptions do not modify session."""
         request = self._build_request(social_exceptions.InvalidEmail('tpa-saml'))
 
         assert TPA_ERROR_CODE_SESSION_KEY not in request.session

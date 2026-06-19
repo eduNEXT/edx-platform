@@ -19,6 +19,7 @@ class AccountSettingsRedirectViewTests(TestCase):
     """
 
     def _build_request(self, error_code=None, backend_name=None):
+        """Build a fake request with optional TPA error session data."""
         request = RequestFactory().get('/account/settings')
         request.session = {}
         if error_code:
@@ -28,6 +29,7 @@ class AccountSettingsRedirectViewTests(TestCase):
         return request
 
     def test_redirects_without_params_when_no_error_in_session(self):
+        """Redirect to Account MFE without query params when session has no errors."""
         request = self._build_request()
 
         response = account_settings_redirect_view(request)
@@ -36,6 +38,7 @@ class AccountSettingsRedirectViewTests(TestCase):
         assert response.url == 'https://account.example.com'
 
     def test_redirects_with_duplicate_provider_param(self):
+        """Redirect includes duplicate_provider-specific query param when applicable."""
         request = self._build_request(error_code='duplicate_provider', backend_name='tpa-saml')
 
         response = account_settings_redirect_view(request)
@@ -61,10 +64,7 @@ class AccountSettingsRedirectViewTests(TestCase):
         assert 'duplicate_provider' not in response.url
 
     def test_session_error_keys_are_consumed(self):
-        """
-        The error code and backend name should be popped from the session
-        so a stale error doesn't leak into a later, unrelated request.
-        """
+        """Ensure TPA error session keys are cleared after redirect."""
         request = self._build_request(error_code='duplicate_provider', backend_name='tpa-saml')
 
         account_settings_redirect_view(request)
