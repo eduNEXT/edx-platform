@@ -728,11 +728,10 @@ class TestCourseListingAuthz(CourseAuthoringAuthzTestMixin, ModuleStoreTestCase)
         the AuthZ course authoring toggle is enabled.
         """
         _, _, authz_courses, legacy_courses = self._create_courses()
-        org_scope = OrgCourseOverviewGlobData(external_key='course-v1:Org1+*')
         assign_role_to_user_in_scope(
             self.authorized_user.username,
             COURSE_STAFF.external_key,
-            org_scope.external_key,
+            OrgCourseOverviewGlobData.build_external_key("Org1"),
         )
 
         request = self._make_request(self.authorized_user)
@@ -761,11 +760,10 @@ class TestCourseListingAuthz(CourseAuthoringAuthzTestMixin, ModuleStoreTestCase)
         authz_keys, _, _, _ = self._create_courses()
         # enable only the first and third course keys
         enabled_keys = {str(authz_keys[0]), str(authz_keys[2])}
-        org_scope = OrgCourseOverviewGlobData(external_key='course-v1:Org1+*')
         assign_role_to_user_in_scope(
             self.authorized_user.username,
             COURSE_STAFF.external_key,
-            org_scope.external_key,
+            OrgCourseOverviewGlobData.build_external_key("Org1"),
         )
 
         request = self._make_request(self.authorized_user)
@@ -788,11 +786,10 @@ class TestCourseListingAuthz(CourseAuthoringAuthzTestMixin, ModuleStoreTestCase)
         courses, `get_courses_accessible_to_user` should return an empty
         list.
         """
-        org_scope = OrgCourseOverviewGlobData(external_key='course-v1:Org2+*')
         assign_role_to_user_in_scope(
             self.authorized_user.username,
             COURSE_STAFF.external_key,
-            org_scope.external_key,
+            OrgCourseOverviewGlobData.build_external_key("Org2"),
         )
 
         request = self._make_request(self.authorized_user)
@@ -810,17 +807,15 @@ class TestCourseListingAuthz(CourseAuthoringAuthzTestMixin, ModuleStoreTestCase)
         """
         Verify that course overviews are fetched once with all authorized orgs.
         """
-        org_scope1 = OrgCourseOverviewGlobData(external_key='course-v1:Org1+*')
-        org_scope2 = OrgCourseOverviewGlobData(external_key='course-v1:Org2+*')
         assign_role_to_user_in_scope(
             self.authorized_user.username,
             COURSE_STAFF.external_key,
-            org_scope1.external_key,
+            OrgCourseOverviewGlobData.build_external_key("Org1"),
         )
         assign_role_to_user_in_scope(
             self.authorized_user.username,
             COURSE_STAFF.external_key,
-            org_scope2.external_key,
+            OrgCourseOverviewGlobData.build_external_key("Org2"),
         )
 
         request = self._make_request(self.authorized_user)
