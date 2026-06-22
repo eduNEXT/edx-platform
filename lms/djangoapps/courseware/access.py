@@ -453,13 +453,6 @@ def _has_access_course(user, action, courselike):
             return ACCESS_GRANTED
         return None
 
-    def _about_page_catalog_visibility_error() -> AccessResponse | CatalogVisibilityError:
-        """
-        Return the typed CatalogVisibilityError so downstream handlers
-        can provide a meaningful error message instead of a generic 404.
-        """
-        return _has_catalog_visibility(courselike, CATALOG_VISIBILITY_CATALOG_AND_ABOUT)
-
     @function_trace("can_see_about_page")
     def can_see_about_page() -> AccessResponse | CatalogVisibilityError:
         """
@@ -498,7 +491,7 @@ def _has_access_course(user, action, courselike):
         ):
             return ACCESS_GRANTED
 
-        return _about_page_catalog_visibility_error()
+        return CatalogVisibilityError()
 
     checkers = {
         'load': can_load,
