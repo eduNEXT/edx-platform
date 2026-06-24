@@ -51,6 +51,7 @@ from lms.djangoapps.courseware.toggles import courseware_disable_navigation_side
 from lms.djangoapps.courseware.views.views import get_cert_data
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
 from lms.djangoapps.utils import OptimizelyClient
+from openedx.core.djangoapps.content.block_structure.api import update_course_in_cache
 from openedx.core.djangoapps.content.course_overviews.api import get_course_overview_or_404
 from openedx.core.djangoapps.content.learning_sequences.api import get_user_course_outline
 from openedx.core.djangoapps.course_groups.cohorts import get_cohort
@@ -483,6 +484,9 @@ class CourseNavigationBlocksView(RetrieveAPIView):
             course_blocks = cache.get(cache_key)
 
         if not course_blocks:
+            # get_collected() may still serve a pre-publish block structure until Celery runs;
+            # sync the cache here so the sidebar is not built from stale data on a cache miss.
+            update_course_in_cache(course_key)
             if getattr(enrollment, 'is_active', False) or bool(staff_access):
                 course_blocks = get_course_outline_block_tree(request, course_key_string, request.user)
             elif allow_public_outline or allow_public or user_is_masquerading:
