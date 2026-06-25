@@ -48,9 +48,10 @@ def account_settings_redirect_view(request):
 
     params = {'tpa_error_code': error_code}
 
-    if error_code == 'duplicate_provider' and backend_name:
+    if backend_name:
         enabled_providers = list(provider.Registry.get_enabled_by_backend_name(backend_name))
-        params['duplicate_provider'] = enabled_providers[0].name if enabled_providers else backend_name
+        provider_name = enabled_providers[0].name if enabled_providers else backend_name
+        params[error_code] = provider_name
 
     return redirect(f'{account_mfe_url}/?{urlencode(params)}')
 
