@@ -26,6 +26,7 @@ from openedx.core.djangoapps.content_libraries import api, permissions
 from openedx.core.djangoapps.content_libraries.rest_api import serializers
 from openedx.core.djangoapps.xblock import api as xblock_api
 from openedx.core.lib.api.view_utils import view_auth_classes
+from openedx.core.lib.asset_sanitization import AssetSanitizationError
 from openedx.core.types.http import RestRequest
 
 from .libraries import LibraryApiPaginationDocs
@@ -321,6 +322,8 @@ class LibraryBlockAssetView(APIView):
         file_content = file_wrapper.read()
         try:
             result = api.add_library_block_static_asset_file(usage_key, file_path, file_content, request.user)
+        except AssetSanitizationError as exc:
+            raise ValidationError(f"Cannot sanitize file: {exc}")  # noqa: B904
         except ValueError:
             raise ValidationError("Invalid file path")  # pylint: disable=raise-missing-from  # noqa: B904
         return Response(self.serializer_class(result).data)

@@ -31,6 +31,7 @@ from openedx_events.content_authoring.signals import LIBRARY_BLOCK_DELETED
 from xblock.core import XBlock
 
 from openedx.core.djangoapps.content_staging.data import StagedContentID
+from openedx.core.lib.asset_sanitization import AssetSanitizationError, sanitize_asset
 from openedx.core.djangoapps.xblock.api import (
     get_component_from_usage_key,
     get_xblock_app_config,
@@ -685,6 +686,18 @@ def _import_staged_block(
             if not media_type_str:
                 media_type_str = "application/octet-stream"
 
+            # Strip JavaScript from SVG/HTML files. Content pasted from older
+            # courses may predate upload sanitization. Unlike direct uploads,
+            # a bad file must not abort the whole paste, so it is skipped.
+            try:
+                file_data = sanitize_asset(filename, file_data, declared_mime_type=media_type_str)
+            except AssetSanitizationError:
+                log.warning(
+                    "Skipping static file %s pasted into %s: file could not be parsed for sanitization.",
+                    filename, usage_key,
+                )
+                continue
+
             media_type = content_api.get_or_create_media_type(media_type_str)
             media = content_api.get_or_create_file_media(
                 learning_package.id,
@@ -1007,6 +1020,9 @@ def add_library_block_static_asset_file(
         raise InvalidNameError("file_path cannot start/end with / or whitespace.")
     if '//' in file_path or '..' in file_path:
         raise InvalidNameError("Invalid sequence (// or ..) in file_path.")
+
+    # Strip JavaScript from SVG/HTML files. May raise AssetSanitizationError.
+    file_content = sanitize_asset(file_path, file_content)
 
     component = get_component_from_usage_key(usage_key)
 

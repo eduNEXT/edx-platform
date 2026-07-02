@@ -7,13 +7,16 @@ import pytest
 from opaque_keys.edx.keys import CourseKey
 from xmodule.contentstore.content import StaticContent
 
-from openedx.core.lib.sanitizing_contentstore import (
+from openedx.core.lib.asset_sanitization import (
     AssetSanitizationError,
-    SanitizingContentStore,
     encode_special_characters,
-    process_uploaded_content,
+    sanitize_asset,
     strip_javascript_from_html,
     strip_javascript_from_svg,
+)
+from openedx.core.lib.sanitizing_contentstore import (
+    SanitizingContentStore,
+    process_uploaded_content,
 )
 
 MALICIOUS_SVG = b"""<?xml version="1.0"?>
@@ -132,6 +135,33 @@ class TestEncodeSpecialCharacters:
 
     def test_plain_name_is_unchanged(self):
         assert encode_special_characters('logo-v2.1_final.svg') == 'logo-v2.1_final.svg'
+
+
+class TestSanitizeAsset:
+    """Tests for the storage-agnostic entry point used by Libraries v2."""
+
+    def test_svg_upload_is_sanitized(self):
+        result = sanitize_asset('static/uncool.svg', MALICIOUS_SVG)
+
+        assert b'alert' not in result
+
+    def test_svg_disguised_as_png_is_sanitized(self):
+        result = sanitize_asset('static/uncool.png', MALICIOUS_SVG)
+
+        assert b'alert' not in result
+
+    def test_binary_data_is_untouched(self):
+        png_bytes = b'\x89PNG\r\n\x1a\n' + b'binary junk <svg onload="alert(1)">'
+        assert sanitize_asset('static/real.png', png_bytes) is png_bytes
+
+    def test_unparseable_svg_is_rejected(self):
+        with pytest.raises(AssetSanitizationError):
+            sanitize_asset('static/broken.svg', b'<svg onload="alert(1)"')
+
+    def test_declared_mime_type_routes_without_extension(self):
+        result = sanitize_asset('static/no-extension', MALICIOUS_HTML, declared_mime_type='text/html')
+
+        assert b'alert' not in result
 
 
 class TestProcessUploadedContent:
