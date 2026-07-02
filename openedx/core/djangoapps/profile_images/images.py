@@ -68,7 +68,7 @@ def create_profile_images(image_file, profile_image_names):
 
     for size, name in profile_image_names.items():
         scaled = _scale_image(image, size)
-        exif = _get_corrected_exif(scaled, original)
+        exif = _get_corrected_exif(original)
         with closing(_create_image_file(scaled, exif)) as scaled_image_file:
             storage.save(name, scaled_image_file)
 
@@ -190,16 +190,18 @@ def _create_image_file(image, exif):
     return image_file
 
 
-def _get_corrected_exif(image, original):
+def _get_corrected_exif(original):
     """
-    If the original image contains exif data, use that data to
-    preserve image orientation in the new image.
+    If the original image contains exif data, preserve only the image
+    orientation in the new image.
+
+    Every other tag is discarded on purpose: uploaded photos can carry
+    metadata such as GPS location, capture time and camera serial numbers,
+    which must not leak into the publicly served profile images.
     """
     if 'exif' in original.info:
-        image_exif = image.info.get('exif', piexif.dump({}))
-        original_exif = original.info['exif']
-        image_exif = _update_exif_orientation(image_exif, _get_exif_orientation(original_exif))
-        return image_exif
+        blank_exif = piexif.dump({})
+        return _update_exif_orientation(blank_exif, _get_exif_orientation(original.info['exif']))
 
 
 def _update_exif_orientation(exif, orientation):

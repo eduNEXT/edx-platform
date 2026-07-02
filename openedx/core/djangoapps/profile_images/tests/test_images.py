@@ -179,6 +179,35 @@ class TestGenerateProfileImages(TestCase):
             for _, image in self._create_mocked_profile_images(imfile, requested_images):
                 self.check_exif_orientation(image, rotate_90_clockwise)
 
+    def test_jpeg_exif_metadata_is_stripped(self):
+        """
+        The original photo's EXIF data must not leak into the generated
+        images: orientation is preserved, but GPS location and every other
+        tag is dropped.
+        """
+        requested_images = {10: "ten.jpg", 100: "hunnert.jpg"}
+        rotate_90_clockwise = 8  # Value used in EXIF Orientation field.
+        exif_bytes = piexif.dump({
+            '0th': {
+                piexif.ImageIFD.Orientation: rotate_90_clockwise,
+                piexif.ImageIFD.Make: b"ACME Camera Co.",
+            },
+            'GPS': {
+                piexif.GPSIFD.GPSLatitudeRef: b'N',
+                piexif.GPSIFD.GPSLatitude: ((6, 1), (14, 1), (2419, 100)),
+                piexif.GPSIFD.GPSLongitudeRef: b'W',
+                piexif.GPSIFD.GPSLongitude: ((75, 1), (34, 1), (355, 100)),
+            },
+        })
+        with NamedTemporaryFile(suffix='.jpg') as image_file:
+            Image.new('RGB', (320, 240), "blue").save(image_file, exif=exif_bytes)
+            image_file.seek(0)
+            for _, image in self._create_mocked_profile_images(image_file, requested_images):
+                self.check_exif_orientation(image, rotate_90_clockwise)
+                exif_dict = piexif.load(image.info['exif'])
+                assert exif_dict['GPS'] == {}
+                assert piexif.ImageIFD.Make not in exif_dict['0th']
+
     def test_jpeg_without_exif_orientation(self):
         requested_images = {10: "ten.jpg", 100: "hunnert.jpg"}
         with make_image_file(extension='.jpg') as imfile:
