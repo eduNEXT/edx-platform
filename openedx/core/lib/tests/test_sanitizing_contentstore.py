@@ -167,6 +167,35 @@ class TestProcessUploadedContent:
 
         assert content.data is pdf_bytes
 
+    def test_svg_disguised_as_png_is_sanitized(self):
+        content = process_uploaded_content(_make_content('uncool.png', 'image/png', MALICIOUS_SVG))
+
+        assert b'alert' not in content.data
+
+    def test_html_disguised_as_png_is_sanitized(self):
+        content = process_uploaded_content(_make_content('uncool.png', 'image/png', MALICIOUS_HTML))
+
+        assert b'alert' not in content.data
+
+    def test_chunked_svg_disguised_as_png_is_sanitized(self):
+        chunks = iter([MALICIOUS_SVG[:100], MALICIOUS_SVG[100:]])
+        content = process_uploaded_content(_make_content('uncool.png', 'image/png', chunks))
+
+        assert b'alert' not in content.data
+
+    def test_real_binary_with_embedded_markup_bytes_is_untouched(self):
+        png_bytes = b'\x89PNG\r\n\x1a\n' + b'binary junk <svg onload="alert(1)"> more junk'
+        content = process_uploaded_content(_make_content('real.png', 'image/png', png_bytes))
+
+        assert content.data is png_bytes
+
+    def test_chunked_binary_still_streams(self):
+        chunks = iter([b'\x89PNG\r\n\x1a\n' + b'x' * 5000, b'y' * 5000])
+        content = process_uploaded_content(_make_content('big.png', 'image/png', chunks))
+
+        assert not isinstance(content.data, bytes)  # still a lazy iterable
+        assert b''.join(content.data) == b'\x89PNG\r\n\x1a\n' + b'x' * 5000 + b'y' * 5000
+
     def test_display_name_is_encoded_for_any_file_type(self):
         content = process_uploaded_content(_make_content('my doc & notes.pdf', 'application/pdf', b'%PDF-1.4'))
 

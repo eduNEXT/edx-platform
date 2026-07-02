@@ -18,6 +18,7 @@ The implementation is deliberately split in two steps:
    name, and strips the JavaScript vectors from SVG and HTML file bodies.
 """
 
+import itertools
 import logging
 import re
 from xml.etree import ElementTree
@@ -82,13 +83,18 @@ def process_uploaded_content(content):
     Takes and returns a ``StaticContent`` instance, modified in place when a
     postprocessor applies. Every asset gets its display name encoded;
     SVG and HTML file bodies additionally get their JavaScript stripped.
+
+    Routing is based on the actual leading bytes of the file as well as the
+    declared content type and extension: declared metadata is client
+    controlled, and an SVG uploaded as "image.png" must still be sanitized.
     """
     if content.name:
         content.name = encode_special_characters(content.name)
 
-    if _is_svg(content):
+    sniffed = _sniff_markup_type(_head_of(content))
+    if sniffed == 'svg' or _is_svg(content):
         sanitizer = strip_javascript_from_svg
-    elif _is_html(content):
+    elif sniffed == 'html' or _is_html(content):
         sanitizer = strip_javascript_from_html
     else:
         return content
@@ -175,6 +181,56 @@ def strip_javascript_from_html(html_data):
         return lxml.html.tostring(document, encoding='utf-8', doctype=doctype or None)
     except Exception as exc:
         raise AssetSanitizationError(f'Could not parse HTML file: {exc}') from exc
+
+
+_SNIFF_SIZE = 4096
+
+
+def _head_of(content):
+    """
+    Return the leading bytes of the asset without losing streamed data.
+
+    When the data is a chunk iterator (large uploads), the consumed chunks
+    are chained back in front of the remaining ones so the content can still
+    be streamed to storage unchanged.
+    """
+    data = content.data
+    if isinstance(data, bytes):
+        return data[:_SNIFF_SIZE]
+    if isinstance(data, str):
+        return data.encode('utf-8')[:_SNIFF_SIZE]
+
+    iterator = iter(data)
+    head_chunks = []
+    head_size = 0
+    for chunk in iterator:
+        chunk = chunk if isinstance(chunk, bytes) else chunk.encode('utf-8')
+        head_chunks.append(chunk)
+        head_size += len(chunk)
+        if head_size >= _SNIFF_SIZE:
+            break
+    content._data = itertools.chain(head_chunks, iterator)  # pylint: disable=protected-access
+    return b''.join(head_chunks)[:_SNIFF_SIZE]
+
+
+def _sniff_markup_type(head):
+    """
+    Detect SVG or HTML documents from their leading bytes.
+
+    Deliberately conservative: only files that start with markup (after an
+    optional BOM and whitespace) are candidates, so binary formats whose
+    payload happens to contain markup byte sequences are never matched.
+    """
+    if head.startswith(b'\xef\xbb\xbf'):  # UTF-8 BOM
+        head = head[3:]
+    head = head.lstrip().lower()
+    if not head.startswith(b'<'):
+        return None
+    if head.startswith((b'<!doctype html', b'<html')) or b'<html' in head:
+        return 'html'
+    if b'<svg' in head or b'<!doctype svg' in head:
+        return 'svg'
+    return None
 
 
 def _is_svg(content):
