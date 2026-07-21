@@ -5,13 +5,16 @@ Utility methods related to file handling.
 
 import os
 from datetime import datetime
+from io import BytesIO
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from django.core.files.base import ContentFile
 from django.core.files.storage import DefaultStorage
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
+from PIL import Image, ImageOps, UnidentifiedImageError
 from pytz import UTC
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -23,8 +26,73 @@ class FileValidationException(Exception):
     pass  # lint-amnesty, pylint: disable=unnecessary-pass
 
 
+# Image formats that can embed EXIF/XMP metadata (including GPS location). Other
+# formats such as GIF or BMP don't carry EXIF, so they are left untouched to
+# avoid a needless re-encode (which would, for example, flatten animated GIFs).
+EXIF_BEARING_IMAGE_FORMATS = {'JPEG', 'MPO', 'TIFF', 'WEBP', 'PNG'}
+
+
+def strip_metadata_from_uploaded_image(uploaded_file):
+    """
+    Return a copy of an uploaded image file with EXIF/XMP metadata removed.
+
+    Any EXIF orientation is first baked into the pixel data so the image still
+    displays the right way up, and then all metadata (GPS location, camera
+    make/model, capture timestamps, ...) is dropped by re-encoding the image
+    without it.
+
+    If the file is not an EXIF-bearing image, is an animated image (which must
+    not be flattened), or carries no metadata to begin with, the original file
+    is returned unchanged.
+
+    Args:
+        uploaded_file: a file-like object (e.g. an ``UploadedFile``) to sanitize.
+
+    Returns:
+        A file-like object (the original, or a new ``ContentFile``) positioned
+        at the start and ready to be saved to storage.
+    """
+    try:
+        uploaded_file.seek(0)
+        image = Image.open(uploaded_file)
+        image.load()
+    except (UnidentifiedImageError, OSError):
+        # Not an image we can parse; store it untouched.
+        uploaded_file.seek(0)
+        return uploaded_file
+
+    image_format = image.format
+    if (
+        image_format not in EXIF_BEARING_IMAGE_FORMATS
+        or getattr(image, 'is_animated', False)
+        or ('exif' not in image.info and 'xmp' not in image.info)
+    ):
+        # Nothing to strip; avoid a needless (and, for JPEG, lossy) re-encode.
+        uploaded_file.seek(0)
+        return uploaded_file
+
+    # ``exif_transpose`` rotates the pixels according to the EXIF Orientation
+    # tag and removes that tag, but leaves the rest of the EXIF (GPS, etc.) in
+    # ``info``; pop it explicitly so the re-encoded image carries no metadata.
+    image = ImageOps.exif_transpose(image)
+    image.info.pop('exif', None)
+    image.info.pop('xmp', None)
+
+    buffer = BytesIO()
+    save_kwargs = {}
+    if image_format == 'JPEG' and getattr(image, 'quantization', None):
+        # Preserve the original quantization tables to minimise quality loss.
+        save_kwargs['quality'] = 'keep'
+    image.save(buffer, format=image_format, **save_kwargs)
+
+    sanitized_file = ContentFile(buffer.getvalue(), name=uploaded_file.name)
+    sanitized_file.content_type = getattr(uploaded_file, 'content_type', None)
+    return sanitized_file
+
+
 def store_uploaded_file(
         request, file_key, allowed_file_types, base_storage_filename, max_file_size, validator=None, is_private=False,
+        strip_image_metadata=False,
 ):
     """
     Stores an uploaded file to django file storage.
@@ -48,6 +116,11 @@ def store_uploaded_file(
             should take care to close the stored file if they open it for reading.
         is_private (Boolean): an optional boolean which if True and the storage backend is S3,
             sets the ACL for the file object to be private.
+        strip_image_metadata (Boolean): an optional boolean which, if True, removes EXIF/XMP metadata
+            (e.g. GPS location, camera make/model, capture timestamps) from uploaded images before
+            storing them. Any EXIF orientation is baked into the pixels first so the image still
+            displays upright. Non-image or metadata-free files are stored unchanged. This should only
+            be enabled for endpoints that exclusively accept images.
 
     Returns:
         Storage: the file storage object where the file can be retrieved from
@@ -75,9 +148,13 @@ def store_uploaded_file(
 
         stored_file_name = base_storage_filename + file_extension
 
+        file_to_store = uploaded_file
+        if strip_image_metadata:
+            file_to_store = strip_metadata_from_uploaded_image(uploaded_file)
+
         file_storage = DefaultStorage()
         # If a file already exists with the supplied name, file_storage will make the filename unique.
-        stored_file_name = file_storage.save(stored_file_name, uploaded_file)
+        stored_file_name = file_storage.save(stored_file_name, file_to_store)
         if is_private and settings.DEFAULT_FILE_STORAGE == 'storages.backends.s3boto3.S3Boto3Storage':
             S3Boto3Storage().connection.meta.client.put_object_acl(
                 ACL='private',

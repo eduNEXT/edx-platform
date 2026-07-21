@@ -1096,6 +1096,9 @@ class UploadFileView(DeveloperErrorViewMixin, APIView):
             file_storage, stored_file_name = store_uploaded_file(
                 request, "uploaded_file", cc_settings.ALLOWED_UPLOAD_FILE_TYPES,
                 unique_file_name, max_file_size=cc_settings.MAX_UPLOAD_FILE_SIZE,
+                # Strip EXIF/XMP metadata (GPS location, camera make/model, ...) from
+                # forum image attachments so uploads don't republish uploaders' data.
+                strip_image_metadata=True,
             )
         except ValueError as err:
             raise BadRequest("no `uploaded_file` was provided") from err
