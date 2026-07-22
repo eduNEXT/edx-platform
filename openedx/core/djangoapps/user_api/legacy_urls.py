@@ -1,18 +1,11 @@
 """
 Defines the URL routes for this app.
 """
-from urllib.parse import urlencode
-
 from django.conf import settings
 from django.shortcuts import redirect
 from django.urls import include, path, re_path
 from rest_framework import routers
 
-from common.djangoapps.third_party_auth import provider
-from common.djangoapps.third_party_auth.middleware import (
-    TPA_ERROR_BACKEND_SESSION_KEY,
-    TPA_ERROR_CODE_SESSION_KEY,
-)
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 from . import views as user_api_views
@@ -27,33 +20,19 @@ def account_settings_redirect_view(request):
     Backward-compatible redirect for /account and /account/settings to the
     Account MFE.
 
-    Unlike a plain RedirectView, this reads third-party-auth error info from
-    the session (set by ExceptionMiddleware.get_redirect_uri) and forwards it
-    to the MFE as query params, instead of dropping it.
+    Unlike a plain RedirectView, this re-evaluates ACCOUNT_MICROFRONTEND_URL
+    per request so site-aware configuration is honored.
 
-    Only 'duplicate_provider' is currently rendered by the MFE
-    (AuthAlreadyAssociated). Other error codes are sent via 'tpa_error_code'
-    for forward-compatibility.
+    Any third-party-auth error message from the pipeline is *not* forwarded
+    here as a query param: SocialAuthExceptionMiddleware already leaves it in
+    the Django messages framework, and the Account MFE reads it directly via
+    ThirdPartyAuthErrorMessageView (openedx/core/djangoapps/user_api/views.py).
     """
     account_mfe_url = configuration_helpers.get_value(
         'ACCOUNT_MICROFRONTEND_URL',
         settings.ACCOUNT_MICROFRONTEND_URL,
-    ).rstrip('/')
-
-    error_code = request.session.pop(TPA_ERROR_CODE_SESSION_KEY, None)
-    backend_name = request.session.pop(TPA_ERROR_BACKEND_SESSION_KEY, None)
-
-    if not error_code:
-        return redirect(account_mfe_url)
-
-    params = {'tpa_error_code': error_code}
-
-    if backend_name:
-        enabled_providers = list(provider.Registry.get_enabled_by_backend_name(backend_name))
-        provider_name = enabled_providers[0].name if enabled_providers else backend_name
-        params[error_code] = provider_name
-
-    return redirect(f'{account_mfe_url}/?{urlencode(params)}')
+    )
+    return redirect(account_mfe_url)
 
 urlpatterns = [
     # This redirect is needed for backward compatibility with the old URL structure for the authentication

@@ -14,11 +14,7 @@ from social_core import exceptions as social_exceptions
 
 from common.djangoapps.student.helpers import get_next_url_for_login_page
 from common.djangoapps.third_party_auth import pipeline
-from common.djangoapps.third_party_auth.middleware import (
-    TPA_ERROR_BACKEND_SESSION_KEY,
-    TPA_ERROR_CODE_SESSION_KEY,
-    ExceptionMiddleware,
-)
+from common.djangoapps.third_party_auth.middleware import ExceptionMiddleware
 from common.djangoapps.third_party_auth.tests.testutil import TestCase
 from openedx.core.djangolib.testing.utils import skip_unless_lms
 
@@ -53,17 +49,20 @@ class ThirdPartyAuthMiddlewareTestCase(TestCase):
 
 
 @ddt.ddt
-class TPAErrorSessionTestCase(TestCase):
+class ExceptionMiddlewareAccountSettingsDispatchTestCase(TestCase):
     """
-    Tests that ExceptionMiddleware.get_redirect_uri() correctly saves a
-    stable error code in the session for the account_settings flow, so that
-    account_settings_redirect_view can later forward it to the Account MFE.
+    Tests that ExceptionMiddleware.get_redirect_uri() dispatches to the URL
+    registered in AUTH_DISPATCH_URLS for the current auth_entry, and that it
+    no longer needs to duplicate the error message in a custom session key:
+    SocialAuthExceptionMiddleware.process_exception (the parent class)
+    already leaves it in the Django messages framework for any
+    SocialAuthBaseException, tagged 'social-auth <backend name>'. The
+    Account MFE reads that message via
+    openedx.core.djangoapps.user_api.views.ThirdPartyAuthErrorMessageView.
     """
 
-    def _build_request(self, exception, auth_entry=pipeline.AUTH_ENTRY_ACCOUNT_SETTINGS):
-        """
-        Build a fake request with session and backend for testing TPA error handling.
-        """
+    def _build_request(self, auth_entry=pipeline.AUTH_ENTRY_ACCOUNT_SETTINGS):
+        """Build a fake request with session and backend for testing TPA error handling."""
         request = RequestFactory().get('/auth/login/tpa-saml/')
         request.session = {}
         request.session[pipeline.AUTH_ENTRY_KEY] = auth_entry
@@ -74,45 +73,53 @@ class TPAErrorSessionTestCase(TestCase):
         request.backend = FakeBackend()
         request.social_strategy = mock.MagicMock()
         request.social_strategy.setting.return_value = None
-
-        ExceptionMiddleware(get_response=lambda r: None).get_redirect_uri(request, exception)
         return request
 
     @ddt.data(
-        (social_exceptions.AuthAlreadyAssociated, 'duplicate_provider'),
-        (social_exceptions.AuthCanceled, 'auth_canceled'),
-        (social_exceptions.AuthFailed, 'auth_failed'),
-        (social_exceptions.AuthTokenError, 'token_error'),
-        (social_exceptions.AuthStateMissing, 'state_missing'),
-        (social_exceptions.AuthStateForbidden, 'state_forbidden'),
-        (social_exceptions.AuthTokenRevoked, 'token_revoked'),
-        (social_exceptions.AuthUnreachableProvider, 'unreachable_provider'),
+        social_exceptions.AuthAlreadyAssociated,
+        social_exceptions.AuthCanceled,
+        social_exceptions.AuthFailed,
+        social_exceptions.AuthTokenError,
+        social_exceptions.AuthStateMissing,
+        social_exceptions.AuthStateForbidden,
+        social_exceptions.AuthTokenRevoked,
+        social_exceptions.AuthUnreachableProvider,
+        social_exceptions.InvalidEmail,
     )
-    @ddt.unpack
-    def test_recognized_exception_saves_error_code_in_session(self, exception_class, expected_code):
-        """Verify known exceptions store correct error codes in session."""
-        request = self._build_request(exception_class('tpa-saml'))
+    def test_dispatches_to_account_settings_url_for_any_tpa_exception(self, exception_class):
+        """The redirect target is /account/settings for the account_settings flow, regardless of exception type."""
+        request = self._build_request()
 
-        assert request.session.get(TPA_ERROR_CODE_SESSION_KEY) == expected_code
-        assert request.session.get(TPA_ERROR_BACKEND_SESSION_KEY) == 'tpa-saml'
-
-    def test_unrecognized_exception_does_not_touch_session(self):
-        """Verify unknown exceptions do not modify session."""
-        request = self._build_request(social_exceptions.InvalidEmail('tpa-saml'))
-
-        assert TPA_ERROR_CODE_SESSION_KEY not in request.session
-        assert TPA_ERROR_BACKEND_SESSION_KEY not in request.session
-
-    def test_error_outside_account_settings_entry_does_not_touch_session(self):
-        """
-        The session should only be populated for the account_settings flow;
-        AUTH_DISPATCH_URLS already handles /login and /register correctly
-        without needing this extra context.
-        """
-        request = self._build_request(
-            social_exceptions.AuthAlreadyAssociated('tpa-saml'),
-            auth_entry=pipeline.AUTH_ENTRY_LOGIN,
+        redirect_uri = ExceptionMiddleware(get_response=lambda r: None).get_redirect_uri(
+            request, exception_class('tpa-saml')
         )
 
-        assert TPA_ERROR_CODE_SESSION_KEY not in request.session
-        assert TPA_ERROR_BACKEND_SESSION_KEY not in request.session
+        assert redirect_uri == pipeline.AUTH_DISPATCH_URLS[pipeline.AUTH_ENTRY_ACCOUNT_SETTINGS]
+
+    def test_dispatches_elsewhere_outside_account_settings_entry(self):
+        """AUTH_DISPATCH_URLS is keyed by auth_entry, not by exception type."""
+        request = self._build_request(auth_entry=pipeline.AUTH_ENTRY_LOGIN)
+
+        redirect_uri = ExceptionMiddleware(get_response=lambda r: None).get_redirect_uri(
+            request, social_exceptions.AuthAlreadyAssociated('tpa-saml')
+        )
+
+        assert redirect_uri == pipeline.AUTH_DISPATCH_URLS[pipeline.AUTH_ENTRY_LOGIN]
+
+    @skip_unless_lms
+    def test_process_exception_leaves_social_auth_tagged_message_for_mfe(self):
+        """
+        End to end: process_exception (the parent implementation) must still
+        queue a Django message tagged with 'social-auth' for the Account MFE
+        to read, since we no longer save it ourselves.
+        """
+        request = self._build_request()
+        MessageMiddleware(get_response=lambda request: None).process_request(request)
+        exception = social_exceptions.AuthAlreadyAssociated('tpa-saml')
+
+        ExceptionMiddleware(get_response=lambda r: None).process_exception(request, exception)
+
+        queued_messages = list(request._messages)  # pylint: disable=protected-access
+        assert len(queued_messages) == 1
+        assert queued_messages[0].extra_tags.split() == ['social-auth', 'tpa-saml']
+        assert str(queued_messages[0]) == str(exception)

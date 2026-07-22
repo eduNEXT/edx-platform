@@ -1,5 +1,6 @@
 """HTTP end-points for the User API. """
 
+from django.contrib import messages as django_messages
 from django.contrib.auth.models import User  # pylint: disable=imported-auth-user
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
@@ -12,6 +13,7 @@ from opaque_keys.edx.keys import CourseKey
 from rest_framework import generics, status, viewsets
 from rest_framework.exceptions import ParseError
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from openedx.core.djangoapps.django_comment_common.models import Role
@@ -161,3 +163,30 @@ class CountryTimeZoneListView(generics.ListAPIView):
     def get_queryset(self):
         country_code = self.request.GET.get("country_code", None)
         return get_country_time_zones(country_code)
+
+
+class ThirdPartyAuthErrorMessageView(APIView):
+    """
+    Surfaces the pending third-party-auth error message, if any, that
+    social_django's SocialAuthExceptionMiddleware (see
+    common.djangoapps.third_party_auth.middleware.ExceptionMiddleware) left
+    in the request's Django messages.
+
+    The Account MFE is a separate single-page app and can't render Django's
+    session-based messages framework directly, so it calls this endpoint
+    once on mount instead of receiving the error via redirect query params.
+    Messages are consumed on read, matching Django's messages flash
+    semantics: a second call right after the first returns
+    ``user_message: null``.
+    """
+
+    authentication_classes = (SessionAuthenticationAllowInactiveUser,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        user_message = None
+        for message in django_messages.get_messages(request):
+            if "social-auth" in (message.extra_tags or "").split():
+                user_message = str(message)
+                break
+        return Response({"user_message": user_message})
