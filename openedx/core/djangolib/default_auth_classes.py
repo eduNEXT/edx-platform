@@ -2,9 +2,12 @@
 Default Authentication classes that are ONLY meant to be used by
 DEFAULT_AUTHENTICATION_CLASSES for observability purposes.
 """
+import jwt
+from django.core.cache import cache
 from edx_django_utils.monitoring import set_custom_attribute
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class DefaultSessionAuthentication(SessionAuthentication):
@@ -53,3 +56,34 @@ class DefaultJwtAuthentication(JwtAuthentication):
         # includes a jwt_auth_result custom attribute, so we do not need to
         # reimplement that observability in this class.
         return super().authenticate(request)
+
+
+class BlacklistJwtAuthentication(DefaultJwtAuthentication):
+    """
+    Default JwtAuthentication with Redis-based token revocation support.
+    """
+
+    blacklist_key_prefix = 'blacklist:'
+
+    def authenticate(self, request):
+        user_and_token = super().authenticate(request)
+        if not user_and_token:
+            return user_and_token
+
+        user, token = user_and_token
+        try:
+            claims = jwt.decode(token, options={'verify_signature': False, 'verify_exp': False})
+        except jwt.PyJWTError:
+            return user, token
+
+        token_subject = claims.get('sub')
+        token_issued_at = claims.get('iat')
+
+        if token_subject is None or token_issued_at is None:
+            return user, token
+
+        cache_key = f'{self.blacklist_key_prefix}{token_subject}:{token_issued_at}'
+        if cache.get(cache_key):
+            raise AuthenticationFailed('JWT has been revoked.')
+
+        return user, token

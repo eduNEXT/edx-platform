@@ -4,11 +4,14 @@
 import re
 import urllib.parse as parse  # pylint: disable=import-error
 from urllib.parse import parse_qs, urlsplit, urlunsplit  # pylint: disable=import-error
+from time import time
 
 import nh3
+import jwt
 from django.conf import settings
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.core.cache import cache
 from django.utils.http import urlencode
 from django.views.generic import TemplateView
 from oauth2_provider.models import Application
@@ -17,6 +20,51 @@ from openedx.core.djangoapps.safe_sessions.middleware import mark_user_change_as
 from openedx.core.djangoapps.user_authn.cookies import delete_logged_in_cookies
 from openedx.core.djangoapps.user_authn.utils import is_safe_login_or_logout_redirect
 from common.djangoapps.third_party_auth import pipeline as tpa_pipeline
+
+
+BLACKLIST_KEY_PREFIX = 'blacklist:'
+
+
+def _get_authorization_token(request):
+    """Return the JWT from cookies."""
+
+    # In browser-based requests, Open edX stores JWT in two cookies.
+    header_payload = request.COOKIES.get('edx-jwt-cookie-header-payload')
+    signature = request.COOKIES.get('edx-jwt-cookie-signature')
+    if header_payload and signature:
+        return f'{header_payload}.{signature}'
+
+    return None
+
+
+def _blacklist_request_jwt(request):
+    """Store the current JWT in Redis until it expires."""
+
+    token = _get_authorization_token(request)
+    if not token:
+        return
+
+    try:
+        claims = jwt.decode(token, options={'verify_signature': False, 'verify_exp': False})
+    except jwt.PyJWTError:
+        return
+
+    token_subject = claims.get('sub')
+    token_issued_at = claims.get('iat')
+    token_expires_at = claims.get('exp')
+    if token_subject is None or token_issued_at is None or token_expires_at is None:
+        return
+
+    try:
+        ttl = int(token_expires_at) - int(time())
+    except (TypeError, ValueError):
+        return
+
+    if ttl <= 0:
+        return
+
+    cache_key = f'{BLACKLIST_KEY_PREFIX}{token_subject}:{token_issued_at}'
+    cache.set(cache_key, 'revoked', timeout=ttl)
 
 
 class LogoutView(TemplateView):
@@ -75,6 +123,9 @@ class LogoutView(TemplateView):
 
         # Get third party auth provider's logout url
         self.tpa_logout_url = tpa_pipeline.get_idp_logout_url_from_running_pipeline(request)
+
+        # Blacklist the JWT before the session is cleared so the token can no longer be used for API calls.
+        _blacklist_request_jwt(request)
 
         logout(request)
 
