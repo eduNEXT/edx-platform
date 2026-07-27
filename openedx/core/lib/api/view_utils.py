@@ -8,7 +8,7 @@ from functools import wraps
 from django.core.exceptions import NON_FIELD_ERRORS, ObjectDoesNotExist, ValidationError
 from django.http import Http404, HttpResponseBadRequest
 from django.utils.translation import gettext as _
-from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
+from openedx.core.djangolib.default_auth_classes import BlacklistJwtAuthentication
 from edx_rest_framework_extensions.auth.session.authentication import SessionAuthenticationAllowInactiveUser
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
@@ -110,7 +110,7 @@ class ExpandableFieldViewMixin:
         return result
 
 
-def view_auth_classes(is_user=False, is_authenticated=True, jwt_authentication_class=JwtAuthentication):
+def view_auth_classes(is_user=False, is_authenticated=True, jwt_authentication_class=BlacklistJwtAuthentication):
     """
     Function and class decorator that abstracts the authentication and permission checks for api views.
     """
