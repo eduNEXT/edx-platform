@@ -58,12 +58,12 @@ class DefaultJwtAuthentication(JwtAuthentication):
         return super().authenticate(request)
 
 
-class BlacklistJwtAuthentication(DefaultJwtAuthentication):
+class BlocklistJwtAuthentication(DefaultJwtAuthentication):
     """
     Default JwtAuthentication with Redis-based token revocation support.
     """
 
-    blacklist_key_prefix = 'blacklist:'
+    blocklist_key_prefix = 'blocklist:'
 
     def authenticate(self, request):
         user_and_token = super().authenticate(request)
@@ -82,7 +82,7 @@ class BlacklistJwtAuthentication(DefaultJwtAuthentication):
         if token_subject is None or token_issued_at is None:
             return user, token
 
-        cache_key = f'{self.blacklist_key_prefix}{token_subject}:{token_issued_at}'
+        cache_key = f'{self.blocklist_key_prefix}{token_subject}:{token_issued_at}'
         if cache.get(cache_key):
             raise AuthenticationFailed('JWT has been revoked.')
 

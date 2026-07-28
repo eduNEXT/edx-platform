@@ -22,7 +22,7 @@ from openedx.core.djangoapps.user_authn.utils import is_safe_login_or_logout_red
 from common.djangoapps.third_party_auth import pipeline as tpa_pipeline
 
 
-BLACKLIST_KEY_PREFIX = 'blacklist:'
+BLOCKLIST_KEY_PREFIX = 'blocklist:'
 
 
 def _get_authorization_token(request):
@@ -37,7 +37,7 @@ def _get_authorization_token(request):
     return None
 
 
-def _blacklist_request_jwt(request):
+def _blocklist_request_jwt(request):
     """Store the current JWT in Redis until it expires."""
 
     token = _get_authorization_token(request)
@@ -63,7 +63,7 @@ def _blacklist_request_jwt(request):
     if ttl <= 0:
         return
 
-    cache_key = f'{BLACKLIST_KEY_PREFIX}{token_subject}:{token_issued_at}'
+    cache_key = f'{BLOCKLIST_KEY_PREFIX}{token_subject}:{token_issued_at}'
     cache.set(cache_key, 'revoked', timeout=ttl)
 
 
@@ -124,8 +124,8 @@ class LogoutView(TemplateView):
         # Get third party auth provider's logout url
         self.tpa_logout_url = tpa_pipeline.get_idp_logout_url_from_running_pipeline(request)
 
-        # Blacklist the JWT before the session is cleared so the token can no longer be used for API calls.
-        _blacklist_request_jwt(request)
+        # Blocklist the JWT before the session is cleared so the token can no longer be used for API calls.
+        _blocklist_request_jwt(request)
 
         logout(request)
 
