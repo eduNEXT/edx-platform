@@ -8,7 +8,6 @@ from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 
 
-from openedx.core.djangolib.default_auth_classes import BlocklistJwtAuthentication
 from openedx.core.lib.api.view_utils import view_auth_classes
 
 from cms.djangoapps.contentstore.utils import get_course_context_v2
@@ -43,7 +42,7 @@ class HomePageCoursesPaginator(PageNumberPagination):
         return super().paginate_queryset(queryset, request, view)
 
 
-@view_auth_classes(is_authenticated=True, jwt_authentication_class=BlocklistJwtAuthentication)
+@view_auth_classes(is_authenticated=True)
 class HomePageCoursesViewV2(APIView):
     """View for getting all courses available to the logged in user."""
 

@@ -110,7 +110,7 @@ class ExpandableFieldViewMixin:
         return result
 
 
-def view_auth_classes(is_user=False, is_authenticated=True, jwt_authentication_class=BlocklistJwtAuthentication):
+def view_auth_classes(is_user=False, is_authenticated=True):
     """
     Function and class decorator that abstracts the authentication and permission checks for api views.
     """
@@ -120,7 +120,7 @@ def view_auth_classes(is_user=False, is_authenticated=True, jwt_authentication_c
         If is_user is True, also requires username in URL matches the request user.
         """
         func_or_class.authentication_classes = (
-            jwt_authentication_class,
+            BlocklistJwtAuthentication,
             BearerAuthenticationAllowInactiveUser,
             SessionAuthenticationAllowInactiveUser
         )
