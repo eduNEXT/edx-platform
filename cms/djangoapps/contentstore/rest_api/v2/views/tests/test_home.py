@@ -4,16 +4,23 @@ Unit tests for home page view.
 
 from collections import OrderedDict
 from datetime import datetime, timedelta
+from unittest import mock
 
 import ddt
+import jwt
 import pytz
 from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APITestCase
 
 from cms.djangoapps.contentstore.tests.utils import CourseTestCase
 from cms.djangoapps.contentstore.utils import reverse_course_url
+from openedx.core.djangoapps.oauth_dispatch.jwt import create_jwt_for_user
 from openedx.core.djangoapps.content.course_overviews.tests.factories import CourseOverviewFactory
+from openedx.core.djangolib.testing.utils import skip_unless_cms
+from common.djangoapps.student.tests.factories import UserFactory
+from openedx.core.djangoapps.user_authn.views import logout as logout_views
 
 
 @ddt.ddt
@@ -298,3 +305,47 @@ class HomePageCoursesViewV2Test(CourseTestCase):
 
         self.assertEqual(len(response.data["results"]["courses"]), 0)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+@skip_unless_cms
+class HomePageCoursesViewV2TokenRevocationTests(APITestCase):
+    """Integration tests for JWT revocation behavior on the home courses endpoint."""
+
+    def setUp(self):
+        super().setUp()
+        self.user = UserFactory.create()
+        self.home_courses_url = reverse("cms.djangoapps.contentstore:v2:courses")
+        self.logout_url = reverse('logout')
+        self.token = create_jwt_for_user(self.user)
+        token_parts = self.token.split('.')
+        self.jwt_header_payload = '.'.join(token_parts[:2])
+        self.jwt_signature = token_parts[2]
+
+    def _set_jwt_cookies_on_client(self):
+        """Set the split JWT cookies expected by JwtAuthCookieMiddleware."""
+        self.client.cookies['edx-jwt-cookie-header-payload'] = self.jwt_header_payload
+        self.client.cookies['edx-jwt-cookie-signature'] = self.jwt_signature
+
+    @mock.patch('cms.djangoapps.contentstore.rest_api.v2.views.home.get_course_context_v2', return_value=([], []))
+    def test_home_page_rejects_revoked_jwt_after_logout(self, _mock_get_course_context):
+        """The same JWT cookies work before logout and fail with 401 after logout revocation."""
+        self._set_jwt_cookies_on_client()
+        response_before_logout = self.client.get(self.home_courses_url)
+        self.assertEqual(response_before_logout.status_code, status.HTTP_200_OK)
+
+        with mock.patch(
+            'openedx.core.djangoapps.user_authn.views.logout._blocklist_request_jwt',
+            wraps=logout_views._blocklist_request_jwt,  # pylint: disable=protected-access
+        ) as mock_blocklist_jwt:
+            logout_response = self.client.get(self.logout_url)
+
+        self.assertEqual(logout_response.status_code, status.HTTP_200_OK)
+        mock_blocklist_jwt.assert_called_once()
+
+        self._set_jwt_cookies_on_client()
+        response_after_logout = self.client.get(self.home_courses_url)
+        self.assertEqual(response_after_logout.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        claims = jwt.decode(self.token, options={'verify_signature': False, 'verify_exp': False})
+        expected_cache_key = f"{logout_views.BLOCKLIST_KEY_PREFIX}{claims['sub']}:{claims['iat']}"
+        self.assertEqual(logout_views.cache.get(expected_cache_key), 'revoked')

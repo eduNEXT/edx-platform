@@ -6,12 +6,16 @@ import urllib
 from unittest import mock
 import ddt
 import nh3
+from django.core.cache import cache
+from django.test import RequestFactory, TestCase
 from django.conf import settings
-from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
+from rest_framework.exceptions import AuthenticationFailed
 
+from openedx.core.djangoapps.user_authn.views import logout as logout_views
 from openedx.core.djangoapps.oauth_dispatch.tests.factories import ApplicationFactory
+from openedx.core.djangolib.default_auth_classes import BlocklistJwtAuthentication, DefaultJwtAuthentication
 from openedx.core.djangolib.testing.utils import skip_unless_lms
 from common.djangoapps.student.tests.factories import UserFactory
 
@@ -240,3 +244,86 @@ class LogoutTests(TestCase):
             'target': nh3.clean(urllib.parse.unquote(redirect_url)),
         }
         self.assertDictContainsSubset(expected, response.context_data)
+
+
+class AuthenticationAndLogoutBlocklistTests(TestCase):
+    """Tests for JWT blocklisting during logout and JWT authentication."""
+
+    def setUp(self):
+        super().setUp()
+        cache.clear()
+        self.user = UserFactory.create()
+        self.request_factory = RequestFactory()
+        self.token = 'header.payload.signature'
+        self.jwt_claims = {
+            'sub': 'user-uuid',
+            'iat': 1700000000,
+            'exp': 1800000000,
+            'user_id': self.user.id,
+        }
+
+    def test_blocklist_request_jwt_stores_decoded_claims_in_cache(self):
+        """Logout blocklists JWTs using blocklist:<sub>:<iat> cache keys."""
+        request = self.request_factory.get('/logout')
+        request.COOKIES = {
+            'edx-jwt-cookie-header-payload': 'header.payload',
+            'edx-jwt-cookie-signature': 'signature',
+        }
+
+        with mock.patch(
+            'openedx.core.djangoapps.user_authn.views.logout.jwt.decode',
+            return_value=self.jwt_claims,
+        ) as mock_decode, mock.patch(
+            'openedx.core.djangoapps.user_authn.views.logout.time',
+            return_value=1700000001,
+        ), mock.patch(
+            'openedx.core.djangoapps.user_authn.views.logout.cache.set',
+        ) as mock_cache_set:
+            # pylint: disable=protected-access
+            logout_views._blocklist_request_jwt(request)
+
+        expected_cache_key = f"{logout_views.BLOCKLIST_KEY_PREFIX}{self.jwt_claims['sub']}:{self.jwt_claims['iat']}"
+        mock_cache_set.assert_called_once_with(expected_cache_key, 'revoked', timeout=99999999)
+        mock_decode.assert_called_once_with(
+            self.token,
+            options={'verify_signature': False, 'verify_exp': False},
+        )
+
+    def test_blocklist_jwt_authentication_allows_non_revoked_token(self):
+        """JWT authentication succeeds when the token is not in the revocation cache."""
+        request = self.request_factory.get('/api/contentstore/v2/home/courses')
+        auth = BlocklistJwtAuthentication()
+
+        with mock.patch.object(
+            DefaultJwtAuthentication,
+            'authenticate',
+            return_value=(self.user, self.token),
+        ), mock.patch(
+            'openedx.core.djangolib.default_auth_classes.jwt.decode',
+            return_value=self.jwt_claims,
+        ):
+            user_and_token = auth.authenticate(request)
+
+        assert user_and_token == (self.user, self.token)
+
+    def test_blocklist_jwt_authentication_rejects_revoked_token(self):
+        """JWT authentication raises AuthenticationFailed for revoked tokens."""
+        request = self.request_factory.get('/api/contentstore/v2/home/courses')
+        auth = BlocklistJwtAuthentication()
+        cache_key = f"{auth.blocklist_key_prefix}{self.jwt_claims['sub']}:{self.jwt_claims['iat']}"
+
+        with mock.patch.object(
+            DefaultJwtAuthentication,
+            'authenticate',
+            return_value=(self.user, self.token),
+        ), mock.patch(
+            'openedx.core.djangolib.default_auth_classes.jwt.decode',
+            return_value=self.jwt_claims,
+        ), mock.patch(
+            'openedx.core.djangolib.default_auth_classes.cache.get',
+            return_value='revoked',
+        ) as mock_cache_get:
+            with self.assertRaises(AuthenticationFailed):
+                auth.authenticate(request)
+
+        mock_cache_get.assert_called_once_with(cache_key)
