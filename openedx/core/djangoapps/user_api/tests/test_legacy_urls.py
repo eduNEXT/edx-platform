@@ -4,6 +4,7 @@ Tests for account_settings_redirect_view in legacy_urls.py.
 from unittest import mock
 
 from django.test import RequestFactory, TestCase, override_settings
+from django.urls import resolve
 
 from openedx.core.djangoapps.user_api.legacy_urls import account_settings_redirect_view
 
@@ -39,3 +40,9 @@ class AccountSettingsRedirectViewTests(TestCase):
             response = account_settings_redirect_view(request)
 
         assert response.url == 'https://site-specific.example.com'
+
+    def test_account_and_account_settings_urls_route_here(self):
+        """The legacy /account and /account/settings paths (with or without a trailing slash) reach this view."""
+        for path in ('/account', '/account/', '/account/settings', '/account/settings/'):
+            match = resolve(path)
+            assert match.func == account_settings_redirect_view
