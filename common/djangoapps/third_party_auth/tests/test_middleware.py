@@ -148,4 +148,4 @@ class ExceptionMiddlewareAccountSettingsDispatchTestCase(TestCase):
         result = ExceptionMiddleware(get_response=lambda r: None).process_exception(request, ValueError('boom'))
 
         assert result is None
-        assert list(request._messages) == []  # pylint: disable=protected-access
+        assert not list(request._messages)  # pylint: disable=protected-access
