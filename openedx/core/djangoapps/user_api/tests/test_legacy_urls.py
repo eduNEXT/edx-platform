@@ -45,4 +45,4 @@ class AccountSettingsRedirectViewTests(TestCase):
         """The legacy /account and /account/settings paths (with or without a trailing slash) reach this view."""
         for path in ('/account', '/account/', '/account/settings', '/account/settings/'):
             match = resolve(path)
-            assert match.func == account_settings_redirect_view
+            assert match.func == account_settings_redirect_view  # pylint: disable=comparison-with-callable
