@@ -175,6 +175,44 @@ class ThirdPartyAuthErrorMessageViewTests(ApiTestCase):
 
         assert response.json() == {'user_message': None}
 
+    def test_preserves_unrelated_message_for_a_later_read(self):
+        """
+        Reading the storage at all marks the whole thing consumed, so an
+        unrelated message queued in the same session must be explicitly
+        re-queued -- otherwise it would be silently dropped here instead of
+        being shown wherever it was actually meant to be displayed.
+        """
+        self._queue_session_message('Unrelated message', extra_tags='some-other-tag')
+
+        response = self.client.get(self.URL)
+        assert response.json() == {'user_message': None}
+
+        # Read it back through a fresh storage bound to the client's session,
+        # the same way _queue_session_message wrote it.
+        session = self.client.session
+        request = RequestFactory().get('/')
+        request.session = session
+        remaining = list(SessionStorage(request))
+        assert [str(m) for m in remaining] == ['Unrelated message']
+        assert remaining[0].extra_tags == 'some-other-tag'
+
+    def test_only_first_social_auth_message_is_returned_rest_are_preserved(self):
+        """If somehow two social-auth messages are queued, only the first is returned this call."""
+        self._queue_session_message('First error', extra_tags='social-auth tpa-saml')
+        session = self.client.session
+        request = RequestFactory().get('/')
+        request.session = session
+        storage = SessionStorage(request)
+        storage.add(django_messages.constants.ERROR, 'Second error', extra_tags='social-auth tpa-saml')
+        storage.update(HttpResponse())
+        session.save()
+
+        first_response = self.client.get(self.URL)
+        second_response = self.client.get(self.URL)
+
+        assert first_response.json() == {'user_message': 'First error'}
+        assert second_response.json() == {'user_message': 'Second error'}
+
 
 class UserApiTestCase(UserAPITestCase):
     """

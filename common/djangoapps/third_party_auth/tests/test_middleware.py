@@ -107,15 +107,26 @@ class ExceptionMiddlewareAccountSettingsDispatchTestCase(TestCase):
         assert redirect_uri == pipeline.AUTH_DISPATCH_URLS[pipeline.AUTH_ENTRY_LOGIN]
 
     @skip_unless_lms
-    def test_process_exception_leaves_social_auth_tagged_message_for_mfe(self):
+    @ddt.data(
+        social_exceptions.AuthAlreadyAssociated,
+        social_exceptions.AuthCanceled,
+        social_exceptions.AuthFailed,
+        social_exceptions.AuthTokenError,
+        social_exceptions.AuthStateMissing,
+        social_exceptions.AuthStateForbidden,
+        social_exceptions.AuthTokenRevoked,
+        social_exceptions.AuthUnreachableProvider,
+    )
+    def test_process_exception_leaves_social_auth_tagged_message_for_mfe(self, exception_class):
         """
         End to end: process_exception (the parent implementation) must still
         queue a Django message tagged with 'social-auth' for the Account MFE
-        to read, since we no longer save it ourselves.
+        to read, since we no longer save it ourselves. Covers every
+        recognized third-party-auth exception, not just AuthAlreadyAssociated.
         """
         request = self._build_request()
         MessageMiddleware(get_response=lambda request: None).process_request(request)
-        exception = social_exceptions.AuthAlreadyAssociated('tpa-saml')
+        exception = exception_class('tpa-saml')
 
         ExceptionMiddleware(get_response=lambda r: None).process_exception(request, exception)
 
@@ -123,3 +134,18 @@ class ExceptionMiddlewareAccountSettingsDispatchTestCase(TestCase):
         assert len(queued_messages) == 1
         assert queued_messages[0].extra_tags.split() == ['social-auth', 'tpa-saml']
         assert str(queued_messages[0]) == str(exception)
+
+    @skip_unless_lms
+    def test_process_exception_does_not_queue_message_for_unrecognized_exception(self):
+        """
+        Non-SocialAuthBaseException errors are untouched by
+        SocialAuthExceptionMiddleware.process_exception -- confirms we're not
+        accidentally tagging unrelated exceptions as TPA errors.
+        """
+        request = self._build_request()
+        MessageMiddleware(get_response=lambda request: None).process_request(request)
+
+        result = ExceptionMiddleware(get_response=lambda r: None).process_exception(request, ValueError('boom'))
+
+        assert result is None
+        assert list(request._messages) == []  # pylint: disable=protected-access
