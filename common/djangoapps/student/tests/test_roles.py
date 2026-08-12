@@ -14,6 +14,7 @@ from openedx_authz.api.data import (
     ContentLibraryData,
     CourseOverviewData,
     OrgCourseOverviewGlobData,
+    PlatformCourseOverviewGlobData,
     RoleAssignmentData,
     RoleData,
     ScopeData,
@@ -21,6 +22,7 @@ from openedx_authz.api.data import (
 )
 from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_STAFF
 from openedx_authz.engine.enforcer import AuthzEnforcer
+from organizations.api import add_organization
 
 from common.djangoapps.student.admin import CourseAccessRoleHistoryAdmin
 from common.djangoapps.student.models import CourseAccessRoleHistory, User
@@ -312,6 +314,33 @@ class RolesTestCase(TestCase):
         with patch("openedx_authz.api.users.get_user_role_assignments_filtered", return_value=assignments):
             result = role.get_orgs_for_user(self.student)
             self.assertCountEqual(result, [self.course_key.org, other_org])  # noqa: PT009
+
+    @override_waffle_flag(AUTHZ_COURSE_AUTHORING_FLAG, active=True)
+    def test_get_orgs_for_user_authz_platform_glob(self):
+        """
+        A platform-wide glob assignment (course-v1:*) has no `.org` attribute, unlike
+        course/org-glob scopes. get_orgs_for_user must special-case it and return every
+        registered org instead of crashing with an AttributeError.
+        """
+        role = CourseStaffRole(self.course_key)
+
+        for org in self.orgs:
+            add_organization({"name": org, "short_name": org, "description": ""})
+
+        staff_authz_role = RoleData(external_key=COURSE_STAFF)
+        assignments = [
+            RoleAssignmentData(
+                subject=UserData(external_key=self.student.username),
+                roles=[staff_authz_role],
+                scope=PlatformCourseOverviewGlobData(external_key="course-v1:*"),
+            ),
+        ]
+
+        with patch("openedx_authz.api.users.get_user_role_assignments_filtered", return_value=assignments):
+            result = role.get_orgs_for_user(self.student)
+            self.assertCountEqual(result, self.orgs)  # noqa: PT009
+            assert role.has_org_for_user(self.student)
+            assert role.has_org_for_user(self.student, org=self.orgs[0])
 
     def test_get_authz_compat_course_access_roles_for_user(self):
         """
