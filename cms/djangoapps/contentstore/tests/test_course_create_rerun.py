@@ -15,7 +15,6 @@ from django.test.client import RequestFactory
 from django.urls import reverse
 from edx_toggles.toggles.testutils import override_waffle_flag
 from opaque_keys.edx.keys import CourseKey
-from openedx_authz.constants.roles import COURSE_EDITOR
 from organizations.api import add_organization, get_course_organizations, get_organization_by_short_name
 from organizations.exceptions import InvalidOrganizationException
 from organizations.models import Organization
@@ -27,7 +26,6 @@ from cms.djangoapps.course_creators.models import CourseCreator
 from common.djangoapps.student.auth import update_org_role
 from common.djangoapps.student.roles import CourseInstructorRole, CourseStaffRole, OrgContentCreatorRole
 from common.djangoapps.student.tests.factories import AdminFactory, UserFactory
-from openedx.core.djangoapps.authz.tests.mixins import CourseAuthoringAuthzTestMixin
 from openedx.core.toggles import AUTHZ_COURSE_AUTHORING_FLAG
 from xmodule.course_block import CourseFields
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
