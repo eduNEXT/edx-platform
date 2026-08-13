@@ -15,13 +15,12 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_GET
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import UsageKey
+from openedx_authz.constants.permissions import COURSES_VIEW_COURSE
 from xblock.core import XBlock
 from xblock.django.request import django_to_webob_request, webob_to_django_response
 from xblock.exceptions import NoSuchHandlerError
 from xblock.plugin import PluginMissingError
 from xblock.runtime import Mixologist
-
-from openedx_authz.constants.permissions import COURSES_VIEW_COURSE
 
 from cms.djangoapps.contentstore.helpers import get_parent_if_split_test, is_library_content, is_unit
 from cms.djangoapps.contentstore.toggles import libraries_v2_enabled, use_new_unit_page
