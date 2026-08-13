@@ -21,6 +21,8 @@ from xblock.exceptions import NoSuchHandlerError
 from xblock.plugin import PluginMissingError
 from xblock.runtime import Mixologist
 
+from openedx_authz.constants.permissions import COURSES_VIEW_COURSE
+
 from cms.djangoapps.contentstore.helpers import get_parent_if_split_test, is_library_content, is_unit
 from cms.djangoapps.contentstore.toggles import libraries_v2_enabled, use_new_unit_page
 from cms.djangoapps.contentstore.xblock_storage_handlers.view_handlers import load_services_for_studio
@@ -28,6 +30,8 @@ from common.djangoapps.edxmako.shortcuts import render_to_response
 from common.djangoapps.student.auth import has_course_author_access
 from common.djangoapps.xblock_django.api import authorable_xblocks, disabled_xblocks
 from common.djangoapps.xblock_django.models import XBlockStudioConfigurationFlag
+from openedx.core.djangoapps.authz.constants import LegacyAuthoringPermission
+from openedx.core.djangoapps.authz.decorators import user_has_course_permission
 from openedx.core.djangoapps.content_tagging.api import get_object_tags
 from openedx.core.djangoapps.discussions.models import DiscussionsConfiguration
 from openedx.core.lib.xblock_utils import get_aside_from_xblock, is_xblock_aside
@@ -491,7 +495,11 @@ def _get_item_in_course(request, usage_key):
     Helper method for getting the old location, containing course,
     item, lms_link, and preview_lms_link for a given locator.
 
-    Verifies that the caller has permission to access this item.
+    Verifies that the caller has permission to view this item. All current callers
+    (container_handler, container_embed_handler, xblock_edit_view, and the REST API v1
+    ContainerHandlerView) are read-only, so this only requires view access, not write
+    access — actual mutations are gated separately (e.g. component_handler's own
+    has_course_author_access check before persisting).
     """
 
     from ..utils import get_lms_link_for_item
@@ -501,7 +509,12 @@ def _get_item_in_course(request, usage_key):
 
     course_key = usage_key.course_key
 
-    if not has_course_author_access(request.user, course_key):
+    if not user_has_course_permission(
+        request.user,
+        COURSES_VIEW_COURSE.identifier,
+        course_key,
+        LegacyAuthoringPermission.READ,
+    ):
         raise PermissionDenied()
 
     course = modulestore().get_course(course_key)
