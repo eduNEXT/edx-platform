@@ -434,10 +434,10 @@ class RolesTestCase(TestCase):
             self.student._roles = RoleCache(self.student)
 
         for org in self.orgs:
-            self.assertTrue(self.student._roles.has_role("instructor", None, org))  # noqa: PT009
-            self.assertTrue(OrgInstructorRole(org).has_user(self.student))  # noqa: PT009
-        self.assertTrue(self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, marvel_course_key))  # noqa: PT009
-        self.assertTrue(self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, dc_course_key))  # noqa: PT009
+            assert self.student._roles.has_role("instructor", None, org)
+            assert OrgInstructorRole(org).has_user(self.student)
+        assert self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, marvel_course_key)
+        assert self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, dc_course_key)
 
 
 @ddt.ddt
