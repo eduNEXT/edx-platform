@@ -393,7 +393,7 @@ class RolesTestCase(TestCase):
         assignment = RoleAssignmentData(
             subject=UserData(external_key=self.student.username),
             roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
-            scope=PlatformCourseOverviewGlobData(external_key="course-v1:*"),
+            scope=PlatformCourseOverviewGlobData(external_key=PlatformCourseOverviewGlobData.build_external_key()),
         )
         with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
             result = get_authz_compat_course_access_roles_for_user(self.student)
@@ -426,7 +426,7 @@ class RolesTestCase(TestCase):
         assignment = RoleAssignmentData(
             subject=UserData(external_key=self.student.username),
             roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
-            scope=PlatformCourseOverviewGlobData(external_key="course-v1:*"),
+            scope=PlatformCourseOverviewGlobData(external_key=PlatformCourseOverviewGlobData.build_external_key()),
         )
         with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
             if hasattr(self.student, "_roles"):
