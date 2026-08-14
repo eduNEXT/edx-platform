@@ -332,7 +332,7 @@ class RolesTestCase(TestCase):
             RoleAssignmentData(
                 subject=UserData(external_key=self.student.username),
                 roles=[staff_authz_role],
-                scope=PlatformCourseOverviewGlobData(external_key="course-v1:*"),
+                scope=PlatformCourseOverviewGlobData(external_key=PlatformCourseOverviewGlobData.build_external_key()),
             ),
         ]
 
