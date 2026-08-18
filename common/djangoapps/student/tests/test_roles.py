@@ -20,6 +20,7 @@ from openedx_authz.api.data import (
     ScopeData,
     UserData,
 )
+from openedx_authz.api.users import assign_role_to_user_in_scope
 from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_STAFF
 from openedx_authz.engine.enforcer import AuthzEnforcer
 from organizations.api import add_organization
@@ -327,20 +328,17 @@ class RolesTestCase(TestCase):
         for org in self.orgs:
             add_organization({"name": org, "short_name": org, "description": ""})
 
-        staff_authz_role = RoleData(external_key=COURSE_STAFF)
-        assignments = [
-            RoleAssignmentData(
-                subject=UserData(external_key=self.student.username),
-                roles=[staff_authz_role],
-                scope=PlatformCourseOverviewGlobData(external_key=PlatformCourseOverviewGlobData.build_external_key()),
-            ),
-        ]
+        assign_role_to_user_in_scope(
+            self.student.username,
+            COURSE_STAFF.external_key,
+            PlatformCourseOverviewGlobData.build_external_key(),
+        )
+        AuthzEnforcer.get_enforcer().load_policy()
 
-        with patch("openedx_authz.api.users.get_user_role_assignments_filtered", return_value=assignments):
-            result = role.get_orgs_for_user(self.student)
-            self.assertCountEqual(result, self.orgs)  # noqa: PT009
-            assert role.has_org_for_user(self.student)
-            assert role.has_org_for_user(self.student, org=self.orgs[0])
+        result = role.get_orgs_for_user(self.student)
+        self.assertCountEqual(result, self.orgs)  # noqa: PT009
+        assert role.has_org_for_user(self.student)
+        assert role.has_org_for_user(self.student, org=self.orgs[0])
 
     def test_get_authz_compat_course_access_roles_for_user(self):
         """
