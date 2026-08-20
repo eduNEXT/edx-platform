@@ -203,3 +203,79 @@ class AdvancedSettingsAuthzTest(CourseTestCase):
             content_type="application/json"
         )
         self.assertEqual(response.status_code, 403)  # noqa: PT009
+
+    def test_editor_can_view_advanced_settings(self, mock_flag):
+        """Course editor (view-only for advanced settings) can GET."""
+        from openedx_authz.constants.roles import COURSE_EDITOR
+
+        editor_user = UserFactory()
+        assign_role_to_user_in_scope(
+            editor_user.username,
+            COURSE_EDITOR.external_key,
+            str(self.course.id),
+        )
+        AuthzEnforcer.get_enforcer().load_policy()
+
+        editor_client = APIClient()
+        editor_client.force_authenticate(user=editor_user)
+        response = editor_client.get(self.url)
+        assert response.status_code == 200
+
+    def test_editor_cannot_write_advanced_settings(self, mock_flag):
+        """Course editor cannot PATCH advanced settings (requires manage permission)."""
+        from openedx_authz.constants.roles import COURSE_EDITOR
+
+        editor_user = UserFactory()
+        assign_role_to_user_in_scope(
+            editor_user.username,
+            COURSE_EDITOR.external_key,
+            str(self.course.id),
+        )
+        AuthzEnforcer.get_enforcer().load_policy()
+
+        editor_client = APIClient()
+        editor_client.force_authenticate(user=editor_user)
+        response = editor_client.patch(
+            self.url,
+            {"display_name": {"value": "Test"}},
+            content_type="application/json",
+        )
+        assert response.status_code == 403
+
+    def test_auditor_can_view_advanced_settings(self, mock_flag):
+        """Course auditor (view-only) can GET advanced settings."""
+        from openedx_authz.constants.roles import COURSE_AUDITOR
+
+        auditor_user = UserFactory()
+        assign_role_to_user_in_scope(
+            auditor_user.username,
+            COURSE_AUDITOR.external_key,
+            str(self.course.id),
+        )
+        AuthzEnforcer.get_enforcer().load_policy()
+
+        auditor_client = APIClient()
+        auditor_client.force_authenticate(user=auditor_user)
+        response = auditor_client.get(self.url)
+        assert response.status_code == 200
+
+    def test_auditor_cannot_write_advanced_settings(self, mock_flag):
+        """Course auditor cannot PATCH advanced settings (requires manage permission)."""
+        from openedx_authz.constants.roles import COURSE_AUDITOR
+
+        auditor_user = UserFactory()
+        assign_role_to_user_in_scope(
+            auditor_user.username,
+            COURSE_AUDITOR.external_key,
+            str(self.course.id),
+        )
+        AuthzEnforcer.get_enforcer().load_policy()
+
+        auditor_client = APIClient()
+        auditor_client.force_authenticate(user=auditor_user)
+        response = auditor_client.patch(
+            self.url,
+            {"display_name": {"value": "Test"}},
+            content_type="application/json",
+        )
+        assert response.status_code == 403
