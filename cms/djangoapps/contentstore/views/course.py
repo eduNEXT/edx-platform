@@ -42,6 +42,7 @@ from openedx_authz.constants.permissions import (
     COURSES_PUBLISH_COURSE_CONTENT,
     COURSES_VIEW_COURSE,
     COURSES_VIEW_COURSE_UPDATES,
+    COURSES_VIEW_GROUP_CONFIGURATIONS,
     COURSES_VIEW_PAGES_AND_RESOURCES,
 )
 from organizations.api import add_organization_course, ensure_organization
@@ -178,6 +179,21 @@ def get_course_and_check_manage_group_configurations_access(course_key, user, de
     if not user_has_course_permission(
         user=user,
         authz_permission=COURSES_MANAGE_GROUP_CONFIGURATIONS.identifier,
+        course_key=course_key,
+        legacy_permission=LegacyAuthoringPermission.READ
+    ):
+        raise PermissionDenied()
+    return _get_course_block(course_key, depth)
+
+
+def get_course_and_check_view_group_configurations_access(course_key, user, depth=0):
+    """
+    Function used to validate read permission and return a course block
+    for group configurations list/detail GET requests.
+    """
+    if not user_has_course_permission(
+        user=user,
+        authz_permission=COURSES_VIEW_GROUP_CONFIGURATIONS.identifier,
         course_key=course_key,
         legacy_permission=LegacyAuthoringPermission.READ
     ):
@@ -1915,7 +1931,10 @@ def group_configurations_list_handler(request, course_key_string):
     course_key = CourseKey.from_string(course_key_string)
     store = modulestore()
     with store.bulk_operations(course_key):
-        course = get_course_and_check_manage_group_configurations_access(course_key, request.user)
+        if request.method == 'GET':
+            course = get_course_and_check_view_group_configurations_access(course_key, request.user)
+        else:
+            course = get_course_and_check_manage_group_configurations_access(course_key, request.user)
 
         if 'text/html' in request.META.get('HTTP_ACCEPT', 'text/html'):
             return redirect(get_group_configurations_url(course_key))
