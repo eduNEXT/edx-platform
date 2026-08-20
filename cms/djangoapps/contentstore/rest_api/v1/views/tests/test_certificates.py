@@ -2,7 +2,7 @@
 Unit tests for the course's certificate.
 """
 from django.urls import reverse
-from openedx_authz.constants.roles import COURSE_EDITOR, COURSE_STAFF
+from openedx_authz.constants.roles import COURSE_AUDITOR, COURSE_EDITOR, COURSE_STAFF
 from rest_framework import status
 
 from cms.djangoapps.contentstore.tests.utils import CourseTestCase
@@ -59,14 +59,41 @@ class CourseCertificatesAuthzViewTest(
         self._add_course_certificates(count=2, signatory_count=2)
         self.add_user_to_role_in_course(self.authorized_user, COURSE_STAFF.external_key, self.course.id)
         resp = self.authorized_client.get(self.url)
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)  # noqa: PT009
+        assert resp.status_code == status.HTTP_200_OK
 
-    def test_non_staff_user_cannot_access(self):
-        """
-        User without permissions should be denied.
-        This case validates that a non-staff user cannot access.
-        """
-        self._add_course_certificates(count=2, signatory_count=2)
+    def test_staff_role_has_can_manage_true(self):
+        """User with COURSE_STAFF role gets can_manage=True in response."""
+        self._add_course_certificates(count=1, signatory_count=1)
+        self.add_user_to_role_in_course(self.authorized_user, COURSE_STAFF.external_key, self.course.id)
+        resp = self.authorized_client.get(self.url)
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["can_manage"] is True
+
+    def test_editor_can_view_certificates(self):
+        """User with COURSE_EDITOR role can view certificates (has view_certificates)."""
+        self._add_course_certificates(count=1, signatory_count=1)
         self.add_user_to_role_in_course(self.authorized_user, COURSE_EDITOR.external_key, self.course.id)
         resp = self.authorized_client.get(self.url)
-        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)  # noqa: PT009
+        assert resp.status_code == status.HTTP_200_OK
+
+    def test_editor_has_can_manage_false(self):
+        """User with COURSE_EDITOR role gets can_manage=False (no manage_certificates)."""
+        self._add_course_certificates(count=1, signatory_count=1)
+        self.add_user_to_role_in_course(self.authorized_user, COURSE_EDITOR.external_key, self.course.id)
+        resp = self.authorized_client.get(self.url)
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["can_manage"] is False
+
+    def test_unauthorized_user_cannot_access(self):
+        """User without any role cannot access."""
+        self._add_course_certificates(count=1, signatory_count=1)
+        resp = self.unauthorized_client.get(self.url)
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_auditor_can_view_certificates(self):
+        """User with COURSE_AUDITOR role can view certificates (has view_certificates)."""
+        self._add_course_certificates(count=1, signatory_count=1)
+        self.add_user_to_role_in_course(self.authorized_user, COURSE_AUDITOR.external_key, self.course.id)
+        resp = self.authorized_client.get(self.url)
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.data["can_manage"] is False
