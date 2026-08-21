@@ -303,13 +303,13 @@ class ContainerHandlerViewAuthzTest(CourseAuthoringAuthzTestMixin, BaseXBlockCon
         self.client.login(username=role_user.username, password=self.password)
         response = self.client.get(self.get_reverse_url(self.vertical.location))
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)  # noqa: PT009
+        assert response.status_code == status.HTTP_200_OK
 
     def test_unauthorized_user_gets_permission_denied(self):
         self.client.login(username=self.unauthorized_user.username, password=self.password)
         response = self.client.get(self.get_reverse_url(self.vertical.location))
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)  # noqa: PT009
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class ContainerVerticalViewTest(BaseXBlockContainer):
