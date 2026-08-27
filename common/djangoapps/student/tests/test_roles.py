@@ -438,6 +438,63 @@ class RolesTestCase(TestCase):
         self.assertTrue(self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, course_key))  # noqa: PT009
         self.assertTrue(self.student.has_perm(instructor_permissions.SHOW_TASKS, course_key))  # noqa: PT009
 
+    def test_get_authz_compat_course_access_roles_for_user_platform_glob(self):
+        """
+        A platform-wide (course-v1:*) AuthZ assignment should map to one legacy
+        org-level course access role per registered org, since it applies to all of them.
+        """
+        for org in self.orgs:
+            add_organization({"name": org, "short_name": org, "description": ""})
+
+        assignment = RoleAssignmentData(
+            subject=UserData(external_key=self.student.username),
+            roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
+            scope=PlatformCourseOverviewGlobData(external_key=PlatformCourseOverviewGlobData.build_external_key()),
+        )
+        with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
+            result = get_authz_compat_course_access_roles_for_user(self.student)
+
+        self.assertCountEqual(  # noqa: PT009
+            result,
+            {
+                AuthzCompatCourseAccessRole(
+                    user_id=self.student.id,
+                    username=self.student.username,
+                    org=org,
+                    course_id=None,
+                    role="instructor",
+                )
+                for org in self.orgs
+            },
+        )
+
+    def test_platform_glob_authz_role_grants_instructor_dashboard_permissions(self):
+        """
+        A platform-wide (course-v1:*) AuthZ course_admin should grant legacy instructor
+        access for courses in *any* org, the same way an org-wide grant does for its org.
+        """
+        # pylint: disable=protected-access
+        for org in self.orgs:
+            add_organization({"name": org, "short_name": org, "description": ""})
+        marvel_course_key = CourseKey.from_string(f"course-v1:{self.orgs[0]}+DemoX+DemoCourse")
+        dc_course_key = CourseKey.from_string(f"course-v1:{self.orgs[1]}+DemoX+DemoCourse")
+
+        assignment = RoleAssignmentData(
+            subject=UserData(external_key=self.student.username),
+            roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
+            scope=PlatformCourseOverviewGlobData(external_key=PlatformCourseOverviewGlobData.build_external_key()),
+        )
+        with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
+            if hasattr(self.student, "_roles"):
+                del self.student._roles
+            self.student._roles = RoleCache(self.student)
+
+        for org in self.orgs:
+            assert self.student._roles.has_role("instructor", None, org)
+            assert OrgInstructorRole(org).has_user(self.student)
+        assert self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, marvel_course_key)
+        assert self.student.has_perm(instructor_permissions.VIEW_DASHBOARD, dc_course_key)
+
 
 @ddt.ddt
 class RoleCacheTestCase(TestCase):  # pylint: disable=missing-class-docstring
