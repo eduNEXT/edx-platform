@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import ddt
 from django.test import Client
-from openedx_authz.constants.roles import COURSE_DATA_RESEARCHER, COURSE_STAFF
+from openedx_authz.constants.roles import COURSE_AUDITOR, COURSE_DATA_RESEARCHER, COURSE_EDITOR, COURSE_STAFF
 from rest_framework import status
 
 from cms.djangoapps.contentstore.api.tests.base import BaseCourseViewTest
@@ -1234,6 +1234,66 @@ class GroupConfigurationsValidationTestCase(CourseTestCase, HelperMethods):
         Tests if validation message is not present when updating usage info.
         """
         self.verify_validation_update_usage_info(None, None)  # pylint: disable=no-value-for-parameter
+
+@ddt.ddt
+class GetGroupConfigurationsListHandlerAuthzTest(CourseAuthzTestMixin, BaseCourseViewTest):
+    """
+    Tests the GET (read) path of group_configurations_list_handler authorization
+    using openedx-authz. The GET path uses the COURSES_VIEW_GROUP_CONFIGURATIONS
+    permission, so view-only roles (editor/auditor) are allowed while roles without
+    any view access are denied.
+    """
+
+    view_name = "group_configurations_list_handler"
+    authz_roles_to_assign = [COURSE_STAFF.external_key]
+    course_key_arg_name = 'course_key_string'
+
+    def setUp(self):
+        super().setUp()
+        # Function-based views require session auth, not DRF force_authenticate.
+        self.authorized_client = Client()
+        self.authorized_client.login(
+            username=self.authorized_user.username, password=self.password
+        )
+        self.unauthorized_client = Client()
+        self.unauthorized_client.login(
+            username=self.unauthorized_user.username, password=self.password
+        )
+
+    def _get(self, client, course_key):
+        """GET the list handler as an HTML request (redirects to the MFE on success)."""
+        return client.get(
+            self.get_url(course_key),
+            HTTP_ACCEPT='text/html',
+        )
+
+    @ddt.data(COURSE_STAFF, COURSE_EDITOR, COURSE_AUDITOR)
+    def test_view_permission_roles_can_read(self, role):
+        """Staff, editor, and auditor all have view_group_configurations and can GET."""
+        user = UserFactory(password=self.password)
+        self.add_user_to_role(user, role.external_key)
+        client = Client()
+        client.login(username=user.username, password=self.password)
+
+        resp = self._get(client, self.course_key)
+        # HTML GET redirects to the authoring MFE when access is granted.
+        assert resp.status_code == status.HTTP_302_FOUND
+
+    def test_unauthorized_user_cannot_read(self):
+        """User without any role cannot GET."""
+        resp = self._get(self.unauthorized_client, self.course_key)
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_role_without_view_permission_cannot_read(self):
+        """A role lacking view_group_configurations (data researcher) cannot GET."""
+        non_staff_user = UserFactory(password=self.password)
+        self.add_user_to_role(non_staff_user, COURSE_DATA_RESEARCHER.external_key)
+        client = Client()
+        client.login(username=non_staff_user.username, password=self.password)
+
+        resp = self._get(client, self.course_key)
+        assert resp.status_code == status.HTTP_403_FORBIDDEN
+
 
 class PostGroupConfigurationsListHandlerAuthzTest(CourseAuthzTestMixin, BaseCourseViewTest):
     """
