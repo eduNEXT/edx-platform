@@ -14,13 +14,16 @@ from openedx_authz.api.data import (
     ContentLibraryData,
     CourseOverviewData,
     OrgCourseOverviewGlobData,
+    PlatformCourseOverviewGlobData,
     RoleAssignmentData,
     RoleData,
     ScopeData,
     UserData,
 )
+from openedx_authz.api.users import assign_role_to_user_in_scope
 from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_STAFF
 from openedx_authz.engine.enforcer import AuthzEnforcer
+from organizations.api import add_organization
 
 from common.djangoapps.student.admin import CourseAccessRoleHistoryAdmin
 from common.djangoapps.student.models import CourseAccessRoleHistory, User
@@ -312,6 +315,61 @@ class RolesTestCase(TestCase):
         with patch("openedx_authz.api.users.get_user_role_assignments_filtered", return_value=assignments):
             result = role.get_orgs_for_user(self.student)
             self.assertCountEqual(result, [self.course_key.org, other_org])  # noqa: PT009
+
+    @override_waffle_flag(AUTHZ_COURSE_AUTHORING_FLAG, active=True)
+    def test_get_orgs_for_user_authz_platform_glob(self):
+        """
+        A platform-wide glob assignment (course-v1:*) has no `.org` attribute, unlike
+        course/org-glob scopes. get_orgs_for_user must special-case it and return every
+        registered org instead of crashing with an AttributeError.
+        """
+        role = CourseStaffRole(self.course_key)
+
+        for org in self.orgs:
+            add_organization({"name": org, "short_name": org, "description": ""})
+
+        assign_role_to_user_in_scope(
+            self.student.username,
+            COURSE_STAFF.external_key,
+            PlatformCourseOverviewGlobData.build_external_key(),
+        )
+        AuthzEnforcer.get_enforcer().load_policy()
+
+        result = role.get_orgs_for_user(self.student)
+        self.assertCountEqual(result, self.orgs)  # noqa: PT009
+        assert role.has_org_for_user(self.student)
+        assert role.has_org_for_user(self.student, org=self.orgs[0])
+
+    @override_waffle_flag(AUTHZ_COURSE_AUTHORING_FLAG, active=True)
+    def test_get_orgs_for_user_authz_platform_glob_vs_org_scoped(self):
+        """
+        Side-by-side check that the platform-glob branch (return every registered org)
+        and the regular branch (return only the orgs with a concrete assignment) produce
+        the same list[str] shape, over the same pool of registered orgs: an org-scoped
+        grant returns a subset, a platform-wide grant returns all of them.
+        """
+        role = CourseStaffRole(self.course_key)
+        third_org = "Universal"
+        all_orgs = [*self.orgs, third_org]
+
+        for org in all_orgs:
+            add_organization({"name": org, "short_name": org, "description": ""})
+
+        subset_user = UserFactory()
+        assign_role_to_user_in_scope(
+            subset_user.username,
+            COURSE_STAFF.external_key,
+            OrgCourseOverviewGlobData.build_external_key(self.orgs[0]),
+        )
+        assign_role_to_user_in_scope(
+            self.student.username,
+            COURSE_STAFF.external_key,
+            PlatformCourseOverviewGlobData.build_external_key(),
+        )
+        AuthzEnforcer.get_enforcer().load_policy()
+
+        self.assertCountEqual(role.get_orgs_for_user(subset_user), [self.orgs[0]])  # noqa: PT009
+        self.assertCountEqual(role.get_orgs_for_user(self.student), all_orgs)  # noqa: PT009
 
     def test_get_authz_compat_course_access_roles_for_user(self):
         """
