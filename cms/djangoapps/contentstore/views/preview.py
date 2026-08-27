@@ -318,6 +318,9 @@ def _studio_wrap_xblock(xblock, view, frag, context, display_name_only=False):
         can_edit = context.get('can_edit', True)
         can_add = context.get('can_add', True)
         can_move = context.get('can_move', True)
+        # Set by block.py; default False so callers that don't set it are unaffected.
+        is_authz_authoring_enabled = context.get('is_authz_authoring_enabled', False)
+        authz_can_edit_course_content = context.get('authz_can_edit_course_content', True)
         root_upstream_link = UpstreamLink.try_get_for_block(root_xblock, log_error=False)
         upstream_link = UpstreamLink.try_get_for_block(xblock, log_error=False)
         if (
@@ -363,6 +366,8 @@ def _studio_wrap_xblock(xblock, view, frag, context, display_name_only=False):
             'is_course': is_course,
             'tags_count': tags_count,
             'can_edit_title': True,  # This is always true even for imported components
+            'is_authz_authoring_enabled': is_authz_authoring_enabled,
+            'authz_can_edit_course_content': authz_can_edit_course_content,
         }
 
         add_webpack_js_to_fragment(frag, "js/factories/xblock_validation")

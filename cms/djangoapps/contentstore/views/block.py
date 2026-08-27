@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_http_methods
 from opaque_keys.edx.keys import CourseKey
-from openedx_authz.constants.permissions import COURSES_VIEW_COURSE
+from openedx_authz.constants.permissions import COURSES_EDIT_COURSE_CONTENT, COURSES_VIEW_COURSE
 from web_fragments.fragment import Fragment
 
 from cms.djangoapps.contentstore.utils import load_services_for_studio
@@ -27,6 +27,7 @@ from cms.djangoapps.contentstore.xblock_storage_handlers.xblock_helpers import g
 from cms.lib.xblock.authoring_mixin import VISIBILITY_VIEW
 from common.djangoapps.edxmako.shortcuts import render_to_response, render_to_string
 from common.djangoapps.student.auth import has_studio_read_access, has_studio_write_access
+from common.djangoapps.student.roles import enable_authz_course_authoring
 from common.djangoapps.util.json_request import JsonResponse, expect_json
 from openedx.core.djangoapps.authz.constants import LegacyAuthoringPermission
 from openedx.core.djangoapps.authz.decorators import user_has_course_permission
@@ -129,10 +130,37 @@ def xblock_handler(request, usage_key_string=None):
     return handle_xblock(request, usage_key_string)
 
 
+def _get_authz_permissions_flags(user, course_key):
+    """
+    Return the two RBAC-authoring flags used to gate the header-actions div
+    in the XBlock component card template.
+
+    When ``authz.enable_course_authoring`` is off for the course both flags
+    default to values that preserve existing (pre-RBAC) behaviour:
+    - ``is_authz_authoring_enabled = False`` → template always shows the div.
+    - ``authz_can_edit_course_content = False`` → unused while flag is off.
+
+    When the flag is on, ``authz_can_edit_course_content`` reflects whether
+    the requesting user holds the ``courses.edit_course_content`` permission.
+
+    Returns:
+        tuple[bool, bool]: (is_authz_authoring_enabled, authz_can_edit_course_content)
+    """
+    if not enable_authz_course_authoring(course_key):
+        return False, False
+    can_edit = user_has_course_permission(
+        user,
+        COURSES_EDIT_COURSE_CONTENT.identifier,
+        course_key,
+        legacy_permission=LegacyAuthoringPermission.WRITE,
+    )
+    return True, can_edit
+
+
 @require_http_methods("GET")
 @login_required
 @expect_json
-def xblock_view_handler(request, usage_key_string, view_name):
+def xblock_view_handler(request, usage_key_string, view_name): # pylint: disable=too-many-statements
     """
     The restful handler for requests for rendered xblock views.
 
@@ -205,6 +233,12 @@ def xblock_view_handler(request, usage_key_string, view_name):
             )  # Only the "Pages" view uses student view in Studio
             can_edit = has_studio_write_access(request.user, usage_key.course_key)
 
+            # Gate the header-actions div on courses.edit_course_content when
+            # the authz flag is on. See _get_authz_preview_flags for details.
+            is_authz_authoring_enabled, authz_can_edit_course_content = (
+                _get_authz_permissions_flags(request.user, usage_key.course_key)
+            )
+
             # Determine the items to be shown as reorderable. Note that the view
             # 'reorderable_container_child_preview' is only rendered for xblocks that
             # are being shown in a reorderable container, so the xblock is automatically
@@ -247,6 +281,8 @@ def xblock_view_handler(request, usage_key_string, view_name):
                     "is_pages_view": is_pages_view or view_name == AUTHOR_VIEW,
                     "is_unit_page": is_unit(xblock),
                     "can_edit": can_edit,
+                    "is_authz_authoring_enabled": is_authz_authoring_enabled,
+                    "authz_can_edit_course_content": authz_can_edit_course_content,
                     "root_xblock": xblock
                     if (view_name == "container_preview")
                     else None,
