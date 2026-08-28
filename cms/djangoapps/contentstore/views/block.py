@@ -186,7 +186,12 @@ def xblock_view_handler(request, usage_key_string, view_name): # pylint: disable
             the second is the resource description
     """
     usage_key = usage_key_with_run(usage_key_string)
-    if not has_studio_read_access(request.user, usage_key.course_key):
+    if not user_has_course_permission(
+        request.user,
+        COURSES_VIEW_COURSE.identifier,
+        usage_key.course_key,
+        LegacyAuthoringPermission.READ,
+    ):
         raise PermissionDenied()
 
     accept_header = request.META.get("HTTP_ACCEPT", "application/json")
@@ -355,7 +360,12 @@ def xblock_edit_view(request, usage_key_string):
     Allows editing of an XBlock specified by the usage key.
     """
     usage_key = usage_key_with_run(usage_key_string)
-    if not has_studio_read_access(request.user, usage_key.course_key):
+    if not user_has_course_permission(
+        request.user,
+        COURSES_VIEW_COURSE.identifier,
+        usage_key.course_key,
+        LegacyAuthoringPermission.READ,
+    ):
         raise PermissionDenied()
 
     store = modulestore()
@@ -427,7 +437,12 @@ def xblock_container_handler(request, usage_key_string):
     """
     usage_key = usage_key_with_run(usage_key_string)
 
-    if not has_studio_read_access(request.user, usage_key.course_key):
+    if not user_has_course_permission(
+        request.user,
+        COURSES_VIEW_COURSE.identifier,
+        usage_key.course_key,
+        LegacyAuthoringPermission.READ,
+    ):
         raise PermissionDenied()
 
     response_format = request.GET.get("format", "html")
