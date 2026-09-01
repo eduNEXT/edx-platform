@@ -20,6 +20,7 @@ from openedx_authz.api.data import (
     ScopeData,
     UserData,
 )
+from openedx_authz.api.users import assign_role_to_user_in_scope
 from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_STAFF
 from openedx_authz.engine.enforcer import AuthzEnforcer
 from organizations.api import add_organization
@@ -390,27 +391,25 @@ class RolesTestCase(TestCase):
         for org in self.orgs:
             add_organization({"name": org, "short_name": org, "description": ""})
 
-        assignment = RoleAssignmentData(
-            subject=UserData(external_key=self.student.username),
-            roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
-            scope=PlatformCourseOverviewGlobData(external_key=PlatformCourseOverviewGlobData.build_external_key()),
+        assign_role_to_user_in_scope(
+            self.student.username,
+            COURSE_ADMIN.external_key,
+            PlatformCourseOverviewGlobData.build_external_key(),
         )
-        with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
-            result = get_authz_compat_course_access_roles_for_user(self.student)
+        AuthzEnforcer.get_enforcer().load_policy()
 
-        self.assertCountEqual(  # noqa: PT009
-            result,
-            {
-                AuthzCompatCourseAccessRole(
-                    user_id=self.student.id,
-                    username=self.student.username,
-                    org=org,
-                    course_id=None,
-                    role="instructor",
-                )
-                for org in self.orgs
-            },
-        )
+        result = get_authz_compat_course_access_roles_for_user(self.student)
+
+        assert result == {
+            AuthzCompatCourseAccessRole(
+                user_id=self.student.id,
+                username=self.student.username,
+                org=org,
+                course_id=None,
+                role="instructor",
+            )
+            for org in self.orgs
+        }
 
     def test_platform_glob_authz_role_grants_instructor_dashboard_permissions(self):
         """
@@ -423,15 +422,16 @@ class RolesTestCase(TestCase):
         marvel_course_key = CourseKey.from_string(f"course-v1:{self.orgs[0]}+DemoX+DemoCourse")
         dc_course_key = CourseKey.from_string(f"course-v1:{self.orgs[1]}+DemoX+DemoCourse")
 
-        assignment = RoleAssignmentData(
-            subject=UserData(external_key=self.student.username),
-            roles=[RoleData(external_key=COURSE_ADMIN.external_key)],
-            scope=PlatformCourseOverviewGlobData(external_key=PlatformCourseOverviewGlobData.build_external_key()),
+        assign_role_to_user_in_scope(
+            self.student.username,
+            COURSE_ADMIN.external_key,
+            PlatformCourseOverviewGlobData.build_external_key(),
         )
-        with patch("openedx_authz.api.users.get_user_role_assignments", return_value=[assignment]):
-            if hasattr(self.student, "_roles"):
-                del self.student._roles
-            self.student._roles = RoleCache(self.student)
+        AuthzEnforcer.get_enforcer().load_policy()
+
+        if hasattr(self.student, "_roles"):
+            del self.student._roles
+        self.student._roles = RoleCache(self.student)
 
         for org in self.orgs:
             assert self.student._roles.has_role("instructor", None, org)

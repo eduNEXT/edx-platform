@@ -181,16 +181,15 @@ def _get_orgs_and_course_ids_from_authz_scope(
     ``get_user_permissions``, which already check org-level and course-level access
     separately) with no changes to ``RoleCache``/``OrgRole``/``CourseRole``.
 
-    Returns an empty list when the org cannot be determined (e.g. a malformed org-glob
-    external_key, where ``OrgGlobData.org`` is ``None``) or the scope type isn't one of
-    the above.
+    Returns an empty list when the scope type isn't one of the above (e.g. a content
+    library scope).
     """
     if isinstance(scope, CourseOverviewData):
         course_id = scope.external_key
         return [(get_org_from_key(course_id), course_id)]
     if isinstance(scope, PlatformCourseOverviewGlobData):
         return [(org["short_name"], None) for org in get_organizations()]
-    if isinstance(scope, OrgCourseOverviewGlobData) and scope.org is not None:
+    if isinstance(scope, OrgCourseOverviewGlobData):
         return [(scope.org, None)]
     return []
 
