@@ -23,7 +23,7 @@ from openedx_authz.api.data import (
 from openedx_authz.api.users import assign_role_to_user_in_scope
 from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_STAFF
 from openedx_authz.engine.enforcer import AuthzEnforcer
-from organizations.api import add_organization
+from organizations.tests.factories import OrganizationFactory
 
 from common.djangoapps.student.admin import CourseAccessRoleHistoryAdmin
 from common.djangoapps.student.models import CourseAccessRoleHistory, User
@@ -326,7 +326,7 @@ class RolesTestCase(TestCase):
         role = CourseStaffRole(self.course_key)
 
         for org in self.orgs:
-            add_organization({"name": org, "short_name": org, "description": ""})
+            OrganizationFactory(short_name=org, name=org)
 
         assign_role_to_user_in_scope(
             self.student.username,
@@ -336,7 +336,7 @@ class RolesTestCase(TestCase):
         AuthzEnforcer.get_enforcer().load_policy()
 
         result = role.get_orgs_for_user(self.student)
-        self.assertCountEqual(result, self.orgs)  # noqa: PT009
+        assert sorted(result) == sorted(self.orgs)
         assert role.has_org_for_user(self.student)
         assert role.has_org_for_user(self.student, org=self.orgs[0])
 
@@ -353,7 +353,7 @@ class RolesTestCase(TestCase):
         all_orgs = [*self.orgs, third_org]
 
         for org in all_orgs:
-            add_organization({"name": org, "short_name": org, "description": ""})
+            OrganizationFactory(short_name=org, name=org)
 
         subset_user = UserFactory()
         assign_role_to_user_in_scope(
@@ -368,8 +368,8 @@ class RolesTestCase(TestCase):
         )
         AuthzEnforcer.get_enforcer().load_policy()
 
-        self.assertCountEqual(role.get_orgs_for_user(subset_user), [self.orgs[0]])  # noqa: PT009
-        self.assertCountEqual(role.get_orgs_for_user(self.student), all_orgs)  # noqa: PT009
+        assert sorted(role.get_orgs_for_user(subset_user)) == [self.orgs[0]]
+        assert sorted(role.get_orgs_for_user(self.student)) == sorted(all_orgs)
 
     def test_get_authz_compat_course_access_roles_for_user(self):
         """
