@@ -416,6 +416,6 @@ class ClipboardAuthzTest(CourseAuthoringAuthzTestMixin, ModuleStoreTestCase):
         course_key = ToyCourseFactory.create().id
         html_key = course_key.make_usage_key("html", "toyhtml")
 
-        response = self.unauthorized_client.post(CLIPBOARD_ENDPOINT, {"usage_key": str(html_key)}, format="json")
-
-        assert response.status_code == 403
+        with self.allow_transaction_exception():
+            response = self.unauthorized_client.post(CLIPBOARD_ENDPOINT, {"usage_key": str(html_key)}, format="json")
+            assert response.status_code == 403
