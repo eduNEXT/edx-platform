@@ -12,7 +12,7 @@ from opaque_keys.edx.keys import CourseKey
 from rest_framework.permissions import BasePermission
 
 from common.djangoapps.student.roles import enable_authz_course_authoring
-from lms.djangoapps.instructor.authz.helpers import user_has_any_instructor_permission
+from lms.djangoapps.instructor.authz.api import user_has_any_instructor_permission
 from lms.djangoapps.instructor.authz.legacy import bridgekeeper_check
 
 log = logging.getLogger(__name__)

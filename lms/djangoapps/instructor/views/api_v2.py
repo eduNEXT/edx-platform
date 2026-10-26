@@ -105,7 +105,7 @@ from lms.djangoapps.instructor.access import (
 )
 from lms.djangoapps.instructor.authz import constants as authz_constants
 from lms.djangoapps.instructor.authz import legacy as authz_legacy
-from lms.djangoapps.instructor.authz.helpers import user_has_any_instructor_permission
+from lms.djangoapps.instructor.authz.api import user_has_any_instructor_permission
 from lms.djangoapps.instructor.authz.permissions import InstructorAuthzPermission
 from lms.djangoapps.instructor.constants import ReportType
 from lms.djangoapps.instructor.enrollment import (
@@ -308,8 +308,13 @@ class CourseMetadataView(DeveloperErrorViewMixin, APIView):
         course = get_course_by_id(course_key)
 
         def can_view_dashboard(user):
-            # Flag on: any of the dashboard AuthZ permissions.
-            # Flag off: the legacy dashboard permission.
+            """
+            Return whether the user can view the instructor dashboard.
+
+            With ``authz.enable_course_authoring`` enabled for the course, holding any of
+            the dashboard AuthZ permissions is enough. With it disabled, the legacy
+            dashboard permission is used.
+            """
             return user_has_any_instructor_permission(
                 user,
                 authz_constants.INSTRUCTOR_DASHBOARD_PERMISSIONS,
@@ -318,6 +323,8 @@ class CourseMetadataView(DeveloperErrorViewMixin, APIView):
             )
 
         # Masquerading is not migrated to AuthZ yet: it keeps requiring legacy staff access.
+        # The AuthZ course staff and course admin roles satisfy it through the legacy
+        # compatibility layer, which maps them to the legacy roles.
         original_user_is_staff = has_access(request.user, 'staff', course_key).has_access
         _, request.user = setup_masquerade(
             request,

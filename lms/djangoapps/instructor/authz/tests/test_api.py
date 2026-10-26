@@ -1,5 +1,5 @@
 """
-Tests for the Instructor Dashboard AuthZ helpers.
+Tests for the Instructor Dashboard AuthZ API.
 """
 
 from unittest.mock import Mock, patch
@@ -11,7 +11,7 @@ from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_AUDITOR, COURSE_S
 
 from common.djangoapps.student.tests.factories import UserFactory
 from lms.djangoapps.instructor.authz import constants
-from lms.djangoapps.instructor.authz.helpers import (
+from lms.djangoapps.instructor.authz.api import (
     get_instructor_authz_permissions,
     user_has_any_instructor_permission,
     user_has_instructor_permission,
@@ -19,7 +19,7 @@ from lms.djangoapps.instructor.authz.helpers import (
 from lms.djangoapps.instructor.authz.tests.mixins import InstructorAuthzTestMixin
 
 COURSE_KEY = CourseLocator("edX", "Demo", "2026")
-HELPERS = "lms.djangoapps.instructor.authz.helpers"
+API = "lms.djangoapps.instructor.authz.api"
 
 
 @ddt.ddt
@@ -88,7 +88,7 @@ class UserHasInstructorPermissionTest(InstructorAuthzTestMixin, TestCase):
         self.set_authz_enabled(False)
         default_check = Mock(return_value=True)
 
-        with patch.dict(f"{HELPERS}.LEGACY_PERMISSION_CHECKS", {constants.COURSES_VIEW_GRADEBOOK: default_check}):
+        with patch.dict(f"{API}.LEGACY_PERMISSION_CHECKS", {constants.COURSES_VIEW_GRADEBOOK: default_check}):
             allowed = user_has_instructor_permission(self.user, constants.COURSES_VIEW_GRADEBOOK, COURSE_KEY)
 
         assert allowed
@@ -116,7 +116,7 @@ class UserHasInstructorPermissionTest(InstructorAuthzTestMixin, TestCase):
         """Each decision is logged with the path (``authz`` or ``legacy``) that resolved it."""
         self.assign_authz_role(self.user, COURSE_STAFF.external_key, COURSE_KEY)
 
-        with self.assertLogs(HELPERS, level="DEBUG") as logs:
+        with self.assertLogs(API, level="DEBUG") as logs:
             user_has_instructor_permission(self.user, constants.COURSES_VIEW_ENROLLMENTS, COURSE_KEY)
             self.set_authz_enabled(False)
             user_has_instructor_permission(self.user, constants.COURSES_VIEW_ENROLLMENTS, COURSE_KEY, lambda *_: True)
@@ -130,7 +130,7 @@ class UserHasInstructorPermissionTest(InstructorAuthzTestMixin, TestCase):
     def test_any_permission_flag_enabled(self):
         """With the flag on, one granted permission of the set is enough."""
         self.set_authz_enabled(True)
-        with patch(f"{HELPERS}.authz_api.is_user_allowed", side_effect=lambda _u, perm, _s: perm == "b"):
+        with patch(f"{API}.authz_api.is_user_allowed", side_effect=lambda _u, perm, _s: perm == "b"):
             assert user_has_any_instructor_permission(self.user, ["a", "b"], COURSE_KEY)
             assert not user_has_any_instructor_permission(self.user, ["a", "c"], COURSE_KEY)
 
@@ -138,7 +138,7 @@ class UserHasInstructorPermissionTest(InstructorAuthzTestMixin, TestCase):
         """With the flag off, the default legacy check of any permission grants access."""
         self.set_authz_enabled(False)
         checks = {"a": lambda *_: False, "b": lambda *_: True}
-        with patch.dict(f"{HELPERS}.LEGACY_PERMISSION_CHECKS", checks, clear=True):
+        with patch.dict(f"{API}.LEGACY_PERMISSION_CHECKS", checks, clear=True):
             assert user_has_any_instructor_permission(self.user, ["a", "b"], COURSE_KEY)
             assert not user_has_any_instructor_permission(self.user, ["a"], COURSE_KEY)
 
@@ -147,6 +147,18 @@ class UserHasInstructorPermissionTest(InstructorAuthzTestMixin, TestCase):
         self.set_authz_enabled(False)
         assert user_has_any_instructor_permission(self.user, ["a", "b"], COURSE_KEY, lambda *_: True)
         assert not user_has_any_instructor_permission(self.user, ["a", "b"], COURSE_KEY, lambda *_: False)
+
+    def test_any_permission_flag_disabled_explicit_legacy_check_runs_once(self):
+        """With the flag off, an explicit legacy check covers the whole set: it runs and is logged once."""
+        self.set_authz_enabled(False)
+        legacy_check = Mock(return_value=False)
+
+        with self.assertLogs(API, level="DEBUG") as logs:
+            assert not user_has_any_instructor_permission(self.user, ["a", "b", "c"], COURSE_KEY, legacy_check)
+
+        legacy_check.assert_called_once_with(self.user, COURSE_KEY)
+        assert [record.access_path for record in logs.records] == ["legacy"]
+        assert logs.records[0].authz_permissions == ["a", "b", "c"]
 
     def test_any_permission_empty_collection_denies(self):
         """An empty collection denies instead of raising, whatever the flag and the legacy check."""

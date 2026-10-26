@@ -48,7 +48,7 @@ from lms.djangoapps.discussion.django_comment_client.utils import has_forum_acce
 from lms.djangoapps.grades.api import is_writable_gradebook_enabled
 from lms.djangoapps.instructor.authz import constants as authz_constants
 from lms.djangoapps.instructor.authz import legacy as authz_legacy
-from lms.djangoapps.instructor.authz.helpers import user_has_any_instructor_permission
+from lms.djangoapps.instructor.authz.api import user_has_any_instructor_permission
 from lms.djangoapps.instructor.constants import INSTRUCTOR_DASHBOARD_PLUGIN_VIEW_NAME
 from openedx.core.djangoapps.course_groups.cohorts import DEFAULT_COHORT_NAME, get_course_cohorts, is_course_cohorted
 from openedx.core.djangoapps.discussions.config.waffle_utils import legacy_discussion_experience_enabled

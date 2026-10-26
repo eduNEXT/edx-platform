@@ -61,7 +61,7 @@ class InstructorAuthzPermissionTest(InstructorAuthzTestMixin, TestCase):
         )
 
         with patch(
-            "lms.djangoapps.instructor.authz.helpers.authz_api.is_user_allowed",
+            "lms.djangoapps.instructor.authz.api.authz_api.is_user_allowed",
             side_effect=lambda _u, permission, _s: permission == constants.COURSES_VIEW_GRADEBOOK,
         ):
             assert InstructorAuthzPermission().has_permission(self._request(), view)

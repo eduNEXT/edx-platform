@@ -36,7 +36,10 @@ def seed_instructor_dashboard_policies():
     """
     Add to the enforcer the policies granted by the Instructor Dashboard.
 
-    They are not part of the static policies that ``seed_policies`` loads.
+    TEMPORARY: openedx-authz has no API to grant a permission to a role, so the
+    policies are added straight to the enforcer. Once the Instructor Dashboard
+    permissions are assigned to the default roles in the openedx-authz static
+    schema (loaded with ``load_authz_schema``), this helper is removed.
     """
     enforcer = AuthzEnforcer.get_enforcer()
     for role, permissions in INSTRUCTOR_DASHBOARD_ROLE_PERMISSIONS.items():

@@ -75,15 +75,12 @@ class AuthzTestMixin:
         """
         Assign an AuthZ role to the user in the course.
 
-        The enforcer policy is reloaded afterwards.
-
         Args:
             user (User): The user receiving the role.
             role (str): The AuthZ role external key.
             course_key (CourseKey): The course where the role is assigned.
         """
         assign_role_to_user_in_scope(user.username, role, str(course_key))
-        AuthzEnforcer.get_enforcer().load_policy()
 
 
 class CourseAuthoringAuthzTestMixin(AuthzTestMixin):

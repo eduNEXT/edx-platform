@@ -1,5 +1,5 @@
 """
-Helpers to enforce AuthZ permissions in the Instructor Dashboard.
+Public API to enforce AuthZ permissions in the Instructor Dashboard.
 
 When the ``authz.enable_course_authoring`` flag is enabled for a course, the
 permission is resolved exclusively through AuthZ (same semantics as Studio, see
@@ -56,12 +56,12 @@ def user_has_instructor_permission(
     """
     if enable_authz_course_authoring(course_key):
         is_allowed = authz_api.is_user_allowed(user.username, authz_permission, str(course_key))
-        _log_decision(ACCESS_PATH_AUTHZ, is_allowed, user, authz_permission, course_key)
+        _log_decision(ACCESS_PATH_AUTHZ, is_allowed, user, (authz_permission,), course_key)
         return is_allowed
 
     legacy_check = legacy_check or LEGACY_PERMISSION_CHECKS.get(authz_permission)
     is_allowed = bool(legacy_check and legacy_check(user, course_key))
-    _log_decision(ACCESS_PATH_LEGACY, is_allowed, user, authz_permission, course_key)
+    _log_decision(ACCESS_PATH_LEGACY, is_allowed, user, (authz_permission,), course_key)
     return is_allowed
 
 
@@ -96,8 +96,11 @@ def user_has_any_instructor_permission(
     if not authz_permissions:
         return False
     if legacy_check is not None and not enable_authz_course_authoring(course_key):
-        # The legacy check covers the whole set; evaluate and log it once.
-        return user_has_instructor_permission(user, authz_permissions[0], course_key, legacy_check)
+        # The legacy check covers the whole set, so it does not depend on which
+        # permission is evaluated: run and log it once instead of once per permission.
+        is_allowed = bool(legacy_check(user, course_key))
+        _log_decision(ACCESS_PATH_LEGACY, is_allowed, user, authz_permissions, course_key)
+        return is_allowed
     return any(
         user_has_instructor_permission(user, permission, course_key, legacy_check) for permission in authz_permissions
     )
@@ -125,7 +128,9 @@ def get_instructor_authz_permissions(
     return {permission: user_has_instructor_permission(user, permission, course_key) for permission in permissions}
 
 
-def _log_decision(path: str, is_allowed: bool, user: AbstractUser, authz_permission: str, course_key: CourseKey):
+def _log_decision(
+    path: str, is_allowed: bool, user: AbstractUser, authz_permissions: Iterable[str], course_key: CourseKey
+):
     """
     Log the path that resolved a permission check, and its outcome.
 
@@ -133,7 +138,7 @@ def _log_decision(path: str, is_allowed: bool, user: AbstractUser, authz_permiss
         path (str): The path that resolved the check.
         is_allowed (bool): Whether access was granted.
         user (AbstractUser): The user checked.
-        authz_permission (str): The AuthZ permission identifier checked.
+        authz_permissions (Iterable[str]): The AuthZ permission identifiers checked.
         course_key (CourseKey): The course where it was checked.
     """
     log.debug(
@@ -142,7 +147,7 @@ def _log_decision(path: str, is_allowed: bool, user: AbstractUser, authz_permiss
         path,
         extra={
             "user_id": user.id,
-            "authz_permission": authz_permission,
+            "authz_permissions": list(authz_permissions),
             "course_key": str(course_key),
             "access_path": path,
         },

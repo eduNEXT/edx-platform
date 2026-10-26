@@ -23,7 +23,7 @@ from lms.djangoapps.instructor.authz.tests.mixins import InstructorAuthzTestMixi
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory
 
-HELPERS = "lms.djangoapps.instructor.authz.helpers"
+API = "lms.djangoapps.instructor.authz.api"
 
 # Tabs migrated to AuthZ, each with one of the permissions that show it.
 MIGRATED_TABS = {tab: permissions[0] for tab, permissions in constants.TAB_PERMISSIONS.items()}
@@ -82,25 +82,24 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
             "data_researcher",
         }
 
-    def test_authz_course_admin(self):
-        """A Course Admin sees every migrated tab and holds every permission."""
+    def test_authz_course_admin_sees_migrated_tabs_and_holds_every_permission(self):
+        """A Course Admin sees exactly the migrated tabs and holds every permission."""
         user = self.create_user_with_authz_role(COURSE_ADMIN.external_key, self.course_key)
 
         response = self._get(user)
 
         assert response.status_code == status.HTTP_200_OK
-        assert set(MIGRATED_TABS) <= self._tab_ids(response)
+        assert self._tab_ids(response) == set(MIGRATED_TABS)
         assert set(response.data["authz_permissions"]) == set(constants.INSTRUCTOR_DASHBOARD_PERMISSIONS)
         assert all(response.data["authz_permissions"].values())
 
-    def test_authz_course_staff(self):
-        """A Course Staff sees every migrated tab but cannot manage the course team."""
+    def test_authz_course_staff_sees_migrated_tabs_but_cannot_manage_course_team(self):
+        """A Course Staff sees exactly the migrated tabs but cannot manage the course team."""
         user = self.create_user_with_authz_role(COURSE_STAFF.external_key, self.course_key)
 
         response = self._get(user)
 
-        tabs = self._tab_ids(response)
-        assert set(MIGRATED_TABS) <= tabs
+        assert self._tab_ids(response) == set(MIGRATED_TABS)
         permissions = response.data["authz_permissions"]
         assert permissions[constants.COURSES_VIEW_COURSE_TEAM]
         # Course Staff does not manage the course team.
@@ -113,7 +112,7 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
         """
         instructor = InstructorFactory(course_key=self.course_key)
 
-        with patch(f"{HELPERS}.authz_api.is_user_allowed", return_value=False):
+        with patch(f"{API}.authz_api.is_user_allowed", return_value=False):
             response = self._get(instructor)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -123,7 +122,7 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
         """With the flag on, a single dashboard permission, not only ``view_course_info``, grants access."""
         user = UserFactory()
 
-        with patch(f"{HELPERS}.authz_api.is_user_allowed", side_effect=lambda _u, perm, _s: perm == permission):
+        with patch(f"{API}.authz_api.is_user_allowed", side_effect=lambda _u, perm, _s: perm == permission):
             response = self._get(user)
 
         assert response.status_code == status.HTTP_200_OK
@@ -140,11 +139,11 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
             return lambda _username, permission, _scope: permission in permissions
 
         with patch(
-            f"{HELPERS}.authz_api.is_user_allowed", side_effect=allowed_only(constants.COURSES_VIEW_COURSE_INFO)
+            f"{API}.authz_api.is_user_allowed", side_effect=allowed_only(constants.COURSES_VIEW_COURSE_INFO)
         ):
             tabs_without_permission = self._tab_ids(self._get(user))
         with patch(
-            f"{HELPERS}.authz_api.is_user_allowed",
+            f"{API}.authz_api.is_user_allowed",
             side_effect=allowed_only(constants.COURSES_VIEW_COURSE_INFO, tab_permission),
         ):
             tabs_with_permission = self._tab_ids(self._get(user))
@@ -184,7 +183,7 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
         self.set_authz_enabled(False)
         instructor = InstructorFactory(course_key=self.course_key)
 
-        with patch(f"{HELPERS}.authz_api.is_user_allowed") as is_user_allowed:
+        with patch(f"{API}.authz_api.is_user_allowed") as is_user_allowed:
             response = self._get(instructor)
 
         assert response.status_code == status.HTTP_200_OK
@@ -215,11 +214,11 @@ class InstructorDashboardTabAuthzTest(InstructorAuthzTestMixin, SharedModuleStor
         assert self._has_instructor_tab(user)
 
     @ddt.data(*constants.INSTRUCTOR_DASHBOARD_PERMISSIONS)
-    def test_authz_any_permission_shown(self, permission):
-        """With the flag on, a single dashboard permission is enough."""
+    def test_authz_instructor_course_tab_shown_with_any_dashboard_permission(self, permission):
+        """With the flag on, a single dashboard permission is enough to show the "Instructor" course tab."""
         user = UserFactory()
 
-        with patch(f"{HELPERS}.authz_api.is_user_allowed", side_effect=lambda _u, perm, _c: perm == permission):
+        with patch(f"{API}.authz_api.is_user_allowed", side_effect=lambda _u, perm, _c: perm == permission):
             assert self._has_instructor_tab(user)
 
     def test_authz_without_permissions_hidden(self):
@@ -232,7 +231,7 @@ class InstructorDashboardTabAuthzTest(InstructorAuthzTestMixin, SharedModuleStor
         """With the flag on, legacy staff without AuthZ permissions does not see the tab."""
         staff = StaffFactory(course_key=self.course.id)
 
-        with patch(f"{HELPERS}.authz_api.is_user_allowed", return_value=False):
+        with patch(f"{API}.authz_api.is_user_allowed", return_value=False):
             assert not self._has_instructor_tab(staff)
 
     def test_legacy_staff_shown(self):
@@ -240,7 +239,7 @@ class InstructorDashboardTabAuthzTest(InstructorAuthzTestMixin, SharedModuleStor
         self.set_authz_enabled(False)
         staff = StaffFactory(course_key=self.course.id)
 
-        with patch(f"{HELPERS}.authz_api.is_user_allowed") as is_user_allowed:
+        with patch(f"{API}.authz_api.is_user_allowed") as is_user_allowed:
             assert self._has_instructor_tab(staff)
 
         is_user_allowed.assert_not_called()

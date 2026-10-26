@@ -35,7 +35,7 @@ from lms.djangoapps.instructor import permissions
 from lms.djangoapps.instructor.access import FORUM_ROLES, ROLES
 from lms.djangoapps.instructor.authz import constants as authz_constants
 from lms.djangoapps.instructor.authz import legacy as authz_legacy
-from lms.djangoapps.instructor.authz.helpers import (
+from lms.djangoapps.instructor.authz.api import (
     get_instructor_authz_permissions,
     user_has_any_instructor_permission,
 )

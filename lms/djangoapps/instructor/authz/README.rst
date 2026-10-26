@@ -7,7 +7,7 @@ What it contains
 ****************
 
 - ``constants.py``: the permission identifiers. Do not repeat the strings in the code. TEMPORARY: the permissions not defined by openedx-authz depend on a separate issue and are declared here only for testing.
-- ``helpers.py``: ``user_has_instructor_permission`` and ``get_instructor_authz_permissions``.
+- ``api.py``: ``user_has_instructor_permission`` and ``get_instructor_authz_permissions``.
 - ``permissions.py``: ``InstructorAuthzPermission``, the DRF permission class for the views.
 - ``legacy.py``: the pre-AuthZ check equivalent to each permission.
 - ``tests/mixins.py``: ``InstructorAuthzTestMixin`` to assign AuthZ roles in tests.
@@ -25,10 +25,10 @@ Every decision is logged with the path that resolved it (``authz`` or ``legacy``
 Migrating a view
 ****************
 
-Replace ``InstructorPermission`` by ``InstructorAuthzPermission`` and declare the AuthZ permission next to the legacy one. ``course_id`` must be a URL kwarg: the permission class reads it from ``view.kwargs`` and returns a ``404`` if it is not a valid course key.
+Replace ``InstructorPermission`` by ``InstructorAuthzPermission`` and declare the AuthZ permission next to the legacy one. ``course_id`` must be a URL kwarg: the permission class reads it from ``view.kwargs`` and returns a ``404`` if it is not a valid course key. Pick the case that matches the view:
 
-Same permissions for every HTTP method
-======================================
+Case 1: Same permissions for every HTTP method
+==============================================
 
 ``authz_permissions`` is always a collection, like ``permission_classes``, even for a single permission. Unlike ``permission_classes``, where all the classes must pass (AND), holding **any one** of the permissions is enough (OR). Declare it with the legacy bridgekeeper permission the view already used:
 
@@ -52,8 +52,8 @@ A bare string raises ``ImproperlyConfigured``. With several permissions and ``au
         authz_permissions = authz_constants.INSTRUCTOR_DASHBOARD_PERMISSIONS
         permission_name = permissions.VIEW_DASHBOARD
 
-Different permissions per HTTP method
-=====================================
+Case 2: Different permissions per HTTP method
+=============================================
 
 Use a mapping when reading and changing need different permissions. Each value is a collection of permissions. A method missing from the mapping is denied (``403``) with ``authz.enable_course_authoring`` enabled for the course, so a method is never left on the legacy rule by mistake. With it disabled, the legacy check decides as usual:
 
@@ -67,8 +67,8 @@ Use a mapping when reading and changing need different permissions. Each value i
         }
         permission_name = permissions.CAN_ENROLL
 
-Legacy rule that is not a bridgekeeper permission
-=================================================
+Case 3: Legacy rule that is not a bridgekeeper permission
+=========================================================
 
 Define ``legacy_permission_check(user, course_key)`` on the view. It replaces ``permission_name`` and receives the same arguments for every method. Reuse the checks of ``legacy.py`` when one matches:
 
@@ -97,7 +97,7 @@ Use ``user_has_instructor_permission`` inside a handler, a serializer or any oth
 .. code-block:: python
 
     from opaque_keys.edx.keys import CourseKey
-    from lms.djangoapps.instructor.authz.helpers import user_has_instructor_permission
+    from lms.djangoapps.instructor.authz.api import user_has_instructor_permission
 
     def post(self, request, course_id):
         course_key = CourseKey.from_string(course_id)
