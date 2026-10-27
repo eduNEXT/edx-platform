@@ -406,6 +406,9 @@ MIDDLEWARE = [
     # Instead of AuthenticationMiddleware, we use a cache-backed version
     'openedx.core.djangoapps.cache_toolbox.middleware.CacheBackedAuthenticationMiddleware',
 
+    # Answers 401 instead of a redirect to login when the client is not asking for HTML
+    'cms.djangoapps.contentstore.middleware.LoginRedirectToUnauthorizedMiddleware',
+
     'common.djangoapps.student.middleware.UserStandingMiddleware',
 
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -1336,6 +1339,7 @@ SPECTACULAR_SETTINGS = {
         'drf_spectacular.hooks.postprocess_schema_enums',
         'cms.lib.spectacular.cms_mark_superseded_paths',
         'cms.lib.spectacular.cms_mark_migrated_paths',
+        'openedx.core.apidocs.untag_deprecated_operations',
     ],
     # Stripped from each path to derive its tags and operationId, so changing
     # it renames every operationId. Paths are published in full, from the
