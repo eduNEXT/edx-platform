@@ -1964,7 +1964,7 @@ def group_configurations_list_handler(request, course_key_string):
     course_key = CourseKey.from_string(course_key_string)
 
     if request.method == 'GET':
-        # GET only redirects to the MFE (html) or returns 406 (json)
+        # GET redirects to the MFE (html), renders the legacy page when the MFE is disabled, or returns 406 (json)
         if not user_has_course_permission(
             user=request.user,
             authz_permission=COURSES_VIEW_GROUP_CONFIGURATIONS.identifier,
@@ -1973,7 +1973,13 @@ def group_configurations_list_handler(request, course_key_string):
         ):
             raise PermissionDenied()
         if 'text/html' in request.META.get('HTTP_ACCEPT', 'text/html'):
-            return redirect(get_group_configurations_url(course_key))
+            if use_new_group_configurations_page(course_key):
+                return redirect(get_group_configurations_url(course_key))
+            store = modulestore()
+            with store.bulk_operations(course_key):
+                course = store.get_course(course_key)
+                group_configurations_context = get_group_configurations_context(course, store)
+            return render_to_response('group_configurations.html', group_configurations_context)
         return HttpResponse(status=406)
 
     store = modulestore()
