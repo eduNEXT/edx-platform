@@ -128,23 +128,16 @@ class InstructorAuthzPermissionTest(InstructorAuthzTestMixin, TestCase):
 
         assert InstructorAuthzPermission().has_permission(self._request(method), view) == expected
 
-    def test_method_missing_from_mapping_denied_with_flag_enabled(self):
-        """With the flag on, a method missing from the mapping is denied even if the legacy rule allows it."""
-        self.set_authz_enabled(True)
+    @ddt.data((True, False), (False, True))
+    @ddt.unpack
+    def test_method_missing_from_mapping(self, authz_enabled, expected):
+        """A method missing from the mapping is denied with the flag on, and uses the legacy rule with it off."""
+        self.set_authz_enabled(authz_enabled)
         view = FakeView(
             authz_permissions={"GET": (constants.COURSES_VIEW_COURSE_TEAM,)}, legacy_permission_check=lambda *_: True
         )
 
-        assert not InstructorAuthzPermission().has_permission(self._request("delete"), view)
-
-    def test_method_missing_from_mapping_uses_legacy_with_flag_disabled(self):
-        """With the flag off, a method missing from the mapping is checked with the legacy rule."""
-        self.set_authz_enabled(False)
-        view = FakeView(
-            authz_permissions={"GET": (constants.COURSES_VIEW_COURSE_TEAM,)}, legacy_permission_check=lambda *_: True
-        )
-
-        assert InstructorAuthzPermission().has_permission(self._request("delete"), view)
+        assert InstructorAuthzPermission().has_permission(self._request("delete"), view) == expected
 
     def test_invalid_course_key(self):
         """An invalid ``course_id`` raises ``Http404``."""

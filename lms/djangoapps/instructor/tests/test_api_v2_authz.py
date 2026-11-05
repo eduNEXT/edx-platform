@@ -82,23 +82,16 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
             "data_researcher",
         }
 
-    def test_authz_course_admin_sees_migrated_tabs(self):
-        """A Course Admin sees exactly the migrated tabs, and AuthZ is reported as enabled."""
-        user = self.create_user_with_authz_role(COURSE_ADMIN.external_key, self.course_key)
+    @ddt.data(COURSE_ADMIN, COURSE_STAFF)
+    def test_authz_role_sees_migrated_tabs(self, role):
+        """A Course Admin and a Course Staff see exactly the migrated tabs, and AuthZ is reported as enabled."""
+        user = self.create_user_with_authz_role(role.external_key, self.course_key)
 
         response = self._get(user)
 
         assert response.status_code == status.HTTP_200_OK
         assert self._tab_ids(response) == set(MIGRATED_TABS)
         assert response.data["authz_enabled"] is True
-
-    def test_authz_course_staff_sees_migrated_tabs(self):
-        """A Course Staff sees exactly the migrated tabs."""
-        user = self.create_user_with_authz_role(COURSE_STAFF.external_key, self.course_key)
-
-        response = self._get(user)
-
-        assert self._tab_ids(response) == set(MIGRATED_TABS)
 
     def test_authz_denied_overrides_legacy_roles(self):
         """
@@ -146,30 +139,23 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
         if tab_id != "course_info":
             assert tab_id not in tabs_without_permission
 
-    def test_legacy_instructor_sees_migrated_tabs(self):
-        """With the flag off, a legacy instructor sees every migrated tab and AuthZ is reported as disabled."""
+    @ddt.data(
+        (InstructorFactory, set()),
+        # Staff without the forum Administrator role does not see Course Team, and without
+        # instructor access does not see Date Extensions.
+        (StaffFactory, {"course_team", "date_extensions"}),
+    )
+    @ddt.unpack
+    def test_legacy_role_sees_its_migrated_tabs(self, user_factory, hidden_tabs):
+        """With the flag off, the legacy role decides the migrated tabs and AuthZ is reported as disabled."""
         self.set_authz_enabled(False)
-        instructor = InstructorFactory(course_key=self.course_key)
+        user = user_factory(course_key=self.course_key)
 
-        response = self._get(instructor)
+        response = self._get(user)
 
         assert response.status_code == status.HTTP_200_OK
-        assert "date_extensions" in self._tab_ids(response)
-        assert set(MIGRATED_TABS) <= self._tab_ids(response)
+        assert self._tab_ids(response) & set(MIGRATED_TABS) == set(MIGRATED_TABS) - hidden_tabs
         assert response.data["authz_enabled"] is False
-
-    def test_legacy_staff_has_staff_only_tabs(self):
-        """
-        Staff without the forum Administrator role does not see Course Team, and
-        without instructor access does not see Date Extensions.
-        """
-        self.set_authz_enabled(False)
-        staff = StaffFactory(course_key=self.course_key)
-
-        response = self._get(staff)
-
-        tabs = self._tab_ids(response)
-        assert tabs & set(MIGRATED_TABS) == set(MIGRATED_TABS) - {"course_team", "date_extensions"}
 
     def test_legacy_does_not_query_authz(self):
         """With the flag off, AuthZ is not queried."""
