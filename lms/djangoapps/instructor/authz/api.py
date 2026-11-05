@@ -15,7 +15,6 @@ from opaque_keys.edx.keys import CourseKey
 from openedx_authz import api as authz_api
 
 from common.djangoapps.student.roles import enable_authz_course_authoring
-from lms.djangoapps.instructor.authz.constants import INSTRUCTOR_DASHBOARD_PERMISSIONS
 from lms.djangoapps.instructor.authz.legacy import LEGACY_PERMISSION_CHECKS
 
 log = logging.getLogger(__name__)
@@ -104,28 +103,6 @@ def user_has_any_instructor_permission(
     return any(
         user_has_instructor_permission(user, permission, course_key, legacy_check) for permission in authz_permissions
     )
-
-
-def get_instructor_authz_permissions(
-    user: AbstractUser, course_key: CourseKey, permissions: Iterable[str] = INSTRUCTOR_DASHBOARD_PERMISSIONS
-) -> dict[str, bool]:
-    """
-    Return the effective value of each permission for the user in the course.
-
-    Each value follows the same rules as ``user_has_instructor_permission``,
-    using the default legacy check of the permission.
-
-    Args:
-        user (AbstractUser): The user whose permissions are resolved.
-        course_key (CourseKey): The course where the permissions are resolved.
-        permissions (Iterable[str]): The permission identifiers to resolve.
-            Defaults to all the Instructor Dashboard ones.
-
-    Returns:
-        dict[str, bool]: Mapping of permission identifier to its value, e.g.
-        ``{"courses.enroll_learners": True}``.
-    """
-    return {permission: user_has_instructor_permission(user, permission, course_key) for permission in permissions}
 
 
 def _log_decision(

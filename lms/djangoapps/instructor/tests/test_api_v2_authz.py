@@ -1,7 +1,7 @@
 """
 Tests for the AuthZ enforcement of the Instructor Dashboard API v2.
 
-They cover the tabs, ``authz_permissions`` and the migrated endpoints.
+They cover the tabs, ``authz_enabled`` and the migrated endpoints.
 """
 
 from unittest.mock import patch
@@ -82,29 +82,23 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
             "data_researcher",
         }
 
-    def test_authz_course_admin_sees_migrated_tabs_and_holds_every_permission(self):
-        """A Course Admin sees exactly the migrated tabs and holds every permission."""
+    def test_authz_course_admin_sees_migrated_tabs(self):
+        """A Course Admin sees exactly the migrated tabs, and AuthZ is reported as enabled."""
         user = self.create_user_with_authz_role(COURSE_ADMIN.external_key, self.course_key)
 
         response = self._get(user)
 
         assert response.status_code == status.HTTP_200_OK
         assert self._tab_ids(response) == set(MIGRATED_TABS)
-        assert set(response.data["authz_permissions"]) == set(constants.INSTRUCTOR_DASHBOARD_PERMISSIONS)
-        assert all(response.data["authz_permissions"].values())
+        assert response.data["authz_enabled"] is True
 
-    def test_authz_course_staff_sees_migrated_tabs_but_cannot_manage_course_team(self):
-        """A Course Staff sees exactly the migrated tabs but cannot manage the course team."""
+    def test_authz_course_staff_sees_migrated_tabs(self):
+        """A Course Staff sees exactly the migrated tabs."""
         user = self.create_user_with_authz_role(COURSE_STAFF.external_key, self.course_key)
 
         response = self._get(user)
 
         assert self._tab_ids(response) == set(MIGRATED_TABS)
-        permissions = response.data["authz_permissions"]
-        assert permissions[constants.COURSES_VIEW_COURSE_TEAM]
-        # Course Staff does not manage the course team.
-        assert not permissions[constants.COURSES_MANAGE_COURSE_TEAM]
-        assert permissions[constants.COURSES_MANAGE_COHORTS]
 
     def test_authz_denied_overrides_legacy_roles(self):
         """
@@ -153,7 +147,7 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
             assert tab_id not in tabs_without_permission
 
     def test_legacy_instructor_sees_migrated_tabs(self):
-        """With the flag off, a legacy instructor sees every migrated tab and manages the course team."""
+        """With the flag off, a legacy instructor sees every migrated tab and AuthZ is reported as disabled."""
         self.set_authz_enabled(False)
         instructor = InstructorFactory(course_key=self.course_key)
 
@@ -162,7 +156,7 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
         assert response.status_code == status.HTTP_200_OK
         assert "date_extensions" in self._tab_ids(response)
         assert set(MIGRATED_TABS) <= self._tab_ids(response)
-        assert response.data["authz_permissions"][constants.COURSES_MANAGE_COURSE_TEAM]
+        assert response.data["authz_enabled"] is False
 
     def test_legacy_staff_has_staff_only_tabs(self):
         """
@@ -176,7 +170,6 @@ class CourseMetadataViewAuthzTest(InstructorAuthzTestMixin, SharedModuleStoreTes
 
         tabs = self._tab_ids(response)
         assert tabs & set(MIGRATED_TABS) == set(MIGRATED_TABS) - {"course_team", "date_extensions"}
-        assert not response.data["authz_permissions"][constants.COURSES_MANAGE_COURSE_TEAM]
 
     def test_legacy_does_not_query_authz(self):
         """With the flag off, AuthZ is not queried."""

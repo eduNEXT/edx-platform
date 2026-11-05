@@ -24,6 +24,7 @@ from common.djangoapps.student.roles import (
     CourseInstructorRole,
     CourseSalesAdminRole,
     CourseStaffRole,
+    enable_authz_course_authoring,
 )
 from lms.djangoapps.bulk_email.api import is_bulk_email_feature_enabled
 from lms.djangoapps.certificates.models import CertificateGenerationConfiguration
@@ -35,10 +36,7 @@ from lms.djangoapps.instructor import permissions
 from lms.djangoapps.instructor.access import FORUM_ROLES, ROLES
 from lms.djangoapps.instructor.authz import constants as authz_constants
 from lms.djangoapps.instructor.authz import legacy as authz_legacy
-from lms.djangoapps.instructor.authz.api import (
-    get_instructor_authz_permissions,
-    user_has_any_instructor_permission,
-)
+from lms.djangoapps.instructor.authz.api import user_has_any_instructor_permission
 from lms.djangoapps.instructor.views.instructor_dashboard import get_analytics_dashboard_message
 from openedx.core.djangoapps.django_comment_common.models import FORUM_ROLE_ADMINISTRATOR
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
@@ -90,11 +88,11 @@ class CourseInformationSerializerV2(serializers.Serializer):
         help_text="URL to the admin console (requires instructor access and MFE configuration, null if not accessible)"
     )
     permissions = serializers.SerializerMethodField(help_text="User permissions for instructor dashboard features")
-    authz_permissions = serializers.SerializerMethodField(
+    authz_enabled = serializers.SerializerMethodField(
         help_text=(
-            "Effective value of each AuthZ permission of the instructor dashboard for the user in the course, keyed by "
-            "permission identifier. Resolved through AuthZ when it is enabled for the course, and through the "
-            "equivalent legacy roles otherwise."
+            "Whether the AuthZ permissions are enabled for the course (``authz.enable_course_authoring`` flag). "
+            "The MFE uses it to decide whether to check the user's permissions through AuthZ or keep the legacy "
+            "behavior."
         )
     )
     tabs = serializers.SerializerMethodField(help_text="List of course tabs with configuration and display information")
@@ -419,18 +417,17 @@ class CourseInformationSerializerV2(serializers.Serializer):
         course = data['course']
         return len(course.get_children()) if hasattr(course, 'get_children') else 0
 
-    def get_authz_permissions(self, data) -> dict[str, bool]:
+    def get_authz_enabled(self, data) -> bool:
         """
-        Get the effective AuthZ permissions of the user for the course.
+        Get whether AuthZ is enabled for the course.
 
         Args:
-            data (dict): The serializer context, with ``user`` and ``course``.
+            data (dict): The serializer context, with ``course``.
 
         Returns:
-            dict[str, bool]: Mapping of AuthZ permission identifier to its
-            value.
+            bool: True if ``authz.enable_course_authoring`` is enabled for the course.
         """
-        return get_instructor_authz_permissions(data['user'], data['course'].id)
+        return enable_authz_course_authoring(data['course'].id)
 
     def get_permissions(self, data):
         """Get user permissions for the course."""

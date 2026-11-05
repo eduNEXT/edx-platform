@@ -7,7 +7,7 @@ What it contains
 ****************
 
 - ``constants.py``: the permission identifiers. Do not repeat the strings in the code. TEMPORARY: the permissions not defined by openedx-authz depend on a separate issue and are declared here only for testing.
-- ``api.py``: ``user_has_instructor_permission`` and ``get_instructor_authz_permissions``.
+- ``api.py``: ``user_has_instructor_permission`` and ``user_has_any_instructor_permission``.
 - ``permissions.py``: ``InstructorAuthzPermission``, the DRF permission class for the views.
 - ``legacy.py``: the pre-AuthZ check equivalent to each permission.
 - ``tests/mixins.py``: ``InstructorAuthzTestMixin`` to assign AuthZ roles in tests.
@@ -112,7 +112,7 @@ Use ``user_has_instructor_permission`` inside a handler, a serializer or any oth
             authz_legacy.has_instructor_access,
         )
 
-To get the effective value of several permissions at once (as ``authz_permissions`` in ``CourseMetadataView``) use ``get_instructor_authz_permissions(user, course_key)``.
+``CourseMetadataView`` returns ``authz_enabled``, whether AuthZ is enabled for the course. The MFE passes it as ``featureEnabled`` to the shared ``usePermissions`` hook of ``frontend-base``, so it checks the permissions through AuthZ only when it is enabled.
 
 Errors
 ======

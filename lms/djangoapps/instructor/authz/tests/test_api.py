@@ -12,7 +12,6 @@ from openedx_authz.constants.roles import COURSE_ADMIN, COURSE_AUDITOR, COURSE_S
 from common.djangoapps.student.tests.factories import UserFactory
 from lms.djangoapps.instructor.authz import constants
 from lms.djangoapps.instructor.authz.api import (
-    get_instructor_authz_permissions,
     user_has_any_instructor_permission,
     user_has_instructor_permission,
 )
@@ -166,14 +165,3 @@ class UserHasInstructorPermissionTest(InstructorAuthzTestMixin, TestCase):
             self.set_authz_enabled(enabled)
             assert not user_has_any_instructor_permission(self.user, [], COURSE_KEY)
             assert not user_has_any_instructor_permission(self.user, [], COURSE_KEY, lambda *_: True)
-
-    def test_get_instructor_authz_permissions(self):
-        """All the dashboard permissions are resolved with their effective value for the user."""
-        self.assign_authz_role(self.user, COURSE_STAFF.external_key, COURSE_KEY)
-
-        result = get_instructor_authz_permissions(self.user, COURSE_KEY)
-
-        assert set(result) == set(constants.INSTRUCTOR_DASHBOARD_PERMISSIONS)
-        assert result[constants.COURSES_VIEW_COHORTS]
-        assert result[constants.COURSES_VIEW_COURSE_TEAM]
-        assert not result[constants.COURSES_MANAGE_COURSE_TEAM]

@@ -37,8 +37,8 @@ COURSES_MANAGE_LEARNER_EXTENSIONS = "courses.manage_learner_extensions"
 COURSES_VIEW_COHORTS = "courses.view_cohorts"
 COURSES_MANAGE_COHORTS = "courses.manage_cohorts"
 
-# Every permission whose effective value is returned to the MFE in
-# ``authz_permissions``.
+# Every permission of the Instructor Dashboard. Holding any of them grants access
+# to the dashboard.
 INSTRUCTOR_DASHBOARD_PERMISSIONS = (
     COURSES_VIEW_COURSE_INFO,
     COURSES_VIEW_ENROLLMENTS,
